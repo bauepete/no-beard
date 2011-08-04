@@ -1,0 +1,288 @@
+\documentclass[11pt]{report}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper}                   % ... or a4paper or a5paper or ... 
+\usepackage{listings}
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage[usenames, dvipsnames]{color}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\newcommand{\leongage}{NoBeard}
+
+\newenvironment{grammar}
+	{\begin{tabular}[b]{lcl}}
+	{\end{tabular}}
+\newcommand{\rewritten}{$\to$}
+\newcommand{\alternative}{$\mid \;$}
+\newcommand{\emptystring}{$\varepsilon$}
+
+\newenvironment{atg}[1][6cm]
+	{\begin{tabular}[b]{lclp{#1}}}
+	{\end{tabular}}
+\newcommand{\atgsy}[2]{$\textrm{#1}_\textrm{#2}$}
+\newcommand{\outattr}{$\uparrow$}
+\newcommand{\inattr}{$\downarrow$}
+
+\newcommand{\semantics}[1]{\textcolor{Gray}{#1}}
+
+\newenvironment {sem}
+	{\underline{sem}}
+	{\underline{endsem}}
+	
+\newcommand{\where}{\underline{where} }
+
+\author{P. Bauer}
+\date{V.\_01.00.00}                                           % Activate to display a given date or no date
+
+\lstdefinelanguage{NoBeard}{
+	morekeywords = {unit, function, do, done, int, char},
+	sensitive=false,
+	morecomment=[l]{\#}
+}
+
+\begin{document}
+\begin{titlepage}
+\begin{center}
+\includegraphics[scale=0.3]{no_beard_1.jpg} \\[2em]
+%\includegraphics[scale=0.3]{no_beard_2.jpg} \\[2em]
+{\Huge A Formal Description of \leongage} \\[1em]
+{\large v 01.01.00} \\[2em]
+{\Large P. Bauer} \\[1em]
+HTBLA Leonding \\
+Limesstr. 14 - 18 \\
+4060 Leonding \\
+Austria
+\end{center}
+\end{titlepage}
+
+%\maketitle
+\tableofcontents
+\chapter{Introduction}
+According to a web article (see \cite{khason:2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is/are are bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
+moreover it should give the reader a clear insight how the main principles of compiler construction are.
+
+This report aims to give a formal description of the programming language \leongage. Please note that only the parts
+necessary for your work can be trusted. In the next versions, more and more information relevant for your assignments
+will be available.
+
+In case of typos, misleading wording or other problems, please feel free to contact me. Thanks for your help.
+\chapter{The Programming Language}
+\section{Lexical Structure}
+
+\leongage{} programs are written in text files of free format, i.e., there is no restriction concerning columns or lines where
+the source text has to be. In this section the scanner relevant terms for \leongage{} are denoted in the form of regular expressions
+with the extension that we allow "definitions" of non-terminals. This means in particular that if we define a term (e.g.
+{\em letter} as it can be seen in the next section) this term can be used in subsequent definitions and is rewritten as
+given in its original definition.
+
+\subsection{Character Sets}
+\begin{description}
+	\item[letter] \texttt{'[A-Za-z]'}
+	\item[digit]\texttt{'[0-9]'}
+\end{description}
+
+\subsection{Keywords}
+There is only one keyword, namely \texttt{PUT}.
+
+\subsection{Token Classes}
+\begin{description}
+	\item[ident] \texttt{['letter(letter \alternative digit)*']}
+	\item[number] \texttt{['digit digit*]}
+\end{description}
+
+\subsection{Single Tokens}
+The characters "{\tt+}", "{\tt-}", "{\tt*}", "{\tt/}", "{\tt:=}", "{\tt;}", "{\tt(}", and "{\tt)}" are mapped to single tokens.
+
+\subsection{Semantics}
+\begin{itemize}
+	\item \leongage{} is a case sensitive language. For example, the names "myVar", "myvar", and "MYVAR" denote three different identifiers.
+	\item Constants may only be between 0 and 65535 ($2^{16} - 1$).
+	\item No symbol may span over more than one line.
+\end{itemize}
+
+\section{Syntax}
+The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation is used.
+
+	\begin{grammar}
+	NoBeard & = & "unit" ident ";" Block ident ";".\\
+	
+	Block & = &  "do" StatSeq "done".\\
+	
+	StatSeq & = & Stat \{Stat\}. \\
+	
+	Stat & = & VarDecl ";" \\
+%	&& \alternative FuncDecl ";" \\
+	&& \alternative Assignment ";"\\
+%	&& \alternative FuncCall ";" \\
+	&& \alternative PutStat ";" \\
+	&& \alternative \emptystring. \\
+	
+	VarDecl & = & Type ident ["=" Expr]. \\
+	
+	Type & = & TypeSpec [ArraySpec]. \\
+	
+	TypeSpec & = & SimpleType %\alternative CompoundType
+	. \\
+	
+	ArraySpec & = & "[" number "]". \\
+	
+	SimpleType & = & "int" \alternative "char" \alternative "bool". \\
+	
+%	FuncDecl & = & "function" ReturnType ident ["(" FormalArguments ")"] Block ident. \\
+	
+%	ReturnType & = & TypeSpec  [ArgArraySpec]. \\
+	
+%	ArgArraySpec & = & "[" "]". \\
+	
+%	FormalArguments & = & Argument \{"," Argument\}. \\
+	
+%	Argument & = & TypeSpec [ArgArraySpec] ident. \\
+	
+	Assignment &=& Reference "=" Expr . \\
+	
+%	FuncCall & = & ident ["(" Expr \{"," Expr\}]. \\
+	
+	PutStat & = & "PUT" "(" Expr ["," Expr] ")" \\
+	&& \alternative "PUTLN. \\
+	
+	Reference & = & ident [ "[" Expr "]"]. \\
+	
+	Expr & = & [AddOp]Term \{AddOp Term\}. \\
+	
+	Term & = & Fact \{MulOp Fact\}. \\
+	
+	Fact & = & Reference \alternative number \alternative string \\
+	&& \alternative FuncCall \alternative "(" Expr ")". \\
+	
+	AddOp & = & "+" \alternative "-". \\
+	
+	Mulop & = & "*" \alternative "/" \alternative "\%".
+	
+	\end{grammar}
+
+\chapter{The \leongage{} Machine}
+\section{Overview}
+The virtual machine being target for \leongage{} programs is a stack machine with instructions of variable length. The word
+width of the \leongage{} machine is 4 bytes.
+
+\begin{description}
+	\item[dat[MAX\_DATA]] The data memory is byte addressed and is separated into three parts: String constants (not used yet),
+	activation records and expression stack.
+	
+	The expression stack is addresses word-wise only.
+\end{description}
+
+\section{List of Assembler Instructions}
+\lstset{language=[x86masm]Assembler, tabsize=2}
+
+\begin{tabular}{rllll}
+	Opcode & Mnemonic & Arguments & Description & Size \\
+	0 & LIT & n & Load Literal & 3 Bytes \\
+	&&&\begin{lstlisting}
+	Push(n);
+	\end{lstlisting}\\
+	1 & LA & d, a & Load Address & 4 Bytes\\
+	&&&\begin{lstlisting}
+	base = db;
+	for (i= 0; i < d; i++) {
+		base = dat[base ... base + 3];
+	}
+	adr = base + a;
+	Push(dat[addr ... addr + 3];
+	\end{lstlisting}
+\end{tabular}
+
+\chapter{Symbol List}
+
+\lstset{language=NoBeard, numbers=left, tabsize=2}
+\begin{lstlisting}
+unit M;
+	function A(int a);
+		int b;
+		
+		int function B(char c);
+			int d;
+		do
+				# some code
+		done B;
+		
+		char function C;
+			int e;
+		do
+			# some more code
+		done C;
+	do
+		# some code on A
+	done A;
+do
+	# this is the main of unit M
+done M;
+\end{lstlisting}
+
+After parsing line 1 the symbol list looks as follows:
+
+\begin{tabular}{lllrrr}
+name & kind & type & size & addr & level \\
+\hline
+M & PROCKIND & UNITTYPE & 0 & 0 & 0
+\end{tabular}
+
+After parsing line 2 a snapshot on the symbol list looks like
+
+\begin{tabular}{lllrrr}
+name & kind & type & size & addr & level \\
+\hline
+M & PROCKIND & UNITTYPE & 0 & 0 & 0 \\
+A & PROCKIND & UNITTYPE & 0 & 0 & 1 \\
+a & PARKIND & SIMINT & 4 & 32 & 2
+\end{tabular}
+
+After parsing line 3
+
+\begin{tabular}{lllrrr}
+name & kind & type & size & addr & level \\
+\hline
+M & PROCKIND & UNITTYPE & 0 & 0 & 0 \\
+A & PROCKIND & PROCTYPE & 4 & 0 & 1 \\
+a & PARKIND & SIMINT & 4 & 32 & 2 \\
+b & VARKIND & SIMINT & 4 & 36 & 2
+\end{tabular}
+
+After parsing line 6 being somewhere between line 7 and the end of line 9.
+
+\begin{tabular}{lllrrr}
+name & kind & type & size & addr & level \\
+\hline
+M & PROCKIND & UNITTYPE & 0 & 0 & 0 \\
+A & PROCKIND & PROCTYPE & 4 & 0 & 1 \\
+a & PARKIND & SIMINT & 4 & 32 & 2 \\
+b & VARKIND & SIMINT & 4 & 36 & 2 \\
+B & PROCKIND & PROCTYPE & 0 & 0 & 2 \\
+c & PARKIND & SIMCHAR & 1 & 32 & 3 \\
+d & VARKIND & SIMINT & 4 & 36 & 3
+\end{tabular}
+
+
+
+\chapter{Attributed Grammar}
+\begin{atg}[4.5cm]
+Leongage &=& & \semantics{\begin{sem} \newline EmitOp(INC); \newline Emit2(0); \newline int inc\_addr = 1; \newline \end{sem}}\\
+&&Stat ";" \{Stat ";"\}. \\
+
+Stat & = & ident ":=" \atgsy{Expr}{\outattr op}  \alternative \\
+&& "PUT" \atgsy{Expr}{\outattr op}. \\
+
+\atgsy{Term}{\outattr op} &=& \atgsy{Fact}{\outattr op}  \\
+&& \{("*" &\semantics{\begin{sem} opcode = mul \end{sem}}\\
+&& \alternative "/" & \semantics{\begin{sem} opcode = div \end{sem}}\\
+&&) & \semantics{\begin{sem}EmitOp(\inattr opcode)\end{sem}}\\
+&&\atgsy{Fact}{\outattr op} & \semantics{\begin{sem}LoadVal(\inattr op)\end{sem}}
+\end{atg}
+
+\bibliography{my_bibliography}{}
+\bibliographystyle{plain}
+
+\end{document}  
