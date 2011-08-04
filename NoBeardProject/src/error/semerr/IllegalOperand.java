@@ -9,7 +9,7 @@ package error.semerr;
  * @author peter
  */
 public class IllegalOperand extends SemErr {
-    public IllegalOperand() {
-        super("Illegal operand", 52);
+    public IllegalOperand(int lineNumber) {
+        super(52, "Illegal operand", lineNumber);
     }
 }

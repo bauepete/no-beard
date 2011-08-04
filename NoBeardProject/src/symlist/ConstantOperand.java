@@ -60,7 +60,7 @@ public class ConstantOperand extends Operand {
                 break;
                 
             default:
-                ErrorHandler.getInstance().raise(new SemErr("Can't assign to given type" + destOp.getType().toString(), 99));
+                ErrorHandler.getInstance().raise(new SemErr(99, "Can't assign to given type" + destOp.getType().toString(), 99));
         }
     }
 

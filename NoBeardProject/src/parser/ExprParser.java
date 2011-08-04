@@ -50,7 +50,7 @@ public class ExprParser extends Parser {
         
         // cc
         if (addOperator != AddopType.NOADD && termP.getOperand().getType() != OperandType.SIMPLEINT) {
-            ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString()));
+            ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
             return false;
         }
         // endcc
@@ -71,7 +71,7 @@ public class ExprParser extends Parser {
             }
             // cc
             if (op.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString()));
+                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
                 return false;
             }
             // endcc
@@ -86,7 +86,7 @@ public class ExprParser extends Parser {
             Operand op2 = termP.getOperand();
             // cc
             if (op2.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString()));
+                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
                 return false;
             }
             // endcc
@@ -130,7 +130,7 @@ public class ExprParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PLUSSY.toString()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PLUSSY.toString(), Symbol.MINUSSY.toString(), scanner.getCurrentLine()));
                 return false;
         }
         return true;

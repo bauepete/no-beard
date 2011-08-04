@@ -50,7 +50,7 @@ public class FactParserTest {
         exprS = new Scanner(new SrcStringReader("(a + b)"));
         noFactS = new Scanner(new SrcStringReader("{"));
         c = new Code();
-        sym = new SymListManager(c, exprS.getNameManager());
+        sym = new SymListManager(c, exprS);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);

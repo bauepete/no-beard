@@ -9,8 +9,8 @@ package error.semerr;
  * @author peter
  */
 public class IncompatibleTypes extends SemErr {
-    public IncompatibleTypes(String srcType, String destType) {
-        super("Incompatible types: Expected " + srcType + " found " + destType, 53);
+    public IncompatibleTypes(String srcType, String destType, int lineNumber) {
+        super(53, "Incompatible types: Expected " + srcType + " found " + destType, lineNumber);
     }
     
 }

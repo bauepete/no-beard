@@ -10,33 +10,10 @@ import error.Error;
  *
  * @author peter
  */
-public class SemErr implements Error {
+public class SemErr extends Error {
     
-    private String msg;
-    protected int errNo;
     
-    public SemErr(String msg, int errNo) {
-        this.msg = msg;
-        this.errNo = errNo;
-    }
-    
-    @Override
-    public String getErrorClass() {
-        return "SemErr";
-    }
-    
-    @Override
-    public  String getLongName() {
-        return "semantic error";
-    }
-    
-    @Override
-    public String getMessage() {
-        return msg;
-    }
-
-    @Override
-    public int getErrNo() {
-        return errNo;
+    public SemErr(int errNo, String errMsg, int lineNumber) {
+        super("SemErr", errNo, errMsg, lineNumber);
     }
 }

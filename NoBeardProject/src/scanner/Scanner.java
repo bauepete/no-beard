@@ -17,30 +17,30 @@ public class Scanner {
         /// Keywords
         PUTSY, UNITSY, DOSY, DONESY, INTSY, BOOLSY, CHARSY,
         /// Classes
-        IDENTSY, NUMBERSY,
+        IDENTSY, NUMBERSY, STRINGSY,
         /// Arithmethic
         PLUSSY, MINUSSY, TIMESSY, DIVSY, MODSY,
         /// Delimiters
         ASSIGNSY, SEMICOLONSY, COLONSY, LPARSY, RPARSY,
         LBRACKETSY, RBRACKETSY;
-        
+
         @Override
         public String toString() {
             String str = super.toString();
             return str.substring(0, str.length() - 2).toLowerCase();
         }
     }
-    
     private SrcReader srcReader;
-    private Token currentToken;
     private NameManager nameManager;
-    
+    private StringManager stringManager;
+    private Token currentToken;
 
     public Scanner(SrcReader sr) {
         srcReader = sr;
         sr.nextChar();
-        
+
         nameManager = new NameManager(sr);
+        stringManager = new StringManager(sr);
 
         currentToken = new Token();
     }
@@ -48,15 +48,22 @@ public class Scanner {
     public NameManager getNameManager() {
         return nameManager;
     }
+    
+    public int getCurrentLine() {
+        return srcReader.getCurrentLine();
+    }
 
     /** Reads the next token from the source code. After a call of nextToken the
-     *** following holds:
-     *** - getCurrentToken().getSy() returns the kind of the current symbol
-     *** - if getCurrentToken().getSy() == identSy, getCurrentToken.getValue() is a unique number identifying the symbol
-     *** - if getCurrentToken().getSy() == numberSy, getCurrentToken.getValue() holds the value of the number
-     *** - if getCurrentToken().getSy() is different from identSy and numberSy getCurrentToken.getValue() is undefined
-     *** @note Before the first call of nextToken SrcReader.getCurrentChar() must return
-     *** the first character of the source file.
+     * following holds:
+     * - getCurrentToken().getSy() returns the kind of the current symbol
+     * - if getCurrentToken().getSy() == IDENTSY, getCurrentToken.getValue()
+     * is a unique number identifying the symbol
+     * - if getCurrentToken().getSy() == NUMBERSY, getCurrentToken.getValue()
+     * holds the value of the number
+     * - if getCurrentToken().getSy() is different from IDENTSY and NUMBERSY
+     * getCurrentToken.getValue() is undefined
+     *** @note Before the first call of nextToken SrcReader.getCurrentChar()
+     * must return the first character of the source file.
      */
     public void nextToken() {
         currentToken.setSy(Symbol.NOSY);
@@ -124,7 +131,7 @@ public class Scanner {
                     currentToken.setSy(Symbol.SEMICOLONSY);
                     srcReader.nextChar();
                     break;
-                    
+
                 case ',':
                     currentToken.setSy(Symbol.COLONSY);
                     srcReader.nextChar();
@@ -150,6 +157,11 @@ public class Scanner {
                     srcReader.nextChar();
                     break;
 
+                case '"':
+                case '\'':
+                    stringManager.readString();
+                    currentToken.setSy(Symbol.STRINGSY);
+
                 default:
                     currentToken.setSy(Symbol.ILLEGALSY);
                     srcReader.nextChar();
@@ -165,6 +177,23 @@ public class Scanner {
      */
     public Token getCurrentToken() {
         return currentToken;
+    }
+    
+    /**
+     * 
+     * @return The start address of the last recently detected string in the
+     * string list.
+     */
+    public int getStringAddress() {
+        return stringManager.getStringAddress();
+    }
+    
+    /**
+     * 
+     * @return The length of the last recently detected string.
+     */
+    public int getStringLength() {
+        return stringManager.getStringLength();
     }
 
     // ---------------------- Private methods ------------------------------

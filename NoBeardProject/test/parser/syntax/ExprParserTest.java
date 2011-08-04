@@ -56,7 +56,7 @@ public class ExprParserTest {
         noExprS = new Scanner(new SrcStringReader("*b"));
 
         c = new Code();
-        sym = new SymListManager(c, addS.getNameManager());
+        sym = new SymListManager(c, addS);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);

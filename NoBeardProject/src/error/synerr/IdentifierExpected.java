@@ -9,7 +9,7 @@ package error.synerr;
  * @author peter
  */
 public class IdentifierExpected extends SynErr {
-    public IdentifierExpected() {
-        super("Identifier expected", 0);
+    public IdentifierExpected(int lineNumber) {
+        super(20, "Identifier expected", lineNumber);
     }
 }

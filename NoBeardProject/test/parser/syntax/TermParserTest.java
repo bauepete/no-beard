@@ -50,7 +50,7 @@ public class TermParserTest {
         modS = new Scanner(new SrcStringReader("a % b"));
         noTermS = new Scanner(new SrcStringReader("-b"));
         c = new Code();
-        sym = new SymListManager(c, mulS.getNameManager());
+        sym = new SymListManager(c, mulS);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);

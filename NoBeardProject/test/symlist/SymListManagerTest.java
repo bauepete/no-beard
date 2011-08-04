@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import scanner.Scanner;
 import symlist.Operand.OperandKind;
 import scanner.Token;
 import scanner.NameManager;
@@ -42,8 +43,10 @@ public class SymListManagerTest {
     @Before
     public void setUp() {
         c = new Code();
-        n = new NameManager(new SrcStringReader(""));
-        symListMgr = new SymListManager(c, n);
+        SrcStringReader sr = new SrcStringReader("");
+        n = new NameManager(sr);
+        Scanner s = new Scanner(sr);
+        symListMgr = new SymListManager(c, s);
         ErrorHandler.getInstance().reset();
         
         symListMgr.newUnit(0);

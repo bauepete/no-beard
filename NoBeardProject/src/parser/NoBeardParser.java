@@ -63,7 +63,7 @@ public class NoBeardParser extends Parser {
         // cc
         if (name != name1) {
             NameManager n = scanner.getNameManager();
-            ErrorHandler.getInstance().raise(new BlockNameMismatch(n.getStringName(name), n.getStringName(name1)));
+            ErrorHandler.getInstance().raise(new BlockNameMismatch(n.getStringName(name), n.getStringName(name1), scanner.getCurrentLine()));
             return false;
         }
         // end cc

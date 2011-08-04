@@ -61,7 +61,7 @@ public class FactParser extends Parser {
 
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.IDENTSY.toString()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.IDENTSY.toString(), Symbol.NUMBERSY.toString(), Symbol.LPARSY.toString(), scanner.getCurrentLine()));
                 return false;
         }
 

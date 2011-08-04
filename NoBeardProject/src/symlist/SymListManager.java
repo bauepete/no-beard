@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Stack;
 import nbm.Code;
 import scanner.NameManager;
+import scanner.Scanner;
 
 /**
  *
@@ -30,13 +31,15 @@ public class SymListManager {
     private int currLevel;
     private int datAddr;
     private Code code;
+    private Scanner scanner;
     private NameManager nameManager;
 
-    public SymListManager(Code code, NameManager nameManager) {
+    public SymListManager(Code code, Scanner scanner) {
         symList = new HashMap<Integer, SymListEntry>();
         s = new Stack();
         this.code = code;
-        this.nameManager = nameManager;
+        this.scanner = scanner;
+        this.nameManager = scanner.getNameManager();
     }
 
     public SymListEntry findObject(int name) {
@@ -72,7 +75,7 @@ public class SymListManager {
      */
     public boolean newUnit(int name) {
         if (symList.containsKey(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name)));
+            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name), scanner.getCurrentLine()));
             return false;
         }
 
@@ -88,7 +91,7 @@ public class SymListManager {
 
     public boolean newVar(int name, ElementType t) {
         if (symList.containsKey(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined("Fraunz"));
+            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name), scanner.getCurrentLine()));
             return false;
         }
 
@@ -119,7 +122,7 @@ public class SymListManager {
         if (procObj.getType() == OperandType.UNITTYPE) {
             procObj.setAddr(startPc);
         } else {
-            ErrorHandler.getInstance().raise(new SemErr("Tried to define proc Start on a type different than unit", 99));
+            ErrorHandler.getInstance().raise(new SemErr(99, "Tried to define proc Start on a type different than unit", scanner.getCurrentLine()));
         }
     }
 

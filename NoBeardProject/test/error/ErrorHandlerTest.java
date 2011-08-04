@@ -62,11 +62,11 @@ public class ErrorHandlerTest {
     public void testRaise() {
         System.out.println("add");
 
-        eh.raise(new NameAlreadyDefined("Sepp"));
+        eh.raise(new NameAlreadyDefined("Sepp", 5));
         assertEquals("Count expected", 1, eh.getCount());
         assertEquals("SemErrs expected", 1, eh.getCount("SemErr"));
 
-        eh.raise(new NameAlreadyDefined("Koal"));
+        eh.raise(new NameAlreadyDefined("Koal", 6));
         assertEquals("Count expected", 2, eh.getCount());
         assertEquals("SemErrs expected", 2, eh.getCount("SemErr"));
 
@@ -79,9 +79,9 @@ public class ErrorHandlerTest {
     public void testAddDifferent() {
         System.out.println("testAddDifferent");
 
-        eh.raise(new NameAlreadyDefined("Sepp"));
-        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString()));
-        eh.raise(new IdentifierExpected());
+        eh.raise(new NameAlreadyDefined("Sepp", 1));
+        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), 2));
+        eh.raise(new IdentifierExpected(3));
         assertEquals("Count expected", 3, eh.getCount());
         assertEquals("SemErrs expected", 1, eh.getCount("SemErr"));
         assertEquals("SynErrs expected", 2, eh.getCount("SynErr"));
@@ -91,10 +91,10 @@ public class ErrorHandlerTest {
     @Test
     public void testGetLastError() {
         System.out.println("testAddDifferent");
-        eh.raise(new NameAlreadyDefined("Sepp"));
-        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString()));
-        eh.raise(new IdentifierExpected());
-        assertEquals("Last error", 0, eh.getLastError().getErrNo());
+        eh.raise(new NameAlreadyDefined("Sepp", 22));
+        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), 25));
+        eh.raise(new IdentifierExpected(26));
+        assertEquals("Last error", 20, eh.getLastError().getErrNo());
         
     }
 }

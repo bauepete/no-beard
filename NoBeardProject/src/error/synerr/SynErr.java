@@ -10,33 +10,9 @@ import error.Error;
  *
  * @author peter
  */
-public class SynErr implements Error {
-    private String msg;
-    private int errNo;
-    
-    public SynErr(String msg, int errNo) {
-        this.msg = msg;
-        this.errNo = errNo;
+public class SynErr extends Error {
+ 
+    public SynErr(int errNo, String msg, int lineNumber) {
+        super("SynErr", errNo, msg, lineNumber);
     }
-
-    @Override
-    public String getErrorClass() {
-        return "SynErr";
-    }
-
-    @Override
-    public String getLongName() {
-        return "syntax errors";
-    }
-
-    @Override
-    public String getMessage() {
-        return msg;
-    }
-
-    @Override
-    public int getErrNo() {
-        return errNo;
-    }
-    
 }

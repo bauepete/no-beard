@@ -39,7 +39,7 @@ public abstract class Parser {
      */
     protected boolean tokenIsA(Symbol sy) {
         if (scanner.getCurrentToken().getSy() != sy) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(sy.toString()));
+            ErrorHandler.getInstance().raise(new SymbolExpected(sy.toString(), scanner.getCurrentLine()));
             return false;
         }
         scanner.nextToken();
@@ -52,7 +52,7 @@ public abstract class Parser {
      */
     protected int ident() {
         if (scanner.getCurrentToken().getSy() != Symbol.IDENTSY) {
-            ErrorHandler.getInstance().raise(new IdentifierExpected());
+            ErrorHandler.getInstance().raise(new IdentifierExpected(scanner.getCurrentLine()));
             return NOIDENT;
         }
         int spix = scanner.getCurrentToken().getValue();
@@ -62,7 +62,7 @@ public abstract class Parser {
     
     protected int number() {
         if (scanner.getCurrentToken().getSy() != Symbol.NUMBERSY) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString()));
+            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
             return NONUMBER;
         }
         int val = scanner.getCurrentToken().getValue();

@@ -29,7 +29,7 @@ public class PutStatParser extends Parser {
     @Override
     public boolean parse() {
         if (!tokenIsA(Symbol.PUTSY)) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PUTSY.toString()));
+            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PUTSY.toString(), scanner.getCurrentLine()));
             return false;
         }
 
@@ -45,7 +45,7 @@ public class PutStatParser extends Parser {
         // cc
         Operand op = exprP.getOperand();
         if (!isOperandToPut(op)) {
-            ErrorHandler.getInstance().raise(new CantPutOperand());
+            ErrorHandler.getInstance().raise(new CantPutOperand(scanner.getCurrentLine()));
             return false;
         }
         // endcc
@@ -74,7 +74,7 @@ public class PutStatParser extends Parser {
                 // endsem
                 // cc
                 if (wOp.getType() != OperandType.SIMPLEINT) {
-                    ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString()));
+                    ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
                     return false;
                 }
                 // endcc
@@ -82,7 +82,7 @@ public class PutStatParser extends Parser {
                 wOp.emitLoadVal(code);
                 // endsem
                 if (!tokenIsA(Symbol.RPARSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.RPARSY.toString()));
+                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.RPARSY.toString(), scanner.getCurrentLine()));
                     // TODO: Add raiseError() and getNameManager as private methods to Parser
                     // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPARSY)));
                     return false;
@@ -110,7 +110,7 @@ public class PutStatParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.COLONSY.toString()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.COLONSY.toString(), Symbol.RPARSY.toString(), scanner.getCurrentLine()));
                 return false;
         }
         return true;

@@ -46,7 +46,7 @@ public class TermParserTest {
         mulS = new Scanner(new SrcStringReader("a * b"));
         divS = new Scanner(new SrcStringReader("1 / 2"));
         c = new Code();
-        sym = new SymListManager(c, mulS.getNameManager());
+        sym = new SymListManager(c, mulS);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);

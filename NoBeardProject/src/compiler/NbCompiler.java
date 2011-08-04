@@ -25,7 +25,7 @@ public class NbCompiler {
         
         scanner = new Scanner(srcReader);
         code = new Code();
-        sym = new SymListManager(code, scanner.getNameManager());
+        sym = new SymListManager(code, scanner);
         Operand.setSymListManager(sym);
         parser = new NoBeardParser(scanner, sym, code);
         ErrorHandler.getInstance().reset();

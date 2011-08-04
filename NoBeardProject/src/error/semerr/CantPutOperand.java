@@ -9,7 +9,7 @@ package error.semerr;
  * @author peter
  */
 public class CantPutOperand extends SemErr {
-    public CantPutOperand() {
-        super("Can't put this operand", 51);
+    public CantPutOperand(int lineNumber) {
+        super(51, "Can't put this operand", lineNumber);
     }
 }

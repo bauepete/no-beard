@@ -62,7 +62,7 @@ public class StatParserTest {
     public void testParseAssignStat() {
         System.out.println("testParseAssignStat");
         Scanner s = assignS;
-        sym = new SymListManager(c, s.getNameManager());
+        sym = new SymListManager(c, s);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
@@ -107,7 +107,7 @@ public class StatParserTest {
     public void testParseNoAssignStat() {
         System.out.println("testParseNoAssignStat");
         Scanner s = noAssignS;
-        sym = new SymListManager(c, s.getNameManager());
+        sym = new SymListManager(c, s);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
         s.nextToken();

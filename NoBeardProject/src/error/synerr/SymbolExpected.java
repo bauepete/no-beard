@@ -10,7 +10,15 @@ package error.synerr;
  */
 public class SymbolExpected extends SynErr {
     
-    public SymbolExpected(String sy) {
-        super(sy.toString() + " expected", 2);
+    public SymbolExpected(String sy, int lineNumber) {
+        super(22, sy.toString() + " expected", lineNumber);
+    }
+    
+    public SymbolExpected(String sy1, String sy2, int lineNumber) {
+        super(22, sy1.toString() + " or " + sy2.toString() + " expected", lineNumber);
+    }
+    
+    public SymbolExpected(String sy1, String sy2, String sy3, int lineNumber) {
+        super(22, sy1.toString() + ", " + sy2.toString() + " or " + sy3.toString() + " expected", lineNumber);
     }
 }

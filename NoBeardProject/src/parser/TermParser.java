@@ -48,7 +48,7 @@ public class TermParser extends Parser {
 
             //cc
             if (op.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString()));
+                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
                 return false;
             }
             // endcc
@@ -112,7 +112,7 @@ public class TermParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.TIMESSY.toString()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString(), scanner.getCurrentLine()));
                 return false;
         }
         return true;

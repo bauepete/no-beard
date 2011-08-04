@@ -51,7 +51,7 @@ public class ExprParserTest {
         complexExprS = new Scanner(new SrcStringReader("-5 * (a + b)/17"));
 
         c = new Code();
-        sym = new SymListManager(c, addS.getNameManager());
+        sym = new SymListManager(c, addS);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);

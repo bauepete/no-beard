@@ -8,8 +8,19 @@ package error;
  *
  * @author peter
  */
-public interface Error {
+public abstract class Error {
 
+    private String errClass;
+    private int errNo;
+    private String errMsg;
+    private int lineNumber;
+    
+    public Error(String errClass, int errNo, String errMsg, int lineNumber) {
+        this.errClass = errClass;
+        this.errNo = errNo;
+        this.errMsg = errMsg;
+        this.lineNumber = lineNumber;
+    }
     /**
      * Errors can be separated in different classes. The ErrorHandler
      * distinguishes the error classes via the string returned by
@@ -17,16 +28,20 @@ public interface Error {
      * @return String which uniquely identifies the error class to
      * which the error belongs.
      */
-    public String getErrorClass();
-
-    public String getLongName();
+    public String getErrorClass() {
+        return errClass;
+    }
 
     /**
      * Returns the message to be printed in case of the occurrence of
      * this error.
      * @return 
      */
-    public String getMessage();
+    public String getMessage() {
+        return (errClass + ": " + lineNumber + ": " + errMsg);
+    }
     
-    public int getErrNo();
+    public int getErrNo() {
+        return errNo;
+    }
 }

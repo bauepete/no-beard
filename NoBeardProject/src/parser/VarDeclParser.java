@@ -44,7 +44,7 @@ public class VarDeclParser extends Parser {
         // cc
         SymListEntry obj = sym.findObject(name);
         if (obj.getKind() != OperandKind.ILLEGAL) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(scanner.getNameManager().getStringName(name)));
+            ErrorHandler.getInstance().raise(new NameAlreadyDefined(scanner.getNameManager().getStringName(name), scanner.getCurrentLine()));
             return false;
         }
         // endcc
@@ -68,7 +68,7 @@ public class VarDeclParser extends Parser {
             // endsem
             // cc
             if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-                ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
+                ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString(), scanner.getCurrentLine()));
                 return false;
             }
             // endcc
@@ -87,7 +87,7 @@ public class VarDeclParser extends Parser {
             scanner.nextToken();
             int val = number();
             if (val == NONUMBER) {
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
                 return false;
             }
             if (!tokenIsA(Symbol.RBRACKETSY)) {
@@ -116,7 +116,7 @@ public class VarDeclParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SynErr("Panic: Code here is not reachable!", 49));
+                ErrorHandler.getInstance().raise(new SynErr(49, "Panic: Code here is not reachable!", scanner.getCurrentLine()));
                 return false;
         }
         scanner.nextToken();

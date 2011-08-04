@@ -36,7 +36,7 @@ public class StatParser extends Parser {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString()));
+                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
                     return false;
                 }
                 break;
@@ -48,7 +48,7 @@ public class StatParser extends Parser {
                 }
 
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString()));
+                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
                     return false;
                 }
 
@@ -60,7 +60,7 @@ public class StatParser extends Parser {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString()));
+                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
                     return false;
                 }
                 break;
@@ -69,7 +69,7 @@ public class StatParser extends Parser {
                 return true;
 
             default:
-                ErrorHandler.getInstance().raise(new StatementExpected());
+                ErrorHandler.getInstance().raise(new StatementExpected(scanner.getCurrentLine()));
                 return false;
 
         }

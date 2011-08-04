@@ -9,7 +9,7 @@ package error.semerr;
  * @author peter
  */
 public class TypeExpected extends SemErr {
-    public TypeExpected(String type) {
-        super("Operand of type " + type + " expected", 55);
+    public TypeExpected(String type, int lineNumber) {
+        super(55, "Operand of type " + type + " expected", lineNumber);
     }
 }

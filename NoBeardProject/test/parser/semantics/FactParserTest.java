@@ -42,7 +42,7 @@ public class FactParserTest {
     @Before
     public void setUp() {
         c = new Code();
-        sym = new SymListManager(c, identS.getNameManager());
+        sym = new SymListManager(c, identS);
         sym.newUnit(25);
     }
 

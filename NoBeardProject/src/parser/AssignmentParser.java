@@ -35,7 +35,7 @@ public class AssignmentParser extends Parser {
         // endsem
         
         if (!tokenIsA(Symbol.ASSIGNSY)) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.ASSIGNSY.toString()));
+            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.ASSIGNSY.toString(), scanner.getCurrentLine()));
             return false;
         }
         ExprParser exprP = new ExprParser(scanner, sym, code);
@@ -47,7 +47,7 @@ public class AssignmentParser extends Parser {
         // endsem
         // cc
         if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-            ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
+            ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString(), scanner.getCurrentLine()));
         }
         // endcc
         // sem

@@ -18,8 +18,11 @@ public class StringManager {
     private int stringAddress;
     private int stringLength;
     
-    public StringManager() {
+    private SrcReader srcReader;
+    
+    public StringManager(SrcReader srcReader) {
         stringStorage = new char[MAXSTRING];
+        this.srcReader = srcReader;
     }
     
     /**
@@ -34,7 +37,28 @@ public class StringManager {
      * apostrophe or quote.
      */
     void readString() {
+        int stringStart = srcReader.getCurrentChar();
+        int strLen = 0;
         
+        srcReader.nextChar();
+        while (srcReader.getCurrentChar() != -1 && srcReader.getCurrentChar() != '\n' &&
+                srcReader.getCurrentChar() != stringStart) {
+            stringStorage[firstFree + strLen] = (char) srcReader.getCurrentChar();
+            srcReader.nextChar();
+            strLen++;
+        }
+        
+        if (srcReader.getCurrentChar() == -1 || srcReader.getCurrentChar() == '\n') {
+            System.err.println("String error");
+            stringAddress = 0;
+            stringLength = 0;
+        }
+        else {
+            stringAddress = firstFree;
+            stringLength = strLen;
+            firstFree += strLen;
+        }
+        srcReader.nextChar();
     }
 
     /**

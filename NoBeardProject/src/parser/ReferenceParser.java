@@ -37,7 +37,7 @@ public class ReferenceParser extends Parser {
 
         // cc
         if (obj.getKind() == OperandKind.ILLEGAL) {
-            ErrorHandler.getInstance().raise(new IllegalOperand());
+            ErrorHandler.getInstance().raise(new IllegalOperand(scanner.getCurrentLine()));
             return false;
         }
         
@@ -46,7 +46,7 @@ public class ReferenceParser extends Parser {
         // endsem
         
         if (op.getKind() != OperandKind.VARIABLE) {
-            ErrorHandler.getInstance().raise(new IllegalOperand());
+            ErrorHandler.getInstance().raise(new IllegalOperand(scanner.getCurrentLine()));
             return false;
         }
         // endcc
