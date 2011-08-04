@@ -49,7 +49,7 @@ public class NbmTest {
     @Test
     public void testInitialization() {
         System.out.println("testInitialization");
-        assertTrue(m.getState() == Nbm.MachineState.RUN);
+        assertTrue("State", m.getState() == Nbm.MachineState.RUN);
     }
 
     @Test
