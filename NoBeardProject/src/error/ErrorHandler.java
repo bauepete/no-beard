@@ -65,7 +65,7 @@ public class ErrorHandler {
         totalCount++;
         errors.put(e.getErrorClass(), count);
         lastError = e;
-        System.err.println(e.getErrorClass()+": " + e.getErrNo() + ": " + e.getMessage());
+        System.err.println(e.getErrorClass()+": " + e.getLineNumber() + ": " + e.getMessage());
     }
     
     public Error getLastError() {

@@ -38,10 +38,15 @@ public abstract class Error {
      * @return 
      */
     public String getMessage() {
-        return (errClass + ": " + lineNumber + ": " + errMsg);
+        return (errMsg);
     }
     
     public int getErrNo() {
         return errNo;
     }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+    
 }

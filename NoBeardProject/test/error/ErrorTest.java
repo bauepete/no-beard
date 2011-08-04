@@ -64,15 +64,15 @@ public class ErrorTest {
     public void testGetErrorClass() {
         System.out.println("SynErrs");
         Error e = identExp;
-        assertEquals("Msg ", "SynErr: 1: Identifier expected", e.getMessage());
+        assertEquals("Msg ", "Identifier expected", e.getMessage());
         assertEquals("ErrNo ", 20, e.getErrNo());
 
         e = statExp;
-        assertEquals("Msg ", "SynErr: 2: Is not a statement", e.getMessage());
+        assertEquals("Msg ", "Is not a statement", e.getMessage());
         assertEquals("ErrNo ", 21, e.getErrNo());
 
         e = symExp;
-        assertEquals("Msg ", "SynErr: 3: assign expected", e.getMessage());
+        assertEquals("Msg ", "assign expected", e.getMessage());
         assertEquals("ErrNo ", 22, e.getErrNo());
     }
 
@@ -84,27 +84,27 @@ public class ErrorTest {
          System.out.println("testSemErrors");
 
         Error e = blockNameMism;
-        assertEquals("Msg ", "SemErr: 4: Block Sepp ends with name Fraunz", e.getMessage());
+        assertEquals("Msg ", "Block Sepp ends with name Fraunz", e.getMessage());
         assertEquals("ErrNo ", 50, e.getErrNo());
 
         e = cantPutOp;
-        assertEquals("Msg ", "SemErr: 5: Can't put this operand", e.getMessage());
+        assertEquals("Msg ", "Can't put this operand", e.getMessage());
         assertEquals("ErrNo ", 51, e.getErrNo());
 
         e = illegalOp;
-        assertEquals("Msg ", "SemErr: 6: Illegal operand", e.getMessage());
+        assertEquals("Msg ", "Illegal operand", e.getMessage());
         assertEquals("ErrNo ", 52, e.getErrNo());
 
         e = incompTypes;
-        assertEquals("Msg ", "SemErr: 7: Incompatible types: Expected int found bool", e.getMessage());
+        assertEquals("Msg ", "Incompatible types: Expected int found bool", e.getMessage());
         assertEquals("ErrNo ", 53, e.getErrNo());
 
         e = nameAlrDefd;
-        assertEquals("Msg ", "SemErr: 8: Name Fritz already defined", e.getMessage());
+        assertEquals("Msg ", "Name Fritz already defined", e.getMessage());
         assertEquals("ErrNo ", 54, e.getErrNo());
 
         e = typeExp;
-        assertEquals("Msg ", "SemErr: 9: Operand of type int expected", e.getMessage());
+        assertEquals("Msg ", "Operand of type int expected", e.getMessage());
         assertEquals("ErrNo ", 55, e.getErrNo());
     }
 }
