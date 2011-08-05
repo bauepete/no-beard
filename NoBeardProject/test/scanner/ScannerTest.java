@@ -153,6 +153,22 @@ public class ScannerTest {
     }
     
     @Test
+    public void testString() {
+        System.out.println("testString");
+        
+        Scanner s = new Scanner(new SrcStringReader("'a string' \"another string\""));
+        s.nextToken();
+        assertEquals("Sy ", Symbol.STRINGSY, s.getCurrentToken().getSy());
+        assertEquals("Start addr ", 0, s.getStringAddress());
+        assertEquals("Length ", 8, s.getStringLength());
+        
+        s.nextToken();
+        assertEquals("Sy ", Symbol.STRINGSY, s.getCurrentToken().getSy());
+        assertEquals("Start addr ", 8, s.getStringAddress());
+        assertEquals("Length ", 14, s.getStringLength());
+    }
+    
+    @Test
     public void testKeywords() {
         System.out.println("testKeywords");
         

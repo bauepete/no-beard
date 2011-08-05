@@ -161,6 +161,7 @@ public class Scanner {
                 case '\'':
                     stringManager.readString();
                     currentToken.setSy(Symbol.STRINGSY);
+                    break;
 
                 default:
                     currentToken.setSy(Symbol.ILLEGALSY);
