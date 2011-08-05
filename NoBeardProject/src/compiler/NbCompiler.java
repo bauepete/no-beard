@@ -49,4 +49,8 @@ public class NbCompiler {
         return sym;
     }
     
+    public byte[] getStringStorage() {
+        return scanner.getStringManager().getStringStorage();
+    }
+    
 }

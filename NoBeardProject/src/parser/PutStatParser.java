@@ -51,15 +51,18 @@ public class PutStatParser extends Parser {
         // endcc
 
         // sem
-//        if (op.getType() == OperandType.ARRCHR) {
-//            op.emitLoadAddr(code);
-//            code.emitOp(Opcode.LIT);
-//            code.emitHalfWord(op.getSize());
-//        }
-//        else {
-//            op.emitLoadVal(code);
-//        }
-        op.emitLoadVal(code);
+        if (op.getType() == OperandType.ARRAYCHAR) {
+            op.emitLoadAddr(code);
+            if (op.getSize() == Operand.UNDEFSIZE) {
+                code.emitOp(Opcode.LIT);
+                code.emitHalfWord(65535);
+            } else {
+                code.emitOp(Opcode.LIT);
+                code.emitHalfWord(op.getSize());
+            }
+        } else {
+            op.emitLoadVal(code);
+        }
         // endsem
 
         switch (scanner.getCurrentToken().getSy()) {
@@ -87,8 +90,10 @@ public class PutStatParser extends Parser {
                     // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPARSY)));
                     return false;
                 }
+                // sem
                 emitPut(op.getType());
-                
+                //endsem
+
                 break;
 
             case RPARSY:
@@ -98,8 +103,9 @@ public class PutStatParser extends Parser {
                         code.emitOp(Opcode.LIT);
                         code.emitHalfWord(0);
                         break;
-                        
+
                     case SIMPLECHAR:
+                    case ARRAYCHAR:
                         code.emitOp(Opcode.LIT);
                         code.emitHalfWord(op.getSize());
                         break;
@@ -115,23 +121,28 @@ public class PutStatParser extends Parser {
         }
         return true;
     }
-    
+
     private boolean isOperandToPut(Operand op) {
         OperandType opType = op.getType();
-        
-        return (opType == OperandType.SIMPLECHAR || opType == OperandType.SIMPLEINT);
+
+        return (opType == OperandType.SIMPLECHAR || opType == OperandType.SIMPLEINT || opType == OperandType.ARRAYCHAR);
     }
-    
+
     private void emitPut(OperandType type) {
         switch (type) {
             case SIMPLEINT:
                 code.emitOp(Opcode.PUT);
-                code.emitByte((byte)0);
+                code.emitByte((byte) 0);
                 break;
-                
+
             case SIMPLECHAR:
                 code.emitOp(Opcode.PUT);
-                code.emitByte((byte)1);
+                code.emitByte((byte) 1);
+                break;
+                
+            case ARRAYCHAR:
+                code.emitOp(Opcode.PUT);
+                code.emitByte((byte) 2);
                 break;
         }
     }

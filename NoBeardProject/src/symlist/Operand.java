@@ -31,6 +31,8 @@ public abstract class Operand {
     protected int size;
     protected int valaddr;
     protected int level;
+    
+    public static final int UNDEFSIZE = -1;
 
     public Operand(OperandKind kind, OperandType type, int size, int valaddr, int level) {
         this.kind = kind;

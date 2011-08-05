@@ -86,4 +86,29 @@ public class StringManagerTest {
         assertEquals("Address: ", 0, instance.getStringAddress());
         assertEquals("Length: ", 0, instance.getStringAddress());
     }
+    
+    @Test
+    public void testGetStringStorage() {
+        System.out.println("getStringStorage");
+        
+        String src = "'hello';'a longer string here';'world';";
+        SrcReader sr = new SrcStringReader(src);
+        StringManager instance = new StringManager(sr);
+        sr.nextChar();
+        instance.readString();
+        sr.nextChar();
+        instance.readString();
+        sr.nextChar();
+        instance.readString();
+        
+        byte[] sStor = instance.getStringStorage();
+        assertEquals("Byte 0", (byte)src.charAt(1), sStor[0]);
+        assertEquals("Byte 4", (byte)src.charAt(5), sStor[4]);
+        
+        assertEquals("Byte 5", (byte)src.charAt(9), sStor[5]);
+        assertEquals("Byte 24", (byte)src.charAt(28), sStor[24]);
+        
+        assertEquals("Byte 25", (byte)src.charAt(32), sStor[25]);
+        assertEquals("Byte 29", (byte)src.charAt(36), sStor[29]);
+    }
 }

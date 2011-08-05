@@ -4,6 +4,8 @@
  */
 package nbm;
 
+import java.util.Arrays;
+
 /**
  *
  * @author peter
@@ -227,6 +229,17 @@ public class Nbm {
                     w = pop();
                     int c = pop();
                     System.out.print((char)c);
+                    break;
+                    
+                case 2:
+                    w = pop();
+                    int n = pop();
+                    int a = pop();
+                    System.out.print(new String(getDat(a, a + n)));
+                    for (int i = n; i < w; i++) {
+                        System.out.print(" ");
+                    }
+                    break;
             }
         }
     }
@@ -333,6 +346,10 @@ public class Nbm {
         }
         return rv;
 
+    }
+    
+    private byte[] getDat(int startAddr, int len) {
+        return (Arrays.copyOfRange(dat, startAddr, startAddr + len));
     }
 
     private void setDatWord(int atAddr, int word) {

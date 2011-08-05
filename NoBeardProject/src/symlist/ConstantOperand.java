@@ -65,7 +65,7 @@ public class ConstantOperand extends Operand {
 
     @Override
     public Operand emitLoadAddr(Code toCode) {
-        if (getType() == OperandType.SIMPLECHAR) {
+        if (getType() == OperandType.SIMPLECHAR || getType() == OperandType.ARRAYCHAR) {
             toCode.emitOp(Opcode.LIT);
             toCode.emitHalfWord(valaddr);
         }

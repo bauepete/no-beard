@@ -4,6 +4,8 @@
  */
 package scanner;
 
+import java.util.Arrays;
+
 /**
  * NoBeard string manager assists the scanner to detect strings.
  * @author peter
@@ -79,6 +81,12 @@ public class StringManager {
      */
     public int getStringLength() {
         return stringLength;
+    }
+
+    public byte[] getStringStorage() {
+        char[] rv = new char[firstFree];
+        System.arraycopy(stringStorage, 0, rv, 0, rv.length);
+        return new String(rv).getBytes();
     }
     
 }

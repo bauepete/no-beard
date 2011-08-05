@@ -6,6 +6,9 @@ package parser.semantics;
 
 import compiler.NbCompiler;
 import error.ErrorHandler;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
@@ -16,6 +19,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.NoBeardParser;
 import scanner.Scanner;
+import scanner.SrcFileReader;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
 import symlist.SymListManager;
@@ -44,7 +48,6 @@ public class NoBeardParserTest {
 
     @Before
     public void setUp() {
- 
     }
 
     @After
@@ -59,7 +62,7 @@ public class NoBeardParserTest {
         System.out.println("testBlockIdentMismatch");
 
         setupTest(new SrcStringReader("unit foo; do put (x); done fox;"));
-        
+
 
         assertFalse("False expected", p.parse());
         assertEquals("Sem err ", 1, ErrorHandler.getInstance().getCount("SemErr"));
@@ -75,7 +78,7 @@ public class NoBeardParserTest {
         };
 
         setupTest(new SrcStringReader("unit foo; do done foo;"));
-        
+
 
         assertTrue("True expected", p.parse());
         assertCodeEquals("Code ", expected, code.getByteCode());
@@ -93,7 +96,7 @@ public class NoBeardParserTest {
             Opcode.HALT.byteCode()
         };
         setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
- 
+
         assertTrue("True expected", p.parse());
         assertCodeEquals("Code ", expected1, code.getByteCode());
 
@@ -107,7 +110,7 @@ public class NoBeardParserTest {
             Opcode.PUT.byteCode(), 0,
             Opcode.HALT.byteCode()
         };
-        
+
         setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
 
         assertTrue("True expected", p.parse());
@@ -128,20 +131,22 @@ public class NoBeardParserTest {
             Opcode.PUT.byteCode(), 0,
             Opcode.HALT.byteCode()
         };
-        
+
         setupTest(new SrcStringReader("unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;"));
-        
-        
+
+
         assertTrue("True expected", p.parse());
         assertCodeEquals("Code ", expected3, code.getByteCode());
     }
-    
+
     @Test
     public void testParseChar() {
+        System.out.println("testParseChar");
+
         byte[] expected = {
             Opcode.INC.byteCode(), 0, 1,
             Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 120,      // ascii code of 'x'
+            Opcode.LIT.byteCode(), 0, 120, // ascii code of 'x'
             Opcode.STC.byteCode(),
             Opcode.LC.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 1,
@@ -153,10 +158,34 @@ public class NoBeardParserTest {
         AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
     }
 
+    @Test
+    public void testHelloWorld() {
+        System.out.println("testHelloWorld");
+        
+        byte[] expected = {
+            Opcode.INC.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 0,    // address of string
+            Opcode.LIT.byteCode(), 0, 11,   // length of string
+            Opcode.LIT.byteCode(), 0, 11,   // width parameter of print instr.
+            Opcode.PUT.byteCode(), 2,
+            Opcode.HALT.byteCode()
+        };
+        
+        try {
+            setupTest(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
+            
+            assertEquals("Parse: ", true, p.parse());
+            AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
         AssmCodeChecker.assertCodeEquals(msg, exp, act);
     }
-    
+
     private void setupTest(SrcReader src) {
         NbCompiler comp = new NbCompiler(src);
         scanner = comp.getScanner();
