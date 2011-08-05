@@ -44,6 +44,20 @@ public class FactParser extends Parser {
                 op = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, val, 0);
                 // endsem
                 break;
+                
+            case STRINGSY:
+                // sem
+                Operand.OperandType opType;
+                if (scanner.getStringLength() == 1) {
+                    opType = Operand.OperandType.SIMPLECHAR;
+                }
+                else {
+                    opType = Operand.OperandType.ARRAYCHAR;
+                }
+                op = new ConstantOperand(opType, scanner.getStringLength(), scanner.getStringAddress(), 0);
+                // endsem
+                scanner.nextToken();
+                break;
 
             case LPARSY:
                 scanner.nextToken();

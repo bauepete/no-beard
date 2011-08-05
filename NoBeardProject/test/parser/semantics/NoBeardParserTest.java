@@ -135,6 +135,23 @@ public class NoBeardParserTest {
         assertTrue("True expected", p.parse());
         assertCodeEquals("Code ", expected3, code.getByteCode());
     }
+    
+    @Test
+    public void testParseChar() {
+        byte[] expected = {
+            Opcode.INC.byteCode(), 0, 1,
+            Opcode.LA.byteCode(), 0, 0, 32,
+            Opcode.LIT.byteCode(), 0, 120,      // ascii code of 'x'
+            Opcode.STC.byteCode(),
+            Opcode.LC.byteCode(), 0, 0, 32,
+            Opcode.LIT.byteCode(), 0, 1,
+            Opcode.PUT.byteCode(), 1,
+            Opcode.HALT.byteCode()
+        };
+        setupTest(new SrcStringReader("unit foo; do char x = \"x\"; put(x); done foo;"));
+        assertEquals("Parse: ", true, p.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+    }
 
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
         AssmCodeChecker.assertCodeEquals(msg, exp, act);

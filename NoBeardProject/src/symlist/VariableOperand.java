@@ -34,9 +34,9 @@ public class VariableOperand extends Operand {
                 break;
 
             case SIMPLECHAR:
-                // toCode.emitOp(Opcode.LC);
-                // TODO: Implement loadVal for strings
-                //code.emitHalfWord(StringStorage.getAt(valaddr));
+                toCode.emitOp(Opcode.LC);
+                toCode.emitByte((byte) (getCurrLevel() - getLevel()));
+                toCode.emitHalfWord(valaddr);
                 break;
         }
         return (new ValueOnStackOperand(this));

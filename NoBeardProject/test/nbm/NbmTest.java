@@ -131,4 +131,27 @@ public class NbmTest {
             Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @Test
+    public void testPutChar() {
+        try {
+            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
+            NoBeardParser p = comp.getParser();
+            boolean parseOk = p.parse();
+            
+            if (parseOk) {
+                Code c = comp.getCode();
+                m.loadProg(0, c.getByteCode());
+                m.runProg(0);
+                assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
+            }
+            else {
+                ErrorHandler.getInstance().printSummary();
+                System.err.println("Compilation not successfull. Can't run program.");
+                fail("Program must compile successfully.");
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

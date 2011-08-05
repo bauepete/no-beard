@@ -36,8 +36,7 @@ public class ConstantOperand extends Operand {
                 
             case SIMPLECHAR:
                 toCode.emitOp(Opcode.LIT);
-                // TODO: Implement loadVal for strings
-                //code.emitHalfWord(StringStorage.getAt(valaddr));
+                toCode.emitHalfWord(getStringStorage(valaddr));
                 break;
         }
     return (new ValueOnStackOperand(this));
@@ -55,8 +54,8 @@ public class ConstantOperand extends Operand {
                 
             case SIMPLECHAR:
                 toCode.emitOp(Opcode.LIT);
-                // TODO: Implement assign for strings
-                // code.emitHalfWord(StringStorage.getAt(valaddr));
+                toCode.emitHalfWord(getStringStorage(valaddr));
+                toCode.emitOp(Opcode.STC);
                 break;
                 
             default:

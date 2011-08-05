@@ -5,6 +5,7 @@
 package symlist;
 
 import nbm.Code;
+import scanner.StringManager;
 
 /**
  *
@@ -21,9 +22,10 @@ public abstract class Operand {
 
     public enum OperandType {
 
-        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL, UNITTYPE, ERRORTYPE
+        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL, ARRAYCHAR, UNITTYPE, ERRORTYPE
     }
     protected static SymListManager symListManager = null;
+    protected static StringManager stringManager = null;
     protected OperandKind kind;
     protected OperandType type;
     protected int size;
@@ -50,6 +52,10 @@ public abstract class Operand {
         Operand.symListManager = symListManager;
     }
 
+    public static void setStringManager(StringManager stringManager) {
+        Operand.stringManager = stringManager;
+    }
+
     public OperandKind getKind() {
         return kind;
     }
@@ -72,14 +78,20 @@ public abstract class Operand {
 
     public int getCurrLevel() {
         if (symListManager == null) {
-            throw new NullPointerException("Operand not initialized properly.");
+            throw new NullPointerException("Operand not initialized properly. SymListManager missing.");
 
         } else {
             return symListManager.getCurrLevel();
         }
     }
     
-
+    public char getStringStorage(int charAt) {
+        if (stringManager == null) {
+            throw new NullPointerException("Operand not initialized properly. StringManager missing.");
+        }
+        return (stringManager.getCharAt(charAt));
+    }
+    
     public abstract Operand emitLoadVal(Code toCode);
 
     public abstract Operand emitLoadAddr(Code toCode);

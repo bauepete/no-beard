@@ -130,6 +130,7 @@ public class Nbm {
 
         @Override
         public void exec() {
+            pc++;
             int x = pop();
             int a = pop();
             // TODO: only the rightmost character may be written to dat
@@ -141,6 +142,7 @@ public class Nbm {
 
         @Override
         public void exec() {
+            pc++;
             int x = pop();
             push(-x);
         }
@@ -224,7 +226,7 @@ public class Nbm {
                 case 1:
                     w = pop();
                     int c = pop();
-                    System.out.print(c);
+                    System.out.print((char)c);
             }
         }
     }

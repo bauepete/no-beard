@@ -25,6 +25,10 @@ public class StringManager {
         this.srcReader = srcReader;
     }
     
+    public char getCharAt(int addr) {
+        return stringStorage[addr];
+    }
+    
     /**
      * readString is called if and only if the SrcReader.getCurrentChar()
      * returns an apostrophe (') or a quote ("). readString() scans the string

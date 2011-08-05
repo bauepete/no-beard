@@ -48,6 +48,10 @@ public class Scanner {
     public NameManager getNameManager() {
         return nameManager;
     }
+
+    public StringManager getStringManager() {
+        return stringManager;
+    }
     
     public int getCurrentLine() {
         return srcReader.getCurrentLine();

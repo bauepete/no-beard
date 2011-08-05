@@ -63,6 +63,13 @@ public class StringManagerTest {
         assertEquals("3rd string address", 25, instance.getStringAddress());
         assertEquals("2nd string length", 5, instance.getStringLength());
         assertEquals("Next char ", ';', sr.getCurrentChar());
+        
+        assertEquals("1st char ", 'h', instance.getCharAt(0));
+        assertEquals("5th char ", 'o', instance.getCharAt(4));
+        assertEquals("6th char ", 'a', instance.getCharAt(5));
+        assertEquals("25th char ", 'e', instance.getCharAt(24));
+        assertEquals("26th char ", 'w', instance.getCharAt(25));
+        assertEquals("30th char ", 'd', instance.getCharAt(29));
     }
 
     /**
