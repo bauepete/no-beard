@@ -182,6 +182,30 @@ public class NoBeardParserTest {
         }
     }
 
+    @Test
+    public void testVariableWorld() {
+        System.out.println("testVariableWorld");
+        
+        byte[] expected = {
+            Opcode.INC.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 0,    // address of string
+            Opcode.LIT.byteCode(), 0, 11,   // length of string
+            Opcode.LIT.byteCode(), 0, 11,   // width parameter of print instr.
+            Opcode.PUT.byteCode(), 2,
+            Opcode.HALT.byteCode()
+        };
+        
+        try {
+            setupTest(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
+            
+            assertEquals("Parse: ", true, p.parse());
+            //AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
         AssmCodeChecker.assertCodeEquals(msg, exp, act);
     }
