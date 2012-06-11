@@ -187,11 +187,19 @@ public class NoBeardParserTest {
         System.out.println("testVariableWorld");
         
         byte[] expected = {
-            Opcode.INC.byteCode(), 0, 0,
-            Opcode.LIT.byteCode(), 0, 0,    // address of string
-            Opcode.LIT.byteCode(), 0, 11,   // length of string
-            Opcode.LIT.byteCode(), 0, 11,   // width parameter of print instr.
-            Opcode.PUT.byteCode(), 2,
+            Opcode.INC.byteCode(), 0, 29,   // stack pointer plus size of vars
+            Opcode.LA.byteCode(), 0, 0, 32, // address of string x
+            Opcode.LIT.byteCode(), 0, 0,    // address of source string
+            Opcode.LIT.byteCode(), 0, 12,   // length of string
+            Opcode.ASSN.byteCode(),         // Array assignment
+            Opcode.LA.byteCode(), 0, 0, 32, // Load address of var to print
+            Opcode.LIT.byteCode(), 0, 12,   // Length of string
+            Opcode.LIT.byteCode(), 0, 12,   // Width parameter of print instr.
+            Opcode.PUT.byteCode(), 2,       // Output of a string
+            Opcode.LA.byteCode(), 0, 0, 44, // address of string y
+            Opcode.LIT.byteCode(), 0, 12,   // address of source string
+            Opcode.LIT.byteCode(), 0, 17,   // length of second string
+            Opcode.ASSN.byteCode(),         // Array assignment
             Opcode.HALT.byteCode()
         };
         
@@ -199,7 +207,7 @@ public class NoBeardParserTest {
             setupTest(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
             
             assertEquals("Parse: ", true, p.parse());
-            //AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+            AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);

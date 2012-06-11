@@ -19,7 +19,7 @@ public class Nbm {
 
     public enum Opcode {
 
-        LIT, LA, LV, LC, STO, STC, NEG, ADD, SUB, MUL, DIV, MOD, PUT, INC, HALT, TRAP;
+        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD, PUT, INC, HALT, TRAP;
 
         public byte byteCode() {
             return (byte) this.ordinal();
@@ -140,6 +140,20 @@ public class Nbm {
         }
     }
 
+    class Assn implements Instruction {
+
+        @Override
+        public void exec() {
+            pc++;
+            int n = pop();
+            int y = pop();
+            int x = pop();
+            for (int i = 0; i < n; i++) {
+                dat[x + i] = dat[y + i];
+            }
+        }
+        
+    }
     class Neg implements Instruction {
 
         @Override
@@ -222,6 +236,7 @@ public class Nbm {
                 case 0:
                     w = pop();
                     int x = pop();
+                    //TODO: print leading blanks
                     System.out.print(x);
                     break;
                     
@@ -235,7 +250,7 @@ public class Nbm {
                     w = pop();
                     int n = pop();
                     int a = pop();
-                    System.out.print(new String(getDat(a, a + n)));
+                    System.out.print(new String(getDat(a, n)));
                     for (int i = n; i < w; i++) {
                         System.out.print(" ");
                     }
@@ -407,6 +422,10 @@ public class Nbm {
                 
             case STC:
                 i = new Stc();
+                break;
+                
+            case ASSN:
+                i = new Assn();
                 break;
                 
             case NEG:

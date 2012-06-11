@@ -4,8 +4,6 @@
  */
 package scanner;
 
-import java.util.Arrays;
-
 /**
  * NoBeard string manager assists the scanner to detect strings.
  * @author peter

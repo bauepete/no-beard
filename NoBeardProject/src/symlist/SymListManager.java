@@ -23,7 +23,7 @@ public class SymListManager {
 
     public enum ElementType {
 
-        INT, CHAR, BOOL
+        INT, CHAR, BOOL, ARRCHAR
     }
     private HashMap<Integer, SymListEntry> symList;
     private Stack s;
@@ -89,33 +89,60 @@ public class SymListManager {
         return true;
     }
 
-    public boolean newVar(int name, ElementType t) {
+    public boolean newVar(int name, ElementType t, int maxInd) {
         if (symList.containsKey(name)) {
             ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name), scanner.getCurrentLine()));
             return false;
         }
 
-        SymListEntry var = null;
+        OperandType opType = OperandType.ERRORTYPE;
+        int opSize = 0;
 
         switch (t) {
             case INT:
-                var = new SymListEntry(name, OperandKind.VARIABLE, OperandType.SIMPLEINT, 4, datAddr, currLevel);
+                opSize = 4;
+                if (maxInd > 1) {
+                    opType = OperandType.ARRAYINT;
+                }
+                else {
+                    maxInd = 1;
+                    opType = OperandType.SIMPLEINT;
+                }
                 break;
 
             case CHAR:
-                var = new SymListEntry(name, OperandKind.VARIABLE, OperandType.SIMPLECHAR, 1, datAddr, currLevel);
+                opSize = 1;
+                if (maxInd > 1) {
+                    opType = OperandType.ARRAYCHAR;
+                }
+                else {
+                    maxInd = 1;
+                    opType = OperandType.SIMPLECHAR;
+                }
                 break;
 
             case BOOL:
-                var = new SymListEntry(name, OperandKind.VARIABLE, OperandType.SIMPLEBOOL, 4, datAddr, currLevel);
+                opSize = 4;
+                if (maxInd > 1) {
+                    opType = OperandType.ARRAYBOOL;
+                }
+                else {
+                    maxInd = 1;
+                    opType = OperandType.SIMPLEBOOL;
+                }
                 break;
         }
-
+        
+        SymListEntry var = new SymListEntry(name, OperandKind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
         symList.put(name, var);
         currProc.addSize(var.getSize());
         datAddr += var.getSize();
         alignDatAddrTo4();
         return true;
+    }
+    
+    public boolean newVar(int name, ElementType t) {
+        return (newVar(name, t, 1));
     }
 
     public void defineProcStart(SymListEntry procObj, int startPc) {

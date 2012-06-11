@@ -7,6 +7,7 @@ package parser;
 import error.ErrorHandler;
 import error.semerr.IncompatibleTypes;
 import error.semerr.NameAlreadyDefined;
+import error.semerr.SemErr;
 import error.synerr.SymbolExpected;
 import error.synerr.SynErr;
 import nbm.Code;
@@ -48,9 +49,33 @@ public class VarDeclParser extends Parser {
             return false;
         }
         // endcc
-        // sem
-        sym.newVar(name, elemType);
-        // endsem
+
+        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKETSY) {
+            scanner.nextToken();
+            // sem
+            int val = number();
+            if (val == NONUMBER) {
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
+                return false;
+            }
+            // endsem
+            // cc
+            if (val <= 0) {
+                ErrorHandler.getInstance().raise(new SemErr(55, "Index > 0 expected", scanner.getCurrentLine()));
+                return false;
+            }
+            // endcc
+
+            if (!tokenIsA(Symbol.RBRACKETSY)) {
+                return false;
+            }
+            sym.newVar(name, elemType, val);
+        } else {
+            // sem
+            sym.newVar(name, elemType);
+            // endsem
+        }
+
 
         if (scanner.getCurrentToken().getSy() == Symbol.ASSIGNSY) {
             // sem
@@ -82,17 +107,6 @@ public class VarDeclParser extends Parser {
     private boolean type() {
         if (!typeSpec()) {
             return false;
-        }
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKETSY) {
-            scanner.nextToken();
-            int val = number();
-            if (val == NONUMBER) {
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
-                return false;
-            }
-            if (!tokenIsA(Symbol.RBRACKETSY)) {
-                return false;
-            }
         }
         return true;
     }

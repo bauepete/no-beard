@@ -97,6 +97,12 @@ public class PutStatParser extends Parser {
                 break;
 
             case RPARSY:
+                // cc
+                if (op.getSize() == Operand.UNDEFSIZE) {
+                    ErrorHandler.getInstance().raise(new CantPutOperand(scanner.getCurrentLine()));
+                    return false;
+                }
+                // end cc
                 // sem
                 switch (op.getType()) {
                     case SIMPLEINT:

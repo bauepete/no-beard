@@ -35,8 +35,17 @@ public class ValueOnStackOperand extends Operand {
                 break;
                 
             case SIMPLECHAR:
-                //TODO: Implement STC
-                //toCode.emitOp(Opcode.STC);
+                toCode.emitOp(Opcode.LIT);
+                // TODO: implement access to string storage
+                toCode.emitHalfWord(valaddr);
+                toCode.emitOp(Opcode.STC);
+                break;
+                
+            case ARRAYCHAR:
+                toCode.emitOp(Opcode.LIT);
+                toCode.emitHalfWord(valaddr);
+                toCode.emitOp(Opcode.ASSN);
+                break;
         }
     }
 

@@ -22,7 +22,8 @@ public abstract class Operand {
 
     public enum OperandType {
 
-        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL, ARRAYCHAR, UNITTYPE, ERRORTYPE
+        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL, ARRAYCHAR, ARRAYINT, ARRAYBOOL,
+        UNITTYPE, ERRORTYPE
     }
     protected static SymListManager symListManager = null;
     protected static StringManager stringManager = null;

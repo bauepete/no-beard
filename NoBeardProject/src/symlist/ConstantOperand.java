@@ -58,6 +58,14 @@ public class ConstantOperand extends Operand {
                 toCode.emitOp(Opcode.STC);
                 break;
                 
+            case ARRAYCHAR:
+                toCode.emitOp(Opcode.LIT);
+                toCode.emitHalfWord(valaddr);
+                toCode.emitOp(Opcode.LIT);
+                toCode.emitHalfWord(destOp.getSize());
+                toCode.emitOp(Opcode.ASSN);
+                break;
+                
             default:
                 ErrorHandler.getInstance().raise(new SemErr(99, "Can't assign to given type" + destOp.getType().toString(), 99));
         }
