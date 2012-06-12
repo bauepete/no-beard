@@ -255,6 +255,10 @@ public class Nbm {
                         System.out.print(" ");
                     }
                     break;
+                    
+                case 3:
+                    System.out.println();
+                    break;
             }
         }
     }

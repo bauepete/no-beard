@@ -55,6 +55,7 @@ public class StatParser extends Parser {
                 break;
 
             case PUTSY:
+            case PUTLNSY:
                 PutStatParser putStatP = new PutStatParser(scanner, sym, code);
                 if (!putStatP.parse()) {
                     return false;

@@ -22,14 +22,32 @@ import symlist.SymListManager;
  */
 public class PutStatParser extends Parser {
 
-    PutStatParser(Scanner s, SymListManager sym, Code c) {
+    public PutStatParser(Scanner s, SymListManager sym, Code c) {
         super(s, sym, c);
     }
 
     @Override
     public boolean parse() {
+        boolean isParsedCorrectly = false;
+
+        switch (scanner.getCurrentToken().getSy()) {
+            case PUTSY:
+                isParsedCorrectly = put();
+                break;
+
+            case PUTLNSY:
+                isParsedCorrectly = putln();
+                break;
+
+            default:
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PUTLNSY.toString(), Symbol.PUTSY.toString(), scanner.getCurrentLine()));
+                break;
+        }
+        return isParsedCorrectly;
+    }
+
+    private boolean put() {
         if (!tokenIsA(Symbol.PUTSY)) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PUTSY.toString(), scanner.getCurrentLine()));
             return false;
         }
 
@@ -128,6 +146,18 @@ public class PutStatParser extends Parser {
         return true;
     }
 
+    private boolean putln() {
+        if (!tokenIsA(Symbol.PUTLNSY)) {
+            return false;
+        }
+        
+        // sem
+        code.emitOp(Opcode.PUT);
+        code.emitByte((byte)3);
+        // endsem
+        return true;
+    }
+
     private boolean isOperandToPut(Operand op) {
         OperandType opType = op.getType();
 
@@ -145,7 +175,7 @@ public class PutStatParser extends Parser {
                 code.emitOp(Opcode.PUT);
                 code.emitByte((byte) 1);
                 break;
-                
+
             case ARRAYCHAR:
                 code.emitOp(Opcode.PUT);
                 code.emitByte((byte) 2);
