@@ -4,6 +4,7 @@
  */
 package parser.semantics;
 
+import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -11,13 +12,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.PutStatParser;
+import parser.general.PutStatParserTestSetup;
 
 /**
  *
  * @author peter
  */
 public class PutStatParserTest {
-    
+
     public PutStatParserTest() {
     }
 
@@ -28,11 +30,11 @@ public class PutStatParserTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -43,11 +45,53 @@ public class PutStatParserTest {
     @Test
     public void testParsePutInt() {
         System.out.println("testParsePutInt");
-        PutStatParser instance = null;
-        boolean expResult = false;
-        boolean result = instance.parse();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        byte[] expected = {
+            Opcode.LIT.byteCode(), 0, 5,
+            Opcode.LIT.byteCode(), 0, 0,
+            Opcode.PUT.byteCode(), 0
+        };
+
+        PutStatParser instance = PutStatParserTestSetup.getPutIntSetup();
+        assertTrue("Parse: ", instance.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+
+    }
+
+    /**
+     * Test of parse method, of class PutStatParser.
+     */
+    @Test
+    public void testParsePutString() {
+        System.out.println("testParsePutString");
+
+        byte[] expected = {
+            Opcode.LIT.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 6,
+            Opcode.LIT.byteCode(), 0, 6,
+            Opcode.PUT.byteCode(), 2
+        };
+
+        PutStatParser instance = PutStatParserTestSetup.getPutStringSetup();
+        assertTrue("Parse: ", instance.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+
+    }
+
+    /**
+     * Test of parse method, of class PutStatParser.
+     */
+    @Test
+    public void testParsePutln() {
+        System.out.println("testParsePutln");
+
+        byte[] expected = {
+            Opcode.PUT.byteCode(), 3
+        };
+
+        PutStatParser instance = PutStatParserTestSetup.getPutlnSetup();
+        assertTrue("Parse: ", instance.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+
     }
 }

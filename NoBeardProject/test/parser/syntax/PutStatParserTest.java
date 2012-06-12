@@ -4,7 +4,6 @@
  */
 package parser.syntax;
 
-import nbm.Code;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,9 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.PutStatParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
-import symlist.SymListManager;
+import parser.general.PutStatParserTestSetup;
 
 /**
  *
@@ -45,20 +42,21 @@ public class PutStatParserTest {
      * Test of parse method, of class PutStatParser.
      */
     @Test
-    public void testParsePut() {
-        System.out.println("testParsePut");
-        Scanner s = new Scanner(new SrcStringReader("put(5);"));
-        s.nextToken();
-        Code c = new Code();
-        SymListManager sl = new SymListManager(c, s);
-        PutStatParser instance = new PutStatParser(s, sl, c);
-        assertTrue(instance.parse());
+    public void testParsePutInt() {
+        System.out.println("testParsePutInt");
         
-        s = new Scanner(new SrcStringReader("put('some bla')"));
-        s.nextToken();
-        instance = new PutStatParser(s, sl, c);
-        assertTrue(instance.parse());
+        PutStatParser p = PutStatParserTestSetup.getPutIntSetup();
+        assertTrue(p.parse());
     }
+    
+    @Test
+    public void testParsePutString() {
+        System.out.println("testParsePutString");
+        
+        PutStatParser p = PutStatParserTestSetup.getPutStringSetup();
+        assertTrue(p.parse());
+    }
+    
     
     /**
      * Test of parse method, of class PutStatParser.
@@ -66,11 +64,7 @@ public class PutStatParserTest {
     @Test
     public void testParsePutln() {
         System.out.println("testParsePutln");
-        Scanner s = new Scanner(new SrcStringReader("putln;"));
-        s.nextToken();
-        Code c = new Code();
-        SymListManager sl = new SymListManager(c, s);
-        PutStatParser instance = new PutStatParser(s, sl, c);
-        assertTrue(instance.parse());
+        PutStatParser p = PutStatParserTestSetup.getPutlnSetup();
+        assertTrue(p.parse());
     }
 }
