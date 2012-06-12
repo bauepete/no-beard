@@ -9,5 +9,8 @@ do
         int unused = l;
     int x=1001 + l * b - h / (b * h);
 
+    put ("Evaluating 1001 + l * b - h / (b * h)");
+    putln;
+    put ("Result is ");
     put (x);          # result should be 1051
 done ComplexExpr;
