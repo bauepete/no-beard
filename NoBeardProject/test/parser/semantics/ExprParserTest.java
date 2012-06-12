@@ -4,8 +4,6 @@
  */
 package parser.semantics;
 
-import error.ErrorHandler;
-import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,23 +12,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ExprParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
-import symlist.Operand;
-import symlist.SymListManager;
+import parser.general.ExprParserTestSetup;
 
 /**
  *
  * @author peter
  */
 public class ExprParserTest {
-
-    private Scanner addS;
-    private Scanner addMulS;
-    private Scanner complexExprS;
-    
-    private SymListManager sym;
-    private Code c;
 
     public ExprParserTest() {
     }
@@ -45,17 +33,6 @@ public class ExprParserTest {
 
     @Before
     public void setUp() {
-        ErrorHandler.getInstance().reset();
-        addS = new Scanner(new SrcStringReader("a + b"));
-        addMulS = new Scanner(new SrcStringReader("a - b * 3"));
-        complexExprS = new Scanner(new SrcStringReader("-5 * (a + b)/17"));
-
-        c = new Code();
-        sym = new SymListManager(c, addS);
-        sym.newUnit(25);
-        sym.newVar(0, SymListManager.ElementType.INT);
-        sym.newVar(1, SymListManager.ElementType.INT);
-        Operand.setSymListManager(sym);
     }
 
     @After
@@ -66,8 +43,8 @@ public class ExprParserTest {
      * Test of parse method, of class ExprParser.
      */
     @Test
-    public void testParseAdd() {
-        System.out.println("testParseAdd");
+    public void testAdd() {
+        System.out.println("testAdd");
         
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
@@ -75,12 +52,67 @@ public class ExprParserTest {
             Opcode.ADD.byteCode()
         };
 
-        Scanner s = addS;
-        s.nextToken();
-        ExprParser p = new ExprParser(s, sym, c);
+        ExprParser p = ExprParserTestSetup.getAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        assertCodeEquals("Code ", expected, c.getByteCode());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+    }
+
+    /**
+     * Test of parse method, of class ExprParser.
+     */
+    @Test
+    public void testSub() {
+        System.out.println("testSub");
+        
+        byte[] expected = {
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.SUB.byteCode()
+        };
+
+        ExprParser p = ExprParserTestSetup.getSubTestSetup();
+
+        assertEquals("Parse ", true, p.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+    }
+
+    /**
+     * Test of parse method, of class ExprParser.
+     */
+    @Test
+    public void testNegAdd() {
+        System.out.println("testNegAdd");
+        
+        byte[] expected = {
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.NEG.byteCode(),
+            Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.ADD.byteCode()
+        };
+
+        ExprParser p = ExprParserTestSetup.getNegAddTestSetup();
+
+        assertEquals("Parse ", true, p.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+    }
+
+    /**
+     * Test of parse method, of class ExprParser.
+     */
+    @Test
+    public void testNeg() {
+        System.out.println("testNeg");
+        
+        byte[] expected = {
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.NEG.byteCode(),
+        };
+
+        ExprParser p = ExprParserTestSetup.getNegTestSetup();
+
+        assertEquals("Parse ", true, p.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -98,12 +130,10 @@ public class ExprParserTest {
             Opcode.SUB.byteCode()
         };
 
-        Scanner s = addMulS;
-        s.nextToken();
-        ExprParser p = new ExprParser(s, sym, c);
+        ExprParser p = ExprParserTestSetup.getAddMulTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        assertCodeEquals("Code ", expected, c.getByteCode());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -124,15 +154,9 @@ public class ExprParserTest {
             Opcode.NEG.byteCode(),
         };
 
-        Scanner s = complexExprS;
-        s.nextToken();
-        ExprParser p = new ExprParser(s, sym, c);
+        ExprParser p = ExprParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        assertCodeEquals("Code ", expected, c.getByteCode());
-    }
-    
-    private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
-        AssmCodeChecker.assertCodeEquals(msg, exp, act);
+        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 }
