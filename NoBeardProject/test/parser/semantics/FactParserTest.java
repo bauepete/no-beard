@@ -4,7 +4,6 @@
  */
 package parser.semantics;
 
-import nbm.Code;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,21 +11,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.FactParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
+import parser.general.FactParserTestSetup;
 import symlist.Operand.OperandKind;
-import symlist.SymListManager;
 
 /**
  *
  * @author peter
  */
 public class FactParserTest {
-
-    private Scanner identS = new Scanner(new SrcStringReader("a25"));
-    private Scanner numberS = new Scanner(new SrcStringReader("42"));
-    private Code c;
-    private SymListManager sym;
 
     public FactParserTest() {
     }
@@ -41,9 +33,6 @@ public class FactParserTest {
 
     @Before
     public void setUp() {
-        c = new Code();
-        sym = new SymListManager(c, identS);
-        sym.newUnit(25);
     }
 
     @After
@@ -57,27 +46,42 @@ public class FactParserTest {
     public void testParseIdentifier() {
         System.out.println("testParseIdentifier");
 
-        Scanner s = identS;
-        s.nextToken();
-        sym.newVar(s.getCurrentToken().getValue(), SymListManager.ElementType.INT);
-
-        FactParser p = new FactParser(s, sym, c);
+        FactParser p = FactParserTestSetup.getIdentifierTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VARIABLE, p.getOperand().getKind());
+        assertEquals("Value ", 32, p.getOperand().getValaddr());
     }
 
     @Test
-    public void testParseConstant() {
-        System.out.println("testParseConstant");
-        
-        Scanner s = numberS;
-        s.nextToken();
+    public void testParseNumber() {
+        System.out.println("testParseNumber");
 
-        FactParser p = new FactParser(s, sym, c);
+        FactParser p = FactParserTestSetup.getNumberTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
         assertEquals("Value ", 42, p.getOperand().getValaddr());
+    }
+
+    @Test
+    public void testParseString() {
+        System.err.append("testParseString");
+
+        FactParser p = FactParserTestSetup.getStringTestSetup();
+        
+        assertEquals("Parse ", true, p.parse());
+        assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
+        assertEquals("Value ", 0, p.getOperand().getValaddr());
+    }
+    
+    @Test
+    public void testParseExpr() {
+        System.err.append("testParseExpr");
+        
+        FactParser p = FactParserTestSetup.getExprSetup();
+        assertEquals("Parse ", true, p.parse());
+        assertEquals("Operand ", OperandKind.VALONSTACK, p.getOperand().getKind());
+        assertEquals("Value ", 36, p.getOperand().getValaddr());
     }
 }
