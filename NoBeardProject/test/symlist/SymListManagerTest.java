@@ -6,7 +6,6 @@ package symlist;
 
 import scanner.Scanner;
 import symlist.Operand.OperandKind;
-import scanner.Token;
 import scanner.NameManager;
 import nbm.Code;
 import error.ErrorHandler;
