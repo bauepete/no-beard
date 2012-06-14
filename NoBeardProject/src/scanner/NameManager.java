@@ -26,6 +26,8 @@ public class NameManager {
                 put("int", Symbol.INTSY);
                 put("char", Symbol.CHARSY);
                 put("bool", Symbol.BOOLSY);
+                put("true", Symbol.TRUESY);
+                put("false", Symbol.FALSESY);
             }};
     
     public NameManager(SrcReader sr) {

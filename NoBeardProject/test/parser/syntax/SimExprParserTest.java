@@ -89,4 +89,11 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getNoExprTestSetup();
         assertEquals("Parse ", false, p.parse());
     }
+    
+    @Test
+    public void testOrExpr() {
+        System.out.println("testOrExpr");
+        SimExprParser p = SimExprParserTestSetup.getOrExprTestSetup();
+        assertTrue(p.parse());
+    }
 }

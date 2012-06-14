@@ -172,7 +172,7 @@ public class ScannerTest {
     public void testKeywords() {
         System.out.println("testKeywords");
         
-        Scanner s = new Scanner(new SrcStringReader("unit foo; do put x; done done foo;"));
+        Scanner s = new Scanner(new SrcStringReader("unit foo; do put x; a < 0; a != 0; true; false; putln; done done foo;"));
         
         s.nextToken();
         assertTrue("UNITSY expected", s.getCurrentToken().getSy() == Symbol.UNITSY);
@@ -188,6 +188,34 @@ public class ScannerTest {
         assertTrue("IDENTSY expected", s.getCurrentToken().getSy() == Symbol.IDENTSY);
         s.nextToken();
         assertTrue("SEMICOLONSY expected", s.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        s.nextToken();
+        assertTrue("IDENTSY expected", s.getCurrentToken().getSy() == Symbol.IDENTSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.LTHSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.NUMBERSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.SEMICOLONSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.IDENTSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.NEQSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.NUMBERSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.SEMICOLONSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.TRUESY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.SEMICOLONSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.FALSESY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.SEMICOLONSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.PUTLNSY);
+        s.nextToken();
+        assertEquals(s.getCurrentToken().getSy(), Symbol.SEMICOLONSY);
         s.nextToken();
         assertTrue("DONESY expected", s.getCurrentToken().getSy() == Symbol.DONESY);
         s.nextToken();

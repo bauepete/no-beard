@@ -16,10 +16,15 @@ public class Scanner {
         NOSY, EOFSY, ILLEGALSY,
         /// Keywords
         PUTSY, PUTLNSY, UNITSY, DOSY, DONESY, INTSY, BOOLSY, CHARSY,
+        TRUESY, FALSESY,
         /// Classes
         IDENTSY, NUMBERSY, STRINGSY,
         /// Arithmethic
         PLUSSY, MINUSSY, TIMESSY, DIVSY, MODSY,
+        /// Relational operators
+        LTHSY, GTHSY, EQLSY, LEQSY, GEQSY, NEQSY,
+        /// Boolean operators
+        NOTSY, ANDSY, ORSY,
         /// Delimiters
         ASSIGNSY, SEMICOLONSY, COLONSY, LPARSY, RPARSY,
         LBRACKETSY, RBRACKETSY;
@@ -52,7 +57,7 @@ public class Scanner {
     public StringManager getStringManager() {
         return stringManager;
     }
-    
+
     public int getCurrentLine() {
         return srcReader.getCurrentLine();
     }
@@ -126,9 +131,60 @@ public class Scanner {
                     srcReader.nextChar();
                     break;
 
-                case '=':
-                    currentToken.setSy(Symbol.ASSIGNSY);
+                case '<':
                     srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '=') {
+                        currentToken.setSy(Symbol.LEQSY);
+                        srcReader.nextChar();
+                    } else {
+                        currentToken.setSy(Symbol.LTHSY);
+                    }
+                    break;
+
+                case '>':
+                    srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '=') {
+                        currentToken.setSy(Symbol.GEQSY);
+                        srcReader.nextChar();
+                    } else {
+                        currentToken.setSy(Symbol.GTHSY);
+                    }                    
+                    break;
+
+                case '!':
+                    srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '=') {
+                        currentToken.setSy(Symbol.NEQSY);
+                        srcReader.nextChar();
+                    } else {
+                        currentToken.setSy(Symbol.NOTSY);
+                    }
+                    break;
+
+                case '=':
+                    srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '=') {
+                        currentToken.setSy(Symbol.EQLSY);
+                        srcReader.nextChar();
+                    } else {
+                        currentToken.setSy(Symbol.ASSIGNSY);
+                    }                    
+                    break;
+                    
+                case '&':
+                    srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '&') {
+                        currentToken.setSy(Symbol.ANDSY);
+                        srcReader.nextChar();
+                    }
+                    break;
+                    
+                case '|':
+                    srcReader.nextChar();
+                    if (srcReader.getCurrentChar() == '|') {
+                        currentToken.setSy(Symbol.ORSY);
+                        srcReader.nextChar();
+                    }
                     break;
 
                 case ';':
@@ -183,7 +239,7 @@ public class Scanner {
     public Token getCurrentToken() {
         return currentToken;
     }
-    
+
     /**
      * 
      * @return The start address of the last recently detected string in the
@@ -192,7 +248,7 @@ public class Scanner {
     public int getStringAddress() {
         return stringManager.getStringAddress();
     }
-    
+
     /**
      * 
      * @return The length of the last recently detected string.

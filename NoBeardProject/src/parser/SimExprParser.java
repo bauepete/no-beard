@@ -22,6 +22,7 @@ import symlist.SymListManager;
 public class SimExprParser extends Parser {
 
     private Operand op;
+    private int orChain;
 
     private enum AddopType {
 
@@ -36,6 +37,10 @@ public class SimExprParser extends Parser {
     @Override
     public boolean parse() {
 
+        // sem
+        orChain = 0;
+        // endsem
+        
         if (tokenIsAddOp()) {
             if (!addOp()) {
                 return false;
@@ -47,60 +52,90 @@ public class SimExprParser extends Parser {
             return false;
         }
         Operand op1 = termP.getOperand();
-        
+
         // cc
-        if (addOperator != AddopType.NOADD && termP.getOperand().getType() != OperandType.SIMPLEINT) {
-            ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
+        if (addOperator != AddopType.NOADD && !operandIsA(op1, OperandType.SIMPLEINT)) {
             return false;
         }
         // endcc
-        
+
         // sem
         if (addOperator == AddopType.MINUS) {
             op = op1.emitLoadVal(code);
             code.emitOp(Opcode.NEG);
-        }
-        else {
+        } else {
             op = op1;
         }
         // endsem
 
         while (tokenIsAddOp()) {
-            if (!addOp()) {
-                return false;
+            if (scanner.getCurrentToken().getSy() == Symbol.ORSY) {
+                scanner.nextToken();
+                // cc
+                if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
+                    return false;
+                }
+                // ccend
+                
+                // sem
+                op.emitLoadVal(code);
+                // TODO code.emitOp(Opcode.TJMP);
+                code.emitHalfWord(orChain);
+                orChain = code.getPc() - 2;
+                // endsem
+                
+                if (!termP.parse()) {
+                    return false;
+                }
+                
+                // cc
+                Operand op2 = termP.getOperand();
+                if (!operandIsA(op2, OperandType.SIMPLEBOOL)) {
+                    return false;
+                }
+                // endcc
+                
+                // sem
+                op = op2.emitLoadVal(code);
+                // endsem
+                
+            } else {
+                if (!addOp()) {
+                    return false;
+                }
+                // cc
+                if (!operandIsA(op, OperandType.SIMPLEINT)) {
+                    return false;
+                }
+                // endcc
+                // sem
+                op.emitLoadVal(code);
+                // endsem
+
+
+                if (!termP.parse()) {
+                    return false;
+                }
+                Operand op2 = termP.getOperand();
+                // cc
+                if (!operandIsA(op2, OperandType.SIMPLEINT)) {
+                    return false;
+                }
+                // endcc
+                // sem
+                op = op2.emitLoadVal(code);
+                if (addOperator == AddopType.PLUS) {
+                    code.emitOp(Opcode.ADD);
+                } else {
+                    code.emitOp(Opcode.SUB);
+                }
+                // endsem
             }
-            // cc
-            if (op.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
-                return false;
-            }
-            // endcc
-            // sem
-            op.emitLoadVal(code);
-            // endsem
-            
-            
-            if (!termP.parse()) {
-                return false;
-            }
-            Operand op2 = termP.getOperand();
-            // cc
-            if (op2.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
-                return false;
-            }
-            // endcc
-            // sem
-            op = op2.emitLoadVal(code);
-            if (addOperator == AddopType.PLUS) {
-                code.emitOp(Opcode.ADD);
-            }
-            else {
-                code.emitOp(Opcode.SUB);
-            }
-            // endsem
 
         }
+        // sem
+        // stuff to fixup jump addresses of orChain
+        // endsem
         return true;
     }
 
@@ -110,7 +145,7 @@ public class SimExprParser extends Parser {
 
     private boolean tokenIsAddOp() {
         Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.PLUSSY || sy == Symbol.MINUSSY);
+        return (sy == Symbol.PLUSSY || sy == Symbol.MINUSSY || sy == Symbol.ORSY);
     }
 
     private boolean addOp() {
@@ -134,5 +169,13 @@ public class SimExprParser extends Parser {
                 return false;
         }
         return true;
+    }
+    
+    private boolean operandIsA(Operand op, OperandType opType) {
+     if (op.getType() != opType) {
+         ErrorHandler.getInstance().raise(new TypeExpected(opType.toString(), scanner.getCurrentLine()));
+         return false;
+     }
+     return true;
     }
 }
