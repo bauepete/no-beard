@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.SimExprParser;
-import parser.general.ExprParserTestSetup;
+import parser.general.SimExprParserTestSetup;
 
 /**
  *
@@ -44,49 +44,49 @@ public class SimExprParserTest {
     @Test
     public void testAdd() {
         System.out.println("testAdd");
-        SimExprParser p = ExprParserTestSetup.getAddTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getAddTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testSub() {
         System.out.println("testSub");
-        SimExprParser p = ExprParserTestSetup.getSubTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getSubTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testNegAdd() {
         System.out.println("testNegAdd");
-        SimExprParser p = ExprParserTestSetup.getNegAddTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getNegAddTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testNeg() {
         System.out.println("testNeg");
-        SimExprParser p = ExprParserTestSetup.getNegTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getNegTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testAddMul() {
         System.out.println("testAddMul");
-        SimExprParser p = ExprParserTestSetup.getAddMulTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getAddMulTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testComplexExpr() {
         System.out.println("testComplexExpr");
-        SimExprParser p = ExprParserTestSetup.getComplexExprTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getComplexExprTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testNoExpr() {
         System.out.println("testNoExpr");
-        SimExprParser p = ExprParserTestSetup.getNoExprTestSetup();
+        SimExprParser p = SimExprParserTestSetup.getNoExprTestSetup();
         assertEquals("Parse ", false, p.parse());
     }
 }
