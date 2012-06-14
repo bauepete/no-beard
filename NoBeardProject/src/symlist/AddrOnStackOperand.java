@@ -13,6 +13,7 @@ import nbm.Code;
 public class AddrOnStackOperand extends Operand {
     public AddrOnStackOperand(Operand op) {
         super(op);
+        this.kind = OperandKind.ADDRONSTACK;
     }
 
     @Override

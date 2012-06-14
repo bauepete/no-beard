@@ -19,6 +19,7 @@ public class ValueOnStackOperand extends Operand {
 
     public ValueOnStackOperand(Operand op) {
         super(op);
+        this.kind = OperandKind.VALONSTACK;
     }
         
     @Override
