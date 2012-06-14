@@ -19,7 +19,7 @@ public class Nbm {
 
     public enum Opcode {
 
-        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD, PUT, INC, HALT, TRAP;
+        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD, PUT, INC, HALT;
 
         public byte byteCode() {
             return (byte) this.ordinal();
@@ -28,6 +28,7 @@ public class Nbm {
     /// Returned from getStackTopValue() if stack of currently running
     /// function is empty.
     public static final int STACKEMPTY = -1;
+    
     // --------------------- Locally used data -----------------------------
     private static final int MAXPROG = 1024;   // Size of program memory
     private static final int MAXDAT = 1024;    // Size of data memory
@@ -40,9 +41,14 @@ public class Nbm {
     private int db_end;         // Pointer to the last byte of frame stack (db + LINKAREA + sizeof(local variables))
     private int top;            // Pointer to the last used byte in frame stack
     private MachineState ms;
-
+    private Instruction[] instructionMap = {
+        new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
+        new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
+        new Put(), new Inc(), new Halt()};
+    
     // -------------------------- Instruction classes ----------------------
     /// Command
+
     interface Instruction {
 
         public void exec();
@@ -152,8 +158,8 @@ public class Nbm {
                 dat[x + i] = dat[y + i];
             }
         }
-        
     }
+
     class Neg implements Instruction {
 
         @Override
@@ -230,7 +236,7 @@ public class Nbm {
         public void exec() {
             byte s = prog[pc + 1];
             pc += 2;
-            
+
             int w;
             switch (s) {
                 case 0:
@@ -239,13 +245,13 @@ public class Nbm {
                     //TODO: print leading blanks
                     System.out.print(x);
                     break;
-                    
+
                 case 1:
                     w = pop();
                     int c = pop();
-                    System.out.print((char)c);
+                    System.out.print((char) c);
                     break;
-                    
+
                 case 2:
                     w = pop();
                     int n = pop();
@@ -255,7 +261,7 @@ public class Nbm {
                         System.out.print(" ");
                     }
                     break;
-                    
+
                 case 3:
                     System.out.println();
                     break;
@@ -343,14 +349,14 @@ public class Nbm {
         return rv;
 
     }
-    
+
     public void runProg(int startPc) {
         top = db + 28;
         pc = startPc;
         ms = MachineState.RUN;
-        
+
         System.out.println("Starting programm at pc " + startPc);
-        
+
         while (ms == MachineState.RUN) {
             execCycle();
         }
@@ -366,7 +372,7 @@ public class Nbm {
         return rv;
 
     }
-    
+
     private byte[] getDat(int startAddr, int len) {
         return (Arrays.copyOfRange(dat, startAddr, startAddr + len));
     }
@@ -400,79 +406,11 @@ public class Nbm {
     }
 
     private Instruction decode(byte opcode) {
-        Instruction i;
-        Opcode o = Opcode.values()[opcode];
-
-        switch (o) {
-            case LIT:
-                i = new Lit();
-                break;
-                
-            case LA:
-                i = new La();
-                break;
-                
-            case LV:
-                i = new Lv();
-                break;
-                
-            case LC:
-                i = new Lc();
-                break;
-                
-            case STO:
-                i = new Sto();
-                break;
-                
-            case STC:
-                i = new Stc();
-                break;
-                
-            case ASSN:
-                i = new Assn();
-                break;
-                
-            case NEG:
-                i = new Neg();
-                break;
-                
-            case ADD:
-                i = new Add();
-                break;
-                
-            case SUB:
-                i = new Sub();
-                break;
-                
-            case MUL:
-                i = new Mul();
-                break;
-                
-            case DIV:
-                i = new Div();
-                break;
-                
-            case MOD:
-                i = new Mod();
-                break;
-
-            case PUT:
-                i = new Put();
-                break;
-
-            case INC:
-                i = new Inc();
-                break;
-                
-            case HALT:
-                i = new Halt();
-                break;
-
-            default:
-                ms = MachineState.ERROR;
-                i = new NoInstr();
+        if (0 <= opcode && opcode < instructionMap.length) {
+            return instructionMap[opcode];
+        } else {
+            ms = MachineState.ERROR;
+            return new NoInstr();
         }
-
-        return i;
     }
 }
