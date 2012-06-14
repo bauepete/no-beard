@@ -84,7 +84,7 @@ public class VarDeclParser extends Parser {
             Operand destAddrOp = destOp.emitLoadAddr(code);
             // endsem
             scanner.nextToken();
-            ExprParser exprP = new ExprParser(scanner, sym, code);
+            SimExprParser exprP = new SimExprParser(scanner, sym, code);
             if (!exprP.parse()) {
                 return false;
             }

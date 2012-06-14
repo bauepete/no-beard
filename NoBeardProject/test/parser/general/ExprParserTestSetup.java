@@ -6,7 +6,7 @@ package parser.general;
 
 import error.ErrorHandler;
 import nbm.Code;
-import parser.ExprParser;
+import parser.SimExprParser;
 import scanner.Scanner;
 import scanner.SrcStringReader;
 import symlist.Operand;
@@ -26,42 +26,42 @@ public class ExprParserTestSetup {
         return c;
     }
 
-    static public ExprParser getAddTestSetup() {
+    static public SimExprParser getAddTestSetup() {
         scanner = new Scanner(new SrcStringReader("a + b"));
         return setupTestObjects();
     }
     
-    static public ExprParser getSubTestSetup() {
+    static public SimExprParser getSubTestSetup() {
         scanner = new Scanner(new SrcStringReader("a - b"));
         return setupTestObjects();
     }
     
-    static public ExprParser getNegAddTestSetup() {
+    static public SimExprParser getNegAddTestSetup() {
         scanner = new Scanner(new SrcStringReader("-a + b"));
         return setupTestObjects();
     }
     
-    static public ExprParser getNegTestSetup() {
+    static public SimExprParser getNegTestSetup() {
         scanner = new Scanner(new SrcStringReader("-b"));
         return setupTestObjects();
     }
     
-    public static ExprParser getAddMulTestSetup() {
+    public static SimExprParser getAddMulTestSetup() {
         scanner = new Scanner(new SrcStringReader("a - b * 3"));
         return setupTestObjects();
     }
     
-    static public ExprParser getComplexExprTestSetup() {
+    static public SimExprParser getComplexExprTestSetup() {
         scanner = new Scanner(new SrcStringReader("-5 * (a + b)/17"));
         return setupTestObjects();
     }
     
-    static public ExprParser getNoExprTestSetup() {
+    static public SimExprParser getNoExprTestSetup() {
         scanner = new Scanner(new SrcStringReader("*b"));
         return setupTestObjects();
     }
     
-    static private ExprParser setupTestObjects() {
+    static private SimExprParser setupTestObjects() {
         ErrorHandler.getInstance().reset();
         c = new Code();
         sym = new SymListManager(c, scanner);
@@ -70,6 +70,6 @@ public class ExprParserTestSetup {
         sym.newVar(1, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
         scanner.nextToken();
-        return new ExprParser(scanner, sym, c);
+        return new SimExprParser(scanner, sym, c);
     }
 }

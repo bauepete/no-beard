@@ -38,7 +38,7 @@ public class AssignmentParser extends Parser {
             ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.ASSIGNSY.toString(), scanner.getCurrentLine()));
             return false;
         }
-        ExprParser exprP = new ExprParser(scanner, sym, code);
+        SimExprParser exprP = new SimExprParser(scanner, sym, code);
         if (!exprP.parse()) {
             return false;
         }

@@ -19,7 +19,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class ExprParser extends Parser {
+public class SimExprParser extends Parser {
 
     private Operand op;
 
@@ -29,7 +29,7 @@ public class ExprParser extends Parser {
     }
     AddopType addOperator = AddopType.NOADD;
 
-    public ExprParser(Scanner s, SymListManager sym, Code c) {
+    public SimExprParser(Scanner s, SymListManager sym, Code c) {
         super(s, sym, c);
     }
 

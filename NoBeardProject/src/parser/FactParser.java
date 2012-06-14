@@ -62,7 +62,7 @@ public class FactParser extends Parser {
             case LPARSY:
                 scanner.nextToken();
                 
-                ExprParser exprP = new ExprParser(scanner, sym, code);
+                SimExprParser exprP = new SimExprParser(scanner, sym, code);
                 if (!exprP.parse()) {
                     return false;
                 }

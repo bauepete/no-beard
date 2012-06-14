@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.ExprParser;
+import parser.SimExprParser;
 import parser.general.ExprParserTestSetup;
 
 /**
@@ -40,7 +40,7 @@ public class ExprParserTest {
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testAdd() {
@@ -52,14 +52,14 @@ public class ExprParserTest {
             Opcode.ADD.byteCode()
         };
 
-        ExprParser p = ExprParserTestSetup.getAddTestSetup();
+        SimExprParser p = ExprParserTestSetup.getAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testSub() {
@@ -71,14 +71,14 @@ public class ExprParserTest {
             Opcode.SUB.byteCode()
         };
 
-        ExprParser p = ExprParserTestSetup.getSubTestSetup();
+        SimExprParser p = ExprParserTestSetup.getSubTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testNegAdd() {
@@ -91,14 +91,14 @@ public class ExprParserTest {
             Opcode.ADD.byteCode()
         };
 
-        ExprParser p = ExprParserTestSetup.getNegAddTestSetup();
+        SimExprParser p = ExprParserTestSetup.getNegAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testNeg() {
@@ -109,14 +109,14 @@ public class ExprParserTest {
             Opcode.NEG.byteCode(),
         };
 
-        ExprParser p = ExprParserTestSetup.getNegTestSetup();
+        SimExprParser p = ExprParserTestSetup.getNegTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testParseAddMul() {
@@ -130,14 +130,14 @@ public class ExprParserTest {
             Opcode.SUB.byteCode()
         };
 
-        ExprParser p = ExprParserTestSetup.getAddMulTestSetup();
+        SimExprParser p = ExprParserTestSetup.getAddMulTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parse method, of class SimExprParser.
      */
     @Test
     public void testComplexExpr() {
@@ -154,7 +154,7 @@ public class ExprParserTest {
             Opcode.NEG.byteCode(),
         };
 
-        ExprParser p = ExprParserTestSetup.getComplexExprTestSetup();
+        SimExprParser p = ExprParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());

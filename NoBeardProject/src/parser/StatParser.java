@@ -26,7 +26,7 @@ public class StatParser extends Parser {
 
     @Override
     public boolean parse() {
-        ExprParser exprP = new ExprParser(scanner, sym, code);
+        SimExprParser exprP = new SimExprParser(scanner, sym, code);
         switch (scanner.getCurrentToken().getSy()) {
             case INTSY:
             case BOOLSY:
