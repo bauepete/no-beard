@@ -86,7 +86,7 @@ public class ScannerTest {
         assertTrue("MODSY expected", s.getCurrentToken().getSy() == Symbol.MODSY);
 
         s.nextToken();
-        assertTrue("COLONSY expected", s.getCurrentToken().getSy() == Symbol.COLONSY);
+        assertTrue("COMMASY expected", s.getCurrentToken().getSy() == Symbol.COMMASY);
     }
 
     @Test

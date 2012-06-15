@@ -26,7 +26,7 @@ public class Scanner {
         /// Boolean operators
         NOTSY, ANDSY, ORSY,
         /// Delimiters
-        ASSIGNSY, SEMICOLONSY, COLONSY, LPARSY, RPARSY,
+        ASSIGNSY, SEMICOLONSY, COMMASY, LPARSY, RPARSY,
         LBRACKETSY, RBRACKETSY;
 
         @Override
@@ -193,7 +193,7 @@ public class Scanner {
                     break;
 
                 case ',':
-                    currentToken.setSy(Symbol.COLONSY);
+                    currentToken.setSy(Symbol.COMMASY);
                     srcReader.nextChar();
                     break;
 

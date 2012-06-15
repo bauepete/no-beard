@@ -84,7 +84,7 @@ public class PutStatParser extends Parser {
         // endsem
 
         switch (scanner.getCurrentToken().getSy()) {
-            case COLONSY:
+            case COMMASY:
                 scanner.nextToken();
 
                 if (!exprP.parse()) {
@@ -140,7 +140,7 @@ public class PutStatParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.COLONSY.toString(), Symbol.RPARSY.toString(), scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.COMMASY.toString(), Symbol.RPARSY.toString(), scanner.getCurrentLine()));
                 return false;
         }
         return true;
