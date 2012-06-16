@@ -30,17 +30,17 @@ public class FactParserTestSetup {
         scanner = new Scanner(new SrcStringReader("42"));
         return setupTestObjects();
     }
-    
+
     public static FactParser getStringTestSetup() {
         scanner = new Scanner(new SrcStringReader("'blablu'"));
         return setupTestObjects();
     }
-    
+
     public static FactParser getExprSetup() {
         scanner = new Scanner(new SrcStringReader("(a + b)"));
         return setupTestObjects();
     }
-    
+
     public static FactParser getNoFactSetup() {
         scanner = new Scanner(new SrcStringReader("{"));
         return setupTestObjects();
@@ -51,7 +51,7 @@ public class FactParserTestSetup {
         sym = new SymListManager(c, scanner);
         sym.newUnit(25);
         scanner.nextToken();
-        sym.newVar(scanner.getCurrentToken().getValue(), SymListManager.ElementType.INT);
+        sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
         return new FactParser(scanner, sym, c);
