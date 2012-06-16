@@ -4,7 +4,6 @@
  */
 package parser.semantics;
 
-import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -13,22 +12,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.TermParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
-import symlist.Operand;
-import symlist.SymListManager;
+import parser.general.TermParserTestSetup;
 
 /**
  *
  * @author peter
  */
 public class TermParserTest {
-
-    private Scanner mulS;
-    private Scanner divS;
-    
-    private SymListManager sym;
-    private Code c;
 
     public TermParserTest() {
     }
@@ -43,14 +33,6 @@ public class TermParserTest {
 
     @Before
     public void setUp() {
-        mulS = new Scanner(new SrcStringReader("a * b"));
-        divS = new Scanner(new SrcStringReader("1 / 2"));
-        c = new Code();
-        sym = new SymListManager(c, mulS);
-        sym.newUnit(25);
-        sym.newVar(0, SymListManager.ElementType.INT);
-        sym.newVar(1, SymListManager.ElementType.INT);
-        Operand.setSymListManager(sym);
     }
 
     @After
@@ -61,43 +43,81 @@ public class TermParserTest {
      * Test of parse method, of class TermParser.
      */
     @Test
-    public void testParseMulVar() {
+    public void testParseMul() {
         System.out.println("testParseMul");
-        Scanner s = mulS;
-
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.MUL.byteCode(),
+            Opcode.LV.byteCode(), 0, 0, 40,
             Opcode.MUL.byteCode()
         };
 
-        s.nextToken();
-        TermParser p = new TermParser(s, sym, c);
+        TermParser p = TermParserTestSetup.getMulTermSetup();
         assertEquals("Parse", true, p.parse());
-        assertCodeEquals("Code ", expected, c.getByteCode());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
     }
 
     /**
      * Test of parse method, of class TermParser.
      */
     @Test
-    public void testParseDivConst() {
-        System.out.println("testParseDivConst");
-        Scanner s = divS;
+    public void testParseDiv() {
+        System.out.println("testParseDiv");
 
         byte[] expected = {
             Opcode.LIT.byteCode(), 0, 1,
             Opcode.LIT.byteCode(), 0, 2,
+            Opcode.DIV.byteCode(),
+            Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.DIV.byteCode()
         };
 
-        s.nextToken();
-        TermParser p = new TermParser(s, sym, c);
+        TermParser p = TermParserTestSetup.getDivTermSetup();
         assertEquals("Parse", true, p.parse());
-        assertCodeEquals("Code ", expected, c.getByteCode());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
     }
+    
+    /**
+     * Test of parse method, of class TermParser.
+     */
+    @Test
+    public void testParseMod() {
+        System.out.println("testParseMod");
 
-    private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
-        AssmCodeChecker.assertCodeEquals(msg, exp, act);
+        byte[] expected = {
+            Opcode.LIT.byteCode(), 0, 10,
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.MOD.byteCode(),
+            Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.MOD.byteCode()
+        };
+
+        TermParser p = TermParserTestSetup.getModTermSetup();
+        assertEquals("Parse", true, p.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
+    }
+    
+    /**
+     * Test boolean "and"-term
+     */
+    
+    @Test
+    public void testParseAnd() {
+        System.out.println("testParseAnd");
+        
+        byte[] expected = {
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.FJMP.byteCode(), 0, 21,
+            Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.FJMP.byteCode(), 0, 21,
+            Opcode.LV.byteCode(), 0, 0, 40,
+            Opcode.JMP.byteCode(), 0, 24,
+            Opcode.LIT.byteCode(), 0, 0
+        };
+        
+        TermParser p = TermParserTestSetup.getAndTermSetup();
+        assertTrue("Parse", p.parse());
+        AssmCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getCode().getByteCode());
     }
 }

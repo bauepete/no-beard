@@ -19,7 +19,8 @@ public class Nbm {
 
     public enum Opcode {
 
-        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD, PUT, INC, HALT;
+        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
+        NOT, FJMP, TJMP, JMP, PUT, INC, HALT;
 
         public byte byteCode() {
             return (byte) this.ordinal();
@@ -44,6 +45,7 @@ public class Nbm {
     private Instruction[] instructionMap = {
         new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
+        new Not(), new Fjmp(), new Tjmp(), new Jmp(),
         new Put(), new Inc(), new Halt()};
     
     // -------------------------- Instruction classes ----------------------
@@ -229,7 +231,57 @@ public class Nbm {
             push(x % y);
         }
     }
+    
+    class Not implements Instruction {
 
+        @Override
+        public void exec() {
+            int x = pop();
+            push(x == 1?0:1);
+        }
+        
+    }
+
+    class Fjmp implements Instruction {
+
+        @Override
+        public void exec() {
+            int b = getProgHalfWord(pc + 1);
+            pc += 3;
+            
+            int x = pop();
+            if (x == 0) {
+                pc = b;
+            }
+        }
+        
+    }
+    
+    class Tjmp implements Instruction {
+
+        @Override
+        public void exec() {
+            int b = getProgHalfWord(pc + 1);
+            pc += 3;
+            
+            int x = pop();
+            if (x == 1) {
+                pc = b;
+            }
+        }
+        
+    }
+    
+    class Jmp implements Instruction {
+
+        @Override
+        public void exec() {
+            int b = getProgHalfWord(pc + 1);
+            pc = b;
+        }
+        
+    }
+    
     class Put implements Instruction {
 
         @Override

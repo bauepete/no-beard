@@ -62,7 +62,7 @@ public class SimExprParserTestSetup {
     }
 
     static public SimExprParser getOrExprTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a || b"));
+        scanner = new Scanner(new SrcStringReader("a || b || c"));
         return setupBoolTestObjects();
     }
 
@@ -85,6 +85,7 @@ public class SimExprParserTestSetup {
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.BOOL);
         sym.newVar(1, SymListManager.ElementType.BOOL);
+        sym.newVar(2, SymListManager.ElementType.BOOL);
         Operand.setSymListManager(sym);
         scanner.nextToken();
         return new SimExprParser(scanner, sym, c);

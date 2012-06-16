@@ -26,8 +26,8 @@ public class TermParser extends Parser {
         NOMUL, TIMES, DIV, MOD
     }
     private MulopType mulOperator = MulopType.NOMUL;
-    
     private Operand op;
+    private int andChain;
 
     public TermParser(Scanner s, SymListManager sym, Code c) {
         super(s, sym, c);
@@ -35,6 +35,10 @@ public class TermParser extends Parser {
 
     @Override
     public boolean parse() {
+        // sem
+        andChain = 0;
+        // endsem
+
         FactParser factP = new FactParser(scanner, sym, code);
         if (!factP.parse()) {
             return false;
@@ -42,46 +46,90 @@ public class TermParser extends Parser {
         op = factP.getOperand();
 
         while (tokenIsMulOp()) {
-            if (!mulOp()) {
-                return false;
-            }
-
-            //cc
-            if (op.getType() != OperandType.SIMPLEINT) {
-                ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
-                return false;
-            }
-            // endcc
-            // sem
-            op.emitLoadVal(code);
-            // endsem
-            if (!factP.parse()) {
-                return false;
-            }
-
-            Operand op2 = factP.getOperand();
-
-            // sem
-            op = op2.emitLoadVal(code);
-
-            switch (mulOperator) {
-                case TIMES:
-                    code.emitOp(Opcode.MUL);
-                    break;
-
-                case DIV:
-                    code.emitOp(Opcode.DIV);
-                    break;
-
-                case MOD:
-                    code.emitOp(Opcode.DIV);
-                    break;
-                    
-                default:
+            if (tokenIsA(Symbol.ANDSY)) {
+                // cc
+                if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
                     return false;
+                }
+                // endcc
+
+                // sem
+                op.emitLoadVal(code);
+                code.emitOp(Opcode.FJMP);
+                code.emitHalfWord(andChain);
+                andChain = code.getPc() - 2;
+                // endsem
+
+                if (!factP.parse()) {
+                    return false;
+                }
+                Operand op2 = factP.getOperand();
+
+                // cc
+                if (!operandIsA(op2, OperandType.SIMPLEBOOL)) {
+                    return false;
+                }
+                // endcc
+
+                // sem
+                op = op2.emitLoadVal(code);
+                // ensem
+            } else {
+                if (!mulOp()) {
+                    return false;
+                }
+
+                //cc
+                if (op.getType() != OperandType.SIMPLEINT) {
+                    ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
+                    return false;
+                }
+                // endcc
+
+                // sem
+                op.emitLoadVal(code);
+                // endsem
+                if (!factP.parse()) {
+                    return false;
+                }
+
+                Operand op2 = factP.getOperand();
+
+                // sem
+                op = op2.emitLoadVal(code);
+
+                switch (mulOperator) {
+                    case TIMES:
+                        code.emitOp(Opcode.MUL);
+                        break;
+
+                    case DIV:
+                        code.emitOp(Opcode.DIV);
+                        break;
+
+                    case MOD:
+                        code.emitOp(Opcode.MOD);
+                        break;
+
+                    default:
+                        return false;
+                }
+                // endsem
             }
-            // endsem
         }
+        // sem
+        if (andChain != 0) {
+            code.emitOp(Opcode.JMP);
+            code.emitHalfWord(code.getPc() + 5);
+            while (andChain != 0) {
+                int next = code.getCodeHalfWord(andChain);
+                code.fixup(andChain, code.getPc());
+                andChain = next;
+            }
+            code.emitOp(Opcode.LIT);
+            code.emitHalfWord(0);
+        }
+        // endsem
         return true;
     }
 
@@ -91,7 +139,7 @@ public class TermParser extends Parser {
 
     private boolean tokenIsMulOp() {
         Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.TIMESSY || sy == Symbol.DIVSY || sy == Symbol.MODSY);
+        return (sy == Symbol.TIMESSY || sy == Symbol.DIVSY || sy == Symbol.MODSY || sy == Symbol.ANDSY);
     }
 
     private boolean mulOp() {

@@ -5,7 +5,6 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.TypeExpected;
 import error.synerr.SymbolExpected;
 import nbm.Code;
 import nbm.Nbm.Opcode;
@@ -79,7 +78,7 @@ public class SimExprParser extends Parser {
                 
                 // sem
                 op.emitLoadVal(code);
-                // TODO code.emitOp(Opcode.TJMP);
+                code.emitOp(Opcode.TJMP);
                 code.emitHalfWord(orChain);
                 orChain = code.getPc() - 2;
                 // endsem
@@ -134,7 +133,17 @@ public class SimExprParser extends Parser {
 
         }
         // sem
-        // stuff to fixup jump addresses of orChain
+        if (orChain != 0) {
+            code.emitOp(Opcode.JMP);
+            code.emitHalfWord(code.getPc() + 5);
+            while (orChain != 0) {
+                int next = code.getCodeHalfWord(orChain);
+                code.fixup(orChain, code.getPc());
+                orChain = next;
+            }
+            code.emitOp(Opcode.LIT);
+            code.emitHalfWord(1);
+        }
         // endsem
         return true;
     }
@@ -169,13 +178,5 @@ public class SimExprParser extends Parser {
                 return false;
         }
         return true;
-    }
-    
-    private boolean operandIsA(Operand op, OperandType opType) {
-     if (op.getType() != opType) {
-         ErrorHandler.getInstance().raise(new TypeExpected(opType.toString(), scanner.getCurrentLine()));
-         return false;
-     }
-     return true;
     }
 }

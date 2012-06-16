@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -45,7 +45,7 @@ public class SimExprParserTest {
     @Test
     public void testAdd() {
         System.out.println("testAdd");
-        
+
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.LV.byteCode(), 0, 0, 36,
@@ -64,7 +64,7 @@ public class SimExprParserTest {
     @Test
     public void testSub() {
         System.out.println("testSub");
-        
+
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.LV.byteCode(), 0, 0, 36,
@@ -83,7 +83,7 @@ public class SimExprParserTest {
     @Test
     public void testNegAdd() {
         System.out.println("testNegAdd");
-        
+
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.NEG.byteCode(),
@@ -103,11 +103,10 @@ public class SimExprParserTest {
     @Test
     public void testNeg() {
         System.out.println("testNeg");
-        
+
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.NEG.byteCode(),
-        };
+            Opcode.NEG.byteCode(),};
 
         SimExprParser p = SimExprParserTestSetup.getNegTestSetup();
 
@@ -121,7 +120,7 @@ public class SimExprParserTest {
     @Test
     public void testParseAddMul() {
         System.out.println("testParseAddMul");
-        
+
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.LV.byteCode(), 0, 0, 36,
@@ -151,12 +150,34 @@ public class SimExprParserTest {
             Opcode.MUL.byteCode(),
             Opcode.LIT.byteCode(), 0, 17,
             Opcode.DIV.byteCode(),
-            Opcode.NEG.byteCode(),
-        };
+            Opcode.NEG.byteCode(),};
 
         SimExprParser p = SimExprParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+    }
+
+    /**
+     * Test of parse method, of class SimExprParser.
+     */
+    @Test
+    public void testOrExpr() {
+        System.out.println("testOrExpr");
+        // a || b || c
+        
+        byte[] expected = {
+            Opcode.LV.byteCode(), 0, 0, 32,
+            Opcode.TJMP.byteCode(), 0, 21,
+            Opcode.LV.byteCode(), 0, 0, 36,
+            Opcode.TJMP.byteCode(), 0, 21,
+            Opcode.LV.byteCode(), 0, 0, 40,
+            Opcode.JMP.byteCode(), 0, 24,
+            Opcode.LIT.byteCode(), 0, 1
+        };
+        
+        SimExprParser p = SimExprParserTestSetup.getOrExprTestSetup();
+        assertTrue(p.parse());
+        AssmCodeChecker.assertCodeEquals("Code", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 }

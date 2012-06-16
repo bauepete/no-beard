@@ -7,9 +7,12 @@ package parser;
 import error.synerr.IdentifierExpected;
 import error.synerr.SymbolExpected;
 import error.*;
+import error.semerr.TypeExpected;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import symlist.Operand;
+import symlist.Operand.OperandType;
 import symlist.SymListManager;
 
 /**
@@ -23,7 +26,7 @@ public abstract class Parser {
     protected Scanner scanner;
     protected SymListManager sym;
     protected Code code;
-    
+
     public Parser(Scanner s, SymListManager sym, Code c) {
         this.scanner = s;
         this.sym = sym;
@@ -46,6 +49,14 @@ public abstract class Parser {
         return true;
     }
 
+    protected boolean operandIsA(Operand op, OperandType opType) {
+        if (op.getType() != opType) {
+            ErrorHandler.getInstance().raise(new TypeExpected(opType.toString(), scanner.getCurrentLine()));
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Checks whether the current token is an identifier.
      * @return The name (spix) of the identifier.
@@ -59,7 +70,7 @@ public abstract class Parser {
         scanner.nextToken();
         return spix;
     }
-    
+
     protected int number() {
         if (scanner.getCurrentToken().getSy() != Symbol.NUMBERSY) {
             ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
