@@ -20,7 +20,7 @@ public class Nbm {
     public enum Opcode {
 
         LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
-        NOT, FJMP, TJMP, JMP, PUT, INC, HALT;
+        NOT, REL, FJMP, TJMP, JMP, PUT, INC, HALT;
 
         public byte byteCode() {
             return (byte) this.ordinal();
@@ -45,7 +45,7 @@ public class Nbm {
     private Instruction[] instructionMap = {
         new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
-        new Not(), new Fjmp(), new Tjmp(), new Jmp(),
+        new Not(), new Rel(), new Fjmp(), new Tjmp(), new Jmp(),
         new Put(), new Inc(), new Halt()};
     
     // -------------------------- Instruction classes ----------------------
@@ -238,6 +238,45 @@ public class Nbm {
         public void exec() {
             int x = pop();
             push(x == 1?0:1);
+        }
+        
+    }
+    
+    class Rel implements Instruction {
+
+        @Override
+        public void exec() {
+            byte r = prog[pc + 1];
+            pc += 2;
+            
+            int y = pop();
+            int x = pop();
+            
+            switch (r) {
+                case 0:
+                    push(x < y? 1: 0);
+                    break;
+                    
+                case 1:
+                    push(x <= y? 1: 0);
+                    break;
+                    
+                case 2:
+                    push(x == y? 1: 0);
+                    break;
+                    
+                case 3:
+                    push(x != y? 1: 0);
+                    break;
+                    
+                case 4:
+                    push(x >= y? 1: 0);
+                    break;
+                    
+                case 5:
+                    push(x > y? 1: 0);
+                    break;
+            }
         }
         
     }
