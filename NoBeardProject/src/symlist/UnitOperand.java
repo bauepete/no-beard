@@ -10,9 +10,9 @@ import nbm.Code;
  *
  * @author peter
  */
-public class BlockOperand extends Operand {
-    BlockOperand(OperandType opType, int size, int valaddr, int level) {
-        super(OperandKind.BLOCK, opType, size, valaddr, level);
+public class UnitOperand extends Operand {
+    UnitOperand(OperandType opType, int size, int valaddr, int level) {
+        super(OperandKind.UNIT, opType, size, valaddr, level);
     }
 
     @Override

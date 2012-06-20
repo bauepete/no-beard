@@ -15,7 +15,7 @@ public class Scanner {
 
         NOSY, EOFSY, ILLEGALSY,
         /// Keywords
-        PUTSY, PUTLNSY, UNITSY, DOSY, DONESY, INTSY, BOOLSY, CHARSY,
+        PUTSY, PUTLNSY, UNITSY, DOSY, DONESY, IFSY, ELSESY, INTSY, BOOLSY, CHARSY,
         TRUESY, FALSESY,
         /// Classes
         IDENTSY, NUMBERSY, STRINGSY,

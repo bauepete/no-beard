@@ -65,6 +65,12 @@ public class StatParser extends Parser {
                     return false;
                 }
                 break;
+                
+            case IFSY:
+                IfStatParser ifStatP = new IfStatParser(scanner, sym, code);
+                if (!ifStatP.parse()) {
+                    return false;
+                }
 
             case DONESY: // if stat is empty
                 return true;

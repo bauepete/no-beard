@@ -64,17 +64,19 @@ public class SymListEntry {
     public void setAddr(int addr) {
         this.addr = addr;
     }
+    
+    public boolean isNamedBlockEntry() {
+        return (kind == OperandKind.FUNCTION || kind == OperandKind.UNIT);
+    }
 
     public Operand createOperand() {
         Operand op = null;
 
         switch (kind) {
-            case BLOCK:
-                if (type == OperandType.UNITTYPE) {
-                    op = new BlockOperand(type, size, addr, level);
-                } else {
-                    op = new IllegalOperand();
-                }
+            case ANONYMOUSBLOCK:
+            case FUNCTION:
+            case UNIT:
+                op = new UnitOperand(type, size, addr, level);
                 break;
             case CONSTANT:
                 op = new ConstantOperand(type, size, addr, level);
@@ -83,7 +85,7 @@ public class SymListEntry {
             case VARIABLE:
                 op = new VariableOperand(type, size, addr, level);
                 break;
-                
+
             default:
                 op = new IllegalOperand();
         }

@@ -62,7 +62,8 @@ public class SymListManagerTest {
     public void testNewUnit() {
         System.out.println("newUnit");
 
-        assertTrue("Expected unit", symListMgr.getCurrProc().getType() == Operand.OperandType.UNITTYPE);
+        assertEquals(Operand.OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(Operand.OperandType.VOID, symListMgr.getCurrBlock().getType());
         SymListEntry unitObj = symListMgr.findObject(0);
         assertFalse("Object found ", unitObj.getKind() == OperandKind.ILLEGAL);
 
@@ -86,6 +87,11 @@ public class SymListManagerTest {
         symListMgr.newVar(1, SymListManager.ElementType.INT);
         assertEquals("Err Count ", 1, ErrorHandler.getInstance().getCount());
     }
+    
+    @Test
+    public void testNewFunc() {
+        
+    }
 
     @Test
     public void testAlignDatAddrTo4() {
@@ -102,8 +108,8 @@ public class SymListManagerTest {
         symListMgr.newVar(1, SymListManager.ElementType.CHAR);
         symListMgr.newVar(2, SymListManager.ElementType.INT);
 
-        assertEquals("Kind expected: ", Operand.OperandKind.BLOCK, symListMgr.findObject(0).getKind());
-        assertEquals("Type expected: ", Operand.OperandType.UNITTYPE, symListMgr.findObject(0).getType());
+        assertEquals("Kind expected: ", Operand.OperandKind.UNIT, symListMgr.findObject(0).getKind());
+        assertEquals("Type expected: ", Operand.OperandType.VOID, symListMgr.findObject(0).getType());
         assertEquals("Size expected: ", 5, symListMgr.findObject(0).getSize());
 
         assertEquals("Kind expected: ", Operand.OperandKind.VARIABLE, symListMgr.findObject(1).getKind());
@@ -127,12 +133,12 @@ public class SymListManagerTest {
         symListMgr.newVar(1, SymListManager.ElementType.INT);
 
         SymListEntry u = symListMgr.findObject(0);
-        symListMgr.defineProcStart(u, 2);
+        symListMgr.defineFuncStart(u, 2);
 
         assertEquals("Start PC ", 2, symListMgr.findObject(0).getAddr());
 
         u = symListMgr.findObject(1);
-        symListMgr.defineProcStart(u, 2);
+        symListMgr.defineFuncStart(u, 2);
         assertEquals("SemErr ", 1, ErrorHandler.getInstance().getCount("SemErr"));
         assertEquals("Addr of var ", 32, u.getAddr());
     }

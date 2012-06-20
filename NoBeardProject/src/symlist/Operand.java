@@ -17,13 +17,15 @@ public abstract class Operand {
 
         CONSTANT, VARIABLE, ARGUMENT,
         VALONSTACK, ADDRONSTACK,
-        BLOCK, ILLEGAL
+        UNIT, FUNCTION, ANONYMOUSBLOCK,
+        ILLEGAL
     }
 
     public enum OperandType {
 
-        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL, ARRAYCHAR, ARRAYINT, ARRAYBOOL,
-        UNITTYPE, ERRORTYPE
+        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL,
+        ARRAYCHAR, ARRAYINT, ARRAYBOOL,
+        VOID, ERRORTYPE
     }
     protected static SymListManager symListManager = null;
     protected static StringManager stringManager = null;

@@ -71,41 +71,9 @@ public class NoBeardParser extends Parser {
     }
 
     private boolean block(SymListEntry obj) {
-        if (!tokenIsA(Symbol.DOSY)) {
+        BlockParser blockP = new BlockParser(scanner, sym, code, obj);
+        if (!blockP.parse()) {
             return false;
-        }
-
-        // sem
-        sym.defineProcStart(obj, code.getPc());
-        int incAddr = code.getPc() + 1;
-        code.emitOp(Nbm.Opcode.INC);
-        code.emitHalfWord(0);  // tmp address will be fixed later
-        // endsem
-
-        if (!statSeq()) {
-            return false;
-        }
-
-        // sem
-        sym.fixINC(incAddr, obj);
-        // endsem
-
-        if (!tokenIsA(Symbol.DONESY)) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean statSeq() {
-        StatParser statP = new StatParser(scanner, sym, code);
-        if (!statP.parse()) {
-            return false;
-        }
-        
-        while (scanner.getCurrentToken().getSy() != Symbol.DONESY) {
-            if (!statP.parse()) {
-                return false;
-            }
         }
         return true;
     }

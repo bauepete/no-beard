@@ -9,7 +9,7 @@ import error.semerr.NameAlreadyDefined;
 import error.semerr.SemErr;
 import symlist.Operand.OperandKind;
 import symlist.Operand.OperandType;
-import java.util.HashMap;
+import java.util.ListIterator;
 import java.util.Stack;
 import nbm.Code;
 import scanner.NameManager;
@@ -25,42 +25,41 @@ public class SymListManager {
 
         INT, CHAR, BOOL, ARRCHAR
     }
-    private HashMap<Integer, SymListEntry> symList;
-    private Stack s;
-    private SymListEntry currProc;
+    private final int NONAME = -1;
+    private Stack<SymListEntry> symList;
+    private Stack datAddrStack;
+    private SymListEntry currBlock;
     private int currLevel;
     private int datAddr;
     private Code code;
     private Scanner scanner;
-    private NameManager nameManager;
 
     public SymListManager(Code code, Scanner scanner) {
-        symList = new HashMap<Integer, SymListEntry>();
-        s = new Stack();
+        //symList = new HashMap<Integer, SymListEntry>();
+        symList = new Stack<SymListEntry>();
+        datAddrStack = new Stack();
         this.code = code;
         this.scanner = scanner;
-        this.nameManager = scanner.getNameManager();
     }
 
     public SymListEntry findObject(int name) {
-        if (symList.containsKey(name)) {
-            return symList.get(name);
+        ListIterator<SymListEntry> i = symList.listIterator(symList.size());
+        
+        while (i.hasPrevious()) {
+            SymListEntry node = i.previous();
+            if (node.getName() == name) {
+                return node;
+            }
         }
-        else {
-            return new SymListEntry(name, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
-        }
+        return new SymListEntry(name, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
     }
 
     public int getCurrLevel() {
         return currLevel;
     }
 
-    public SymListEntry getCurrProc() {
-        return currProc;
-    }
-
-    public int getLength() {
-        return symList.size();
+    public SymListEntry getCurrBlock() {
+        return currBlock;
     }
 
     public int getDatAddr() {
@@ -68,30 +67,41 @@ public class SymListManager {
     }
 
     /**
-     * Creates a unit node.
-     * @param name
+     * Creates a unit node and adds it to the symbol list.
+     * @param name Name of the unit.
      * @return false if name is already declared in the current scope or
      * the address would exceed MAXDATA.
      */
     public boolean newUnit(int name) {
-        if (symList.containsKey(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name), scanner.getCurrentLine()));
+        if (doesNameExist(name)) {
+            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
             return false;
         }
 
-        SymListEntry proc = new SymListEntry(name, OperandKind.BLOCK, OperandType.UNITTYPE, 0, 0, currLevel);
-        symList.put(name, proc);
-        s.push(currProc);
-        currProc = proc;
-        s.push(datAddr);
-        datAddr = 32;
-        currLevel++;
+        SymListEntry proc = new SymListEntry(name, OperandKind.UNIT, OperandType.VOID, 0, 0, currLevel);
+        addBlockNode(proc);
         return true;
     }
 
+    /**
+     * Creates an anonymous block node and adds it to the symbol list.
+     */
+    public void newBlock() {
+        SymListEntry block = new SymListEntry(NONAME, OperandKind.ANONYMOUSBLOCK, OperandType.VOID, 0, 0, currLevel);
+        addBlockNode(block);
+    }
+    
+    /**
+     * Creates a variable node and adds it to the symbol list.
+     * @param name The name of the variable.
+     * @param t Type of the variable (INT, CHAR, ..., ARRAYINT, ...)
+     * @param maxInd Size of array. 1 in case of simple variable.
+     * @return true if creating and adding the var node was successful,
+     * false otherwise.
+     */
     public boolean newVar(int name, ElementType t, int maxInd) {
-        if (symList.containsKey(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager.getStringName(name), scanner.getCurrentLine()));
+        if (doesNameExist(name)) {
+            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
             return false;
         }
 
@@ -134,22 +144,29 @@ public class SymListManager {
         }
         
         SymListEntry var = new SymListEntry(name, OperandKind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
-        symList.put(name, var);
-        currProc.addSize(var.getSize());
+        symList.push(var);
+        currBlock.addSize(var.getSize());
         datAddr += var.getSize();
         alignDatAddrTo4();
         return true;
     }
     
+    /**
+     * Creates a variable node and adds it to the symbol list. This call is
+     * equivalent to newVar(name, t, 1).
+     * @param name
+     * @param t
+     * @return 
+     */
     public boolean newVar(int name, ElementType t) {
         return (newVar(name, t, 1));
     }
 
-    public void defineProcStart(SymListEntry procObj, int startPc) {
-        if (procObj.getType() == OperandType.UNITTYPE) {
-            procObj.setAddr(startPc);
+    public void defineFuncStart(SymListEntry funcObj, int startPc) {
+        if (funcObj.isNamedBlockEntry()) {
+            funcObj.setAddr(startPc);
         } else {
-            ErrorHandler.getInstance().raise(new SemErr(99, "Tried to define proc Start on a type different than unit", scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr(99, "Tried to define function start on a type different than unit", scanner.getCurrentLine()));
         }
     }
 
@@ -163,6 +180,19 @@ public class SymListManager {
         code.fixup(atAddr, blockObj.getSize());
     }
 
+    private boolean doesNameExist(int name) {
+        return (findObject(name).getType() != OperandType.ERRORTYPE);
+    }
+    
+    private void addBlockNode(SymListEntry node) {
+        symList.push(node);
+        currBlock = node;
+        datAddrStack.push(datAddr);
+        datAddr = 32;
+        currLevel++;
+        
+    }
+    
     private void alignDatAddrTo4() {
         int r = datAddr % 4;
         if (r == 0) {
@@ -170,5 +200,9 @@ public class SymListManager {
         } else {
             datAddr += (4 - r);
         }
+    }
+    
+    private NameManager nameManager() {
+        return scanner.getNameManager();
     }
 }

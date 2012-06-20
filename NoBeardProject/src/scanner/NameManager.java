@@ -22,6 +22,8 @@ public class NameManager {
                 put("do", Symbol.DOSY);
                 put("put", Symbol.PUTSY);
                 put("putln", Symbol.PUTLNSY);
+                put("if", Symbol.IFSY);
+                put("else", Symbol.ELSESY);
                 put("done", Symbol.DONESY);
                 put("int", Symbol.INTSY);
                 put("char", Symbol.CHARSY);
