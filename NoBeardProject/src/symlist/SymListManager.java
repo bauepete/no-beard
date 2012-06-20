@@ -42,9 +42,17 @@ public class SymListManager {
         this.scanner = scanner;
     }
 
+    /**
+     * Looks up a name in the symbol list and returns the SymListEntry with
+     * this name. Lookup starts at top of the stack and the first node found
+     * matching the name is returned.
+     * In case name is not found a node of kind Operand.ILLEGAL is returned.
+     * @param name The name to be looked up.
+     * @return The symbol node matching the name or an illegal symbol node.
+     */
     public SymListEntry findObject(int name) {
         ListIterator<SymListEntry> i = symList.listIterator(symList.size());
-        
+
         while (i.hasPrevious()) {
             SymListEntry node = i.previous();
             if (node.getName() == name) {
@@ -66,6 +74,16 @@ public class SymListManager {
         return datAddr;
     }
 
+    public boolean newFunc(int name, OperandType operandType) {
+        if (doesNameExistInCurrentScope(name)) {
+            raiseNameAlreadyDefined(name);
+            return false;
+        }
+        SymListEntry func = new SymListEntry(name, OperandKind.FUNCTION, operandType, 0, 0, currLevel);
+        addBlockNode(func);
+        return true;
+    }
+
     /**
      * Creates a unit node and adds it to the symbol list.
      * @param name Name of the unit.
@@ -73,8 +91,8 @@ public class SymListManager {
      * the address would exceed MAXDATA.
      */
     public boolean newUnit(int name) {
-        if (doesNameExist(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
+        if (doesNameExistInCurrentScope(name) || getCurrLevel() > 0) {
+            raiseNameAlreadyDefined(name);
             return false;
         }
 
@@ -90,7 +108,7 @@ public class SymListManager {
         SymListEntry block = new SymListEntry(NONAME, OperandKind.ANONYMOUSBLOCK, OperandType.VOID, 0, 0, currLevel);
         addBlockNode(block);
     }
-    
+
     /**
      * Creates a variable node and adds it to the symbol list.
      * @param name The name of the variable.
@@ -100,8 +118,8 @@ public class SymListManager {
      * false otherwise.
      */
     public boolean newVar(int name, ElementType t, int maxInd) {
-        if (doesNameExist(name)) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
+        if (doesNameExistInCurrentScope(name)) {
+            raiseNameAlreadyDefined(name);
             return false;
         }
 
@@ -113,8 +131,7 @@ public class SymListManager {
                 opSize = 4;
                 if (maxInd > 1) {
                     opType = OperandType.ARRAYINT;
-                }
-                else {
+                } else {
                     maxInd = 1;
                     opType = OperandType.SIMPLEINT;
                 }
@@ -124,8 +141,7 @@ public class SymListManager {
                 opSize = 1;
                 if (maxInd > 1) {
                     opType = OperandType.ARRAYCHAR;
-                }
-                else {
+                } else {
                     maxInd = 1;
                     opType = OperandType.SIMPLECHAR;
                 }
@@ -135,14 +151,13 @@ public class SymListManager {
                 opSize = 4;
                 if (maxInd > 1) {
                     opType = OperandType.ARRAYBOOL;
-                }
-                else {
+                } else {
                     maxInd = 1;
                     opType = OperandType.SIMPLEBOOL;
                 }
                 break;
         }
-        
+
         SymListEntry var = new SymListEntry(name, OperandKind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
         symList.push(var);
         currBlock.addSize(var.getSize());
@@ -150,7 +165,7 @@ public class SymListManager {
         alignDatAddrTo4();
         return true;
     }
-    
+
     /**
      * Creates a variable node and adds it to the symbol list. This call is
      * equivalent to newVar(name, t, 1).
@@ -162,6 +177,11 @@ public class SymListManager {
         return (newVar(name, t, 1));
     }
 
+    /**
+     * Defines the start address of a function or unit kind node.
+     * @param funcObj The object which start address to be defined.
+     * @param startPc The start address of funcObj.
+     */
     public void defineFuncStart(SymListEntry funcObj, int startPc) {
         if (funcObj.isNamedBlockEntry()) {
             funcObj.setAddr(startPc);
@@ -180,19 +200,37 @@ public class SymListManager {
         code.fixup(atAddr, blockObj.getSize());
     }
 
-    private boolean doesNameExist(int name) {
-        return (findObject(name).getType() != OperandType.ERRORTYPE);
+    /* ---------------------------------------------------------------------- */
+    /* -------------------------- private methods --------------------------- */
+    /* ---------------------------------------------------------------------- */
+    private boolean doesNameExistInCurrentScope(int name) {
+        return (findObjectInCurrentScope(name).getType() != OperandType.ERRORTYPE);
     }
     
+    private SymListEntry findObjectInCurrentScope(int name) {
+        ListIterator<SymListEntry> i = symList.listIterator(symList.size());
+
+        while (i.hasPrevious()) {
+            SymListEntry node = i.previous();
+            if (node.getLevel() != getCurrLevel()) {
+                return new SymListEntry(0, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+            }
+            if (node.getName() == name) {
+                return node;
+            }
+        }
+        return new SymListEntry(0, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+    }
+
     private void addBlockNode(SymListEntry node) {
         symList.push(node);
         currBlock = node;
         datAddrStack.push(datAddr);
         datAddr = 32;
         currLevel++;
-        
+
     }
-    
+
     private void alignDatAddrTo4() {
         int r = datAddr % 4;
         if (r == 0) {
@@ -201,8 +239,12 @@ public class SymListManager {
             datAddr += (4 - r);
         }
     }
-    
+
     private NameManager nameManager() {
         return scanner.getNameManager();
+    }
+    
+    private void raiseNameAlreadyDefined(int name) {
+        ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
     }
 }

@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import symlist.Operand.OperandType;
 import scanner.Scanner;
 import symlist.Operand.OperandKind;
 import scanner.NameManager;
@@ -64,35 +65,103 @@ public class SymListManagerTest {
 
         assertEquals(Operand.OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
         assertEquals(Operand.OperandType.VOID, symListMgr.getCurrBlock().getType());
+        assertEquals(1, symListMgr.getCurrLevel());
         SymListEntry unitObj = symListMgr.findObject(0);
-        assertFalse("Object found ", unitObj.getKind() == OperandKind.ILLEGAL);
+        assertEquals(unitObj.getKind(), OperandKind.UNIT);
+        
+        symListMgr.newUnit(1);
+        assertEquals(1, symListMgr.getCurrLevel());
+        assertEquals(OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(54, ErrorHandler.getInstance().getLastError().getErrNo());
 
         symListMgr.newUnit(0);
-        assertEquals("SemErr ", 1, ErrorHandler.getInstance().getCount("SemErr"));
-        assertEquals("Errors count", 1, ErrorHandler.getInstance().getCount());
+        assertEquals("SemErr ", 2, ErrorHandler.getInstance().getCount("SemErr"));
+        assertEquals("Errors count", 2, ErrorHandler.getInstance().getCount());
         assertEquals("Error ", 54, ErrorHandler.getInstance().getLastError().getErrNo());
     }
 
     @Test
-    public void testNewVar() {
-        System.err.println("newVar");
+    public void testNewSimpleVar() {
+        System.err.println("newSimpleVar");
 
         symListMgr.newVar(1, SymListManager.ElementType.INT);
-
         assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
+        assertEquals(4, symListMgr.getCurrBlock().getSize());
 
         symListMgr.newVar(2, SymListManager.ElementType.BOOL);
         assertEquals("datAddr expected ", 40, symListMgr.getDatAddr());
-
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
-        assertEquals("Err Count ", 1, ErrorHandler.getInstance().getCount());
+        assertEquals(8, symListMgr.getCurrBlock().getSize());
+        
+        symListMgr.newVar(3, SymListManager.ElementType.CHAR);
+        assertEquals(44, symListMgr.getDatAddr());
+        assertEquals(9, symListMgr.getCurrBlock().getSize());
     }
     
     @Test
-    public void testNewFunc() {
+    public void testNewArrayVar() {
+        System.out.print("testNewArrayVar");
         
+        symListMgr.newVar(1, SymListManager.ElementType.INT, 10);
+        assertEquals(72, symListMgr.getDatAddr());
+        assertEquals(40, symListMgr.getCurrBlock().getSize());
+        
+        symListMgr.newVar(2, SymListManager.ElementType.BOOL, 5);
+        assertEquals(92, symListMgr.getDatAddr());
+        assertEquals(60, symListMgr.getCurrBlock().getSize());
+        
+        symListMgr.newVar(3, SymListManager.ElementType.CHAR, 15);
+        assertEquals(108, symListMgr.getDatAddr());
+        assertEquals(75, symListMgr.getCurrBlock().getSize());
+    }
+    
+    @Test
+    public void testNewVarFail() {
+        System.out.println("testNewVarFail");
+        
+        symListMgr.newVar(0, SymListManager.ElementType.INT);
+        assertEquals(4, symListMgr.getCurrBlock().getSize());
+        assertEquals(36, symListMgr.getDatAddr());
+        
+        symListMgr.newVar(0, SymListManager.ElementType.BOOL);
+        assertEquals(4, symListMgr.getCurrBlock().getSize());
+        assertEquals(36, symListMgr.getDatAddr());
+     }
+    
+    @Test
+    public void testNewBlock() {
+        System.out.println("testNewBlock");
+        
+        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newBlock();
+        assertEquals(2, symListMgr.getCurrLevel());
+        
+        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        assertEquals(2, symListMgr.getCurrLevel());
+        assertEquals(0, ErrorHandler.getInstance().getCount());
+        assertEquals(4, symListMgr.getCurrBlock().getSize());
+    }
+    
+    @Test
+    public void testNewFuncFail() {
+        System.err.println("testNewFuncFail");
+        
+        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newFunc(1, OperandType.SIMPLEBOOL);
+        assertEquals(54, ErrorHandler.getInstance().getLastError().getErrNo());
+        assertEquals(1, symListMgr.getCurrLevel());
+        assertEquals(0, symListMgr.getCurrBlock().getName());
+        assertEquals(OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
     }
 
+    @Test
+    public void testNewFunc() {
+        System.err.println("testNewFunc");
+        
+        symListMgr.newFunc(1, OperandType.ARRAYINT);
+        assertEquals(2, symListMgr.getCurrLevel());
+        assertEquals(32, symListMgr.getDatAddr());
+    }
+    
     @Test
     public void testAlignDatAddrTo4() {
         System.out.println("alignDatAddrTo4");
