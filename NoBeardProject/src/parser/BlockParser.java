@@ -8,7 +8,6 @@ import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand.OperandKind;
 import symlist.SymListEntry;
 import symlist.SymListManager;
 
@@ -33,12 +32,10 @@ public class BlockParser extends Parser {
 
         // sem
         int incAddr = 0;
-        if (isNamedBlock()) {
-            sym.defineFuncStart(obj, code.getPc());
-            incAddr = code.getPc() + 1;
-            code.emitOp(Opcode.INC);
-            code.emitHalfWord(0);  // tmp address will be fixed later
-        }
+        sym.defineFuncStart(obj, code.getPc());
+        incAddr = code.getPc() + 1;
+        code.emitOp(Opcode.INC);
+        code.emitHalfWord(0);  // tmp address will be fixed later
         // endsem
 
         if (!statSeq()) {
@@ -46,9 +43,7 @@ public class BlockParser extends Parser {
         }
 
         // sem
-        if (isNamedBlock()) {
-            sym.fixINC(incAddr, obj);
-        }
+        sym.fixINC(incAddr, obj);
         // endsem
 
         if (!tokenIsA(Symbol.DONESY)) {
@@ -70,7 +65,7 @@ public class BlockParser extends Parser {
         }
         return true;
     }
-    
+
     private boolean isNamedBlock() {
         return (obj.isNamedBlockEntry());
     }
