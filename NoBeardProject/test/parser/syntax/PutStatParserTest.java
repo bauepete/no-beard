@@ -48,6 +48,17 @@ public class PutStatParserTest {
         PutStatParser p = PutStatParserTestSetup.getPutIntSetup();
         assertTrue(p.parse());
     }
+
+    /**
+     * Test of parse method, of class PutStatParser.
+     */
+    @Test
+    public void testParsePutChar() {
+        System.out.println("testParsePutChar");
+        
+        PutStatParser p = PutStatParserTestSetup.getPutCharSetup();
+        assertTrue(p.parse());
+    }
     
     @Test
     public void testParsePutString() {

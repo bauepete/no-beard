@@ -62,6 +62,25 @@ public class PutStatParserTest {
      * Test of parse method, of class PutStatParser.
      */
     @Test
+    public void testParsePutChar() {
+        System.out.println("testParsePutChar");
+
+        byte[] expected = {
+            Opcode.LIT.byteCode(), 0, 97,       // decimal ascii value of 'a' to be putted
+            Opcode.LIT.byteCode(), 0, 1,        // column width
+            Opcode.PUT.byteCode(), 1            // put simple char
+        };
+
+        PutStatParser instance = PutStatParserTestSetup.getPutCharSetup();
+        assertTrue("Parse: ", instance.parse());
+        AssmCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+
+    }
+
+    /**
+     * Test of parse method, of class PutStatParser.
+     */
+    @Test
     public void testParsePutString() {
         System.out.println("testParsePutString");
 

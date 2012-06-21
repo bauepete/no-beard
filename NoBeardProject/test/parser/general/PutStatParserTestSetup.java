@@ -8,6 +8,8 @@ import nbm.Code;
 import parser.PutStatParser;
 import scanner.Scanner;
 import scanner.SrcStringReader;
+import scanner.StringManager;
+import symlist.Operand;
 import symlist.SymListManager;
 
 /**
@@ -29,6 +31,11 @@ public class PutStatParserTestSetup {
         return setupTestObjects();
     }
     
+    public static PutStatParser getPutCharSetup() {
+        scanner = new Scanner(new SrcStringReader("put('a')"));
+        return setupTestObjects();
+    }
+    
     public static PutStatParser getPutStringSetup() {
         scanner = new Scanner(new SrcStringReader("put('blabla')"));
         return setupTestObjects();
@@ -43,6 +50,7 @@ public class PutStatParserTestSetup {
         scanner.nextToken();
         c = new Code();
         sl = new SymListManager(c, scanner);
+        Operand.setStringManager(scanner.getStringManager());
         return new PutStatParser(scanner, sl, c);
     }
 }
