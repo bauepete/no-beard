@@ -47,9 +47,9 @@ public class PutStatParserTest {
         System.out.println("testParsePutInt");
 
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 5,
-            Opcode.LIT.byteCode(), 0, 0,
-            Opcode.PUT.byteCode(), 0
+            Opcode.LIT.byteCode(), 0, 5,        // int value to be putted
+            Opcode.LIT.byteCode(), 0, 0,        // column width
+            Opcode.PUT.byteCode(), 0            // put int
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutIntSetup();
@@ -66,10 +66,10 @@ public class PutStatParserTest {
         System.out.println("testParsePutString");
 
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 0,
-            Opcode.LIT.byteCode(), 0, 6,
-            Opcode.LIT.byteCode(), 0, 6,
-            Opcode.PUT.byteCode(), 2
+            Opcode.LIT.byteCode(), 0, 0,    // address of string
+            Opcode.LIT.byteCode(), 0, 6,    // length of string
+            Opcode.LIT.byteCode(), 0, 6,    // width of column
+            Opcode.PUT.byteCode(), 2        // put string
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutStringSetup();
