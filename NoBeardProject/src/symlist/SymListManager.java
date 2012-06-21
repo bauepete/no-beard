@@ -26,8 +26,9 @@ public class SymListManager {
         INT, CHAR, BOOL, ARRCHAR
     }
     private final int NONAME = -1;
-    private Stack<SymListEntry> symList;
-    private Stack datAddrStack;
+    private Stack<SymListEntry> symListStack;
+    private Stack<SymListEntry> blockStack;
+    private Stack<Integer> datAddrStack;
     private SymListEntry currBlock;
     private int currLevel;
     private int datAddr;
@@ -36,7 +37,8 @@ public class SymListManager {
 
     public SymListManager(Code code, Scanner scanner) {
         //symList = new HashMap<Integer, SymListEntry>();
-        symList = new Stack<SymListEntry>();
+        symListStack = new Stack<SymListEntry>();
+        blockStack = new Stack<SymListEntry>();
         datAddrStack = new Stack();
         this.code = code;
         this.scanner = scanner;
@@ -51,7 +53,7 @@ public class SymListManager {
      * @return The symbol node matching the name or an illegal symbol node.
      */
     public SymListEntry findObject(int name) {
-        ListIterator<SymListEntry> i = symList.listIterator(symList.size());
+        ListIterator<SymListEntry> i = symListStack.listIterator(symListStack.size());
 
         while (i.hasPrevious()) {
             SymListEntry node = i.previous();
@@ -159,7 +161,7 @@ public class SymListManager {
         }
 
         SymListEntry var = new SymListEntry(name, OperandKind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
-        symList.push(var);
+        symListStack.push(var);
         currBlock.addSize(var.getSize());
         datAddr += var.getSize();
         alignDatAddrTo4();
@@ -200,15 +202,33 @@ public class SymListManager {
         code.fixup(atAddr, blockObj.getSize());
     }
 
-    /* ---------------------------------------------------------------------- */
+    /**
+     * Closes the scope of the current named (e.g., unit or function) or
+     * anonymous block. All local objects of the block are deleted.
+     */
+    public void endBlock() {
+        while (!symListStack.empty() && symListStack.peek().getLevel() == getCurrLevel()) {
+            symListStack.pop();
+        }
+        symListStack.pop();
+        if (blockStack.empty()) {
+            currBlock = null;
+        } else {
+            currBlock = blockStack.pop();
+        }
+        datAddr = datAddrStack.pop();
+        currLevel--;
+    }
+
+    /* -----------------------------------8----------------------------------- */
     /* -------------------------- private methods --------------------------- */
     /* ---------------------------------------------------------------------- */
     private boolean doesNameExistInCurrentScope(int name) {
         return (findObjectInCurrentScope(name).getType() != OperandType.ERRORTYPE);
     }
-    
+
     private SymListEntry findObjectInCurrentScope(int name) {
-        ListIterator<SymListEntry> i = symList.listIterator(symList.size());
+        ListIterator<SymListEntry> i = symListStack.listIterator(symListStack.size());
 
         while (i.hasPrevious()) {
             SymListEntry node = i.previous();
@@ -223,7 +243,10 @@ public class SymListManager {
     }
 
     private void addBlockNode(SymListEntry node) {
-        symList.push(node);
+        symListStack.push(node);
+        if (currBlock != null) {
+            blockStack.push(currBlock);
+        }
         currBlock = node;
         datAddrStack.push(datAddr);
         datAddr = 32;
@@ -243,7 +266,7 @@ public class SymListManager {
     private NameManager nameManager() {
         return scanner.getNameManager();
     }
-    
+
     private void raiseNameAlreadyDefined(int name) {
         ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
     }

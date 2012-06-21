@@ -82,7 +82,7 @@ public class SymListManagerTest {
 
     @Test
     public void testNewSimpleVar() {
-        System.err.println("newSimpleVar");
+        System.out.println("newSimpleVar");
 
         symListMgr.newVar(1, SymListManager.ElementType.INT);
         assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
@@ -143,7 +143,7 @@ public class SymListManagerTest {
     
     @Test
     public void testNewFuncFail() {
-        System.err.println("testNewFuncFail");
+        System.out.println("testNewFuncFail");
         
         symListMgr.newVar(1, SymListManager.ElementType.INT);
         symListMgr.newFunc(1, OperandType.SIMPLEBOOL);
@@ -155,11 +155,42 @@ public class SymListManagerTest {
 
     @Test
     public void testNewFunc() {
-        System.err.println("testNewFunc");
+        System.out.println("testNewFunc");
         
         symListMgr.newFunc(1, OperandType.ARRAYINT);
         assertEquals(2, symListMgr.getCurrLevel());
         assertEquals(32, symListMgr.getDatAddr());
+    }
+    
+    @Test
+    public void testEndBlock() {
+        System.out.println("testEndBlock");
+        
+        symListMgr.newVar(0, SymListManager.ElementType.INT);
+        symListMgr.newFunc(1, OperandType.VOID);
+        symListMgr.newVar(0, SymListManager.ElementType.CHAR);
+        symListMgr.newBlock();
+        symListMgr.newVar(0, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymListManager.ElementType.INT, 5);
+        
+        // Test whether setup is correct
+        assertEquals(0, ErrorHandler.getInstance().getCount());
+        assertEquals(3, symListMgr.getCurrLevel());
+        assertEquals(24, symListMgr.getCurrBlock().getSize());
+        assertEquals(56, symListMgr.getDatAddr());
+        
+        symListMgr.endBlock();
+        assertEquals(2, symListMgr.getCurrLevel());
+        assertEquals(1, symListMgr.getCurrBlock().getSize());
+        assertEquals(36, symListMgr.getDatAddr());
+        
+        symListMgr.endBlock();
+        assertEquals(1, symListMgr.getCurrLevel());
+        assertEquals(4, symListMgr.getCurrBlock().getSize());
+        assertEquals(36, symListMgr.getDatAddr());
+        
+        symListMgr.endBlock();
+        assertEquals(null, symListMgr.getCurrBlock());
     }
     
     @Test
