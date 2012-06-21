@@ -55,7 +55,7 @@ public class PutStatParser extends Parser {
             return false;
         }
 
-        SimExprParser exprP = new SimExprParser(scanner, sym, code);
+        ExprParser exprP = new ExprParser(scanner, sym, code);
         if (!exprP.parse()) {
             return false;
         }
