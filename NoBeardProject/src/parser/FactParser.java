@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.synerr.SymbolExpected;
+import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -75,7 +75,8 @@ public class FactParser extends Parser {
 
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.IDENTSY.toString(), Symbol.NUMBERSY.toString(), Symbol.LPARSY.toString(), scanner.getCurrentLine()));
+                String[] sList = {Symbol.IDENTSY.toString(), Symbol.NUMBERSY.toString(), Symbol.LPARSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 return false;
         }
 

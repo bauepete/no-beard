@@ -5,8 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.synerr.StatementExpected;
-import error.synerr.SymbolExpected;
+import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -36,7 +35,7 @@ public class StatParser extends Parser {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.SEMICOLONSY.toString()));
                     return false;
                 }
                 break;
@@ -48,7 +47,7 @@ public class StatParser extends Parser {
                 }
 
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.SEMICOLONSY.toString()));
                     return false;
                 }
 
@@ -61,7 +60,7 @@ public class StatParser extends Parser {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.SEMICOLONSY.toString()));
                     return false;
                 }
                 break;
@@ -76,7 +75,7 @@ public class StatParser extends Parser {
                 return true;
 
             default:
-                ErrorHandler.getInstance().raise(new StatementExpected(scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SynErr().new StatementExpected());
                 return false;
 
         }

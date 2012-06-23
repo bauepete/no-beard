@@ -10,6 +10,7 @@ import symlist.Operand.OperandKind;
 import scanner.NameManager;
 import nbm.Code;
 import error.ErrorHandler;
+import error.Error;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -48,6 +49,7 @@ public class SymListManagerTest {
         Scanner s = new Scanner(sr);
         symListMgr = new SymListManager(c, s);
         ErrorHandler.getInstance().reset();
+        Error.setScanner(s);
         
         symListMgr.newUnit(0);
     }

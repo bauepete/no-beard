@@ -5,11 +5,8 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.IncompatibleTypes;
-import error.semerr.NameAlreadyDefined;
-import error.semerr.SemErr;
-import error.synerr.SymbolExpected;
-import error.synerr.SynErr;
+import error.SemErr;
+import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -45,7 +42,7 @@ public class VarDeclParser extends Parser {
         // cc
         SymListEntry obj = sym.findObject(name);
         if (obj.getKind() != OperandKind.ILLEGAL) {
-            ErrorHandler.getInstance().raise(new NameAlreadyDefined(scanner.getNameManager().getStringName(name), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new NameAlreadyDefined(scanner.getNameManager().getStringName(name)));
             return false;
         }
         // endcc
@@ -55,13 +52,13 @@ public class VarDeclParser extends Parser {
             // sem
             int val = number();
             if (val == NONUMBER) {
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBERSY.toString()));
                 return false;
             }
             // endsem
             // cc
             if (val <= 0) {
-                ErrorHandler.getInstance().raise(new SemErr(55, "Index > 0 expected", scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SemErr().new IndexExpected());
                 return false;
             }
             // endcc
@@ -93,7 +90,7 @@ public class VarDeclParser extends Parser {
             // endsem
             // cc
             if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-                ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString(), scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
                 return false;
             }
             // endcc
@@ -130,7 +127,8 @@ public class VarDeclParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SynErr(49, "Panic: Code here is not reachable!", scanner.getCurrentLine()));
+                String[] sList = {Symbol.INTSY.toString(), Symbol.CHARSY.toString(), Symbol.BOOLSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 return false;
         }
         scanner.nextToken();

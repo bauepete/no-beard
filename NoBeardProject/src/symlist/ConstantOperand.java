@@ -5,7 +5,7 @@
 package symlist;
 
 import error.ErrorHandler;
-import error.semerr.SemErr;
+import error.SemErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import symlist.Operand.OperandKind;
@@ -44,6 +44,23 @@ public class ConstantOperand extends Operand {
 
     @Override
     public void emitAssign(Code toCode, Operand destOp) {
+        if (destOp.getKind() != OperandKind.ADDRONSTACK) {
+            errorHandler().raise(new SemErr().new IllegalOperand());
+            return;
+        }
+        
+        if (!typesOk(destOp)) {
+            SemErr x = new SemErr().new BlockNameMismatch(null, null);
+            errorHandler().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
+            return;
+        }
+        
+        if (!srcKindOk()) {
+            errorHandler().raise(new SemErr().new IllegalOperand());
+            return;
+        }
+        
+        
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -67,7 +84,7 @@ public class ConstantOperand extends Operand {
                 break;
                 
             default:
-                ErrorHandler.getInstance().raise(new SemErr(99, "Can't assign to given type" + destOp.getType().toString(), 99));
+                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
         }
     }
 
@@ -79,5 +96,16 @@ public class ConstantOperand extends Operand {
         }
         
         return (new AddrOnStackOperand(this));
+    }
+    
+    private boolean typesOk(Operand destOp) {
+        return (destOp.getType() != OperandType.ERRORTYPE && destOp.getType() != OperandType.VOID &&
+                getType() != OperandType.ERRORTYPE && getType() != OperandType.VOID &&
+                getType() == destOp.getType());
+    }
+    
+    private boolean srcKindOk() {
+        return (getKind() != OperandKind.ILLEGAL && getKind() != OperandKind.ANONYMOUSBLOCK &&
+                getKind() != OperandKind.FUNCTION && getKind() != OperandKind.UNIT);
     }
 }

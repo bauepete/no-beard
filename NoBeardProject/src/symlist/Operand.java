@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import error.ErrorHandler;
 import nbm.Code;
 import scanner.StringManager;
 
@@ -102,4 +103,8 @@ public abstract class Operand {
     public abstract Operand emitLoadAddr(Code toCode);
 
     public abstract void emitAssign(Code toCode, Operand destOp);
+    
+    protected ErrorHandler errorHandler() {
+        return ErrorHandler.getInstance();
+    }
 }

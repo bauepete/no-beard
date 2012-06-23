@@ -5,8 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.IncompatibleTypes;
-import error.semerr.TypeExpected;
+import error.SemErr;
 import java.util.HashMap;
 import nbm.Code;
 import nbm.Nbm.Opcode;
@@ -14,6 +13,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.Token;
 import symlist.Operand;
+import symlist.Operand.OperandType;
 import symlist.SymListManager;
 import symlist.ValueOnStackOperand;
 
@@ -68,7 +68,7 @@ public class ExprParser extends Parser {
             // cc
             if (op.getSize() == Operand.UNDEFSIZE || op2.getSize() == Operand.UNDEFSIZE ||
                     op.getType() != op2.getType() || op.getSize() != op2.getSize()) {
-                ErrorHandler.getInstance().raise(new IncompatibleTypes(op.getType().toString(), op2.getType().toString(), scanner.getCurrentLine()));
+                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(op.getType().toString(), op2.getType().toString()));
                 return false;
             }
             // endcc
@@ -85,9 +85,8 @@ public class ExprParser extends Parser {
                     
                 default:
                     int line = scanner.getCurrentLine();
-                    ErrorHandler.getInstance().raise(new TypeExpected(Operand.OperandType.SIMPLEINT.toString(), line));
-                    ErrorHandler.getInstance().raise(new TypeExpected(Operand.OperandType.SIMPLECHAR.toString(), line));
-                    ErrorHandler.getInstance().raise(new TypeExpected(Operand.OperandType.SIMPLEBOOL.toString(), line));
+                    String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
+                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(tList));
                     break;
             }
             op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, op.getValaddr(), op.getCurrLevel());

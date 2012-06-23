@@ -5,6 +5,7 @@
 package parser.general;
 
 import error.ErrorHandler;
+import error.Error;
 import nbm.Code;
 import parser.TermParser;
 import scanner.Scanner;
@@ -52,6 +53,7 @@ public class TermParserTestSetup {
 
     private static TermParser setupTestObjects() {
         ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         c = new Code();
         sym = new SymListManager(c, scanner);
         sym.newUnit(25);
@@ -65,6 +67,7 @@ public class TermParserTestSetup {
 
     private static TermParser setupBoolTestObjects() {
         ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         c = new Code();
         sym = new SymListManager(c, scanner);
         sym.newUnit(25);

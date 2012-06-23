@@ -4,10 +4,7 @@
  */
 package parser;
 
-import error.synerr.IdentifierExpected;
-import error.synerr.SymbolExpected;
 import error.*;
-import error.semerr.TypeExpected;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -42,7 +39,7 @@ public abstract class Parser {
      */
     protected boolean tokenIsA(Symbol sy) {
         if (scanner.getCurrentToken().getSy() != sy) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(sy.toString(), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sy.toString()));
             return false;
         }
         scanner.nextToken();
@@ -51,7 +48,7 @@ public abstract class Parser {
 
     protected boolean operandIsA(Operand op, OperandType opType) {
         if (op.getType() != opType) {
-            ErrorHandler.getInstance().raise(new TypeExpected(opType.toString(), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(opType.toString()));
             return false;
         }
         return true;
@@ -63,7 +60,7 @@ public abstract class Parser {
      */
     protected int ident() {
         if (scanner.getCurrentToken().getSy() != Symbol.IDENTSY) {
-            ErrorHandler.getInstance().raise(new IdentifierExpected(scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SynErr().new IdentifierExpected());
             return NOIDENT;
         }
         int spix = scanner.getCurrentToken().getValue();
@@ -73,7 +70,7 @@ public abstract class Parser {
 
     protected int number() {
         if (scanner.getCurrentToken().getSy() != Symbol.NUMBERSY) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.NUMBERSY.toString(), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBERSY.toString()));
             return NONUMBER;
         }
         int val = scanner.getCurrentToken().getValue();

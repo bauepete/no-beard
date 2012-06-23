@@ -5,8 +5,8 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.TypeExpected;
-import error.synerr.SymbolExpected;
+import error.SemErr;
+import error.SynErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -81,7 +81,7 @@ public class TermParser extends Parser {
 
                 //cc
                 if (op.getType() != OperandType.SIMPLEINT) {
-                    ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc
@@ -160,7 +160,8 @@ public class TermParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString(), scanner.getCurrentLine()));
+                String [] sList = {Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 return false;
         }
         return true;

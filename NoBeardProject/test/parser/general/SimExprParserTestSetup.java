@@ -5,6 +5,7 @@
 package parser.general;
 
 import error.ErrorHandler;
+import error.Error;
 import nbm.Code;
 import parser.SimExprParser;
 import scanner.Scanner;
@@ -68,6 +69,7 @@ public class SimExprParserTestSetup {
 
     static private SimExprParser setupTestObjects() {
         ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         c = new Code();
         sym = new SymListManager(c, scanner);
         sym.newUnit(25);
@@ -80,6 +82,7 @@ public class SimExprParserTestSetup {
 
     static private SimExprParser setupBoolTestObjects() {
         ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         c = new Code();
         sym = new SymListManager(c, scanner);
         sym.newUnit(25);

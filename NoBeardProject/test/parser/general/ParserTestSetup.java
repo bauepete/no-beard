@@ -4,6 +4,8 @@
  */
 package parser.general;
 
+import error.ErrorHandler;
+import error.Error;
 import nbm.Code;
 import scanner.Scanner;
 import symlist.Operand;
@@ -23,6 +25,8 @@ public class ParserTestSetup {
     }
     
     protected static void setupTestObjects() {
+        ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         code = new Code();
         sym = new SymListManager(code, scanner);
         sym.newUnit(25);

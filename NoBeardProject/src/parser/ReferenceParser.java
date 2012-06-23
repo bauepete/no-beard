@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.IllegalOperand;
+import error.SemErr;
 import nbm.Code;
 import scanner.Scanner;
 import symlist.Operand;
@@ -37,7 +37,7 @@ public class ReferenceParser extends Parser {
 
         // cc
         if (obj.getKind() == OperandKind.ILLEGAL) {
-            ErrorHandler.getInstance().raise(new IllegalOperand(scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new IllegalOperand());
             return false;
         }
         
@@ -46,7 +46,7 @@ public class ReferenceParser extends Parser {
         // endsem
         
         if (op.getKind() != OperandKind.VARIABLE) {
-            ErrorHandler.getInstance().raise(new IllegalOperand(scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new IllegalOperand());
             return false;
         }
         // endcc

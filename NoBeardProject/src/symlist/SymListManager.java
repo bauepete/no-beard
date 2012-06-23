@@ -5,8 +5,7 @@
 package symlist;
 
 import error.ErrorHandler;
-import error.semerr.NameAlreadyDefined;
-import error.semerr.SemErr;
+import error.SemErr;
 import symlist.Operand.OperandKind;
 import symlist.Operand.OperandType;
 import java.util.ListIterator;
@@ -188,7 +187,7 @@ public class SymListManager {
         if (funcObj.isNamedBlockEntry()) {
             funcObj.setAddr(startPc);
         } else {
-            ErrorHandler.getInstance().raise(new SemErr(99, "Tried to define function start on a type different than unit", scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new IllegalFunctionStart());
         }
     }
 
@@ -268,6 +267,6 @@ public class SymListManager {
     }
 
     private void raiseNameAlreadyDefined(int name) {
-        ErrorHandler.getInstance().raise(new NameAlreadyDefined(nameManager().getStringName(name), scanner.getCurrentLine()));
+        ErrorHandler.getInstance().raise(new SemErr().new NameAlreadyDefined(nameManager().getStringName(name)));
     }
 }

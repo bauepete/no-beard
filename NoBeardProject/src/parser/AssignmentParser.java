@@ -5,8 +5,8 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.IncompatibleTypes;
-import error.synerr.SymbolExpected;
+import error.SemErr;
+import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -31,11 +31,11 @@ public class AssignmentParser extends Parser {
         }
         // sem
         Operand destOp = refP.getOperand();
-        destOp.emitLoadAddr(code); 
+        Operand destAddrOp = destOp.emitLoadAddr(code); 
         // endsem
         
         if (!tokenIsA(Symbol.ASSIGNSY)) {
-            ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.ASSIGNSY.toString(), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.ASSIGNSY.toString()));
             return false;
         }
         SimExprParser exprP = new SimExprParser(scanner, sym, code);
@@ -47,11 +47,12 @@ public class AssignmentParser extends Parser {
         // endsem
         // cc
         if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-            ErrorHandler.getInstance().raise(new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString(), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
+            return false;
         }
         // endcc
         // sem
-        srcOp.emitAssign(code, destOp);
+        srcOp.emitAssign(code, destAddrOp);
         // endsem
         return true;
     }

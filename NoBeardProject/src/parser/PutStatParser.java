@@ -5,9 +5,8 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.CantPutOperand;
-import error.semerr.TypeExpected;
-import error.synerr.SymbolExpected;
+import error.SemErr;
+import error.SynErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -40,7 +39,8 @@ public class PutStatParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PUTLNSY.toString(), Symbol.PUTSY.toString(), scanner.getCurrentLine()));
+                String[] sList = {Symbol.PUTLNSY.toString(), Symbol.PUTSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 break;
         }
         return isParsedCorrectly;
@@ -63,7 +63,7 @@ public class PutStatParser extends Parser {
         // cc
         Operand op = exprP.getOperand();
         if (!isOperandToPut(op)) {
-            ErrorHandler.getInstance().raise(new CantPutOperand(scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new CantPutOperand());
             return false;
         }
         // endcc
@@ -95,7 +95,7 @@ public class PutStatParser extends Parser {
                 // endsem
                 // cc
                 if (wOp.getType() != OperandType.SIMPLEINT) {
-                    ErrorHandler.getInstance().raise(new TypeExpected(OperandType.SIMPLEINT.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc
@@ -103,7 +103,7 @@ public class PutStatParser extends Parser {
                 wOp.emitLoadVal(code);
                 // endsem
                 if (!tokenIsA(Symbol.RPARSY)) {
-                    ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.RPARSY.toString(), scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.RPARSY.toString()));
                     // TODO: Add raiseError() and getNameManager as private methods to Parser
                     // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPARSY)));
                     return false;
@@ -117,7 +117,7 @@ public class PutStatParser extends Parser {
             case RPARSY:
                 // cc
                 if (op.getSize() == Operand.UNDEFSIZE) {
-                    ErrorHandler.getInstance().raise(new CantPutOperand(scanner.getCurrentLine()));
+                    ErrorHandler.getInstance().raise(new SemErr().new CantPutOperand());
                     return false;
                 }
                 // end cc
@@ -140,7 +140,8 @@ public class PutStatParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.COMMASY.toString(), Symbol.RPARSY.toString(), scanner.getCurrentLine()));
+                String[] sList = {Symbol.COMMASY.toString(), Symbol.RPARSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 return false;
         }
         return true;

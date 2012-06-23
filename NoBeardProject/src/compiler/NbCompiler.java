@@ -5,6 +5,7 @@
 package compiler;
 
 import error.ErrorHandler;
+import error.Error;
 import nbm.Code;
 import parser.NoBeardParser;
 import scanner.Scanner;
@@ -30,6 +31,7 @@ public class NbCompiler {
         Operand.setStringManager(scanner.getStringManager());
         parser = new NoBeardParser(scanner, sym, code);
         ErrorHandler.getInstance().reset();
+        Error.setScanner(scanner);
         scanner.nextToken();
     }
 

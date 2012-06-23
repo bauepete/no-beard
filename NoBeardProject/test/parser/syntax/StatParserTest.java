@@ -4,6 +4,8 @@
  */
 package parser.syntax;
 
+import error.ErrorHandler;
+import error.Error;
 import nbm.Code;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -43,6 +45,7 @@ public class StatParserTest {
     
     @Before
     public void setUp() {
+        ErrorHandler.getInstance().reset();
         assignS = new Scanner(new SrcStringReader("a = 5;"));
         noAssignS = new Scanner(new SrcStringReader("a == 5;"));
         simplePutS = new Scanner(new SrcStringReader("put(5);"));
@@ -62,6 +65,7 @@ public class StatParserTest {
     public void testParseAssignStat() {
         System.out.println("testParseAssignStat");
         Scanner s = assignS;
+        Error.setScanner(s);
         sym = new SymListManager(c, s);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
@@ -80,6 +84,7 @@ public class StatParserTest {
     public void testParsePutStat() {
         System.out.println("testParsePutStat");
         Scanner s = putS;
+        Error.setScanner(s);
         s.nextToken();
         
         StatParser p = new StatParser(s, sym, c);
@@ -94,6 +99,7 @@ public class StatParserTest {
     public void testParseSimplePutStat() {
         System.out.println("testParseSimplePutStat");
         Scanner s = simplePutS;
+        Error.setScanner(s);
         s.nextToken();
         
         StatParser p = new StatParser(s, sym, c);
@@ -107,6 +113,7 @@ public class StatParserTest {
     public void testParseNoAssignStat() {
         System.out.println("testParseNoAssignStat");
         Scanner s = noAssignS;
+        Error.setScanner(s);
         sym = new SymListManager(c, s);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
@@ -123,6 +130,7 @@ public class StatParserTest {
     public void testParseNoPutStat() {
         System.out.println("testParseNoPutStat");
         Scanner s = noPutS;
+        Error.setScanner(s);
         s.nextToken();
         
         StatParser p = new StatParser(s, sym, c);

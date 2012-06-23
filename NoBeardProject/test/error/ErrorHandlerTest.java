@@ -4,15 +4,15 @@
  */
 package error;
 
-import error.synerr.IdentifierExpected;
-import error.semerr.NameAlreadyDefined;
-import error.synerr.SymbolExpected;
+import scanner.SrcStringReader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import scanner.SrcFileReader;
 import static org.junit.Assert.*;
 
 /**
@@ -37,6 +37,7 @@ public class ErrorHandlerTest {
     @Before
     public void setUp() {
         eh = ErrorHandler.getInstance();
+        Error.setScanner(new Scanner(new SrcStringReader("unit a; do; done a;")));
     }
 
     @After
@@ -62,11 +63,11 @@ public class ErrorHandlerTest {
     public void testRaise() {
         System.out.println("add");
 
-        eh.raise(new NameAlreadyDefined("Sepp", 5));
+        eh.raise(new SemErr().new NameAlreadyDefined("Sepp"));
         assertEquals("Count expected", 1, eh.getCount());
         assertEquals("SemErrs expected", 1, eh.getCount("SemErr"));
 
-        eh.raise(new NameAlreadyDefined("Koal", 6));
+        eh.raise(new SemErr().new NameAlreadyDefined("Koal"));
         assertEquals("Count expected", 2, eh.getCount());
         assertEquals("SemErrs expected", 2, eh.getCount("SemErr"));
 
@@ -79,9 +80,9 @@ public class ErrorHandlerTest {
     public void testAddDifferent() {
         System.out.println("testAddDifferent");
 
-        eh.raise(new NameAlreadyDefined("Sepp", 1));
-        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), 2));
-        eh.raise(new IdentifierExpected(3));
+        eh.raise(new SemErr().new NameAlreadyDefined("Sepp"));
+        eh.raise(new SynErr().new SymbolExpected(Symbol.SEMICOLONSY.toString()));
+        eh.raise(new SynErr().new IdentifierExpected());
         assertEquals("Count expected", 3, eh.getCount());
         assertEquals("SemErrs expected", 1, eh.getCount("SemErr"));
         assertEquals("SynErrs expected", 2, eh.getCount("SynErr"));
@@ -91,9 +92,9 @@ public class ErrorHandlerTest {
     @Test
     public void testGetLastError() {
         System.out.println("testAddDifferent");
-        eh.raise(new NameAlreadyDefined("Sepp", 22));
-        eh.raise(new SymbolExpected(Symbol.SEMICOLONSY.toString(), 25));
-        eh.raise(new IdentifierExpected(26));
+        eh.raise(new SemErr().new NameAlreadyDefined("Sepp"));
+        eh.raise(new SynErr().new SymbolExpected(Symbol.SEMICOLONSY.toString()));
+        eh.raise(new SynErr().new IdentifierExpected());
         assertEquals("Last error", 20, eh.getLastError().getErrNo());
         
     }

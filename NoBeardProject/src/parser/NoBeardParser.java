@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.semerr.BlockNameMismatch;
+import error.SemErr;
 import nbm.Nbm;
 import nbm.Code;
 import scanner.NameManager;
@@ -63,7 +63,7 @@ public class NoBeardParser extends Parser {
         // cc
         if (name != name1) {
             NameManager n = scanner.getNameManager();
-            ErrorHandler.getInstance().raise(new BlockNameMismatch(n.getStringName(name), n.getStringName(name1), scanner.getCurrentLine()));
+            ErrorHandler.getInstance().raise(new SemErr().new BlockNameMismatch(n.getStringName(name), n.getStringName(name1)));
             return false;
         }
         // end cc

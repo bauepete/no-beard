@@ -4,14 +4,17 @@
  */
 package error;
 
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import scanner.SrcFileReader;
 import scanner.Scanner.Symbol;
-import error.semerr.*;
-import error.synerr.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import scanner.Scanner;
 import static org.junit.Assert.*;
 
 /**
@@ -42,15 +45,20 @@ public class ErrorTest {
     
     @Before
     public void setUp() {
-        identExp = new IdentifierExpected(1);
-        statExp = new StatementExpected(2);
-        symExp = new SymbolExpected(Symbol.ASSIGNSY.toString(), 3);
-        blockNameMism = new BlockNameMismatch("Sepp", "Fraunz", 4);
-        cantPutOp = new CantPutOperand(5);
-        illegalOp = new IllegalOperand(6);
-        incompTypes = new IncompatibleTypes("int", "bool", 7);
-        nameAlrDefd = new NameAlreadyDefined("Fritz", 8);
-        typeExp = new TypeExpected("int", 9);
+        try {
+            Error.setScanner(new Scanner(new SrcFileReader("SamplePrograms/Smallest.nb")));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ErrorTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        identExp = new SynErr().new IdentifierExpected();
+        statExp = new SynErr().new StatementExpected();
+        symExp = new SynErr().new SymbolExpected(Symbol.ASSIGNSY.toString());
+        blockNameMism = new SemErr().new BlockNameMismatch("Seppi", "Fraunzn");
+        cantPutOp = new SemErr().new CantPutOperand();
+        illegalOp = new SemErr().new IllegalOperand();
+        incompTypes = new SemErr().new IncompatibleTypes("int", "bool");
+        nameAlrDefd = new SemErr().new NameAlreadyDefined("Fritz");
+        typeExp = new SemErr().new TypeExpected("int");
     }
     
     @After
@@ -61,7 +69,7 @@ public class ErrorTest {
      * Test of getErrorClass method, of class Error.
      */
     @Test
-    public void testGetErrorClass() {
+    public void testSynErrs() {
         System.out.println("SynErrs");
         Error e = identExp;
         assertEquals("Msg ", "Identifier expected", e.getMessage());
@@ -80,11 +88,11 @@ public class ErrorTest {
      * Test of getMessage method, of class Error.
      */
     @Test
-    public void testGetMessage() {
+    public void testSemErrs() {
          System.out.println("testSemErrors");
 
         Error e = blockNameMism;
-        assertEquals("Msg ", "Block Sepp ends with name Fraunz", e.getMessage());
+        assertEquals("Msg ", "Block Seppi ends with name Fraunzn", e.getMessage());
         assertEquals("ErrNo ", 50, e.getErrNo());
 
         e = cantPutOp;

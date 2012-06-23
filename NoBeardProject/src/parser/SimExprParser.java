@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.synerr.SymbolExpected;
+import error.SynErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -174,7 +174,8 @@ public class SimExprParser extends Parser {
                 break;
 
             default:
-                ErrorHandler.getInstance().raise(new SymbolExpected(Symbol.PLUSSY.toString(), Symbol.MINUSSY.toString(), scanner.getCurrentLine()));
+                String[] sList = {Symbol.PLUSSY.toString(), Symbol.MINUSSY.toString()};
+                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
                 return false;
         }
         return true;
