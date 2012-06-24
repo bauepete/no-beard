@@ -4,7 +4,6 @@
  */
 package symlist;
 
-import error.ErrorHandler;
 import error.SemErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
@@ -84,7 +83,7 @@ public class ConstantOperand extends Operand {
                 break;
                 
             default:
-                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
+                throw new UnsupportedOperationException("Constants of int and bool arrays syntactically not supported yet.");
         }
     }
 

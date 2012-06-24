@@ -19,7 +19,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import parser.semantics.AssmCodeChecker;
 import scanner.SrcFileReader;
-import scanner.StringManager;
 import static org.junit.Assert.*;
 
 /**
@@ -91,25 +90,5 @@ public class OperandTest {
         assertEquals(Operand.OperandKind.VALONSTACK, vOp2.getKind());
         assertEquals(Operand.OperandKind.VALONSTACK, vOp3.getKind());
         assertEquals(Operand.OperandKind.VALONSTACK, vOp4.getKind());
-    }
-
-    @Test
-    public void testAssignFromConstOp() {
-        System.out.println("testAssignFromConstOp");
-                
-        Operand destV = new VariableOperand(OperandType.SIMPLEINT, 1, 0, 0);
-        Operand destAos = new AddrOnStackOperand(destV);
-        
-        cOp.emitAssign(c, destV);
-        assertEquals(0, c.getPc());
-        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
-        
-        byte[] exp = {
-            Opcode.LIT.byteCode(), 0, 42,
-            Opcode.STO.byteCode()
-        };
-        
-        cOp.emitAssign(c, destAos);
-        AssmCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
     }
 }
