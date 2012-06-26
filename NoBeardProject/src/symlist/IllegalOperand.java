@@ -28,7 +28,7 @@ public class IllegalOperand extends Operand {
 
     @Override
     public Operand emitLoadAddr(Code toCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this;
     }
     
 }
