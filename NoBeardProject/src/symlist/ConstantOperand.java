@@ -5,6 +5,7 @@
 package symlist;
 
 import error.SemErr;
+import error.SemErr.TypeExpected;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import symlist.Operand.OperandKind;
@@ -26,6 +27,9 @@ public class ConstantOperand extends Operand {
     
     @Override
     public Operand emitLoadVal(Code toCode) {
+        if (super.emitLoadVal(toCode) == null) {
+            return new IllegalOperand();
+        }
         switch(type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -42,24 +46,10 @@ public class ConstantOperand extends Operand {
     }
 
     @Override
-    public void emitAssign(Code toCode, Operand destOp) {
-        if (destOp.getKind() != OperandKind.ADDRONSTACK) {
-            errorHandler().raise(new SemErr().new IllegalOperand());
-            return;
+    public boolean emitAssign(Code toCode, Operand destOp) {
+        if (!super.emitAssign(toCode, destOp)) {
+            return false;
         }
-        
-        if (!typesOk(destOp)) {
-            SemErr x = new SemErr().new BlockNameMismatch(null, null);
-            errorHandler().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
-            return;
-        }
-        
-        if (!srcKindOk()) {
-            errorHandler().raise(new SemErr().new IllegalOperand());
-            return;
-        }
-        
-        
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -83,28 +73,31 @@ public class ConstantOperand extends Operand {
                 break;
                 
             default:
-                throw new UnsupportedOperationException("Constants of int and bool arrays syntactically not supported yet.");
+                String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
+                    OperandType.SIMPLEINT.toString(), OperandType.ARRAYCHAR.toString()};
+                errorHandler().raise(new SemErr().new TypeExpected(tList));
+                return false;
         }
+        return true;
     }
 
     @Override
     public Operand emitLoadAddr(Code toCode) {
+        if (super.emitLoadAddr(toCode) == null) {
+            return new IllegalOperand();
+        }
+        
+        Operand returnedOp = null;
+        
         if (getType() == OperandType.SIMPLECHAR || getType() == OperandType.ARRAYCHAR) {
             toCode.emitOp(Opcode.LIT);
             toCode.emitHalfWord(valaddr);
+            returnedOp = new AddrOnStackOperand(this);
+        } else {
+            String[] tList = {OperandType.SIMPLECHAR.toString(), OperandType.ARRAYCHAR.toString()};
+            errorHandler().raise(new SemErr().new TypeExpected(tList));
+            returnedOp = new IllegalOperand();
         }
-        
-        return (new AddrOnStackOperand(this));
-    }
-    
-    private boolean typesOk(Operand destOp) {
-        return (destOp.getType() != OperandType.ERRORTYPE && destOp.getType() != OperandType.VOID &&
-                getType() != OperandType.ERRORTYPE && getType() != OperandType.VOID &&
-                getType() == destOp.getType());
-    }
-    
-    private boolean srcKindOk() {
-        return (getKind() != OperandKind.ILLEGAL && getKind() != OperandKind.ANONYMOUSBLOCK &&
-                getKind() != OperandKind.FUNCTION && getKind() != OperandKind.UNIT);
+        return returnedOp;
     }
 }

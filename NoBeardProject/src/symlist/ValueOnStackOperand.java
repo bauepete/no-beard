@@ -28,7 +28,10 @@ public class ValueOnStackOperand extends Operand {
     }
 
     @Override
-    public void emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(Code toCode, Operand destOp) {
+        if (!super.emitAssign(toCode, destOp)) {
+            return false;
+        }
         switch(destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -36,9 +39,6 @@ public class ValueOnStackOperand extends Operand {
                 break;
                 
             case SIMPLECHAR:
-                toCode.emitOp(Opcode.LIT);
-                // TODO: implement access to string storage
-                toCode.emitHalfWord(valaddr);
                 toCode.emitOp(Opcode.STC);
                 break;
                 
@@ -48,6 +48,7 @@ public class ValueOnStackOperand extends Operand {
                 toCode.emitOp(Opcode.ASSN);
                 break;
         }
+        return true;
     }
 
     @Override

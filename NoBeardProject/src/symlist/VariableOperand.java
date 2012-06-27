@@ -43,7 +43,7 @@ public class VariableOperand extends Operand {
     }
 
     @Override
-    public void emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(Code toCode, Operand destOp) {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -58,8 +58,7 @@ public class VariableOperand extends Operand {
                 // TODO: Implement assign for char
                 break;
         }
-
-
+        return true;
     }
 
     @Override

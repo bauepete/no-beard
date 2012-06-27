@@ -10,14 +10,12 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nbm.Code;
-import nbm.Nbm.Opcode;
 import symlist.Operand.OperandType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import parser.semantics.AssmCodeChecker;
 import scanner.SrcFileReader;
 import static org.junit.Assert.*;
 
@@ -90,5 +88,77 @@ public class OperandTest {
         assertEquals(Operand.OperandKind.VALONSTACK, vOp2.getKind());
         assertEquals(Operand.OperandKind.VALONSTACK, vOp3.getKind());
         assertEquals(Operand.OperandKind.VALONSTACK, vOp4.getKind());
+    }
+    
+    @Test
+    public void testAssignIncompatibleTypes() {
+        System.out.println("testAssignIncompatibleTypes");
+
+        Operand src = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
+        Operand destAosV = new AddrOnStackOperand(new VariableOperand(OperandType.SIMPLECHAR, 1, 0, 0));
+        
+        assertFalse(src.emitAssign(c, destAosV));
+        assertEquals(0, c.getPc());
+        assertEquals(53, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testAssignInvalidDestKind() {
+        System.out.println("testAssignInvalidDestKind");
+        
+        Operand src = new ConstantOperand(OperandType.ARRAYBOOL, 32, 32, 0);
+        assertFalse("AddrOnStackOp expected", src.emitAssign(c, vOp));
+        assertEquals(0, c.getPc());
+        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testAssignInvalidType() {
+        System.out.println("testAssignInvalidType");
+        
+        Operand src = new ConstantOperand(OperandType.VOID, 0, 0, 0);
+        assertFalse("Invalid type ", src.emitAssign(c, new AddrOnStackOperand(vOp)));
+        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testAssignInvalidSrcKind() {
+        System.out.println("testAssignInvalidSrcKind");
+        Operand src = new Operand(Operand.OperandKind.UNIT, OperandType.SIMPLEBOOL, 0, 0, 0);
+        assertFalse("Invalid src kind ", src.emitAssign(c, new AddrOnStackOperand(vOp)));
+        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    
+    @Test
+    public void testLoadValInvalidKind() {
+        System.out.println("testLoadValInvalidKind");
+        Operand op = new Operand(Operand.OperandKind.UNIT, OperandType.VOID, 0, 0, 0);
+        assertNull("Invalid Kind ", op.emitLoadVal(c));
+        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testLoadValInvalidType() {
+        System.out.println("testLoadValInvalidType");
+        Operand op = new Operand(Operand.OperandKind.ADDRONSTACK, OperandType.VOID, 0, 0, 0);
+        assertNull("Invalid Type ", op.emitLoadVal(c));
+        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testLoadAddrInvalidKind() {
+        System.out.println("testLoadAddrInvalidKind");
+        Operand op = new Operand(Operand.OperandKind.UNIT, OperandType.VOID, 0, 0, 0);
+        assertNull("Invalid Kind ", op.emitLoadVal(c));
+        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
+    }
+    
+    @Test
+    public void testLoadAddrInvalidType() {
+        System.out.println("testLoadAddrInvalidType");
+        Operand op = new Operand(Operand.OperandKind.ADDRONSTACK, OperandType.VOID, 0, 0, 0);
+        assertNull("Invalid Type ", op.emitLoadVal(c));
+        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
     }
 }

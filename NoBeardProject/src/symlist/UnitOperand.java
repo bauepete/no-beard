@@ -18,17 +18,18 @@ public class UnitOperand extends Operand {
     @Override
     public Operand emitLoadVal(Code toCode) {
         // nothing to be done;
-        return this;
+        return new IllegalOperand();
     }
 
     @Override
-    public void emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(Code toCode, Operand destOp) {
         // nothing to be done;
+        return super.emitAssign(toCode, destOp);
     }
 
     @Override
     public Operand emitLoadAddr(Code toCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new IllegalOperand();
     }
     
 }

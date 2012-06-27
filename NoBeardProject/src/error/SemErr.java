@@ -67,8 +67,9 @@ public class SemErr extends Error {
                 sb.append(types[i]);
                 sb.append(" or ");
             }
-            sb.append(types[types.length]);
+            sb.append(types[types.length - 1]);
             sb.append(" expected");
+            setMessage(sb.toString());
         }
     }
 

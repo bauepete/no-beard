@@ -70,11 +70,11 @@ public class ConstantOperandTest {
         AssmCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
         
         byte[] expChar = {
-            Opcode.LIT.byteCode(), 0, 0
+            Opcode.LIT.byteCode(), 0, 42
         };
         rOp = charOp.emitLoadVal(c);
         assertEquals(OperandKind.VALONSTACK, rOp.getKind());
-        AssmCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
+        AssmCodeChecker.assertCodeEquals("Code ", expChar, c.getByteCode());
     }
 
     /**
@@ -137,20 +137,16 @@ public class ConstantOperandTest {
      * Test of emitAssign method, of class ConstantOperand.
      */
     @Test
-    public void testAssignFails() {
-        System.out.println("testAssignFails");
+    public void testEmitAssignToOtherArray() {
+        System.out.println("testEmitAssignToOtherArray");
         
-        Operand destV = new VariableOperand(OperandType.SIMPLEINT, 4, 0, 0);
-        intOp.emitAssign(c, destV);
+        Operand srcArray = new ConstantOperand(OperandType.ARRAYBOOL, 10, 0, 0);
+        Operand destV = new VariableOperand(OperandType.ARRAYBOOL, 10, 32, 0);
+        Operand destAos = new AddrOnStackOperand(destV);
+        
+        assertFalse(srcArray.emitAssign(c, destAos));
         assertEquals(0, c.getPc());
-        assertEquals(52, ErrorHandler.getInstance().getLastError().getErrNo());
-        
-        Operand destCharV = new VariableOperand(OperandType.SIMPLECHAR, 1, 0, 0);
-        Operand destAosV = new AddrOnStackOperand(destCharV);
-        
-        intOp.emitAssign(c, destAosV);
-        assertEquals(0, c.getPc());
-        assertEquals(53, ErrorHandler.getInstance().getLastError().getErrNo());
+        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
     }
 
     /**
@@ -166,5 +162,17 @@ public class ConstantOperandTest {
         Operand rv = charOp.emitLoadAddr(c);
         assertEquals(OperandKind.ADDRONSTACK, rv.getKind());
         AssmCodeChecker.assertCodeEquals("Code ", expected, c.getByteCode());
+    }
+
+    /**
+     * Test of emitLoadAddr method, of class ConstantOperand.
+     */
+    @Test
+    public void testEmitLoadAddrToInvalidType() {
+        System.out.println("testEmitLoadAddrToInvalidType");
+        
+        Operand rv = intOp.emitLoadAddr(c);
+        assertEquals(OperandKind.ILLEGAL, rv.getKind());
+        assertEquals(0, c.getPc());
     }
 }

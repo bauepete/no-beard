@@ -5,6 +5,7 @@
 package symlist;
 
 import error.ErrorHandler;
+import error.SemErr;
 import nbm.Code;
 import scanner.StringManager;
 
@@ -12,7 +13,7 @@ import scanner.StringManager;
  *
  * @author peter
  */
-public abstract class Operand {
+public class Operand {
 
     public enum OperandKind {
 
@@ -35,7 +36,6 @@ public abstract class Operand {
     protected int size;
     protected int valaddr;
     protected int level;
-    
     public static final int UNDEFSIZE = -1;
 
     public Operand(OperandKind kind, OperandType type, int size, int valaddr, int level) {
@@ -90,21 +90,77 @@ public abstract class Operand {
             return symListManager.getCurrLevel();
         }
     }
-    
+
     public char getStringStorage(int charAt) {
         if (stringManager == null) {
             throw new NullPointerException("Operand not initialized properly. StringManager missing.");
         }
         return (stringManager.getCharAt(charAt));
     }
-    
-    public abstract Operand emitLoadVal(Code toCode);
 
-    public abstract Operand emitLoadAddr(Code toCode);
+    public Operand emitLoadVal(Code toCode) {
+        if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION ||
+                getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
+            ErrorHandler.getInstance().raise(new SemErr().new IllegalOperand());
+            return null;
+        }
+        
+        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT) {
+            String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
+            ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(tList));
+            return null;
+        }
+        return this;
+    }
 
-    public abstract void emitAssign(Code toCode, Operand destOp);
-    
+    public Operand emitLoadAddr(Code toCode) {
+        if (getKind() != OperandKind.CONSTANT && getKind() != OperandKind.VARIABLE &&
+                getKind() != OperandKind.ARGUMENT && getKind() != OperandKind.ADDRONSTACK) {
+            return null;
+        }
+        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT &&
+                getType() != OperandType.ARRAYBOOL && getType() != OperandType.ARRAYCHAR && getType() != OperandType.ARRAYINT) {
+            return null;
+        }
+        return this;
+    }
+
+    public boolean emitAssign(Code toCode, Operand destOp) {
+        if (destOp.getKind() != OperandKind.ADDRONSTACK) {
+            errorHandler().raise(new SemErr().new IllegalOperand());
+            return false;
+        }
+
+        if (!typesOk(destOp)) {
+            String[] tList = {OperandType.SIMPLEINT.toString(), OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
+                              OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
+            errorHandler().raise(new SemErr().new TypeExpected(tList));
+            return false;
+        }
+
+        if (!srcKindOk()) {
+            errorHandler().raise(new SemErr().new IllegalOperand());
+            return false;
+        }
+        
+        if (getType() != destOp.getType()) {
+            errorHandler().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
+            return false;
+        }
+        return true;
+    }
+
     protected ErrorHandler errorHandler() {
         return ErrorHandler.getInstance();
+    }
+
+    private boolean typesOk(Operand destOp) {
+        return (destOp.getType() != OperandType.ERRORTYPE && destOp.getType() != OperandType.VOID
+                && getType() != OperandType.ERRORTYPE && getType() != OperandType.VOID);
+    }
+
+    private boolean srcKindOk() {
+        return (getKind() != OperandKind.ILLEGAL && getKind() != OperandKind.ANONYMOUSBLOCK
+                && getKind() != OperandKind.FUNCTION && getKind() != OperandKind.UNIT);
     }
 }

@@ -27,7 +27,7 @@ public class AddrOnStackOperand extends Operand {
     }
 
     @Override
-    public void emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(Code toCode, Operand destOp) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
