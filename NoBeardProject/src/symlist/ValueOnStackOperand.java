@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import error.SemErr;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 
@@ -42,18 +43,17 @@ public class ValueOnStackOperand extends Operand {
                 toCode.emitOp(Opcode.STC);
                 break;
                 
-            case ARRAYCHAR:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(valaddr);
-                toCode.emitOp(Opcode.ASSN);
-                break;
+            default:
+                String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
+                errorHandler().raise(new SemErr().new TypeExpected(tList));
+                return false;
         }
         return true;
     }
 
     @Override
     public Operand emitLoadAddr(Code toCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new IllegalOperand();
     }
     
 }

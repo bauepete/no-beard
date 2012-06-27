@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import symlist.Operand.OperandKind;
 import error.ErrorHandler;
 import error.Error;
 import scanner.Scanner;
@@ -72,16 +73,11 @@ public class ValueOnStackOperandTest {
      * Test of emitLoadVal method, of class ValueOnStackOperand.
      */
     @Test
-    @Ignore
     public void testEmitLoadVal() {
         System.out.println("emitLoadVal");
-        Code toCode = null;
-        ValueOnStackOperand instance = null;
-        Operand expResult = null;
-        Operand result = instance.emitLoadVal(toCode);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Operand op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, 32, 0);
+        assertEquals(OperandKind.VALONSTACK, op.emitLoadVal(toCode).getKind());
+        assertEquals(0, toCode.getPc());
     }
 
     /**
@@ -114,27 +110,24 @@ public class ValueOnStackOperandTest {
      * Test of emitAssign method, of class ValueOnStackOperand.
      */
     @Test
-    public void testEmitAssignFail() {
-        System.out.println("testEmitAssignFail");
-        assertFalse(intVosSrcOp.emitAssign(toCode, intDestOp));
-        byte[] expected = {};
+    public void testEmitAssignToArrInt() {
+        System.out.println("testEmitAssignToArrInt");
+        
+        Operand srcOp = new ValueOnStackOperand(Operand.OperandType.ARRAYINT, 40, 0, 0);
+        Operand destOp = new AddrOnStackOperand(new VariableOperand(Operand.OperandType.ARRAYINT, 40, 0, 0));
+        assertFalse(srcOp.emitAssign(toCode, destOp));
         assertEquals(0, toCode.getPc());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
+        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
     }
 
     /**
      * Test of emitLoadAddr method, of class ValueOnStackOperand.
      */
     @Test
-    @Ignore
     public void testEmitLoadAddr() {
         System.out.println("emitLoadAddr");
-        Code toCode = null;
-        ValueOnStackOperand instance = null;
-        Operand expResult = null;
-        Operand result = instance.emitLoadAddr(toCode);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        Operand op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, 32, 0);
+        assertEquals(OperandKind.ILLEGAL, op.emitLoadAddr(toCode).getKind());
     }
 }
