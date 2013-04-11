@@ -10,6 +10,12 @@ package scanner;
  */
 public class Scanner {
 
+    private void handleDigit() {
+        int n = NumberAnalyzer.readNumber(srcReader);
+        currentToken.setSy(Symbol.NUMBERSY);
+        currentToken.setValue(n);
+    }
+
     public enum Symbol {
         /// Special
 
@@ -80,9 +86,7 @@ public class Scanner {
         do {
 
             if (Character.isDigit(srcReader.getCurrentChar())) {
-                int n = NumberAnalyzer.readNumber(srcReader);
-                currentToken.setSy(Symbol.NUMBERSY);
-                currentToken.setValue(n);
+                handleDigit();
                 return;
             }
 
@@ -90,148 +94,151 @@ public class Scanner {
                 nameManager.readName(currentToken);
                 return;
             }
-
-            switch (srcReader.getCurrentChar()) {
-                case ' ':
-                case '\t':
-                case '\n':
-                    srcReader.nextChar();
-                    break;
-
-                case -1:
-                    currentToken.setSy(Symbol.EOFSY);
-                    break;
-
-                case '#':
-                    skipComment();
-                    break;
-
-                case '+':
-                    currentToken.setSy(Symbol.PLUSSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '-':
-                    currentToken.setSy(Symbol.MINUSSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '*':
-                    currentToken.setSy(Symbol.TIMESSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '/':
-                    currentToken.setSy(Symbol.DIVSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '%':
-                    currentToken.setSy(Symbol.MODSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '<':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '=') {
-                        currentToken.setSy(Symbol.LEQSY);
-                        srcReader.nextChar();
-                    } else {
-                        currentToken.setSy(Symbol.LTHSY);
-                    }
-                    break;
-
-                case '>':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '=') {
-                        currentToken.setSy(Symbol.GEQSY);
-                        srcReader.nextChar();
-                    } else {
-                        currentToken.setSy(Symbol.GTHSY);
-                    }                    
-                    break;
-
-                case '!':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '=') {
-                        currentToken.setSy(Symbol.NEQSY);
-                        srcReader.nextChar();
-                    } else {
-                        currentToken.setSy(Symbol.NOTSY);
-                    }
-                    break;
-
-                case '=':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '=') {
-                        currentToken.setSy(Symbol.EQLSY);
-                        srcReader.nextChar();
-                    } else {
-                        currentToken.setSy(Symbol.ASSIGNSY);
-                    }                    
-                    break;
-                    
-                case '&':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '&') {
-                        currentToken.setSy(Symbol.ANDSY);
-                        srcReader.nextChar();
-                    }
-                    break;
-                    
-                case '|':
-                    srcReader.nextChar();
-                    if (srcReader.getCurrentChar() == '|') {
-                        currentToken.setSy(Symbol.ORSY);
-                        srcReader.nextChar();
-                    }
-                    break;
-
-                case ';':
-                    currentToken.setSy(Symbol.SEMICOLONSY);
-                    srcReader.nextChar();
-                    break;
-
-                case ',':
-                    currentToken.setSy(Symbol.COMMASY);
-                    srcReader.nextChar();
-                    break;
-
-                case '(':
-                    currentToken.setSy(Symbol.LPARSY);
-                    srcReader.nextChar();
-                    break;
-
-                case ')':
-                    currentToken.setSy(Symbol.RPARSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '[':
-                    currentToken.setSy(Symbol.LBRACKETSY);
-                    srcReader.nextChar();
-                    break;
-
-                case ']':
-                    currentToken.setSy(Symbol.RBRACKETSY);
-                    srcReader.nextChar();
-                    break;
-
-                case '"':
-                case '\'':
-                    stringManager.readString();
-                    currentToken.setSy(Symbol.STRINGSY);
-                    break;
-
-                default:
-                    currentToken.setSy(Symbol.ILLEGALSY);
-                    srcReader.nextChar();
-            }
+            handleTerminals();
 
         } while (currentToken.getSy() == Symbol.NOSY);
     }
 
-    /** Returns the token scanned by the last call of nextToken(). All the assumptions
+     private void handleTerminals() {
+        switch (srcReader.getCurrentChar()) {
+            case ' ':
+            case '\t':
+            case '\n':
+                srcReader.nextChar();
+                break;
+
+            case -1:
+                currentToken.setSy(Symbol.EOFSY);
+                break;
+
+            case '#':
+                skipComment();
+                break;
+
+            case '+':
+                currentToken.setSy(Symbol.PLUSSY);
+                srcReader.nextChar();
+                break;
+
+            case '-':
+                currentToken.setSy(Symbol.MINUSSY);
+                srcReader.nextChar();
+                break;
+
+            case '*':
+                currentToken.setSy(Symbol.TIMESSY);
+                srcReader.nextChar();
+                break;
+
+            case '/':
+                currentToken.setSy(Symbol.DIVSY);
+                srcReader.nextChar();
+                break;
+
+            case '%':
+                currentToken.setSy(Symbol.MODSY);
+                srcReader.nextChar();
+                break;
+
+            case '<':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '=') {
+                    currentToken.setSy(Symbol.LEQSY);
+                    srcReader.nextChar();
+                } else {
+                    currentToken.setSy(Symbol.LTHSY);
+                }
+                break;
+
+            case '>':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '=') {
+                    currentToken.setSy(Symbol.GEQSY);
+                    srcReader.nextChar();
+                } else {
+                    currentToken.setSy(Symbol.GTHSY);
+                }                    
+                break;
+
+            case '!':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '=') {
+                    currentToken.setSy(Symbol.NEQSY);
+                    srcReader.nextChar();
+                } else {
+                    currentToken.setSy(Symbol.NOTSY);
+                }
+                break;
+
+            case '=':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '=') {
+                    currentToken.setSy(Symbol.EQLSY);
+                    srcReader.nextChar();
+                } else {
+                    currentToken.setSy(Symbol.ASSIGNSY);
+                }                    
+                break;
+                
+            case '&':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '&') {
+                    currentToken.setSy(Symbol.ANDSY);
+                    srcReader.nextChar();
+                }
+                break;
+                
+            case '|':
+                srcReader.nextChar();
+                if (srcReader.getCurrentChar() == '|') {
+                    currentToken.setSy(Symbol.ORSY);
+                    srcReader.nextChar();
+                }
+                break;
+
+            case ';':
+                currentToken.setSy(Symbol.SEMICOLONSY);
+                srcReader.nextChar();
+                break;
+
+            case ',':
+                currentToken.setSy(Symbol.COMMASY);
+                srcReader.nextChar();
+                break;
+
+            case '(':
+                currentToken.setSy(Symbol.LPARSY);
+                srcReader.nextChar();
+                break;
+
+            case ')':
+                currentToken.setSy(Symbol.RPARSY);
+                srcReader.nextChar();
+                break;
+
+            case '[':
+                currentToken.setSy(Symbol.LBRACKETSY);
+                srcReader.nextChar();
+                break;
+
+            case ']':
+                currentToken.setSy(Symbol.RBRACKETSY);
+                srcReader.nextChar();
+                break;
+
+            case '"':
+            case '\'':
+                stringManager.readString();
+                currentToken.setSy(Symbol.STRINGSY);
+                break;
+
+            default:
+                currentToken.setSy(Symbol.ILLEGALSY);
+                srcReader.nextChar();
+        }
+    }
+
+     /** Returns the token scanned by the last call of nextToken(). All the assumptions
      *** in next_symbol also hold for current_token.
      *** @return The current token.
      *** @see nextToken()
