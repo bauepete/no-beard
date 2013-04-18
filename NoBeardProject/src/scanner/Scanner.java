@@ -10,12 +10,6 @@ package scanner;
  */
 public class Scanner {
 
-    private void handleDigit() {
-        int n = NumberAnalyzer.readNumber(srcReader);
-        currentToken.setSy(Symbol.NUMBERSY);
-        currentToken.setValue(n);
-    }
-
     public enum Symbol {
         /// Special
 
@@ -91,7 +85,7 @@ public class Scanner {
             }
 
             if (Character.isLetter(srcReader.getCurrentChar())) {
-                nameManager.readName(currentToken);
+                handleName();
                 return;
             }
             handleTerminals();
@@ -99,7 +93,17 @@ public class Scanner {
         } while (currentToken.getSy() == Symbol.NOSY);
     }
 
-     private void handleTerminals() {
+    private void handleDigit() {
+        int n = NumberAnalyzer.readNumber(srcReader);
+        currentToken.setSy(Symbol.NUMBERSY);
+        currentToken.setValue(n);
+    }
+    
+    private void handleName() {
+        nameManager.readName(currentToken);
+    }
+
+    private void handleTerminals() {
         switch (srcReader.getCurrentChar()) {
             case ' ':
             case '\t':
@@ -157,7 +161,7 @@ public class Scanner {
                     srcReader.nextChar();
                 } else {
                     currentToken.setSy(Symbol.GTHSY);
-                }                    
+                }
                 break;
 
             case '!':
@@ -177,9 +181,9 @@ public class Scanner {
                     srcReader.nextChar();
                 } else {
                     currentToken.setSy(Symbol.ASSIGNSY);
-                }                    
+                }
                 break;
-                
+
             case '&':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '&') {
@@ -187,7 +191,7 @@ public class Scanner {
                     srcReader.nextChar();
                 }
                 break;
-                
+
             case '|':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '|') {
@@ -238,7 +242,7 @@ public class Scanner {
         }
     }
 
-     /** Returns the token scanned by the last call of nextToken(). All the assumptions
+    /** Returns the token scanned by the last call of nextToken(). All the assumptions
      *** in next_symbol also hold for current_token.
      *** @return The current token.
      *** @see nextToken()
