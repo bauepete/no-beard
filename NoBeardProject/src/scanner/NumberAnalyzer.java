@@ -9,7 +9,16 @@ package scanner;
  * @author peter
  */
 public class NumberAnalyzer {
-    
+    /**
+     * readNumber is called if and only if SrcReader.getCurrentChar() returns
+     * a digit. readNumber scans the number beginning with this digit and
+     * converts it to a cardinal number which is returned.
+     * 
+     * After a call of readNumber SrcReader.getCurrentChar() returns the first
+     * character of the source code that is not part of the number.
+     * @param sr
+     * @return 
+     */
     public static int readNumber(SrcReader sr) {
         
         int val = 0;

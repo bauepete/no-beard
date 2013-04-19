@@ -21,16 +21,6 @@ public class Token {
         value = 0;
     }
     
-//    public Token(Symbol sy) {
-//        this.sy = sy;
-//        value = 0;
-//    }
-//    
-//    public Token(Symbol sy, int value) {
-//        this.sy = sy;
-//        this.value = value;
-//    }
-
     public Symbol getSy() {
         return sy;
     }

@@ -1,6 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2012  Peter Bauer
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scanner;
 
@@ -10,7 +22,9 @@ import scanner.Scanner.Symbol;
 
 /**
  *
- * @author peter
+ * @author Peter Bauer
+ * The NameManager is responsible to store and retrieve names. It furthermore
+ * calculates the spix. An arithmetic representation of a name.
  */
 public class NameManager {
 
@@ -44,6 +58,10 @@ public class NameManager {
      * name read is a keyword, Token.sy is set to the corresponding Symbol.
      * If the name read is an identifier, Token.sy is set to IDENTSY and
      * Token.value is set to a unique identifier (spix).
+     * 
+     * After a call of readName SrcReader.getCurrentChar() returns the first
+     * character of the source code that is not part of the identifier.
+
      * @param t Token which corresponds to the name read.
      * @see Token
      * @see Symbol
