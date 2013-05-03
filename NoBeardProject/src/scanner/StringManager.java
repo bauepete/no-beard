@@ -4,6 +4,9 @@
  */
 package scanner;
 
+import error.ErrorHandler;
+import error.ScanErr;
+
 /**
  * NoBeard string manager assists the scanner to detect strings.
  * @author peter
@@ -53,7 +56,7 @@ public class StringManager {
         }
         
         if (srcReader.getCurrentChar() == -1 || srcReader.getCurrentChar() == '\n') {
-            System.err.println("String error");
+            ErrorHandler.getInstance().raise(new ScanErr().new InvalidString());
             stringAddress = 0;
             stringLength = 0;
         }

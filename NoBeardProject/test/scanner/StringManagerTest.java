@@ -4,7 +4,8 @@
  */
 package scanner;
 
-import org.junit.Ignore;
+import error.ErrorHandler;
+import error.Error;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -81,8 +82,11 @@ public class StringManagerTest {
         SrcReader sr = new SrcStringReader("'a longer string not ending in this line");
         StringManager instance = new StringManager(sr);
         
-        sr.nextChar();
+        ErrorHandler.getInstance().reset();
+        Error.setScanner(new Scanner(sr));
+
         instance.readString();
+        assertEquals(0, ErrorHandler.getInstance().getLastError().getErrNo());
         assertEquals("Address: ", 0, instance.getStringAddress());
         assertEquals("Length: ", 0, instance.getStringAddress());
     }

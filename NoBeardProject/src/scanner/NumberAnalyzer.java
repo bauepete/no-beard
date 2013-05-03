@@ -4,6 +4,10 @@
  */
 package scanner;
 
+import error.ErrorHandler;
+import error.ScanErr;
+import error.ScanErr.IntegerOverflow;
+
 /**
  *
  * @author peter
@@ -28,6 +32,8 @@ public class NumberAnalyzer {
             val += sr.getCurrentChar() - '0';
             sr.nextChar();
         }
+        if (val > 65535)
+            ErrorHandler.getInstance().raise(new ScanErr().new IntegerOverflow());
         return val;
     }
     
