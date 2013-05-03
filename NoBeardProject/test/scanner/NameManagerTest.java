@@ -18,8 +18,10 @@ import static org.junit.Assert.*;
  */
 public class NameManagerTest {
     private SrcReader sr;
+    private SrcReader srMany;
     private Token t;
-    private NameManager instance;
+    private NameManager nameManager;
+    private NameManager nameManagerMany;
 
     public NameManagerTest() {
     }
@@ -35,8 +37,10 @@ public class NameManagerTest {
     @Before
     public void setUp() {
         sr = new SrcStringReader("var1; var2;");
+        srMany = new SrcStringReader("var1; var2; bla; blu; var2; blu;");
         t = new Token();
-        instance = new NameManager(sr);
+        nameManager = new NameManager(sr);
+        nameManagerMany = new NameManager(srMany);
     }
 
     @After
@@ -51,7 +55,7 @@ public class NameManagerTest {
         System.out.println("readName");
 
         sr.nextChar();
-        instance.readName(t);
+        nameManager.readName(t);
 
         assertEquals("IDENT ", Symbol.IDENTSY, t.getSy());
         assertEquals("Spix ", 0, t.getValue());
@@ -60,10 +64,44 @@ public class NameManagerTest {
         sr.nextChar();
         sr.nextChar();
         
-        instance.readName(t);
+        nameManager.readName(t);
         assertEquals("IDENT ", Symbol.IDENTSY, t.getSy());
         assertEquals("Spix ", 1, t.getValue());
         assertEquals("Current char ", ';', sr.getCurrentChar());
+    }
+    
+    @Test
+    public void testReadNameDouble() {
+        System.out.println("testReadNameDouble");
+        
+        srMany.nextChar();
+        nameManagerMany.readName(t); // var1
+        srMany.nextChar();
+        srMany.nextChar();
+        
+        nameManagerMany.readName(t); // var2
+        int var2Spix = t.getValue();
+        srMany.nextChar();
+        srMany.nextChar();
+        
+        nameManagerMany.readName(t); // bla
+        srMany.nextChar();
+        srMany.nextChar();
+
+        nameManagerMany.readName(t); // blu
+        int bluSpix = t.getValue();
+        srMany.nextChar();
+        srMany.nextChar();
+
+        nameManagerMany.readName(t); // var2
+        srMany.nextChar();
+        srMany.nextChar();
+        assertEquals(var2Spix, t.getValue());
+
+        nameManagerMany.readName(t); // blu
+        srMany.nextChar();
+        srMany.nextChar();
+        assertEquals(bluSpix, t.getValue());
     }
 
     /**
@@ -76,15 +114,15 @@ public class NameManagerTest {
         int spix = 0;
 
         sr.nextChar();
-        instance.readName(t);
+        nameManager.readName(t);
 
-        assertEquals("Name ", "var1", instance.getStringName(t.getValue()));
+        assertEquals("Name ", "var1", nameManager.getStringName(t.getValue()));
         
         sr.nextChar();
         sr.nextChar();
         
-        instance.readName(t);
+        nameManager.readName(t);
         
-        assertEquals("Name ", "var2", instance.getStringName(t.getValue()));
+        assertEquals("Name ", "var2", nameManager.getStringName(t.getValue()));
     }
 }
