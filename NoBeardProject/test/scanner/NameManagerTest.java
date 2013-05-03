@@ -111,8 +111,6 @@ public class NameManagerTest {
     public void testGetStringName() {
         System.out.println("getStringName");
 
-        int spix = 0;
-
         sr.nextChar();
         nameManager.readName(t);
 
