@@ -77,10 +77,10 @@ public class ScannerTest {
         assertTrue("MINUSSY expected", s.getCurrentToken().getSy() == Symbol.MINUSSY);
 
         s.nextToken();
-        assertTrue("DIVSY expected", s.getCurrentToken().getSy() == Symbol.TIMESSY);
+        assertTrue("TIMESSY expected", s.getCurrentToken().getSy() == Symbol.TIMESSY);
 
         s.nextToken();
-        assertTrue("TIMESSY expected", s.getCurrentToken().getSy() == Symbol.DIVSY);
+        assertTrue("DIVSY expected", s.getCurrentToken().getSy() == Symbol.DIVSY);
 
         s.nextToken();
         assertTrue("MODSY expected", s.getCurrentToken().getSy() == Symbol.MODSY);
