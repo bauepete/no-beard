@@ -179,7 +179,7 @@ public class ScannerTest {
         s.nextToken();
         assertTrue("IDENTSY expected", s.getCurrentToken().getSy() == Symbol.IDENTSY);
         s.nextToken();
-        assertTrue("LPARSY expected", s.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        assertTrue("SEMICOLONSY expected", s.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
         s.nextToken();
         assertTrue("DOSY expected", s.getCurrentToken().getSy() == Symbol.DOSY);
         s.nextToken();
@@ -219,11 +219,11 @@ public class ScannerTest {
         s.nextToken();
         assertTrue("DONESY expected", s.getCurrentToken().getSy() == Symbol.DONESY);
         s.nextToken();
-        assertTrue("RPARSY expected", s.getCurrentToken().getSy() == Symbol.DONESY);
+        assertTrue("DONESY expected", s.getCurrentToken().getSy() == Symbol.DONESY);
         s.nextToken();
-        assertTrue("RPARSY expected", s.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", s.getCurrentToken().getSy() == Symbol.IDENTSY);
         s.nextToken();
-        assertTrue("RPARSY expected", s.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        assertTrue("SEMICOLONSY expected", s.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
         s.nextToken();
         assertTrue("EOFSY expected", s.getCurrentToken().getSy() == Symbol.EOFSY);
         s.nextToken();
