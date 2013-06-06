@@ -17,11 +17,14 @@ import static org.junit.Assert.*;
  * @author peter
  */
 public class NameManagerTest {
+
     private SrcReader sr;
     private SrcReader srMany;
+    private SrcReader srKeywords;
     private Token t;
     private NameManager nameManager;
     private NameManager nameManagerMany;
+    private NameManager nmKeywords;
 
     public NameManagerTest() {
     }
@@ -38,9 +41,13 @@ public class NameManagerTest {
     public void setUp() {
         sr = new SrcStringReader("var1; var2;");
         srMany = new SrcStringReader("var1; var2; bla; blu; var2; blu;");
+//        sr_ = new SrcStringReader("var_1; var_2; _var, var_, _var_");
+//        srFail = new SrcStringReader("var_; _");
+        srKeywords = new SrcStringReader("put, putln, unit, do, done, if, else, int, bool, char, true, false,");
         t = new Token();
         nameManager = new NameManager(sr);
         nameManagerMany = new NameManager(srMany);
+        nmKeywords = new NameManager(srKeywords);
     }
 
     @After
@@ -63,27 +70,27 @@ public class NameManagerTest {
 
         sr.nextChar();
         sr.nextChar();
-        
+
         nameManager.readName(t);
         assertEquals("IDENT ", Symbol.IDENTSY, t.getSy());
         assertEquals("Spix ", 1, t.getValue());
         assertEquals("Current char ", ';', sr.getCurrentChar());
     }
-    
+
     @Test
     public void testReadNameDouble() {
         System.out.println("testReadNameDouble");
-        
+
         srMany.nextChar();
         nameManagerMany.readName(t); // var1
         srMany.nextChar();
         srMany.nextChar();
-        
+
         nameManagerMany.readName(t); // var2
         int var2Spix = t.getValue();
         srMany.nextChar();
         srMany.nextChar();
-        
+
         nameManagerMany.readName(t); // bla
         srMany.nextChar();
         srMany.nextChar();
@@ -115,12 +122,33 @@ public class NameManagerTest {
         nameManager.readName(t);
 
         assertEquals("Name ", "var1", nameManager.getStringName(t.getValue()));
-        
+
         sr.nextChar();
         sr.nextChar();
-        
+
         nameManager.readName(t);
-        
+
         assertEquals("Name ", "var2", nameManager.getStringName(t.getValue()));
+    }
+
+    @Test
+    public void testKeywords() {
+        System.out.println("testKeywords");
+
+        srKeywords.nextChar();
+        nmKeywords.readName(t);
+
+        Symbol[] expTokens = {Symbol.PUTSY, Symbol.PUTLNSY, Symbol.UNITSY, Symbol.DOSY,
+            Symbol.DONESY, Symbol.IFSY, Symbol.ELSESY, Symbol.INTSY, Symbol.BOOLSY,
+            Symbol.CHARSY, Symbol.TRUESY, Symbol.FALSESY};
+
+        for (Symbol s : expTokens) {
+            assertEquals(s, t.getSy());
+            assertEquals(',', srKeywords.getCurrentChar());
+            srKeywords.nextChar();
+            srKeywords.nextChar();
+            nmKeywords.readName(t);
+        }
+
     }
 }
