@@ -2,7 +2,6 @@
 \usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
 \geometry{a4paper}                   % ... or a4paper or a5paper or ... 
 \usepackage{listings}
-%\geometry{landscape}                % Activate for for rotated page geometry
 %\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
 \usepackage{graphicx}
 \usepackage{amssymb}
@@ -103,33 +102,38 @@ The characters "{\tt+}", "{\tt-}", "{\tt*}", "{\tt/}", "{\tt:=}", "{\tt;}", "{\t
 	\item No symbol may span over more than one line.
 \end{itemize}
 
+\section{Sample Program}
+\begin{lstlisting}
+unit ComplexExpr;# ---------------------------- ComplexExpr.nb -----------# --- A syntactically correct NoBeard program# -------------------------------------------------------do    int l = 10;    int b =5;    int h= 170;        int unused = l;    int x=1001 + l * b - h / (b * h);    put ("Evaluating 1001 + l * b - h / (b * h)");    putln;    put ("Result is ");    put (x);          # result should be 1051done ComplexExpr;
+\end{lstlisting}
+
 \section{Syntax}
 The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation is used.
 
 	\begin{grammar}
-	NoBeard & = & "unit" ident ";" Block ident ";".\\
+	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
 	
-	Block & = &  "do" StatSeq "done".\\
+	Block & = &  ``do" StatSeq ``done".\\
 	
 	StatSeq & = & Stat \{Stat\}. \\
 	
-	Stat & = & VarDecl ";" \\
+	Stat & = & VarDecl ``;" \\
 %	&& \alternative FuncDecl ";" \\
-	&& \alternative Assignment ";"\\
+	&& \alternative Assignment ``;"\\
 %	&& \alternative FuncCall ";" \\
-	&& \alternative PutStat ";" \\
+	&& \alternative PutStat ``;" \\
+%	&& \alternative IfStat \\
 	&& \alternative \emptystring. \\
 	
-	VarDecl & = & Type ident ["=" Expr]. \\
+	VarDecl & = & Type ident [``=" Expr]. \\
 	
-	Type & = & TypeSpec [ArraySpec]. \\
+	Type & = & SimpleType [ArraySpec]. \\
 	
-	TypeSpec & = & SimpleType %\alternative CompoundType
-	. \\
+	%TypeSpec & = & SimpleType %\alternative CompoundType. \\
 	
-	ArraySpec & = & "[" number "]". \\
+	ArraySpec & = & ``[" number ``]". \\
 	
-	SimpleType & = & "int" \alternative "char" \alternative "bool". \\
+	SimpleType & = & ``int" \alternative ``char" \alternative ``bool". \\
 	
 %	FuncDecl & = & "function" ReturnType ident ["(" FormalArguments ")"] Block ident. \\
 	
@@ -141,25 +145,35 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 	
 %	Argument & = & TypeSpec [ArgArraySpec] ident. \\
 	
-	Assignment &=& Reference "=" Expr . \\
+	Assignment &=& Reference ``=" Expr . \\
 	
 %	FuncCall & = & ident ["(" Expr \{"," Expr\}]. \\
+
+%	IfStat & = & ``if" Expr Block \\
+%	&& [``else" Block]. \\
 	
-	PutStat & = & "PUT" "(" Expr ["," Expr] ")" \\
-	&& \alternative "PUTLN. \\
+%	WhileStat & = & "while" "[" CondExpr "]" "do" StatSeq "done". \\
 	
-	Reference & = & ident [ "[" Expr "]"]. \\
+	PutStat & = & ``put" ``(" Expr [``," Expr] ``)" \\
+	&& \alternative "putln". \\
 	
-	Expr & = & [AddOp]Term \{AddOp Term\}. \\
+	Expr & = & SimExpr [RelOp SimExpr]. \\
+	
+	SimExpr & = & [AddOp]Term \{AddOp Term\}. \\
 	
 	Term & = & Fact \{MulOp Fact\}. \\
 	
 	Fact & = & Reference \alternative number \alternative string \\
-	&& \alternative FuncCall \alternative "(" Expr ")". \\
+	&& \alternative %FuncCall \alternative
+	``(" Expr ``)". \\
 	
-	AddOp & = & "+" \alternative "-". \\
+	Reference & = & ident [ ``[" Expr ``]"]. \\
 	
-	Mulop & = & "*" \alternative "/" \alternative "\%".
+	RelOp & = & "$<$" \alternative "$<$=" \alternative "==" \alternative "!=" \alternative "$>$=" \alternative "$>$". \\
+	
+	AddOp & = & ``+" \alternative ``-". \\
+	
+	Mulop & = & ``*" \alternative ``/" \alternative ``\%".
 	
 	\end{grammar}
 
@@ -169,30 +183,88 @@ The virtual machine being target for \leongage{} programs is a stack machine wit
 width of the \leongage{} machine is 4 bytes.
 
 \begin{description}
-	\item[dat[MAX\_DATA]] The data memory is byte addressed and is separated into three parts: String constants (not used yet),
-	activation records and expression stack.
+	\item[dat[MAX\_DATA]] The data memory is byte addressed and is separated into three parts: String constants,
+	activation records, and expression stack. Figure
 	
-	The expression stack is addresses word-wise only.
+	The expression stack is addressed word-wise only.
 \end{description}
 
-\section{List of Assembler Instructions}
-\lstset{language=[x86masm]Assembler, tabsize=2}
+\section{Runtime Structure of a \leongage{} Program}
+The \leongage{} Machine follows the following fixed execution cycle:
+\begin{enumerate}
+	\item Fetch instruction
+	\item Decode instruction
+	\item Execute instruction
+\end{enumerate}
+The very first instruction is fetched from {\tt prog[startPc]} where {\tt startPc} has to be provided as an argument when starting the program. From this point of time onwards the program is executed until the machine state changes from {\em run}.
 
-\begin{tabular}{rllll}
-	Opcode & Mnemonic & Arguments & Description & Size \\
+\lstset{language=Java, tabsize=2}
+\begin{lstlisting}
+runProg(startPc) {
+	db = start byte of first free word in dat;
+	top = db + 28;
+	pc = startPc;
+	ms = run;
+	
+	while (ms == run) {
+		fetch instruction (opcode and operands) which starts at prog[pc];
+		pc = pc + length of instruction;
+		execute instruction
+	}
+}
+\end{lstlisting}
+
+\section{Instructions}
+\leongage{} instructions have a variable length. Every instruction has one opcode and either zero, or one, or two operands. When describing the instructions we use the following conventions:
+
+\begin{tabular}{clcl}
+Name & Range & Size & Description \\
+n & 0 ... 65535 & 2 Bytes & Unsigned number \\
+b & 0 ... 65535 & 2 Bytes & Code address (absolute number)
+\end{tabular}
+\section{List of Assembler Instructions}
+\lstset{language=[x86masm]Assembler, tabsize=2, basicstyle=\footnotesize}
+
+\begin{tabular}{p{2em}|p{2em}|l|p{7cm}|l}
+	Op code & Mnem-onic & ops & Description & Size \\ \hline
 	0 & LIT & n & Load Literal & 3 Bytes \\
-	&&&\begin{lstlisting}
+	&&&
+	\begin{lstlisting}
 	Push(n);
-	\end{lstlisting}\\
+	\end{lstlisting}\\ \hline
+	
 	1 & LA & d, a & Load Address & 4 Bytes\\
-	&&&\begin{lstlisting}
+	&&&
+	\begin{lstlisting}
 	base = db;
 	for (i= 0; i < d; i++) {
 		base = dat[base ... base + 3];
 	}
+	Push(base + a);
+	\end{lstlisting} \\ \hline
+	
+	2 & LV & d, a & Load Value & 4 Bytes \\
+	&&&
+	\begin{lstlisting}
+	base = db;
+	for (i = 0; i < d; i++) {
+		base = dat[base ... base + 3];
+	}
 	adr = base + a;
-	Push(dat[addr ... addr + 3];
-	\end{lstlisting}
+	Push(dat[addr ... addr + 3]);
+	\end{lstlisting} \\ \hline
+	
+	3 & LC & d, a & Load Character & 4 Bytes \\
+	&&&
+	\begin{lstlisting}
+	base = db;
+	for (i = 0; i < d; i++) {
+		base = dat[base ... base + 3];
+	}
+	lw = 000dat[base + a];
+	Push(lw);
+	\end{lstlisting} \\
+	&&& The local word to be pushed onto the stack is filled with three trailing binary zeros following the character to be loaded from {\tt dat}. \\ \hline
 \end{tabular}
 
 \chapter{Symbol List}
@@ -267,9 +339,44 @@ d & VARKIND & SIMINT & 4 & 36 & 3
 
 
 
+\chapter{Some Translations by Example}
+\section{Reserving Space for Local Variables}
+
+\section{Assignments}
+
+\section{Boolean Expressions}
+We show the translation of a boolean expression {\tt a $\mid \mid$ b $\mid \mid$ c} where {\tt a}, {\tt b}, and {\tt c} are variables of type {\tt bool}. The sequence of several relational expressions or boolean variables connected via a boolean {\em or} is realized by a so-called or-chain. In particular, after evaluation of each single relational expression (or boolean variable) and this evaluation yields {\em true} all further evaluations are skipped and the program flow is continued at the end of the complete boolean expression. Figure~\ref{fig:orchain} shows this principle. In order to keep the program flow simple, the load value parts in front of each evaluation are skipped. The more detailed \leongage{} assembler code for this sequence is given in listing~\ref{cod:orchain}. Note that, for the sake of simplicity, the addresses given as operands to the {\tt JMP} and {\tt TJMP} instructions are the line numbers here. Of course, the ``real" code generates the memory addresses of the targeted assembler instruction.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=.5]{images/OrChain.png}
+\end{center}
+\caption{Program flow of an or chain}
+\label{fig:orchain}
+\end{figure}
+
+\lstset{language=[x86masm]Assembler, morekeywords={LV,TJMP,LIT}}
+
+\begin{lstlisting}[float,caption={Assembler code of or-chain}, captionpos=b,label=cod:orchain]
+...
+LV 0, 32		; load value a
+TJMP 8			; if true, jump to the end
+LV 0, 36		; load value b
+TJMP 8			; if true, jump to the end
+LV 0, 40		; load value c
+JMP 9				; result is determined by c only
+LIT 1
+...
+\end{lstlisting}
+When generating this kind of code, we have to deal with the situation that the final addresses we have to jump to are not known in prior. Therefore, we have to construct a so-called or-chain, which work as follows. While parsing a conditional expression, we maintain an int variable holding the 
+
+The translation of {\em and-}expressions works analogously.
+
+\section{Jumps in If- and While-Statements}
+
 \chapter{Attributed Grammar}
 \begin{atg}[4.5cm]
-Leongage &=& & \semantics{\begin{sem} \newline EmitOp(INC); \newline Emit2(0); \newline int inc\_addr = 1; \newline \end{sem}}\\
+\leongage &=& & \semantics{\begin{sem} \newline EmitOp(INC); \newline Emit2(0); \newline int inc\_addr = 1; \newline \end{sem}}\\
 &&Stat ";" \{Stat ";"\}. \\
 
 Stat & = & ident ":=" \atgsy{Expr}{\outattr op}  \alternative \\

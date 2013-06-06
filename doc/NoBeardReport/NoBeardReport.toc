@@ -6,9 +6,17 @@
 \contentsline {subsection}{\numberline {2.1.3}Token Classes}{3}
 \contentsline {subsection}{\numberline {2.1.4}Single Tokens}{3}
 \contentsline {subsection}{\numberline {2.1.5}Semantics}{3}
-\contentsline {section}{\numberline {2.2}Syntax}{4}
-\contentsline {chapter}{\numberline {3}The NoBeard{} Machine}{5}
-\contentsline {section}{\numberline {3.1}Overview}{5}
-\contentsline {section}{\numberline {3.2}List of Assembler Instructions}{5}
-\contentsline {chapter}{\numberline {4}Symbol List}{6}
-\contentsline {chapter}{\numberline {5}Attributed Grammar}{8}
+\contentsline {section}{\numberline {2.2}Sample Program}{4}
+\contentsline {section}{\numberline {2.3}Syntax}{4}
+\contentsline {chapter}{\numberline {3}The NoBeard{} Machine}{6}
+\contentsline {section}{\numberline {3.1}Overview}{6}
+\contentsline {section}{\numberline {3.2}Runtime Structure of a NoBeard{} Program}{6}
+\contentsline {section}{\numberline {3.3}Instructions}{7}
+\contentsline {section}{\numberline {3.4}List of Assembler Instructions}{8}
+\contentsline {chapter}{\numberline {4}Symbol List}{9}
+\contentsline {chapter}{\numberline {5}Some Translations by Example}{11}
+\contentsline {section}{\numberline {5.1}Reserving Space for Local Variables}{11}
+\contentsline {section}{\numberline {5.2}Assignments}{11}
+\contentsline {section}{\numberline {5.3}Boolean Expressions}{11}
+\contentsline {section}{\numberline {5.4}Jumps in If- and While-Statements}{12}
+\contentsline {chapter}{\numberline {6}Attributed Grammar}{13}
