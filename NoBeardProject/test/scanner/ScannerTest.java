@@ -51,6 +51,17 @@ public class ScannerTest {
 
         assertTrue("EOFSY expected", s.getCurrentToken().getSy() == Symbol.EOFSY);
     }
+    
+    @Test
+    public void testComment() {
+        System.out.println("testComment");
+        
+        Scanner s = new Scanner(new SrcStringReader("# This is a comment line \n if"));
+
+        s.nextToken();
+
+        assertTrue("IFSY expected", s.getCurrentToken().getSy() == Symbol.IFSY);
+    }
 
     @Test
     public void testSimpleSymbols() {
