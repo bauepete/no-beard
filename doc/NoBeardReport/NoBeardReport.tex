@@ -104,7 +104,22 @@ The characters "{\tt+}", "{\tt-}", "{\tt*}", "{\tt/}", "{\tt:=}", "{\tt;}", "{\t
 
 \section{Sample Program}
 \begin{lstlisting}
-unit ComplexExpr;# ---------------------------- ComplexExpr.nb -----------# --- A syntactically correct NoBeard program# -------------------------------------------------------do    int l = 10;    int b =5;    int h= 170;        int unused = l;    int x=1001 + l * b - h / (b * h);    put ("Evaluating 1001 + l * b - h / (b * h)");    putln;    put ("Result is ");    put (x);          # result should be 1051done ComplexExpr;
+unit ComplexExpr;
+# ---------------------------- ComplexExpr.nb -----------
+# --- A syntactically correct NoBeard program
+# -------------------------------------------------------
+do
+    int l = 10;
+    int b =5;
+    int h= 170;
+        int unused = l;
+    int x=1001 + l * b - h / (b * h);
+
+    put ("Evaluating 1001 + l * b - h / (b * h)");
+    putln;
+    put ("Result is ");
+    put (x);          # result should be 1051
+done ComplexExpr;
 \end{lstlisting}
 
 \section{Syntax}
@@ -373,6 +388,9 @@ When generating this kind of code, we have to deal with the situation that the f
 The translation of {\em and-}expressions works analogously.
 
 \section{Jumps in If- and While-Statements}
+
+\chapter{Error Handling}
+ErrorHandler.getInstance().raise(new ...));
 
 \chapter{Attributed Grammar}
 \begin{atg}[4.5cm]

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.9.29)  11 APR 2013 21:09
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010) (format=pdflatex 2010.9.29)  14 JUN 2013 09:54
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -332,13 +332,17 @@ File: images/OrChain.png Graphic file (type png)
 
 ] [12 <./images/OrChain.png (PNG copy)>]
 Chapter 6.
+[13
 
-Overfull \hbox (11.54489pt too wide) in paragraph at lines 403--404
+]
+Chapter 7.
+
+Overfull \hbox (11.54489pt too wide) in paragraph at lines 406--407
 [][]$[]$\OT1/cmr/m/n/10.95 EmitOp($\OMS/cmsy/m/n/10.95 #$\OT1/cmr/m/n/10.95 opc
 ode)$[]$[]| 
  []
 
-(./NoBeardReport.bbl [13
+(./NoBeardReport.bbl [14
 
 ]
 Missing character: There is no Ð in font cmr10!
@@ -354,7 +358,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 4--9
 ake-two/, April
  []
 
-) [14
+) [15
 
 ] (./NoBeardReport.aux) ) 
 Here is how much of TeX's memory you used:
@@ -380,10 +384,10 @@ cmr8.pfb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 fb></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
 b></usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb>
 </usr/local/texlive/2010/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on NoBeardReport.pdf (15 pages, 233162 bytes).
+Output written on NoBeardReport.pdf (16 pages, 234371 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 80 compressed objects within 1 object stream
+ 118 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

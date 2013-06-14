@@ -19,4 +19,5 @@
 \contentsline {section}{\numberline {5.2}Assignments}{11}
 \contentsline {section}{\numberline {5.3}Boolean Expressions}{11}
 \contentsline {section}{\numberline {5.4}Jumps in If- and While-Statements}{12}
-\contentsline {chapter}{\numberline {6}Attributed Grammar}{13}
+\contentsline {chapter}{\numberline {6}Error Handling}{13}
+\contentsline {chapter}{\numberline {7}Attributed Grammar}{14}
