@@ -10,11 +10,11 @@ package nbm;
  */
 public class Code {
     
-    private byte[] prog;
+    private final byte[] prog;
     private int pc;
     
-    public Code() {
-        prog = new byte[Nbm.getMAXPROG()];
+    public Code(int codeStorageSize) {
+        prog = new byte[codeStorageSize];
     }
     
     public int getPc() {

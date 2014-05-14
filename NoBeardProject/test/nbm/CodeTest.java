@@ -7,9 +7,7 @@ package nbm;
 import org.junit.Ignore;
 import nbm.Nbm.Opcode;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -20,14 +18,6 @@ import static org.junit.Assert.*;
 public class CodeTest {
 
     public CodeTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -44,7 +34,7 @@ public class CodeTest {
     @Test
     public void testEmitOp() {
         System.out.println("testEmitOp");
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Nbm.Opcode.ADD);
 
@@ -59,7 +49,7 @@ public class CodeTest {
     public void testEmitByte() {
         System.out.println("emitByte");
         byte b = 1;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.PUT);
         instance.emitByte(b);
@@ -75,7 +65,7 @@ public class CodeTest {
     public void testEmitHalfWord() {
         System.out.println("emitHalfWord");
         int halfWord = 42;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -92,7 +82,7 @@ public class CodeTest {
     public void testEmitHalfWord255() {
         System.out.println("emitHalfWord255");
         int halfWord = 255;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -109,7 +99,7 @@ public class CodeTest {
     public void testEmitHalfWord256() {
         System.out.println("emitHalfWord256");
         int halfWord = 256;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -126,7 +116,7 @@ public class CodeTest {
     public void testEmitHalfWord65535() {
         System.out.println("emitHalfWord65535");
         int halfWord = 65535;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -144,7 +134,7 @@ public class CodeTest {
         System.out.println("fixup");
         int atAddr = 0;
         int halfWord = 0;
-        Code instance = new Code();
+        Code instance = new Code(256);
 
         instance.emitOp(Opcode.INC);
         int fixupAddr = instance.getPc();
@@ -165,7 +155,7 @@ public class CodeTest {
     public void testGetByteCode() {
         System.out.println("getByteCode");
 
-        Code instance = new Code();
+        Code instance = new Code(256);
         byte[] expected = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 42,
@@ -189,7 +179,7 @@ public class CodeTest {
      */
     @Ignore
     @Test
-    public void testProgOverflow() {
+    public void testProgramStorageOverflow() {
         // TODO implement case where program storage would be exceeded.
         fail("Not implemented yet");
     }
