@@ -4,9 +4,7 @@
  */
 package parser.general;
 
-import nbm.Code;
 import parser.SimExprParser;
-import symlist.Operand;
 import symlist.SymListManager;
 
 /**
@@ -48,29 +46,14 @@ public class SimExprParserTestSetup extends ParserTestSetup {
     }
 
     static private SimExprParser setupTestObjects(String srcLine) {
-        // TODO: rearrange lines, move similarities into setupScanner
-        setupScanner(srcLine);
-        code = new Code(256);
-        sym = new SymListManager(code, scanner, errorHandler);
-        sym.newUnit(25);
-        sym.newVar(0, SymListManager.ElementType.INT);
-        sym.newVar(1, SymListManager.ElementType.INT);
-        Operand.setSymListManager(sym);
-        scanner.nextToken();
-        return new SimExprParser(scanner, sym, code, errorHandler);
+        setupInfraStructure(srcLine);
+        ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
+        return new SimExprParser(scanner, symListManager, code, errorHandler);
     }
 
     static private SimExprParser setupBoolTestObjects(String srcLine) {
-        // TODO: rearrange lines, move similarities into setupScanner
-        setupScanner(srcLine);
-        code = new Code(256);
-        sym = new SymListManager(code, scanner, errorHandler);
-        sym.newUnit(25);
-        sym.newVar(0, SymListManager.ElementType.BOOL);
-        sym.newVar(1, SymListManager.ElementType.BOOL);
-        sym.newVar(2, SymListManager.ElementType.BOOL);
-        Operand.setSymListManager(sym);
-        scanner.nextToken();
-        return new SimExprParser(scanner, sym, code, errorHandler);
+        setupInfraStructure(srcLine);
+        fillSymList(SymListManager.ElementType.BOOL);
+        return new SimExprParser(scanner, symListManager, code, errorHandler);
     }
 }

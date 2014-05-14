@@ -17,51 +17,27 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class ExprParserTestSetup {
-    private static Scanner scanner;
-    private static SymListManager sym;
-    private static Code code;
-    private static ErrorHandler errorHandler;
-
-    public static Code getCode() {
-        return code;
-    }
+public class ExprParserTestSetup extends ParserTestSetup {
     
     public static ExprParser getSimpleRel() {
-        prepareScanner("a < b");
-        return setupTestObjects();
+        return setupTestObjects("a < b");
     }
-    
-    private static void prepareScanner(String srcLine) {
-        SrcReader sourceReader = new SrcStringReader(srcLine);
-        errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler);
-    }
-    
-    private static ExprParser setupTestObjects() {
-        code = new Code(256);
-        sym = new SymListManager(code, scanner, errorHandler);
-        sym.newUnit(25);
-        scanner.nextToken();
-        sym.newVar(0, SymListManager.ElementType.INT);
-        sym.newVar(1, SymListManager.ElementType.INT);
-        sym.newVar(2, SymListManager.ElementType.INT);
-        Operand.setSymListManager(sym);
-        return new ExprParser(scanner, sym, code, errorHandler);
+        
+    private static ExprParser setupTestObjects(String srcLine) {
+        setupInfraStructure(srcLine);
+        fillSymList(SymListManager.ElementType.INT);
+        return new ExprParser(scanner, symListManager, code, errorHandler);
     }
     
     public static ExprParser getAndRel() {
-        prepareScanner("(a <= b) && (b == 1)");
-        return setupTestObjects();
+        return setupTestObjects("(a <= b) && (b == 1)");
     }
     
     public static ExprParser getOrRel() {
-        prepareScanner("(a != b) || (b >= 1)");
-        return setupTestObjects();
+        return setupTestObjects("(a != b) || (b >= 1)");
     }
     
     public static ExprParser getAndOrRel() {
-        prepareScanner("((a < b) && (b > 1)) || (c < 0)");
-        return setupTestObjects();
+        return setupTestObjects("((a < b) && (b > 1)) || (c < 0)");
     }
 }

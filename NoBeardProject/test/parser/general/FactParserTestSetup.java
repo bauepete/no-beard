@@ -5,6 +5,7 @@
 package parser.general;
 
 import parser.FactParser;
+import symlist.SymListManager;
 
 /**
  *
@@ -17,9 +18,9 @@ public class FactParserTestSetup extends ParserTestSetup {
     }
 
     private static FactParser setupTestObjectsAndParser(String srcLine) {
-        setupScanner(srcLine);
-        setupTestObjects();
-        return new FactParser(scanner, sym, code, errorHandler);
+        setupInfraStructure(srcLine);
+        fillSymList(SymListManager.ElementType.INT);
+        return new FactParser(scanner, symListManager, code, errorHandler);
     }
 
     public static FactParser getNumberTestSetup() {

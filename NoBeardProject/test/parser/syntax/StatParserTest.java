@@ -106,6 +106,7 @@ public class StatParserTest {
         sym = new SymListManager(c, scanner, errorHandler);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
+        Operand.setSymListManager(sym);
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);

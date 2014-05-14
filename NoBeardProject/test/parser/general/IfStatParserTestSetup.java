@@ -5,6 +5,7 @@
 package parser.general;
 
 import parser.IfStatParser;
+import symlist.SymListManager;
 
 /**
  *
@@ -13,17 +14,16 @@ import parser.IfStatParser;
 public class IfStatParserTestSetup extends ParserTestSetup {
     
     public static IfStatParser getSimpleIfTestSetup() {
-        setupScanner("if x == 0 do put('0'); done");
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("if x == 0 do put('0'); done");
     }
     
     public static IfStatParser getIfElseTestSetup() {
-        setupScanner("if x == 0 do put('0'); done else do put('1'); done");
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("if x == 0 do put('0'); done else do put('1'); done");
     }
     
-    private static IfStatParser setupTestObjectsAndParser() {
-        setupTestObjects();
-        return new IfStatParser(scanner, sym, code, errorHandler);
+    private static IfStatParser setupTestObjectsAndParser(String srcLine) {
+        setupInfraStructure(srcLine);
+        fillSymList(SymListManager.ElementType.INT);
+        return new IfStatParser(scanner, symListManager, code, errorHandler);
     }
 }

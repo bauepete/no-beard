@@ -4,9 +4,7 @@
  */
 package parser.general;
 
-import nbm.Code;
 import parser.TermParser;
-import symlist.Operand;
 import symlist.SymListManager;
 
 /**
@@ -36,28 +34,14 @@ public class TermParserTestSetup extends ParserTestSetup {
     }
 
     private static TermParser setupTestObjects(String srcLine) {
-        setupScanner(srcLine);
-        code = new Code(256);
-        sym = new SymListManager(code, scanner, errorHandler);
-        sym.newUnit(25);
-        scanner.nextToken();
-        sym.newVar(0, SymListManager.ElementType.INT);
-        sym.newVar(1, SymListManager.ElementType.INT);
-        sym.newVar(2, SymListManager.ElementType.INT);
-        Operand.setSymListManager(sym);
-        return new TermParser(scanner, sym, code, errorHandler);
+        setupInfraStructure(srcLine);
+        ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
+        return new TermParser(scanner, symListManager, code, errorHandler);
     }
 
     private static TermParser setupBoolTestObjects(String srcLine) {
-        setupScanner(srcLine);
-        code = new Code(256);
-        sym = new SymListManager(code, scanner, errorHandler);
-        sym.newUnit(25);
-        scanner.nextToken();
-        sym.newVar(0, SymListManager.ElementType.BOOL);
-        sym.newVar(1, SymListManager.ElementType.BOOL);
-        sym.newVar(2, SymListManager.ElementType.BOOL);
-        Operand.setSymListManager(sym);
-        return new TermParser(scanner, sym, code, errorHandler);
+        setupInfraStructure(srcLine);
+        fillSymList(SymListManager.ElementType.BOOL);
+        return new TermParser(scanner, symListManager, code, errorHandler);
     }
 }

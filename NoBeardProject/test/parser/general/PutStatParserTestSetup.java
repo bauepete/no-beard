@@ -4,28 +4,17 @@
  */
 package parser.general;
 
-import error.ErrorHandler;
 import nbm.Code;
 import parser.PutStatParser;
-import scanner.Scanner;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
-import symlist.Operand;
-import symlist.SymListManager;
 
 /**
  *
  * @author peter
  */
-public class PutStatParserTestSetup {
-
-    private static Scanner scanner;
-    private static ErrorHandler errorHandler;
-    private static Code c;
-    private static SymListManager sl;
+public class PutStatParserTestSetup extends ParserTestSetup {
 
     public static Code getCode() {
-        return c;
+        return code;
     }
     
     public static PutStatParser getPutIntSetup() {
@@ -45,14 +34,7 @@ public class PutStatParserTestSetup {
     }
     
     private static PutStatParser setupTestObjects(String srcLine) {
-        SrcReader sourceReader = new SrcStringReader(srcLine);
-        errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler);
-        scanner.nextToken();
-        
-        c = new Code(256);
-        sl = new SymListManager(c, scanner, errorHandler);
-        Operand.setStringManager(scanner.getStringManager());
-        return new PutStatParser(scanner, sl, c, errorHandler);
+        setupInfraStructure(srcLine);
+        return new PutStatParser(scanner, symListManager, code, errorHandler);
     }
 }
