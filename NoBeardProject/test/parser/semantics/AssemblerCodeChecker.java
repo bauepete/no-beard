@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
  *
  * @author peter
  */
-public class AssmCodeChecker {
+public class AssemblerCodeChecker {
     
     public static void assertCodeEquals(String msg, byte[] exp, byte[] act) {
         for (int i = 0; i < Math.min(exp.length, act.length); i++) {

@@ -4,11 +4,13 @@
  */
 package scanner;
 
+import compiler.SourceCodeInfo;
+
 /**
  *
  * @author peter
  */
-public class SrcStringReader implements SrcReader {
+public class SrcStringReader implements SrcReader, SourceCodeInfo {
 
     String srcString;
     int currentIndex;

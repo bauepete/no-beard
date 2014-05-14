@@ -30,6 +30,7 @@ import symlist.SymListManager;
  */
 public class NoBeardParserTest {
 
+    private NbCompiler comp;
     private Code code;
     private SymListManager sym;
     private Scanner scanner;
@@ -63,9 +64,10 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unit foo; do put (x); done fox;"));
 
-
+        ErrorHandler eh = comp.getErrorHandler();
         assertFalse("False expected", p.parse());
-        assertEquals("Sem err ", 1, ErrorHandler.getInstance().getCount("SemErr"));
+        assertEquals("Sem err count", 1, eh.getCount(error.Error.ErrorClass.SEMANTICAL));
+        assertEquals("Last error", error.Error.ErrorType.OPERAND_KIND_EXPECTED.getNumber(), eh.getLastError().getNumber());
     }
 
     @Test
@@ -155,7 +157,7 @@ public class NoBeardParserTest {
         };
         setupTest(new SrcStringReader("unit foo; do char x = \"x\"; put(x); done foo;"));
         assertEquals("Parse: ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
     }
 
     @Test
@@ -175,7 +177,7 @@ public class NoBeardParserTest {
             setupTest(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
             
             assertEquals("Parse: ", true, p.parse());
-            AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+            AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,7 +209,7 @@ public class NoBeardParserTest {
             setupTest(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
             
             assertEquals("Parse: ", true, p.parse());
-            AssmCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
+            AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,11 +217,11 @@ public class NoBeardParserTest {
     }
 
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
-        AssmCodeChecker.assertCodeEquals(msg, exp, act);
+        AssemblerCodeChecker.assertCodeEquals(msg, exp, act);
     }
 
     private void setupTest(SrcReader src) {
-        NbCompiler comp = new NbCompiler(src);
+        comp = new NbCompiler(src);
         scanner = comp.getScanner();
         sym = comp.getSymListManager();
         code = comp.getCode();

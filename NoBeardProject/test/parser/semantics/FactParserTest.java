@@ -81,7 +81,7 @@ public class FactParserTest {
         
         FactParser p = FactParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());
-        assertEquals("Operand ", OperandKind.VALONSTACK, p.getOperand().getKind());
+        assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());
         assertEquals("Value ", 36, p.getOperand().getValaddr());
     }   
 }

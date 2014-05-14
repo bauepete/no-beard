@@ -4,6 +4,7 @@
  */
 package symlist;
 
+import error.Error.ErrorType;
 import error.SemErr;
 import error.SemErr.TypeExpected;
 import nbm.Code;
@@ -75,7 +76,7 @@ public class ConstantOperand extends Operand {
             default:
                 String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
                     OperandType.SIMPLEINT.toString(), OperandType.ARRAYCHAR.toString()};
-                errorHandler().raise(new SemErr().new TypeExpected(tList));
+                errorHandler().raise(new error.Error(ErrorType.TYPE_EXPECTED, tList));
                 return false;
         }
         return true;
@@ -87,7 +88,7 @@ public class ConstantOperand extends Operand {
             return new IllegalOperand();
         }
         
-        Operand returnedOp = null;
+        Operand returnedOp;
         
         if (getType() == OperandType.SIMPLECHAR || getType() == OperandType.ARRAYCHAR) {
             toCode.emitOp(Opcode.LIT);
@@ -95,7 +96,7 @@ public class ConstantOperand extends Operand {
             returnedOp = new AddrOnStackOperand(this);
         } else {
             String[] tList = {OperandType.SIMPLECHAR.toString(), OperandType.ARRAYCHAR.toString()};
-            errorHandler().raise(new SemErr().new TypeExpected(tList));
+            errorHandler().raise(new error.Error(ErrorType.TYPE_EXPECTED, tList));
             returnedOp = new IllegalOperand();
         }
         return returnedOp;

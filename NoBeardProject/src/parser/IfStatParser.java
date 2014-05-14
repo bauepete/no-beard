@@ -4,6 +4,7 @@
  */
 package parser;
 
+import error.ErrorHandler;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -18,8 +19,8 @@ import symlist.SymListManager;
  */
 public class IfStatParser extends Parser {
 
-    public IfStatParser(Scanner scanner, SymListManager sym, Code code) {
-        super(scanner, sym, code);
+    public IfStatParser(Scanner scanner, SymListManager sym, Code code, ErrorHandler e) {
+        super(scanner, sym, code, e);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class IfStatParser extends Parser {
         if (!tokenIsA(Symbol.IFSY)) {
             return false;
         }
-        ExprParser exprP = new ExprParser(scanner, sym, code);
+        ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parse()) {
             return false;
         }
@@ -45,7 +46,7 @@ public class IfStatParser extends Parser {
         sym.newBlock();
         // endsem
         
-        BlockParser blockP = new BlockParser(scanner, sym, code, sym.getCurrBlock());
+        BlockParser blockP = new BlockParser(scanner, sym, code, sym.getCurrBlock(), getErrorHandler());
         if (!blockP.parse()) {
             return false;
         }

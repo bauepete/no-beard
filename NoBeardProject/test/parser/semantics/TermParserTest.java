@@ -55,7 +55,7 @@ public class TermParserTest {
 
         TermParser p = TermParserTestSetup.getMulTermSetup();
         assertEquals("Parse", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -75,7 +75,7 @@ public class TermParserTest {
 
         TermParser p = TermParserTestSetup.getDivTermSetup();
         assertEquals("Parse", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
     }
     
     /**
@@ -95,7 +95,7 @@ public class TermParserTest {
 
         TermParser p = TermParserTestSetup.getModTermSetup();
         assertEquals("Parse", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getCode().getByteCode());
     }
     
     /**
@@ -118,6 +118,6 @@ public class TermParserTest {
         
         TermParser p = TermParserTestSetup.getAndTermSetup();
         assertTrue("Parse", p.parse());
-        AssmCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getCode().getByteCode());
     }
 }

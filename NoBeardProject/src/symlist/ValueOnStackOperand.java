@@ -4,7 +4,7 @@
  */
 package symlist;
 
-import error.SemErr;
+import error.Error;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 
@@ -15,12 +15,12 @@ import nbm.Nbm.Opcode;
 public class ValueOnStackOperand extends Operand {
 
     public ValueOnStackOperand(OperandType type, int size, int valaddr, int level) {
-        super(OperandKind.VALONSTACK, type, size, valaddr, level);
+        super(OperandKind.VALUEONSTACK, type, size, valaddr, level);
     }
 
     public ValueOnStackOperand(Operand op) {
         super(op);
-        this.kind = OperandKind.VALONSTACK;
+        this.kind = OperandKind.VALUEONSTACK;
     }
         
     @Override
@@ -45,7 +45,7 @@ public class ValueOnStackOperand extends Operand {
                 
             default:
                 String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
-                errorHandler().raise(new SemErr().new TypeExpected(tList));
+                errorHandler().raise(new Error(Error.ErrorType.TYPE_EXPECTED, tList));
                 return false;
         }
         return true;

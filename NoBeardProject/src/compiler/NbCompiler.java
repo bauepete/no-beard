@@ -5,7 +5,6 @@
 package compiler;
 
 import error.ErrorHandler;
-import error.Error;
 import nbm.Code;
 import parser.NoBeardParser;
 import scanner.Scanner;
@@ -17,21 +16,21 @@ import symlist.SymListManager;
  * @author peter
  */
 public class NbCompiler {
-    private  Scanner scanner;
-    private  NoBeardParser parser;
-    private  SymListManager sym;
-    private  Code code;
+    private final  Scanner scanner;
+    private final  NoBeardParser parser;
+    private final  SymListManager sym;
+    private final  Code code;
+    private final ErrorHandler errorHandler;
     
     public NbCompiler(SrcReader srcReader) {
         
-        scanner = new Scanner(srcReader);
+        errorHandler = new ErrorHandler(srcReader);
+        scanner = new Scanner(srcReader, errorHandler);
         code = new Code();
-        sym = new SymListManager(code, scanner);
+        sym = new SymListManager(code, scanner, errorHandler);
         Operand.setSymListManager(sym);
         Operand.setStringManager(scanner.getStringManager());
-        parser = new NoBeardParser(scanner, sym, code);
-        ErrorHandler.getInstance().reset();
-        Error.setScanner(scanner);
+        parser = new NoBeardParser(scanner, sym, code, errorHandler);
         scanner.nextToken();
     }
 
@@ -53,6 +52,10 @@ public class NbCompiler {
     
     public byte[] getStringStorage() {
         return scanner.getStringManager().getStringStorage();
+    }
+    
+    public ErrorHandler getErrorHandler() {
+        return errorHandler;
     }
     
 }

@@ -4,9 +4,8 @@
  */
 package scanner;
 
+import error.Error;
 import error.ErrorHandler;
-import error.ScanErr;
-import error.ScanErr.IntegerOverflow;
 
 /**
  *
@@ -23,7 +22,7 @@ public class NumberAnalyzer {
      * @param sr
      * @return 
      */
-    public static int readNumber(SrcReader sr) {
+    public static int readNumber(SrcReader sr, ErrorHandler eh) {
         
         int val = 0;
         
@@ -33,7 +32,7 @@ public class NumberAnalyzer {
             sr.nextChar();
         }
         if (val > 65535)
-            ErrorHandler.getInstance().raise(new ScanErr().new IntegerOverflow());
+            eh.raise(new Error(Error.ErrorType.INTEGER_OVERFLOW));
         return val;
     }
     

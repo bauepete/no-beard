@@ -8,7 +8,6 @@ import symlist.Operand.OperandKind;
 import error.ErrorHandler;
 import error.Error;
 import scanner.Scanner;
-import org.junit.Ignore;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
@@ -16,7 +15,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import parser.semantics.AssmCodeChecker;
+import parser.semantics.AssemblerCodeChecker;
 import scanner.SrcStringReader;
 import static org.junit.Assert.*;
 
@@ -27,6 +26,8 @@ import static org.junit.Assert.*;
 public class ValueOnStackOperandTest {
 
     Code toCode;
+    ErrorHandler errorHandler;
+    
     Operand intSrcOp;
     Operand intDestOp;
     Operand charSrcOp;
@@ -50,6 +51,7 @@ public class ValueOnStackOperandTest {
     @Before
     public void setUp() {
         toCode = new Code();
+        errorHandler = new ErrorHandler(new SrcStringReader(""));
         
         intSrcOp = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, 17, 0);
         intDestOp = new VariableOperand(Operand.OperandType.SIMPLEINT, 4, 32, 0);
@@ -60,9 +62,6 @@ public class ValueOnStackOperandTest {
         intAosDestOp = new AddrOnStackOperand(intDestOp);
         charVosSrcOp = new ValueOnStackOperand(charSrcOp);
         charAosDestOp = new AddrOnStackOperand(charDestOp);
-        
-        ErrorHandler.getInstance().reset();
-        Error.setScanner(new Scanner(new SrcStringReader("")));
     }
 
     @After
@@ -76,7 +75,7 @@ public class ValueOnStackOperandTest {
     public void testEmitLoadVal() {
         System.out.println("emitLoadVal");
         Operand op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, 32, 0);
-        assertEquals(OperandKind.VALONSTACK, op.emitLoadVal(toCode).getKind());
+        assertEquals(OperandKind.VALUEONSTACK, op.emitLoadVal(toCode).getKind());
         assertEquals(0, toCode.getPc());
     }
 
@@ -90,7 +89,7 @@ public class ValueOnStackOperandTest {
         byte[] expected = {
             Opcode.STO.byteCode()
         };
-        AssmCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
     }
 
     /**
@@ -103,7 +102,7 @@ public class ValueOnStackOperandTest {
         byte[] expected = {
             Opcode.STC.byteCode()
         };
-        AssmCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
     }
 
     /**
@@ -113,11 +112,12 @@ public class ValueOnStackOperandTest {
     public void testEmitAssignToArrInt() {
         System.out.println("testEmitAssignToArrInt");
         
+        Operand.setErrorHandler(errorHandler);
         Operand srcOp = new ValueOnStackOperand(Operand.OperandType.ARRAYINT, 40, 0, 0);
         Operand destOp = new AddrOnStackOperand(new VariableOperand(Operand.OperandType.ARRAYINT, 40, 0, 0));
         assertFalse(srcOp.emitAssign(toCode, destOp));
         assertEquals(0, toCode.getPc());
-        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
+        assertEquals(Error.ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**

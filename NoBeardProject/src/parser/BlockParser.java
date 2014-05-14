@@ -4,6 +4,7 @@
  */
 package parser;
 
+import error.ErrorHandler;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -17,10 +18,10 @@ import symlist.SymListManager;
  */
 public class BlockParser extends Parser {
 
-    private SymListEntry obj;
+    private final SymListEntry obj;
 
-    public BlockParser(Scanner scanner, SymListManager sym, Code code, SymListEntry obj) {
-        super(scanner, sym, code);
+    public BlockParser(Scanner scanner, SymListManager sym, Code code, SymListEntry obj, ErrorHandler e) {
+        super(scanner, sym, code, e);
         this.obj = obj;
     }
 
@@ -31,9 +32,8 @@ public class BlockParser extends Parser {
         }
 
         // sem
-        int incAddr = 0;
         sym.defineFuncStart(obj, code.getPc());
-        incAddr = code.getPc() + 1;
+        int incAddr = code.getPc() + 1;
         code.emitOp(Opcode.INC);
         code.emitHalfWord(0);  // tmp address will be fixed later
         // endsem
@@ -53,7 +53,7 @@ public class BlockParser extends Parser {
     }
 
     private boolean statSeq() {
-        StatParser statP = new StatParser(scanner, sym, code);
+        StatParser statP = new StatParser(scanner, sym, code, getErrorHandler());
         if (!statP.parse()) {
             return false;
         }

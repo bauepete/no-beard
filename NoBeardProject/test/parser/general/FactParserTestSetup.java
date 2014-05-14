@@ -4,44 +4,41 @@
  */
 package parser.general;
 
-import nbm.Code;
+import error.ErrorHandler;
 import parser.FactParser;
 import scanner.Scanner;
+import scanner.SrcReader;
 import scanner.SrcStringReader;
 
 /**
  *
  * @author peter
  */
-public class FactParserTestSetup extends ParserTestSetup {    
+public class FactParserTestSetup extends ParserTestSetup {
 
     public static FactParser getIdentifierTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a25"));
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("a25");
+    }
+
+    private static FactParser setupTestObjectsAndParser(String srcLine) {
+        setupScanner(srcLine);
+        setupTestObjects();
+        return new FactParser(scanner, sym, code, errorHandler);
     }
 
     public static FactParser getNumberTestSetup() {
-        scanner = new Scanner(new SrcStringReader("42"));
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("42");
     }
 
     public static FactParser getStringTestSetup() {
-        scanner = new Scanner(new SrcStringReader("'blablu'"));
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("'blablu'");
     }
 
     public static FactParser getExprSetup() {
-        scanner = new Scanner(new SrcStringReader("(a + b)"));
-        return setupTestObjectsAndParser();
+        return setupTestObjectsAndParser("(a + b)");
     }
 
     public static FactParser getNoFactSetup() {
-        scanner = new Scanner(new SrcStringReader("{"));
-        return setupTestObjectsAndParser();
-    }
-
-    private static FactParser setupTestObjectsAndParser() {
-        setupTestObjects();
-        return new FactParser(scanner, sym, code);
+        return setupTestObjectsAndParser("{");
     }
 }

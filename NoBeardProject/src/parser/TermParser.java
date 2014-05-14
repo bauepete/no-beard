@@ -5,8 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.SemErr;
-import error.SynErr;
+import error.Error;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -29,8 +28,8 @@ public class TermParser extends Parser {
     private Operand op;
     private int andChain;
 
-    public TermParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public TermParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+        super(s, sym, c, e);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class TermParser extends Parser {
         andChain = 0;
         // endsem
 
-        FactParser factP = new FactParser(scanner, sym, code);
+        FactParser factP = new FactParser(scanner, sym, code, getErrorHandler());
         if (!factP.parse()) {
             return false;
         }
@@ -81,7 +80,7 @@ public class TermParser extends Parser {
 
                 //cc
                 if (op.getType() != OperandType.SIMPLEINT) {
-                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(OperandType.SIMPLEINT.toString()));
+                    getErrorHandler().raise(new Error(Error.ErrorType.TYPE_EXPECTED, OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc
@@ -160,8 +159,10 @@ public class TermParser extends Parser {
                 break;
 
             default:
-                String [] sList = {Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                String [] sList = {
+                    Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString()
+                };
+                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
         return true;

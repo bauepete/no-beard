@@ -4,15 +4,14 @@
  */
 package scanner;
 
+import compiler.SourceCodeInfo;
+
 /**
  *
  * @author peter
  */
-public interface SrcReader {
+public interface SrcReader extends SourceCodeInfo {
     
     public void nextChar();
-    public int getCurrentChar();
-    public int getCurrentCol();
-    public int getCurrentLine();
-    
+    public int getCurrentChar();    
 }

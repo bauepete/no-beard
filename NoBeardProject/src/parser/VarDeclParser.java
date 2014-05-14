@@ -5,8 +5,8 @@
 package parser;
 
 import error.ErrorHandler;
-import error.SemErr;
-import error.SynErr;
+import error.Error;
+import error.Error.ErrorType;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -24,8 +24,8 @@ public class VarDeclParser extends Parser {
 
     private ElementType elemType;
 
-    VarDeclParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    VarDeclParser(Scanner s, SymListManager sym, Code c, ErrorHandler eh) {
+        super(s, sym, c, eh);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class VarDeclParser extends Parser {
         // cc
         SymListEntry obj = sym.findObject(name);
         if (obj.getKind() != OperandKind.ILLEGAL) {
-            ErrorHandler.getInstance().raise(new SemErr().new NameAlreadyDefined(scanner.getNameManager().getStringName(name)));
+            getErrorHandler().raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, scanner.getNameManager().getStringName(name)));
             return false;
         }
         // endcc
@@ -52,13 +52,13 @@ public class VarDeclParser extends Parser {
             // sem
             int val = number();
             if (val == NONUMBER) {
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBERSY.toString()));
+                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.NUMBERSY.toString()));
                 return false;
             }
             // endsem
             // cc
             if (val <= 0) {
-                ErrorHandler.getInstance().raise(new SemErr().new IndexExpected());
+                getErrorHandler().raise(new Error(ErrorType.POSITIVE_ARRAY_SIZE_EXPECTED));
                 return false;
             }
             // endcc
@@ -81,7 +81,7 @@ public class VarDeclParser extends Parser {
             Operand destAddrOp = destOp.emitLoadAddr(code);
             // endsem
             scanner.nextToken();
-            SimExprParser exprP = new SimExprParser(scanner, sym, code);
+            SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
             if (!exprP.parse()) {
                 return false;
             }
@@ -90,7 +90,8 @@ public class VarDeclParser extends Parser {
             // endsem
             // cc
             if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
+                String[] tList = {srcOp.getType().toString(), destOp.getType().toString()};
+                getErrorHandler().raise(new Error(ErrorType.INCOMPATIBLE_TYPES, tList));
                 return false;
             }
             // endcc
@@ -128,7 +129,7 @@ public class VarDeclParser extends Parser {
 
             default:
                 String[] sList = {Symbol.INTSY.toString(), Symbol.CHARSY.toString(), Symbol.BOOLSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
         scanner.nextToken();

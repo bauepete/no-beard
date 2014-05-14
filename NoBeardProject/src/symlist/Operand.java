@@ -5,7 +5,6 @@
 package symlist;
 
 import error.ErrorHandler;
-import error.SemErr;
 import nbm.Code;
 import scanner.StringManager;
 
@@ -18,7 +17,7 @@ public class Operand {
     public enum OperandKind {
 
         CONSTANT, VARIABLE, ARGUMENT,
-        VALONSTACK, ADDRONSTACK,
+        VALUEONSTACK, ADDRONSTACK,
         UNIT, FUNCTION, ANONYMOUSBLOCK,
         ILLEGAL
     }
@@ -29,8 +28,10 @@ public class Operand {
         ARRAYCHAR, ARRAYINT, ARRAYBOOL,
         VOID, ERRORTYPE
     }
+    
     protected static SymListManager symListManager = null;
     protected static StringManager stringManager = null;
+    private static  ErrorHandler errorHandler;
     protected OperandKind kind;
     protected OperandType type;
     protected int size;
@@ -60,6 +61,10 @@ public class Operand {
 
     public static void setStringManager(StringManager stringManager) {
         Operand.stringManager = stringManager;
+    }
+    
+    public static void setErrorHandler(ErrorHandler eh) {
+        errorHandler = eh;
     }
 
     public OperandKind getKind() {
@@ -101,13 +106,13 @@ public class Operand {
     public Operand emitLoadVal(Code toCode) {
         if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION ||
                 getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
-            ErrorHandler.getInstance().raise(new SemErr().new IllegalOperand());
+            errorHandler().raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Operand can't be loaded on stack"));
             return null;
         }
         
         if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT) {
             String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
-            ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(tList));
+            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
             return null;
         }
         return this;
@@ -127,31 +132,32 @@ public class Operand {
 
     public boolean emitAssign(Code toCode, Operand destOp) {
         if (destOp.getKind() != OperandKind.ADDRONSTACK) {
-            errorHandler().raise(new SemErr().new IllegalOperand());
+            errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: destination operand is not on stack"));
             return false;
         }
 
         if (!typesOk(destOp)) {
             String[] tList = {OperandType.SIMPLEINT.toString(), OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
                               OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
-            errorHandler().raise(new SemErr().new TypeExpected(tList));
+            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
             return false;
         }
 
         if (!srcKindOk()) {
-            errorHandler().raise(new SemErr().new IllegalOperand());
+            errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: illegal source operand"));
             return false;
         }
         
         if (getType() != destOp.getType()) {
-            errorHandler().raise(new SemErr().new IncompatibleTypes(getType().toString(), destOp.getType().toString()));
+            String[] tList = {getType().toString(), destOp.getType().toString()};
+            errorHandler.raise(new error.Error(error.Error.ErrorType.INCOMPATIBLE_TYPES, tList));
             return false;
         }
         return true;
     }
 
     protected ErrorHandler errorHandler() {
-        return ErrorHandler.getInstance();
+        return errorHandler;
     }
 
     private boolean typesOk(Operand destOp) {

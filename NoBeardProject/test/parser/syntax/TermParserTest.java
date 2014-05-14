@@ -4,6 +4,7 @@
  */
 package parser.syntax;
 
+import error.Error.ErrorType;
 import error.ErrorHandler;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -21,14 +22,6 @@ import parser.general.TermParserTestSetup;
 public class TermParserTest {
 
     public TermParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -77,6 +70,6 @@ public class TermParserTest {
         System.out.println("testParseNoTerm");
         TermParser p = TermParserTestSetup.getNoTermSetup();
         assertEquals("Parse", false, p.parse());
-        assertEquals("Error", 1, ErrorHandler.getInstance().getCount("SynErr"));
+        assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
     }
 }

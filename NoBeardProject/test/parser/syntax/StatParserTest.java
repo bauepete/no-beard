@@ -15,6 +15,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.StatParser;
 import scanner.Scanner;
+import scanner.SrcReader;
 import scanner.SrcStringReader;
 import symlist.Operand;
 import symlist.SymListManager;
@@ -24,6 +25,9 @@ import symlist.SymListManager;
  * @author peter
  */
 public class StatParserTest {
+    private ErrorHandler errorHandler;
+    private Scanner scanner;
+    
     private Scanner assignS;
     private Scanner noAssignS;
     private Scanner simplePutS;
@@ -35,22 +39,8 @@ public class StatParserTest {
     public StatParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
-        ErrorHandler.getInstance().reset();
-        assignS = new Scanner(new SrcStringReader("a = 5;"));
-        noAssignS = new Scanner(new SrcStringReader("a == 5;"));
-        simplePutS = new Scanner(new SrcStringReader("put(5);"));
-        putS = new Scanner(new SrcStringReader("put(5, 3);"));
-        noPutS = new Scanner(new SrcStringReader("put(5, 3, 8);"));
         c = new Code();
     }
     
@@ -64,17 +54,22 @@ public class StatParserTest {
     @Test
     public void testParseAssignStat() {
         System.out.println("testParseAssignStat");
-        Scanner s = assignS;
-        Error.setScanner(s);
-        sym = new SymListManager(c, s);
+        setupTestObjects("a = 5;");
+        sym = new SymListManager(c, scanner, errorHandler);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
-        s.nextToken();
+        scanner.nextToken();
         
-        StatParser p = new StatParser(s, sym, c);
+        StatParser p = new StatParser(scanner, sym, c, errorHandler);
         assertEquals("Parse ", true, p.parse());
         
+    }
+    
+    private void setupTestObjects(String srcLine) {
+        SrcReader sourceReader = new SrcStringReader(srcLine);
+        errorHandler = new ErrorHandler(sourceReader);
+        scanner = new Scanner(sourceReader, errorHandler);
     }
 
     /**
@@ -83,11 +78,10 @@ public class StatParserTest {
     @Test
     public void testParsePutStat() {
         System.out.println("testParsePutStat");
-        Scanner s = putS;
-        Error.setScanner(s);
-        s.nextToken();
+        setupTestObjects("put(5, 3);");
+        scanner.nextToken();
         
-        StatParser p = new StatParser(s, sym, c);
+        StatParser p = new StatParser(scanner, sym, c, errorHandler);
         assertEquals("Parse ", true, p.parse());
         
     }
@@ -98,11 +92,10 @@ public class StatParserTest {
     @Test
     public void testParseSimplePutStat() {
         System.out.println("testParseSimplePutStat");
-        Scanner s = simplePutS;
-        Error.setScanner(s);
-        s.nextToken();
+        setupTestObjects("put(5);");
+        scanner.nextToken();
         
-        StatParser p = new StatParser(s, sym, c);
+        StatParser p = new StatParser(scanner, sym, c, errorHandler);
         assertEquals("Parse ", true, p.parse());
         
     }
@@ -112,14 +105,13 @@ public class StatParserTest {
     @Test
     public void testParseNoAssignStat() {
         System.out.println("testParseNoAssignStat");
-        Scanner s = noAssignS;
-        Error.setScanner(s);
-        sym = new SymListManager(c, s);
+        setupTestObjects("a == 5;");
+        sym = new SymListManager(c, scanner, errorHandler);
         sym.newUnit(1);
         sym.newVar(0, SymListManager.ElementType.INT);
-        s.nextToken();
+        scanner.nextToken();
         
-        StatParser p = new StatParser(s, sym, c);
+        StatParser p = new StatParser(scanner, sym, c, errorHandler);
         assertEquals("Parse ", false, p.parse());
         
     }
@@ -129,11 +121,10 @@ public class StatParserTest {
     @Test
     public void testParseNoPutStat() {
         System.out.println("testParseNoPutStat");
-        Scanner s = noPutS;
-        Error.setScanner(s);
-        s.nextToken();
+        setupTestObjects("put(5, 3, 8);");
+        scanner.nextToken();
         
-        StatParser p = new StatParser(s, sym, c);
+        StatParser p = new StatParser(scanner, sym, c, errorHandler);
         assertEquals("Parse ", false, p.parse());
         
     }

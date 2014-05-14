@@ -4,11 +4,12 @@
  */
 package parser.general;
 
+import error.ErrorHandler;
 import nbm.Code;
 import parser.PutStatParser;
 import scanner.Scanner;
+import scanner.SrcReader;
 import scanner.SrcStringReader;
-import scanner.StringManager;
 import symlist.Operand;
 import symlist.SymListManager;
 
@@ -19,6 +20,7 @@ import symlist.SymListManager;
 public class PutStatParserTestSetup {
 
     private static Scanner scanner;
+    private static ErrorHandler errorHandler;
     private static Code c;
     private static SymListManager sl;
 
@@ -27,30 +29,30 @@ public class PutStatParserTestSetup {
     }
     
     public static PutStatParser getPutIntSetup() {
-        scanner = new Scanner(new SrcStringReader("put(5);"));
-        return setupTestObjects();
+        return setupTestObjects("put(5);");
     }
     
     public static PutStatParser getPutCharSetup() {
-        scanner = new Scanner(new SrcStringReader("put('a')"));
-        return setupTestObjects();
+        return setupTestObjects("put('a')");
     }
     
     public static PutStatParser getPutStringSetup() {
-        scanner = new Scanner(new SrcStringReader("put('blabla')"));
-        return setupTestObjects();
+        return setupTestObjects("put('blabla')");
     }
     
     public static PutStatParser getPutlnSetup() {
-        scanner = new Scanner(new SrcStringReader("putln"));
-        return setupTestObjects();
+        return setupTestObjects("putln");
     }
     
-    private static PutStatParser setupTestObjects() {
+    private static PutStatParser setupTestObjects(String srcLine) {
+        SrcReader sourceReader = new SrcStringReader(srcLine);
+        errorHandler = new ErrorHandler(sourceReader);
+        scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
+        
         c = new Code();
-        sl = new SymListManager(c, scanner);
+        sl = new SymListManager(c, scanner, errorHandler);
         Operand.setStringManager(scanner.getStringManager());
-        return new PutStatParser(scanner, sl, c);
+        return new PutStatParser(scanner, sl, c, errorHandler);
     }
 }

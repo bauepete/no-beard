@@ -18,11 +18,9 @@
 package scanner;
 
 import error.ErrorHandler;
-import error.Error;
+import error.Error.ErrorType;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,14 +33,6 @@ public class NumberAnalyzerTest {
     public NumberAnalyzerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
     }
@@ -58,10 +48,11 @@ public class NumberAnalyzerTest {
     public void testReadNumber() {
         System.out.println("readNumber");
         SrcReader sr = new SrcStringReader("42;");
+        ErrorHandler eh = new ErrorHandler(sr);
         sr.nextChar();
         
         int expResult = 42;
-        int result = NumberAnalyzer.readNumber(sr);
+        int result = NumberAnalyzer.readNumber(sr, eh);
         assertEquals(expResult, result);
         assertEquals(';', sr.getCurrentChar());
     }
@@ -73,12 +64,12 @@ public class NumberAnalyzerTest {
     public void testReadNumberOverflow() {
         System.out.println("readNumberOverflow");
         SrcReader sr = new SrcStringReader("65536;");
-        ErrorHandler.getInstance().reset();
-        Error.setScanner(new Scanner(sr));
+        ErrorHandler eh = new ErrorHandler(sr);
+        sr.nextChar();
 
-        int result = NumberAnalyzer.readNumber(sr);
-        assertEquals(1, ErrorHandler.getInstance().getCount());
-        assertEquals(1, ErrorHandler.getInstance().getLastError().getErrNo());
+        int result = NumberAnalyzer.readNumber(sr, eh);
+        assertEquals(1, eh.getCount());
+        assertEquals(ErrorType.INTEGER_OVERFLOW.getNumber(), eh.getLastError().getNumber());
         assertEquals(';', sr.getCurrentChar());
     }
 }

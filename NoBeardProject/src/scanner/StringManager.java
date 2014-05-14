@@ -5,7 +5,7 @@
 package scanner;
 
 import error.ErrorHandler;
-import error.ScanErr;
+import error.Error;
 
 /**
  * NoBeard string manager assists the scanner to detect strings.
@@ -15,17 +15,19 @@ public class StringManager {
     
     private final int MAXSTRING = 2048;
     
-    private char[] stringStorage;
+    private final char[] stringStorage;
     private int firstFree;
     
     private int stringAddress;
     private int stringLength;
     
-    private SrcReader srcReader;
+    private final SrcReader srcReader;
+    private final ErrorHandler errorHandler;
     
-    public StringManager(SrcReader srcReader) {
+    public StringManager(SrcReader srcReader, ErrorHandler errorHandler) {
         stringStorage = new char[MAXSTRING];
         this.srcReader = srcReader;
+        this.errorHandler = errorHandler;
     }
     
     public char getCharAt(int addr) {
@@ -56,7 +58,7 @@ public class StringManager {
         }
         
         if (srcReader.getCurrentChar() == -1 || srcReader.getCurrentChar() == '\n') {
-            ErrorHandler.getInstance().raise(new ScanErr().new InvalidString());
+            errorHandler.raise(new Error(error.Error.ErrorType.INVALID_STRING));
             stringAddress = 0;
             stringLength = 0;
         }

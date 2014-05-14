@@ -22,14 +22,6 @@ public class IfStatParserTest {
     public IfStatParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
     }

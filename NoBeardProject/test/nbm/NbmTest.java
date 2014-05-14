@@ -6,15 +6,12 @@ package nbm;
 
 import parser.NoBeardParser;
 import compiler.NbCompiler;
-import error.ErrorHandler;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import scanner.SrcFileReader;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,14 +24,6 @@ public class NbmTest {
     private Nbm m;
 
     public NbmTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -101,7 +90,7 @@ public class NbmTest {
                 assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
             }
             else {
-                ErrorHandler.getInstance().printSummary();
+                comp.getErrorHandler().printSummary();
                 System.err.println("Compilation not successfull. Can't run program.");
                 fail("Program must compile successfully.");
             }
@@ -125,7 +114,7 @@ public class NbmTest {
                 assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
             }
             else {
-                ErrorHandler.getInstance().printSummary();
+                comp.getErrorHandler().printSummary();
                 System.err.println("Compilation not successfull. Can't run program.");
                 fail("Program must compile successfully.");
             }
@@ -148,7 +137,7 @@ public class NbmTest {
                 assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
             }
             else {
-                ErrorHandler.getInstance().printSummary();
+                comp.getErrorHandler().printSummary();
                 System.err.println("Compilation not successfull. Can't run program.");
                 fail("Program must compile successfully.");
             }
@@ -172,7 +161,7 @@ public class NbmTest {
                 assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
             }
             else {
-                ErrorHandler.getInstance().printSummary();
+                comp.getErrorHandler().printSummary();
                 System.err.println("Compilation not successfull. Can't run program.");
                 fail("Program must compile successfully.");
             }
@@ -197,7 +186,7 @@ public class NbmTest {
                 assertEquals("Stack top", Nbm.STACKEMPTY, m.getStackTopValue());
             }
             else {
-                ErrorHandler.getInstance().printSummary();
+                comp.getErrorHandler().printSummary();
                 System.err.print("Compilation not successfull. Can't run program.");
                 fail("Program must compile successfully.");
             }

@@ -17,80 +17,68 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class SimExprParserTestSetup {
+public class SimExprParserTestSetup extends ParserTestSetup {
 
     static private Code c;
-    static private SymListManager sym;
-    static private Scanner scanner;
 
     public static Code getCode() {
         return c;
     }
 
     static public SimExprParser getAddTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a + b"));
-        return setupTestObjects();
+        return setupTestObjects("a + b");
     }
-
+    
     static public SimExprParser getSubTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a - b"));
-        return setupTestObjects();
+        return setupTestObjects("a - b");
     }
 
     static public SimExprParser getNegAddTestSetup() {
-        scanner = new Scanner(new SrcStringReader("-a + b"));
-        return setupTestObjects();
+        return setupTestObjects("-a + b");
     }
 
     static public SimExprParser getNegTestSetup() {
-        scanner = new Scanner(new SrcStringReader("-b"));
-        return setupTestObjects();
+        return setupTestObjects("-b");
     }
 
     public static SimExprParser getAddMulTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a - b * 3"));
-        return setupTestObjects();
+        return setupTestObjects("a - b * 3");
     }
 
     static public SimExprParser getComplexExprTestSetup() {
-        scanner = new Scanner(new SrcStringReader("-5 * (a + b)/17"));
-        return setupTestObjects();
+        return setupTestObjects("-5 * (a + b)/17");
     }
 
     static public SimExprParser getNoExprTestSetup() {
-        scanner = new Scanner(new SrcStringReader("*b"));
-        return setupTestObjects();
+        return setupTestObjects("*b");
     }
 
     static public SimExprParser getOrExprTestSetup() {
-        scanner = new Scanner(new SrcStringReader("a || b || c"));
-        return setupBoolTestObjects();
+        return setupBoolTestObjects("a || b || c");
     }
 
-    static private SimExprParser setupTestObjects() {
-        ErrorHandler.getInstance().reset();
-        Error.setScanner(scanner);
+    static private SimExprParser setupTestObjects(String srcLine) {
+        setupScanner(srcLine);
         c = new Code();
-        sym = new SymListManager(c, scanner);
+        sym = new SymListManager(c, scanner, errorHandler);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
         scanner.nextToken();
-        return new SimExprParser(scanner, sym, c);
+        return new SimExprParser(scanner, sym, c, errorHandler);
     }
 
-    static private SimExprParser setupBoolTestObjects() {
-        ErrorHandler.getInstance().reset();
-        Error.setScanner(scanner);
+    static private SimExprParser setupBoolTestObjects(String srcLine) {
+        setupScanner(srcLine);
         c = new Code();
-        sym = new SymListManager(c, scanner);
+        sym = new SymListManager(c, scanner, errorHandler);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.BOOL);
         sym.newVar(1, SymListManager.ElementType.BOOL);
         sym.newVar(2, SymListManager.ElementType.BOOL);
         Operand.setSymListManager(sym);
         scanner.nextToken();
-        return new SimExprParser(scanner, sym, c);
+        return new SimExprParser(scanner, sym, c, errorHandler);
     }
 }

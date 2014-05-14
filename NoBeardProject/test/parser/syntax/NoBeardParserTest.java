@@ -11,9 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import nbm.Code;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.NoBeardParser;
@@ -29,26 +27,19 @@ import symlist.SymListManager;
  */
 public class NoBeardParserTest {
     
+    private NbCompiler compiler;
     private Code c;
     private SymListManager sym;
     private Scanner s;
-    private NoBeardParser p;
+    private NoBeardParser parser;
+    private ErrorHandler errorHandler;
     
     public NoBeardParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
         c = new Code();
-        ErrorHandler.getInstance().reset();
     }
     
     @After
@@ -63,13 +54,13 @@ public class NoBeardParserTest {
         System.out.println("parse");
         
         setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", parser.parse());
         
         setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", parser.parse());
         
         setupTest(new SrcStringReader("unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;"));
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", parser.parse());
     }
     
     @Test
@@ -78,7 +69,7 @@ public class NoBeardParserTest {
         
         setupTest(new SrcStringReader("unit foo; do done foo;"));
 
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", parser.parse());
     }
     
     @Test
@@ -87,8 +78,8 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unti foo; do put x; done foo;"));
 
-        assertFalse("False expected", p.parse());
-        assertEquals("Error count expected: ", 1, ErrorHandler.getInstance().getCount());
+        assertFalse("False expected", parser.parse());
+        assertEquals("Error count expected: ", 1, errorHandler.getCount());
     }
 
     @Test
@@ -97,8 +88,8 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unit; do put x; done foo;"));
         
-        assertFalse("False expected", p.parse());
-        assertEquals("SynErr count ", 1, ErrorHandler.getInstance().getCount("SynErr"));
+        assertFalse("False expected", parser.parse());
+        assertEquals("Last error", error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     @Test
@@ -108,17 +99,18 @@ public class NoBeardParserTest {
         try {
             setupTest(new SrcFileReader("SamplePrograms/Smallest.nb"));
 
-            assertTrue("True expected", p.parse());
+            assertTrue("True expected", parser.parse());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     private void setupTest(SrcReader sr) {
-        NbCompiler compiler = new NbCompiler(sr);
+        compiler = new NbCompiler(sr);
+        errorHandler = compiler.getErrorHandler();
         s = compiler.getScanner();
         sym = compiler.getSymListManager();
         c = compiler.getCode();
-        p = compiler.getParser();
+        parser = compiler.getParser();
     }
 }

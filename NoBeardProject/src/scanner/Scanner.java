@@ -4,6 +4,8 @@
  */
 package scanner;
 
+import error.ErrorHandler;
+
 /**
  *
  * @author peter
@@ -39,15 +41,17 @@ public class Scanner {
     private NameManager nameManager;
     private StringManager stringManager;
     private Token currentToken;
+    private final ErrorHandler errorHandler;
 
-    public Scanner(SrcReader sr) {
+    public Scanner(SrcReader sr, ErrorHandler errorHandler) {
         srcReader = sr;
         sr.nextChar();
 
         nameManager = new NameManager(sr);
-        stringManager = new StringManager(sr);
+        stringManager = new StringManager(sr, errorHandler);
 
         currentToken = new Token();
+        this.errorHandler = errorHandler;
     }
 
     public NameManager getNameManager() {
@@ -94,7 +98,7 @@ public class Scanner {
     }
 
     private void handleDigit() {
-        int n = NumberAnalyzer.readNumber(srcReader);
+        int n = NumberAnalyzer.readNumber(srcReader, errorHandler);
         currentToken.setSy(Symbol.NUMBERSY);
         currentToken.setValue(n);
     }

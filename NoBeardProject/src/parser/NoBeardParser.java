@@ -5,7 +5,6 @@
 package parser;
 
 import error.ErrorHandler;
-import error.SemErr;
 import nbm.Nbm;
 import nbm.Code;
 import scanner.NameManager;
@@ -20,8 +19,8 @@ import symlist.SymListManager;
  */
 public class NoBeardParser extends Parser {
 
-    public NoBeardParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public NoBeardParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+        super(s, sym, c, e);
     }
 
     @Override
@@ -63,7 +62,8 @@ public class NoBeardParser extends Parser {
         // cc
         if (name != name1) {
             NameManager n = scanner.getNameManager();
-            ErrorHandler.getInstance().raise(new SemErr().new BlockNameMismatch(n.getStringName(name), n.getStringName(name1)));
+            String[] pList = {n.getStringName(name), n.getStringName(name1)};
+            getErrorHandler().raise(new error.Error(error.Error.ErrorType.BLOCK_NAME_MISSMATCH, pList));
             return false;
         }
         // end cc
@@ -71,10 +71,7 @@ public class NoBeardParser extends Parser {
     }
 
     private boolean block(SymListEntry obj) {
-        BlockParser blockP = new BlockParser(scanner, sym, code, obj);
-        if (!blockP.parse()) {
-            return false;
-        }
-        return true;
+        BlockParser blockP = new BlockParser(scanner, sym, code, obj, getErrorHandler());
+        return blockP.parse();
     }
 }

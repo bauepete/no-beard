@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import error.SynErr;
+import error.Error;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -29,8 +29,8 @@ public class SimExprParser extends Parser {
     }
     AddopType addOperator = AddopType.NOADD;
 
-    public SimExprParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public SimExprParser(Scanner s, SymListManager sym, Code c, ErrorHandler eh) {
+        super(s, sym, c, eh);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SimExprParser extends Parser {
             }
         }
 
-        TermParser termP = new TermParser(scanner, sym, code);
+        TermParser termP = new TermParser(scanner, sym, code, getErrorHandler());
         if (!termP.parse()) {
             return false;
         }
@@ -175,7 +175,7 @@ public class SimExprParser extends Parser {
 
             default:
                 String[] sList = {Symbol.PLUSSY.toString(), Symbol.MINUSSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
         return true;

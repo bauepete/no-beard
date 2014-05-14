@@ -26,14 +26,14 @@ public class ExprParser extends Parser {
     private Operand op;
     private byte ror;
 
-    public ExprParser(Scanner scanner, SymListManager sym, Code code) {
-        super(scanner, sym, code);
+    public ExprParser(Scanner scanner, SymListManager sym, Code code, ErrorHandler e) {
+        super(scanner, sym, code, e);
     }
 
     @Override
     public boolean parse() {
 
-        SimExprParser simExprP = new SimExprParser(scanner, sym, code);
+        SimExprParser simExprP = new SimExprParser(scanner, sym, code, getErrorHandler());
         if (!simExprP.parse()) {
             return false;
         }
@@ -68,7 +68,8 @@ public class ExprParser extends Parser {
             // cc
             if (op.getSize() == Operand.UNDEFSIZE || op2.getSize() == Operand.UNDEFSIZE ||
                     op.getType() != op2.getType() || op.getSize() != op2.getSize()) {
-                ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(op.getType().toString(), op2.getType().toString()));
+                String[] tList = {op.getType().toString(), op2.getType().toString()};
+                getErrorHandler().raise(new error.Error(error.Error.ErrorType.INCOMPATIBLE_TYPES, tList));
                 return false;
             }
             // endcc
@@ -85,8 +86,11 @@ public class ExprParser extends Parser {
                     
                 default:
                     int line = scanner.getCurrentLine();
-                    String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
-                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(tList));
+                    String[] tList = {
+                        OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
+                        OperandType.SIMPLEINT.toString()
+                    };
+                    getErrorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
                     break;
             }
             op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, op.getValaddr(), op.getCurrLevel());

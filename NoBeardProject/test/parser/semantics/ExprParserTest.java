@@ -52,7 +52,7 @@ public class ExprParserTest {
         };
         ExprParser p = ExprParserTestSetup.getSimpleRel();
         assertTrue(p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -74,7 +74,7 @@ public class ExprParserTest {
         };
         ExprParser p = ExprParserTestSetup.getAndRel();
         assertTrue(p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -96,7 +96,7 @@ public class ExprParserTest {
         };
         ExprParser p = ExprParserTestSetup.getOrRel();
         assertTrue(p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -126,6 +126,6 @@ public class ExprParserTest {
         };
         ExprParser p = ExprParserTestSetup.getAndOrRel();
         assertTrue(p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getCode().getByteCode());
     }
 }

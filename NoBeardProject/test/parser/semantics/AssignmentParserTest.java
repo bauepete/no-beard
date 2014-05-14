@@ -53,7 +53,7 @@ public class AssignmentParserTest {
         Scanner scanner = comp.getScanner();
         SymListManager sym = comp.getSymListManager();
         Code code = comp.getCode();
-        AssignmentParser p = new AssignmentParser(scanner, sym, code);
+        AssignmentParser p = new AssignmentParser(scanner, sym, code, comp.getErrorHandler());
         byte[] expResult = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 3,
@@ -64,6 +64,6 @@ public class AssignmentParserTest {
         sym.newVar(0, SymListManager.ElementType.INT);
         
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code: ", expResult, code.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, code.getByteCode());
     }
 }

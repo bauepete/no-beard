@@ -55,7 +55,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -74,7 +74,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getSubTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -94,7 +94,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getNegAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -111,7 +111,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getNegTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -132,7 +132,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getAddMulTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -155,7 +155,7 @@ public class SimExprParserTest {
         SimExprParser p = SimExprParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 
     /**
@@ -178,6 +178,6 @@ public class SimExprParserTest {
         
         SimExprParser p = SimExprParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parse());
-        AssmCodeChecker.assertCodeEquals("Code", expected, SimExprParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code", expected, SimExprParserTestSetup.getCode().getByteCode());
     }
 }

@@ -4,8 +4,8 @@
  */
 package parser;
 
+import error.Error;
 import error.ErrorHandler;
-import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -21,8 +21,8 @@ public class FactParser extends Parser {
 
     private Operand op;
     
-    public FactParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public FactParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+        super(s, sym, c, e);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FactParser extends Parser {
 
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTSY:
-                ReferenceParser refP = new ReferenceParser(scanner, sym, code);
+                ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
                 if (!refP.parse()) {
                     return false;
                 }
@@ -62,7 +62,7 @@ public class FactParser extends Parser {
             case LPARSY:
                 scanner.nextToken();
                 
-                ExprParser exprP = new ExprParser(scanner, sym, code);
+                ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
                 if (!exprP.parse()) {
                     return false;
                 }
@@ -76,7 +76,7 @@ public class FactParser extends Parser {
 
             default:
                 String[] sList = {Symbol.IDENTSY.toString(), Symbol.NUMBERSY.toString(), Symbol.LPARSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
 

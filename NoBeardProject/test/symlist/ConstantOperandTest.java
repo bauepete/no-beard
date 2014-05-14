@@ -6,10 +6,11 @@ package symlist;
 
 import symlist.Operand.OperandKind;
 import scanner.Scanner;
-import parser.semantics.AssmCodeChecker;
+import parser.semantics.AssemblerCodeChecker;
 import nbm.Nbm.Opcode;
 import error.ErrorHandler;
 import error.Error;
+import error.Error.ErrorType;
 import symlist.Operand.OperandType;
 import nbm.Code;
 import org.junit.After;
@@ -19,6 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import scanner.SrcStringReader;
 import static org.junit.Assert.*;
+import scanner.SrcReader;
 
 /**
  *
@@ -27,6 +29,7 @@ import static org.junit.Assert.*;
 public class ConstantOperandTest {
     private Code c;
     private Scanner scanner;
+    private ErrorHandler errorHandler;
     private ConstantOperand intOp = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
     private ConstantOperand charOp = new ConstantOperand(OperandType.SIMPLECHAR, 1, 0, 0);
     private ConstantOperand strOp = new ConstantOperand(OperandType.ARRAYCHAR, 10, 0, 0);
@@ -44,11 +47,12 @@ public class ConstantOperandTest {
     
     @Before
     public void setUp() {
-        ErrorHandler.getInstance().reset();
-        scanner = new Scanner(new SrcStringReader("unit A; do done A;"));
+        SrcReader sourceReader = new SrcStringReader("unit A; do done A;");
+        errorHandler = new ErrorHandler(sourceReader);
+        scanner = new Scanner(sourceReader, errorHandler);
         c = new Code();
-        Error.setScanner(scanner);
         Operand.setStringManager(scanner.getStringManager());
+        Operand.setErrorHandler(errorHandler);
     }
     
     @After
@@ -66,15 +70,15 @@ public class ConstantOperandTest {
             Opcode.LIT.byteCode(), 0, 42
         };
         Operand rOp = intOp.emitLoadVal(c);
-        assertEquals(OperandKind.VALONSTACK, rOp.getKind());
-        AssmCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
+        assertEquals(OperandKind.VALUEONSTACK, rOp.getKind());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
         
         byte[] expChar = {
             Opcode.LIT.byteCode(), 0, 42
         };
         rOp = charOp.emitLoadVal(c);
-        assertEquals(OperandKind.VALONSTACK, rOp.getKind());
-        AssmCodeChecker.assertCodeEquals("Code ", expChar, c.getByteCode());
+        assertEquals(OperandKind.VALUEONSTACK, rOp.getKind());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expChar, c.getByteCode());
     }
 
     /**
@@ -93,7 +97,7 @@ public class ConstantOperandTest {
         };
         
         intOp.emitAssign(c, destAos);
-        AssmCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
     }
 
     /**
@@ -111,7 +115,7 @@ public class ConstantOperandTest {
             Opcode.STC.byteCode()
         };
         charOp.emitAssign(c, destAos);
-        AssmCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
     }
 
     /**
@@ -130,7 +134,7 @@ public class ConstantOperandTest {
             Opcode.ASSN.byteCode()
         };
         strOp.emitAssign(c, destAos);
-        AssmCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
     }
 
     /**
@@ -146,7 +150,7 @@ public class ConstantOperandTest {
         
         assertFalse(srcArray.emitAssign(c, destAos));
         assertEquals(0, c.getPc());
-        assertEquals(55, ErrorHandler.getInstance().getLastError().getErrNo());
+        assertEquals(ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**
@@ -161,7 +165,7 @@ public class ConstantOperandTest {
         
         Operand rv = charOp.emitLoadAddr(c);
         assertEquals(OperandKind.ADDRONSTACK, rv.getKind());
-        AssmCodeChecker.assertCodeEquals("Code ", expected, c.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, c.getByteCode());
     }
 
     /**

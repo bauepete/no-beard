@@ -4,12 +4,10 @@
  */
 package parser.syntax;
 
+import error.Error.ErrorType;
 import parser.FactParser;
-import error.ErrorHandler;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import parser.general.FactParserTestSetup;
 import static org.junit.Assert.*;
@@ -21,14 +19,6 @@ import static org.junit.Assert.*;
 public class FactParserTest {
 
     public FactParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
     
     @Before
@@ -76,6 +66,6 @@ public class FactParserTest {
         FactParser p = FactParserTestSetup.getNoFactSetup();
         
         assertEquals("Parse ", false, p.parse());
-        assertEquals("Error", 1, ErrorHandler.getInstance().getCount("SynErr"));
+        assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
     }
 }

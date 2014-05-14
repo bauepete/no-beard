@@ -7,7 +7,6 @@ package parser.syntax;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ExprParser;
@@ -22,14 +21,6 @@ public class ExprParserTest {
     public ExprParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
     }

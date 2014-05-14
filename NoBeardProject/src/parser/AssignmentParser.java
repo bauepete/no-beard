@@ -4,9 +4,8 @@
  */
 package parser;
 
+import error.Error;
 import error.ErrorHandler;
-import error.SemErr;
-import error.SynErr;
 import nbm.Code;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -19,13 +18,13 @@ import symlist.SymListManager;
  */
 public class AssignmentParser extends Parser {
 
-    public AssignmentParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public AssignmentParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+        super(s, sym, c, e);
     }
 
     @Override
     public boolean parse() {
-        ReferenceParser refP = new ReferenceParser(scanner, sym, code);
+        ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
         if (!refP.parse()) {
             return false;
         }
@@ -35,10 +34,10 @@ public class AssignmentParser extends Parser {
         // endsem
         
         if (!tokenIsA(Symbol.ASSIGNSY)) {
-            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.ASSIGNSY.toString()));
+            getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.ASSIGNSY.toString()));
             return false;
         }
-        SimExprParser exprP = new SimExprParser(scanner, sym, code);
+        SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parse()) {
             return false;
         }
@@ -47,7 +46,8 @@ public class AssignmentParser extends Parser {
         // endsem
         // cc
         if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-            ErrorHandler.getInstance().raise(new SemErr().new IncompatibleTypes(srcOp.getType().toString(), destOp.getType().toString()));
+            String[] opList = {srcOp.getType().toString(), destOp.getType().toString()};
+            getErrorHandler().raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, opList));
             return false;
         }
         // endcc

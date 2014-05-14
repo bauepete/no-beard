@@ -4,9 +4,12 @@
  */
 package parser;
 
+import error.Error;
+import error.Error.ErrorType;
 import error.ErrorHandler;
 import error.SemErr;
-import error.SynErr;
+import java.util.LinkedList;
+import java.util.List;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
@@ -21,8 +24,8 @@ import symlist.SymListManager;
  */
 public class PutStatParser extends Parser {
 
-    public PutStatParser(Scanner s, SymListManager sym, Code c) {
-        super(s, sym, c);
+    public PutStatParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+        super(s, sym, c, e);
     }
 
     @Override
@@ -40,7 +43,7 @@ public class PutStatParser extends Parser {
 
             default:
                 String[] sList = {Symbol.PUTLNSY.toString(), Symbol.PUTSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 break;
         }
         return isParsedCorrectly;
@@ -55,7 +58,7 @@ public class PutStatParser extends Parser {
             return false;
         }
 
-        ExprParser exprP = new ExprParser(scanner, sym, code);
+        ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parse()) {
             return false;
         }
@@ -63,7 +66,7 @@ public class PutStatParser extends Parser {
         // cc
         Operand op = exprP.getOperand();
         if (!isOperandToPut(op)) {
-            ErrorHandler.getInstance().raise(new SemErr().new CantPutOperand());
+            getErrorHandler().raise(new Error(ErrorType.OPERAND_KIND_EXPECTED, outputableOperands()));
             return false;
         }
         // endcc
@@ -95,7 +98,7 @@ public class PutStatParser extends Parser {
                 // endsem
                 // cc
                 if (wOp.getType() != OperandType.SIMPLEINT) {
-                    ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(OperandType.SIMPLEINT.toString()));
+                    getErrorHandler().raise(new Error(ErrorType.TYPE_EXPECTED, OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc
@@ -103,7 +106,7 @@ public class PutStatParser extends Parser {
                 wOp.emitLoadVal(code);
                 // endsem
                 if (!tokenIsA(Symbol.RPARSY)) {
-                    ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.RPARSY.toString()));
+                    getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.RPARSY.toString()));
                     // TODO: Add raiseError() and getNameManager as private methods to Parser
                     // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPARSY)));
                     return false;
@@ -117,7 +120,7 @@ public class PutStatParser extends Parser {
             case RPARSY:
                 // cc
                 if (op.getSize() == Operand.UNDEFSIZE) {
-                    ErrorHandler.getInstance().raise(new SemErr().new CantPutOperand());
+                    getErrorHandler().raise(new Error(ErrorType.OPERAND_KIND_EXPECTED, outputableOperands()));
                     return false;
                 }
                 // end cc
@@ -141,7 +144,7 @@ public class PutStatParser extends Parser {
 
             default:
                 String[] sList = {Symbol.COMMASY.toString(), Symbol.RPARSY.toString()};
-                ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(sList));
+                getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
         return true;
@@ -159,10 +162,24 @@ public class PutStatParser extends Parser {
         return true;
     }
 
+    private final OperandType[] OUTPUTABLE_OPERANDS = {
+        OperandType.SIMPLECHAR, OperandType.SIMPLEINT, OperandType.ARRAYCHAR
+    };
+    
     private boolean isOperandToPut(Operand op) {
-        OperandType opType = op.getType();
-
-        return (opType == OperandType.SIMPLECHAR || opType == OperandType.SIMPLEINT || opType == OperandType.ARRAYCHAR);
+        for (OperandType operand : OUTPUTABLE_OPERANDS) {
+            if (operand == op.getType())
+                return true;
+        }
+        return false;
+    }
+    
+    private String[] outputableOperands() {
+        List<String> opList = new LinkedList();
+        
+        for (OperandType operand: OUTPUTABLE_OPERANDS)
+            opList.add(operand.toString());
+        return (String[]) opList.toArray();
     }
 
     private void emitPut(OperandType type) {
