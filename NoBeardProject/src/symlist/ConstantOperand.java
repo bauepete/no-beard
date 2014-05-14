@@ -5,8 +5,6 @@
 package symlist;
 
 import error.Error.ErrorType;
-import error.SemErr;
-import error.SemErr.TypeExpected;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import symlist.Operand.OperandKind;

@@ -7,7 +7,6 @@ package parser;
 import error.Error;
 import error.Error.ErrorType;
 import error.ErrorHandler;
-import error.SemErr;
 import java.util.LinkedList;
 import java.util.List;
 import nbm.Code;

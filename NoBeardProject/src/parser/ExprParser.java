@@ -5,7 +5,6 @@
 package parser;
 
 import error.ErrorHandler;
-import error.SemErr;
 import java.util.HashMap;
 import nbm.Code;
 import nbm.Nbm.Opcode;

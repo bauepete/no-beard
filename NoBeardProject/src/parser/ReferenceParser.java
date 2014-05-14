@@ -7,7 +7,6 @@ package parser;
 import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
-import error.SemErr;
 import nbm.Code;
 import scanner.Scanner;
 import symlist.Operand;
