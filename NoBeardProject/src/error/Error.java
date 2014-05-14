@@ -61,21 +61,11 @@ public class Error {
         }
     }
 
-    private ErrorType errorType;
+    private final ErrorType errorType;
 
-    private static Scanner scanner;
-    private String errClass;
-    private int errNo;
-    private String errMsg;
     private int lineNumber;
     private String[] parameters;
 
-    /**
-     * @deprecated @param scanner
-     */
-    public static void setScanner(Scanner scanner) {
-        Error.scanner = scanner;
-    }
 
     public Error(ErrorType errorType) {
         this.errorType = errorType;
@@ -93,33 +83,6 @@ public class Error {
     
     void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
-    }
-
-    /**
-     * @deprecated
-     * @param errClass
-     * @param errNo
-     * @param errMsg
-     * @param lineNumber 
-     */
-    public Error(String errClass, int errNo, String errMsg, int lineNumber) {
-        this.errClass = errClass;
-        this.errNo = errNo;
-        this.errMsg = errMsg;
-        this.lineNumber = lineNumber;
-    }
-
-    /**
-     * @deprecated
-     * @param errClass
-     * @param errNo
-     * @param errMsg 
-     */
-    public Error(String errClass, int errNo, String errMsg) {
-        this.errClass = errClass;
-        this.errNo = errNo;
-        this.errMsg = errMsg;
-        this.lineNumber = getScanner().getCurrentLine();
     }
 
     /**
@@ -162,13 +125,6 @@ public class Error {
             return msg.replaceAll("%s", sb.toString());
     }
 
-    /**
-     * @deprecated @return
-     */
-    public int getErrNo() {
-        return errNo;
-    }
-
     public int getNumber() {
         return errorType.getNumber();
     }
@@ -176,25 +132,4 @@ public class Error {
     public int getLineNumber() {
         return lineNumber;
     }
-
-    /**
-     * @deprecated 
-     * @param msg 
-     */
-    protected void setMessage(String msg) {
-        this.errMsg = msg;
-    }
-
-    /**
-     * @deprecated 
-     * @return 
-     */
-    private Scanner getScanner() {
-        if (scanner == null) {
-            throw new NullPointerException("Error not initialized properly. Initial setScanner missing.");
-        } else {
-            return scanner;
-        }
-    }
-
 }
