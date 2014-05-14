@@ -20,7 +20,7 @@ public class ErrorHandler {
     private final SourceCodeInfo sourceCodeInfo;
 
     public ErrorHandler(SourceCodeInfo srcCodeInfo) {
-        errors = new LinkedList<Error>();
+        errors = new LinkedList<>();
         this.sourceCodeInfo = srcCodeInfo;
     }
     
@@ -35,19 +35,6 @@ public class ErrorHandler {
 
     public int getCount(Error.ErrorClass errorClass) {
         return this.errorCounts[errorClass.ordinal()];
-    }
-    /**
-     * @deprecated
-     * @param errorClass
-     * @return 
-     */
-    public int getCount(String errorClass) {
-//        if (errors.containsKey(errorClass)) {
-//            return errors.get(errorClass);
-//        } else {
-//            return 0;
-//        }
-        return 0;
     }
 
     public void printSummary() {
