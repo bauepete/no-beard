@@ -58,7 +58,7 @@ public class IfStatParserTest {
         
         IfStatParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.byteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
 
     /**
@@ -84,6 +84,6 @@ public class IfStatParserTest {
         };
         IfStatParser instance = IfStatParserTestSetup.getIfElseTestSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.byteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
 }

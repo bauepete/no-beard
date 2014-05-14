@@ -50,7 +50,7 @@ public class PutStatParserTestSetup {
         scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
         
-        c = new Code();
+        c = new Code(256);
         sl = new SymListManager(c, scanner, errorHandler);
         Operand.setStringManager(scanner.getStringManager());
         return new PutStatParser(scanner, sl, c, errorHandler);

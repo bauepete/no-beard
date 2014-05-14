@@ -26,7 +26,7 @@ public class NbCompiler {
         
         errorHandler = new ErrorHandler(srcReader);
         scanner = new Scanner(srcReader, errorHandler);
-        code = new Code();
+        code = new Code(nbm.Nbm.getMAXPROG());
         sym = new SymListManager(code, scanner, errorHandler);
         Operand.setSymListManager(sym);
         Operand.setStringManager(scanner.getStringManager());

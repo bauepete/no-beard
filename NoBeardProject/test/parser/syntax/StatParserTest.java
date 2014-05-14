@@ -5,12 +5,9 @@
 package parser.syntax;
 
 import error.ErrorHandler;
-import error.Error;
 import nbm.Code;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.StatParser;
@@ -41,7 +38,7 @@ public class StatParserTest {
 
     @Before
     public void setUp() {
-        c = new Code();
+        c = new Code(256);
     }
     
     @After

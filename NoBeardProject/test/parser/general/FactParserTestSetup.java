@@ -4,11 +4,7 @@
  */
 package parser.general;
 
-import error.ErrorHandler;
 import parser.FactParser;
-import scanner.Scanner;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
 
 /**
  *

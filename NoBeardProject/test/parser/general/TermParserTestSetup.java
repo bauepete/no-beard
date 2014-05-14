@@ -6,8 +6,6 @@ package parser.general;
 
 import nbm.Code;
 import parser.TermParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
 import symlist.Operand;
 import symlist.SymListManager;
 
@@ -16,7 +14,6 @@ import symlist.SymListManager;
  * @author peter
  */
 public class TermParserTestSetup extends ParserTestSetup {
-    static private Code c;
 
     public static TermParser getMulTermSetup() {
         return setupTestObjects("a * b * c");
@@ -38,33 +35,29 @@ public class TermParserTestSetup extends ParserTestSetup {
         return setupTestObjects("-b");
     }
 
-    public static Code getCode() {
-        return c;
-    }
-
     private static TermParser setupTestObjects(String srcLine) {
         setupScanner(srcLine);
-        c = new Code();
-        sym = new SymListManager(c, scanner, errorHandler);
+        code = new Code(256);
+        sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         scanner.nextToken();
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);
         sym.newVar(2, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
-        return new TermParser(scanner, sym, c, errorHandler);
+        return new TermParser(scanner, sym, code, errorHandler);
     }
 
     private static TermParser setupBoolTestObjects(String srcLine) {
         setupScanner(srcLine);
-        c = new Code();
-        sym = new SymListManager(c, scanner, errorHandler);
+        code = new Code(256);
+        sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         scanner.nextToken();
         sym.newVar(0, SymListManager.ElementType.BOOL);
         sym.newVar(1, SymListManager.ElementType.BOOL);
         sym.newVar(2, SymListManager.ElementType.BOOL);
         Operand.setSymListManager(sym);
-        return new TermParser(scanner, sym, c, errorHandler);
+        return new TermParser(scanner, sym, code, errorHandler);
     }
 }

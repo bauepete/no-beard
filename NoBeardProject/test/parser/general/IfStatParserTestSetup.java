@@ -5,8 +5,6 @@
 package parser.general;
 
 import parser.IfStatParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
 
 /**
  *

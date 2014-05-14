@@ -39,7 +39,7 @@ public class NoBeardParserTest {
 
     @Before
     public void setUp() {
-        c = new Code();
+        c = new Code(256);
     }
     
     @After

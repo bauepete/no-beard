@@ -39,7 +39,7 @@ public class ExprParserTestSetup {
     }
     
     private static ExprParser setupTestObjects() {
-        code = new Code();
+        code = new Code(256);
         sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         scanner.nextToken();

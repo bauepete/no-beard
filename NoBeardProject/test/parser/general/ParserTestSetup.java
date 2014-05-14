@@ -22,12 +22,12 @@ public class ParserTestSetup {
     protected static Code code;
     protected static ErrorHandler errorHandler;
     
-    public static byte[] byteCode() {
+    public static byte[] getByteCode() {
         return code.getByteCode();
     }
     
     protected static void setupTestObjects() {
-        code = new Code();
+        code = new Code(256);
         sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         scanner.nextToken();

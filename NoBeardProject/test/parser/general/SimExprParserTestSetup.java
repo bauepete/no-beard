@@ -4,12 +4,8 @@
  */
 package parser.general;
 
-import error.ErrorHandler;
-import error.Error;
 import nbm.Code;
 import parser.SimExprParser;
-import scanner.Scanner;
-import scanner.SrcStringReader;
 import symlist.Operand;
 import symlist.SymListManager;
 
@@ -18,12 +14,6 @@ import symlist.SymListManager;
  * @author peter
  */
 public class SimExprParserTestSetup extends ParserTestSetup {
-
-    static private Code c;
-
-    public static Code getCode() {
-        return c;
-    }
 
     static public SimExprParser getAddTestSetup() {
         return setupTestObjects("a + b");
@@ -58,27 +48,29 @@ public class SimExprParserTestSetup extends ParserTestSetup {
     }
 
     static private SimExprParser setupTestObjects(String srcLine) {
+        // TODO: rearrange lines, move similarities into setupScanner
         setupScanner(srcLine);
-        c = new Code();
-        sym = new SymListManager(c, scanner, errorHandler);
+        code = new Code(256);
+        sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.INT);
         sym.newVar(1, SymListManager.ElementType.INT);
         Operand.setSymListManager(sym);
         scanner.nextToken();
-        return new SimExprParser(scanner, sym, c, errorHandler);
+        return new SimExprParser(scanner, sym, code, errorHandler);
     }
 
     static private SimExprParser setupBoolTestObjects(String srcLine) {
+        // TODO: rearrange lines, move similarities into setupScanner
         setupScanner(srcLine);
-        c = new Code();
-        sym = new SymListManager(c, scanner, errorHandler);
+        code = new Code(256);
+        sym = new SymListManager(code, scanner, errorHandler);
         sym.newUnit(25);
         sym.newVar(0, SymListManager.ElementType.BOOL);
         sym.newVar(1, SymListManager.ElementType.BOOL);
         sym.newVar(2, SymListManager.ElementType.BOOL);
         Operand.setSymListManager(sym);
         scanner.nextToken();
-        return new SimExprParser(scanner, sym, c, errorHandler);
+        return new SimExprParser(scanner, sym, code, errorHandler);
     }
 }
