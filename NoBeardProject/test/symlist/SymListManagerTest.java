@@ -36,7 +36,7 @@ public class SymListManagerTest {
 
     @Before
     public void setUp() {
-        c = new Code();
+        c = new Code(256);
         SrcStringReader sr = new SrcStringReader("TestUnit; aName");
         errorHandler = new ErrorHandler(sr);
         Scanner s = prepareScanner(sr);

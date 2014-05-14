@@ -7,7 +7,6 @@ package symlist;
 import symlist.Operand.OperandKind;
 import error.ErrorHandler;
 import error.Error;
-import scanner.Scanner;
 import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
@@ -50,7 +49,7 @@ public class ValueOnStackOperandTest {
 
     @Before
     public void setUp() {
-        toCode = new Code();
+        toCode = new Code(256);
         errorHandler = new ErrorHandler(new SrcStringReader(""));
         
         intSrcOp = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, 17, 0);

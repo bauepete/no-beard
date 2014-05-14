@@ -27,10 +27,10 @@ import scanner.SrcReader;
  */
 public class OperandTest {
 
-    private ConstantOperand cOp = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
-    private VariableOperand vOp = new VariableOperand(OperandType.ARRAYBOOL, 4 * 17, 0, 1);
-    private ValueOnStackOperand vosOp = new ValueOnStackOperand(OperandType.SIMPLEBOOL, 4, 0, 1);
-    private AddrOnStackOperand aosOp = new AddrOnStackOperand(cOp);
+    private final ConstantOperand cOp = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
+    private final VariableOperand vOp = new VariableOperand(OperandType.ARRAYBOOL, 4 * 17, 0, 1);
+    private final ValueOnStackOperand vosOp = new ValueOnStackOperand(OperandType.SIMPLEBOOL, 4, 0, 1);
+    private final AddrOnStackOperand aosOp = new AddrOnStackOperand(cOp);
 
     private Code c;
     private ErrorHandler errorHandler;
@@ -49,7 +49,7 @@ public class OperandTest {
 
     @Before
     public void setUp() {
-        c = new Code();
+        c = new Code(256);
         SrcReader sourceReader = null;
         try {
             sourceReader = new SrcFileReader("SamplePrograms/Smallest.nb");
