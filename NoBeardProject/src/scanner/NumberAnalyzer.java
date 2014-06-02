@@ -12,6 +12,8 @@ import error.ErrorHandler;
  * @author peter
  */
 public class NumberAnalyzer {
+    public static final int MAX_INTEGER = 65535;
+    
     /**
      * readNumber is called if and only if SrcReader.getCurrentChar() returns
      * a digit. readNumber scans the number beginning with this digit and
@@ -19,8 +21,9 @@ public class NumberAnalyzer {
      * 
      * After a call of readNumber SrcReader.getCurrentChar() returns the first
      * character of the source code that is not part of the number.
-     * @param sr
-     * @return 
+     * @param sr Source reader
+     * @param eh Error handler
+     * @return The number scanned
      */
     public static int readNumber(SrcReader sr, ErrorHandler eh) {
         

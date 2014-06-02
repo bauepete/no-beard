@@ -30,6 +30,9 @@ import static org.junit.Assert.*;
  */
 public class NumberAnalyzerTest {
     
+    private SrcReader sourceReader;
+    private ErrorHandler errorHandler;
+    
     public NumberAnalyzerTest() {
     }
 
@@ -46,15 +49,26 @@ public class NumberAnalyzerTest {
      */
     @Test
     public void testReadNumber() {
-        System.out.println("readNumber");
-        SrcReader sr = new SrcStringReader("42;");
-        ErrorHandler eh = new ErrorHandler(sr);
-        sr.nextChar();
+        prepareTestSetup("42;");
         
         int expResult = 42;
-        int result = NumberAnalyzer.readNumber(sr, eh);
+        int result = NumberAnalyzer.readNumber(sourceReader, errorHandler);
         assertEquals(expResult, result);
-        assertEquals(';', sr.getCurrentChar());
+        assertEquals(';', sourceReader.getCurrentChar());
+    }
+    
+    private void prepareTestSetup(String source) {
+        sourceReader = new SrcStringReader(source);
+        errorHandler = new ErrorHandler(sourceReader);
+        sourceReader.nextChar();
+    }
+    
+    @Test
+    public void testLargestNumber() {
+        prepareTestSetup(Integer.toString(NumberAnalyzer.MAX_INTEGER) + ";");
+        int result = NumberAnalyzer.readNumber(sourceReader, errorHandler);
+        assertEquals(NumberAnalyzer.MAX_INTEGER, result);
+        assertEquals(';', sourceReader.getCurrentChar());
     }
     
     /**
@@ -63,13 +77,11 @@ public class NumberAnalyzerTest {
     @Test
     public void testReadNumberOverflow() {
         System.out.println("readNumberOverflow");
-        SrcReader sr = new SrcStringReader("65536;");
-        ErrorHandler eh = new ErrorHandler(sr);
-        sr.nextChar();
-
-        int result = NumberAnalyzer.readNumber(sr, eh);
-        assertEquals(1, eh.getCount());
-        assertEquals(ErrorType.INTEGER_OVERFLOW.getNumber(), eh.getLastError().getNumber());
-        assertEquals(';', sr.getCurrentChar());
+        String source = Integer.toString(NumberAnalyzer.MAX_INTEGER + 1) + ";";
+        prepareTestSetup(source);
+        int result = NumberAnalyzer.readNumber(sourceReader, errorHandler);
+        assertEquals(1, errorHandler.getCount());
+        assertEquals(ErrorType.INTEGER_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(';', sourceReader.getCurrentChar());
     }
 }
