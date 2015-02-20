@@ -7,6 +7,8 @@
 \usepackage{amssymb}
 \usepackage{epstopdf}
 \usepackage[usenames, dvipsnames]{color}
+\usepackage{hyperref}
+
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \newcommand{\leongage}{NoBeard}
@@ -60,14 +62,15 @@ Austria
 %\maketitle
 \tableofcontents
 \chapter{Introduction}
-According to a web article (see \cite{khason:2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is/are are bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
+According to a web article (see \cite{khason_computer_2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is/are are bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
 moreover it should give the reader a clear insight how the main principles of compiler construction are.
 
 This report aims to give a formal description of the programming language \leongage. Please note that only the parts
 necessary for your work can be trusted. In the next versions, more and more information relevant for your assignments
 will be available.
 
-In case of typos, misleading wording or other problems, please feel free to contact me. Thanks for your help.
+In case of typos, misleading wording or other problems, please feel free to contact me. Thanks for your help. Some more text to read~\cite{terry_compiling_2004}. 
+
 \chapter{The Programming Language}
 \section{Lexical Structure}
 
@@ -123,7 +126,7 @@ done ComplexExpr;
 \end{lstlisting}
 
 \section{Syntax}
-The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation is used.
+The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation~\cite{wirth_what_1977} is used.
 
 	\begin{grammar}
 	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
@@ -408,6 +411,6 @@ Stat & = & ident ":=" \atgsy{Expr}{\outattr op}  \alternative \\
 \end{atg}
 
 \bibliography{my_bibliography}{}
-\bibliographystyle{plain}
+\bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
 
 \end{document}  

@@ -1,10 +1,23 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{Kha08}
 
-\bibitem{khason:2008}
-T.~Khason.
-\newblock Computer languages and facial hair -- take two.
-\newblock
-  {http://khason.net/blog/computer-languages-and-facial-hair-Ð-take-two/},
-  April 2008.
+\bibitem[Kha08]{khason_computer_2008}
+Tamir Khason.
+\newblock Computer languages and facial hair -- take two, 2008.
+\newblock URL:
+  \url{http://khason.net/blog/computer-languages-and-facial-hair-%e2%80%93-take-two/}.
+
+\bibitem[Ter04]{terry_compiling_2004}
+Pat Terry.
+\newblock {\em Compiling {With} {C}\# {And} {Java}}.
+\newblock Addison-Wesley Educational Publishers Inc, Harlow, England ; New
+  York, 2004.
+
+\bibitem[Wir77]{wirth_what_1977}
+Niklaus Wirth.
+\newblock What {Can} {We} {Do} {About} the {Unnecessary} {Diversity} of
+  {Notation} for {Syntactic} {Definitions}?
+\newblock {\em Commun. ACM}, 20(11):822--823, November 1977.
+\newblock URL: \url{http://doi.acm.org/10.1145/359863.359883}, \href
+  {http://dx.doi.org/10.1145/359863.359883} {\path{doi:10.1145/359863.359883}}.
 
 \end{thebibliography}
