@@ -13,12 +13,24 @@
 
 \newcommand{\leongage}{NoBeard}
 
-\newenvironment{grammar}
-	{\begin{tabular}[b]{lcl}}
-	{\end{tabular}}
-\newcommand{\rewritten}{$\to$}
+%\newenvironment{grammar}
+%	{\begin{tabular}[b]{lcl}}
+%	{\end{tabular}}
+%\newcommand{\rewritten}{$\to$}
 \newcommand{\alternative}{$\mid \;$}
 \newcommand{\emptystring}{$\varepsilon$}
+
+% ---------------------------------------------- Definition of grammar environment -----------------------------------------------------
+\newenvironment{grammar}
+	{	\begin{tabular}{p{.25\textwidth} c p{.75\textwidth}}
+	}
+	{	\end{tabular}
+	}
+\newcommand{\completerule}[2]{#1 & = & #2.\\}
+\newcommand{\startrule}[2]{#1 & = & #2\\}
+\newcommand{\alternativerule}[1]{ & $|$ & #1\\}
+\newcommand{\alternativeend}[1]{ & $|$ & #1.\\}
+\newcommand{\finishrule}[1]{ & & #1.\\}
 
 \newenvironment{atg}[1][6cm]
 	{\begin{tabular}[b]{lclp{#1}}}
@@ -38,10 +50,21 @@
 \author{P. Bauer}
 \date{V.\_01.00.00}                                           % Activate to display a given date or no date
 
+% -------------------------------------------------- Definition of lstlisting for NoBeard ------------------------------------------------------------------
+\definecolor{srcred}{rgb}{0.6,0,0}
+\definecolor{srcpurple}{rgb}{0.5,0,0.35}
+\definecolor{srcgreen}{rgb}{0.25,0.5,0.35}
+\definecolor{srcblue}{rgb}{0.25,0.35,0.75}
 \lstdefinelanguage{NoBeard}{
-	morekeywords = {unit, function, do, done, int, char},
-	sensitive=false,
-	morecomment=[l]{\#}
+	basicstyle=\ttfamily,
+	frame=single,
+	sensitive=true,
+	morekeywords = {unit, function, do, done, int, char, put, putln},
+	morecomment=[l][\color{srcgreen}]{\#},
+	morestring=[b][\color{srcred}]{"},
+	keywordstyle=\color{srcpurple},
+	showspaces=false,
+	showstringspaces=false
 }
 
 \begin{document}
@@ -50,7 +73,7 @@
 \includegraphics[scale=0.3]{no_beard_1.jpg} \\[2em]
 %\includegraphics[scale=0.3]{no_beard_2.jpg} \\[2em]
 {\Huge A Formal Description of \leongage} \\[1em]
-{\large v 01.01.00} \\[2em]
+{\large v 01.02.00} \\[2em]
 {\Large P. Bauer} \\[1em]
 HTBLA Leonding \\
 Limesstr. 14 - 18 \\
@@ -106,9 +129,11 @@ The characters "{\tt+}", "{\tt-}", "{\tt*}", "{\tt/}", "{\tt:=}", "{\tt;}", "{\t
 \end{itemize}
 
 \section{Sample Program}
+\lstset{language=NoBeard}
+
 \begin{lstlisting}
 unit ComplexExpr;
-# ---------------------------- ComplexExpr.nb -----------
+# ----------------- ComplexExpr.nb ----------------------
 # --- A syntactically correct NoBeard program
 # -------------------------------------------------------
 do
@@ -129,70 +154,43 @@ done ComplexExpr;
 The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation~\cite{wirth_what_1977} is used.
 
 	\begin{grammar}
-	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
-	
-	Block & = &  ``do" StatSeq ``done".\\
-	
-	StatSeq & = & Stat \{Stat\}. \\
-	
-	Stat & = & VarDecl ``;" \\
-%	&& \alternative FuncDecl ";" \\
-	&& \alternative Assignment ``;"\\
-%	&& \alternative FuncCall ";" \\
-	&& \alternative PutStat ``;" \\
-%	&& \alternative IfStat \\
-	&& \alternative \emptystring. \\
-	
-	VarDecl & = & Type ident [``=" Expr]. \\
-	
-	Type & = & SimpleType [ArraySpec]. \\
-	
-	%TypeSpec & = & SimpleType %\alternative CompoundType. \\
-	
-	ArraySpec & = & ``[" number ``]". \\
-	
-	SimpleType & = & ``int" \alternative ``char" \alternative ``bool". \\
-	
-%	FuncDecl & = & "function" ReturnType ident ["(" FormalArguments ")"] Block ident. \\
-	
-%	ReturnType & = & TypeSpec  [ArgArraySpec]. \\
-	
-%	ArgArraySpec & = & "[" "]". \\
-	
-%	FormalArguments & = & Argument \{"," Argument\}. \\
-	
-%	Argument & = & TypeSpec [ArgArraySpec] ident. \\
-	
-	Assignment &=& Reference ``=" Expr . \\
-	
-%	FuncCall & = & ident ["(" Expr \{"," Expr\}]. \\
+		\completerule{NoBeard}{``unit'' identifier ``;'' Block identifier ``;''}
+%	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
 
-%	IfStat & = & ``if" Expr Block \\
-%	&& [``else" Block]. \\
-	
-%	WhileStat & = & "while" "[" CondExpr "]" "do" StatSeq "done". \\
-	
-	PutStat & = & ``put" ``(" Expr [``," Expr] ``)" \\
-	&& \alternative "putln". \\
-	
-	Expr & = & SimExpr [RelOp SimExpr]. \\
-	
-	SimExpr & = & [AddOp]Term \{AddOp Term\}. \\
-	
-	Term & = & Fact \{MulOp Fact\}. \\
-	
-	Fact & = & Reference \alternative number \alternative string \\
-	&& \alternative %FuncCall \alternative
-	``(" Expr ``)". \\
-	
-	Reference & = & ident [ ``[" Expr ``]"]. \\
-	
-	RelOp & = & "$<$" \alternative "$<$=" \alternative "==" \alternative "!=" \alternative "$>$=" \alternative "$>$". \\
-	
-	AddOp & = & ``+" \alternative ``-". \\
-	
-	Mulop & = & ``*" \alternative ``/" \alternative ``\%".
-	
+		\completerule{Block}{``do'' StatementSequence ``done''}
+%	Block & = &  ``do" StatSeq ``done".\\
+
+		\completerule{StatementSequence}{\{Statement\}}
+		\\
+%	StatSeq & = & Stat \{Stat\}. \\
+
+		\startrule{Statement}{VariableDeclaration}
+		\alternativerule{Put}
+		\alternativerule{If}
+		\alternativerule{Assignment}
+		\alternativeend{\emptystring}
+		\\
+		\completerule{VariableDeclaration}{Type identifier [``='' Expression]``;''}
+		\completerule{Type}{SimpleType[ArraySpecification]}
+		\completerule{SimpleType}{``int'' $|$ ``char'' $|$ ``bool''}
+		\completerule{ArraySpecification}{``['' number ``]''}
+		\\
+		\startrule{Put}{``put'' ``('' Expression \{``,'' Expression\} ``)''``;''}
+		\alternativeend{``putln'' ``;''}
+		\\
+		\completerule{If}{``if'' Expression Block $|$ ``else'' Block}
+		\\
+		\completerule{Assignment}{Reference ``='' Expression ``;''}
+		\completerule{Reference}{Identifier [ ``['' Expression``]'']}
+		\\
+		\completerule{Expression}{SimpleExpression RelOp SimpleExpression}
+		\completerule{SimpleExpression}{[AddOp] Term \{AddOp Term\}}
+		\completerule{Term}{Factor \{MulOp Factor\}}
+		\completerule{Factor}{Reference $|$ number $|$ string $|$ ``('' Expression ``)''}
+		\\
+		\completerule{RelOp}{``$<$'' $|$ ``$<$='' $|$ ``=='' $|$ ``$>$='' $|$ ``$>$''}
+		\completerule{AddOp}{``+'' $|$ ``-''}
+		\completerule{MulOp}{``*'' $|$ ``/'' $|$ ``\%''}	
 	\end{grammar}
 
 \chapter{The \leongage{} Machine}
@@ -216,7 +214,7 @@ The \leongage{} Machine follows the following fixed execution cycle:
 \end{enumerate}
 The very first instruction is fetched from {\tt prog[startPc]} where {\tt startPc} has to be provided as an argument when starting the program. From this point of time onwards the program is executed until the machine state changes from {\em run}.
 
-\lstset{language=Java, tabsize=2}
+\lstset{language=Java, tabsize=2, basicstyle=\small}
 \begin{lstlisting}
 runProg(startPc) {
 	db = start byte of first free word in dat;
@@ -287,7 +285,10 @@ b & 0 ... 65535 & 2 Bytes & Code address (absolute number)
 
 \chapter{Symbol List}
 
-\lstset{language=NoBeard, numbers=left, tabsize=2}
+\lstset{language=NoBeard,
+	numbers=left,
+	tabsize=2
+}
 \begin{lstlisting}
 unit M;
 	function A(int a);
@@ -390,7 +391,7 @@ When generating this kind of code, we have to deal with the situation that the f
 
 The translation of {\em and-}expressions works analogously.
 
-\section{Jumps in If- and While-Statements}
+%\section{Jumps in If- and While-Statements}
 
 \chapter{Error Handling}
 ErrorHandler.getInstance().raise(new ...));
