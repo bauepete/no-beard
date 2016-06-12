@@ -233,7 +233,7 @@ public class SymListManager {
             funcObj.setAddr(startPc);
         } else {
             // TODO: this is not finished yet.
-            errorHandler.raise(new Error(ErrorType.GENERAL_SEM_ERROR, "STRANGE!!!"));
+            // errorHandler.raise(new Error(ErrorType.GENERAL_SEM_ERROR, "STRANGE!!!"));
         }
     }
 
