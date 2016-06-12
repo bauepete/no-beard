@@ -48,7 +48,7 @@ public class Nbc {
         try {
             sourceReader = new SrcFileReader(args[0]);
         } catch (FileNotFoundException ex) {
-            System.err.println("File " + args[0] + " not found");
+            System.err.println("Source file " + args[0] + " not found");
             return;
         }
         NbCompiler compiler = new NbCompiler(sourceReader);
