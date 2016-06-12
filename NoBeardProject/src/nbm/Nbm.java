@@ -35,14 +35,14 @@ public class Nbm {
     private static final int MAXDAT = 1024;    // Size of data memory
     private static final int LINKAREA = 28;    // Space to store house keeping data when functions are called
     private static final int WORDSIZE = 4;     // Size of one word in bytes
-    private byte[] prog;
-    private byte[] dat;
+    private final byte[] prog;
+    private final byte[] dat;
     private int pc;             // Program counter
     private int db;             // Pointer to first byte of frame stack of currently running function
     private int db_end;         // Pointer to the last byte of frame stack (db + LINKAREA + sizeof(local variables))
     private int top;            // Pointer to the last used byte in frame stack
     private MachineState ms;
-    private Instruction[] instructionMap = {
+    private final Instruction[] instructionMap = {
         new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
         new Not(), new Rel(), new Fjmp(), new Tjmp(), new Jmp(),
@@ -328,23 +328,22 @@ public class Nbm {
             byte s = prog[pc + 1];
             pc += 2;
 
-            int w;
             switch (s) {
                 case 0:
-                    w = pop();
+                    pop();
                     int x = pop();
                     //TODO: print leading blanks
                     System.out.print(x);
                     break;
 
                 case 1:
-                    w = pop();
+                    pop();
                     int c = pop();
                     System.out.print((char) c);
                     break;
 
                 case 2:
-                    w = pop();
+                    int w = pop();
                     int n = pop();
                     int a = pop();
                     System.out.print(new String(getDat(a, n)));
@@ -430,7 +429,7 @@ public class Nbm {
     }
 
     public int getStackTopValue() {
-        int rv = 0;
+        int rv;
 
         if (top > db_end) {
             rv = getDatWord(top);
