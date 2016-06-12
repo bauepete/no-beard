@@ -170,6 +170,7 @@ public class NoBeardParserTest {
             Opcode.LIT.byteCode(), 0, 11,   // length of string
             Opcode.LIT.byteCode(), 0, 11,   // width parameter of print instr.
             Opcode.PUT.byteCode(), 2,
+            Opcode.PUT.byteCode(), 3,
             Opcode.HALT.byteCode()
         };
         
