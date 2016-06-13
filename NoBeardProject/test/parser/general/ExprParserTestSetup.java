@@ -4,13 +4,7 @@
  */
 package parser.general;
 
-import error.ErrorHandler;
-import nbm.Code;
 import parser.ExprParser;
-import scanner.Scanner;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
-import symlist.Operand;
 import symlist.SymListManager;
 
 /**
