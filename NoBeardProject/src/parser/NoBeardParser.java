@@ -19,6 +19,8 @@ import symlist.SymListManager;
  */
 public class NoBeardParser extends Parser {
 
+    private SymListEntry unitObj;
+    
     public NoBeardParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
@@ -38,18 +40,16 @@ public class NoBeardParser extends Parser {
             return false;
         }
 
-        // sem
-        sym.newUnit(name);
-        SymListEntry unitObj = sym.findObject(name);
-        // endsem
+        sem(() -> {
+            sym.newUnit(name);
+            unitObj = sym.findObject(name);
+        });
 
         if (!block(unitObj)) {
             return false;
         }
 
-        // sem
-        code.emitOp(Nbm.Opcode.HALT);
-        // endsem
+        sem(() -> code.emitOp(Nbm.Opcode.HALT));
 
         int name1 = ident();
         if (name1 == NOIDENT) {

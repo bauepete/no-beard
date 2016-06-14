@@ -20,6 +20,16 @@ import symlist.SymListManager;
  */
 public abstract class Parser {
 
+    @FunctionalInterface
+    protected interface SemanticAction {
+        public void doSemanticAction();
+    }
+    public void sem(SemanticAction semanticAction) {
+        if (parsingWasSuccessfullUntilNow)
+            semanticAction.doSemanticAction();
+    }
+    private boolean parsingWasSuccessfullUntilNow = true;
+    
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
