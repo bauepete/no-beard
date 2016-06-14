@@ -4,7 +4,7 @@
  */
 package scanner;
 
-import compiler.SourceCodeInfo;
+import error.SourceCodeInfo;
 
 /**
  *

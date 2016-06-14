@@ -4,7 +4,6 @@
  */
 package error;
 
-import compiler.SourceCodeInfo;
 import java.util.LinkedList;
 import java.util.List;
 

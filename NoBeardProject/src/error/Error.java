@@ -4,8 +4,6 @@
  */
 package error;
 
-import scanner.Scanner;
-
 /**
  *
  * @author peter
