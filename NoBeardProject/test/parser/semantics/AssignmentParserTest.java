@@ -4,8 +4,6 @@
  */
 package parser.semantics;
 
-import compiler.NbCompiler;
-import nbm.Code;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -13,8 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.AssignmentParser;
-import scanner.Scanner;
+import parser.Parser;
+import parser.ParserFactory;
 import scanner.SrcStringReader;
 import symlist.SymListManager;
 
@@ -23,7 +21,7 @@ import symlist.SymListManager;
  * @author peter
  */
 public class AssignmentParserTest {
-    
+
     public AssignmentParserTest() {
     }
 
@@ -34,11 +32,11 @@ public class AssignmentParserTest {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -49,21 +47,19 @@ public class AssignmentParserTest {
     @Test
     public void testParse() {
         System.out.println("parse");
-        NbCompiler comp = new NbCompiler(new SrcStringReader("x = 3"));
-        Scanner scanner = comp.getScanner();
-        SymListManager sym = comp.getSymListManager();
-        Code code = comp.getCode();
-        AssignmentParser p = new AssignmentParser(scanner, sym, code, comp.getErrorHandler());
         byte[] expResult = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 3,
             Opcode.STO.byteCode()
         };
-        
-        sym.newUnit(1);
-        sym.newVar(0, SymListManager.ElementType.INT);
-        
+
+        ParserFactory.setup(new SrcStringReader("x = 3"));
+        ParserFactory.getSymbolListManager().newUnit(1);
+        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+
+        Parser p = ParserFactory.createAssignmentParser();
+
         assertEquals("Parse ", true, p.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, code.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, ParserFactory.getCodeGenerator().getByteCode());
     }
 }

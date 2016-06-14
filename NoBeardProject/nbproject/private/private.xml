@@ -4,16 +4,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/PutStatParser.java</file>
             <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/semantics/NoBeardParserTest.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/ExprParserTestSetup.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/PutStatParser.java</file>
             <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/semantics/ExprParserTest.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/nbm/Code.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/symlist/SymListManager.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/IfStatParserTestSetup.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/Parser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/IfStatParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/nbm/Nbm.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/ExprParserTestSetup.java</file>
         </group>
     </open-files>
 </project-private>
