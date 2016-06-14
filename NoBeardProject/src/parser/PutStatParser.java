@@ -97,7 +97,7 @@ public class PutStatParser extends Parser {
                 // endsem
                 // cc
                 if (wOp.getType() != OperandType.SIMPLEINT) {
-                    getErrorHandler().raise(new Error(ErrorType.TYPE_EXPECTED, OperandType.SIMPLEINT.toString()));
+                    getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc

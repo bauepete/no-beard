@@ -116,7 +116,7 @@ public class ValueOnStackOperandTest {
         Operand destOp = new AddrOnStackOperand(new VariableOperand(Operand.OperandType.ARRAYINT, 40, 0, 0));
         assertFalse(srcOp.emitAssign(toCode, destOp));
         assertEquals(0, toCode.getPc());
-        assertEquals(Error.ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(Error.ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**

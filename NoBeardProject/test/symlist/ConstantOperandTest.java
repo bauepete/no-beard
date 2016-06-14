@@ -149,7 +149,7 @@ public class ConstantOperandTest {
         
         assertFalse(srcArray.emitAssign(c, destAos));
         assertEquals(0, c.getPc());
-        assertEquals(ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**

@@ -89,7 +89,7 @@ public class ExprParser extends Parser {
                         OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
                         OperandType.SIMPLEINT.toString()
                     };
-                    getErrorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
+                    getErrorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
                     break;
             }
             op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, op.getValaddr(), op.getCurrLevel());

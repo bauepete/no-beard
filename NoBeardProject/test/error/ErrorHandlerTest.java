@@ -5,10 +5,9 @@
 package error;
 
 import error.Error.ErrorType;
+import java.util.List;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import scanner.Scanner.Symbol;
 import static org.junit.Assert.*;
@@ -25,14 +24,6 @@ public class ErrorHandlerTest {
     public ErrorHandlerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
         eh = new ErrorHandler(new SrcStringReader(""));
@@ -40,6 +31,15 @@ public class ErrorHandlerTest {
 
     @After
     public void tearDown() {
+    }
+    
+    @Test
+    public void testThrowSymbolExpected() {
+        eh.throwSymbolExpectedError("unit", ";");
+        assertEquals(1, eh.getCount());
+        List<Error> errorList = eh.getAllErrors();
+        assertEquals(1, errorList.size());
+        assertEquals(ErrorType.SYMBOL_EXPECTED.getNumber(), errorList.get(0).getNumber());
     }
     
     @Test

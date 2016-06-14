@@ -80,7 +80,7 @@ public class TermParser extends Parser {
 
                 //cc
                 if (op.getType() != OperandType.SIMPLEINT) {
-                    getErrorHandler().raise(new Error(Error.ErrorType.TYPE_EXPECTED, OperandType.SIMPLEINT.toString()));
+                    getErrorHandler().raise(new Error(Error.ErrorType.TYPES_EXPECTED, OperandType.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc

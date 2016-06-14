@@ -123,7 +123,7 @@ public class OperandTest {
 
         Operand src = new ConstantOperand(OperandType.VOID, 0, 0, 0);
         assertFalse("Invalid type ", src.emitAssign(c, new AddrOnStackOperand(vOp)));
-        assertEquals(Error.ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(Error.ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     @Test
@@ -147,7 +147,7 @@ public class OperandTest {
         System.out.println("testLoadValInvalidType");
         Operand op = new Operand(Operand.OperandKind.ADDRONSTACK, OperandType.VOID, 0, 0, 0);
         assertNull("Invalid Type ", op.emitLoadVal(c));
-        assertEquals(Error.ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(Error.ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     @Test
@@ -163,6 +163,6 @@ public class OperandTest {
         System.out.println("testLoadAddrInvalidType");
         Operand op = new Operand(Operand.OperandKind.ADDRONSTACK, OperandType.VOID, 0, 0, 0);
         assertNull("Invalid Type ", op.emitLoadVal(c));
-        assertEquals(Error.ErrorType.TYPE_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+        assertEquals(Error.ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 }

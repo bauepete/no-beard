@@ -66,7 +66,7 @@ public abstract class Parser {
 
     protected boolean operandIsA(Operand op, OperandType opType) {
         if (op.getType() != opType) {
-            getErrorHandler().raise(new Error(ErrorType.TYPE_EXPECTED, opType.toString()));
+            getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, opType.toString()));
             //ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(opType.toString()));
             return false;
         }

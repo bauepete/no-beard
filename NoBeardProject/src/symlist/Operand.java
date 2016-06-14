@@ -112,7 +112,7 @@ public class Operand {
         
         if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT) {
             String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
-            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
+            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
             return null;
         }
         return this;
@@ -139,7 +139,7 @@ public class Operand {
         if (!typesOk(destOp)) {
             String[] tList = {OperandType.SIMPLEINT.toString(), OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
                               OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
-            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPE_EXPECTED, tList));
+            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
             return false;
         }
 

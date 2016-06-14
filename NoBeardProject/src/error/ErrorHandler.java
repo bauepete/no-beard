@@ -45,12 +45,21 @@ public class ErrorHandler {
         System.err.println();
     }
 
+    public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
+        errors.add(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
+        totalCount++;
+    }
+    
     public void raise(Error e) {
         e.setLineNumber(sourceCodeInfo.getCurrentLine());
         errorCounts[e.getErrorClass().ordinal()]++;
         totalCount++;
         lastError = e;
         System.err.println(e.getErrorClass()+": " + e.getLineNumber() + ": " + e.getMessage());
+    }
+    
+    public List<Error> getAllErrors() {
+        return errors;
     }
     
     public Error getLastError() {

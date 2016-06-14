@@ -45,7 +45,7 @@ public class ValueOnStackOperand extends Operand {
                 
             default:
                 String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
-                errorHandler().raise(new Error(Error.ErrorType.TYPE_EXPECTED, tList));
+                errorHandler().raise(new Error(Error.ErrorType.TYPES_EXPECTED, tList));
                 return false;
         }
         return true;

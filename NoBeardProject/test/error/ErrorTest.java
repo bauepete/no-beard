@@ -5,9 +5,7 @@
 package error;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,14 +33,20 @@ public class ErrorTest {
     
     @Test
     public void testErrorsWithOneParameter() {
-        Error error = new Error(Error.ErrorType.SYMBOL_EXPECTED, "Identifier");
-        assertEquals("Identifier expected", error.getMessage());
+        Error error = new Error(Error.ErrorType.NAME_ALREADY_DEFINED, "foo");
+        assertEquals("Identifier foo already defined", error.getMessage());
     }
     
     @Test
-    public void testErrorsWithMoreParameters() {
+    public void testErrorsWithList() {
         String[] typeList = {"simple bool", "simple char", "simple int"};
-        Error error = new Error(Error.ErrorType.TYPE_EXPECTED, typeList);
-        assertEquals("Type simple bool, simple char or simple int expected", error.getMessage());
+        Error error = new Error(Error.ErrorType.TYPES_EXPECTED, typeList);
+        assertEquals("Types simple bool, simple char or simple int expected", error.getMessage());
+    }
+    
+    @Test
+    public void testErrorWithVariableParameterList() {
+        Error error = new Error(Error.ErrorType.SYMBOL_EXPECTED, "unit", "Identifier");
+        assertEquals("unit expected but found Identifier", error.getMessage());
     }
 }
