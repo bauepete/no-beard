@@ -68,7 +68,7 @@ public class SimExprParser extends Parser {
         // endsem
 
         while (tokenIsAddOp()) {
-            if (scanner.getCurrentToken().getSy() == Symbol.ORSY) {
+            if (scanner.getCurrentToken().getSy() == Symbol.OR) {
                 scanner.nextToken();
                 // cc
                 if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
@@ -154,19 +154,19 @@ public class SimExprParser extends Parser {
 
     private boolean tokenIsAddOp() {
         Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.PLUSSY || sy == Symbol.MINUSSY || sy == Symbol.ORSY);
+        return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
     }
 
     private boolean addOp() {
         switch (scanner.getCurrentToken().getSy()) {
-            case PLUSSY:
+            case PLUS:
                 //sem
                 addOperator = AddopType.PLUS;
                 // endsem
                 scanner.nextToken();
                 break;
 
-            case MINUSSY:
+            case MINUS:
                 // sem
                 addOperator = AddopType.MINUS;
                 // endsem
@@ -174,7 +174,7 @@ public class SimExprParser extends Parser {
                 break;
 
             default:
-                String[] sList = {Symbol.PLUSSY.toString(), Symbol.MINUSSY.toString()};
+                String[] sList = {Symbol.PLUS.toString(), Symbol.MINUS.toString()};
                 getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }

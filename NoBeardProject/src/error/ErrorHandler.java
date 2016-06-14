@@ -46,14 +46,14 @@ public class ErrorHandler {
     }
 
     public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
-        errors.add(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
-        totalCount++;
+        raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
     }
     
     public void raise(Error e) {
         e.setLineNumber(sourceCodeInfo.getCurrentLine());
         errorCounts[e.getErrorClass().ordinal()]++;
         totalCount++;
+        errors.add(e);
         lastError = e;
         System.err.println(e.getErrorClass()+": " + e.getLineNumber() + ": " + e.getMessage());
     }

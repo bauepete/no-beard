@@ -17,30 +17,30 @@ public class Scanner {
 
         NOSY, EOFSY, ILLEGALSY,
         /// Keywords
-        PUTSY, PUTLNSY, UNITSY, DOSY, DONESY, IFSY, ELSESY, INTSY, BOOLSY, CHARSY,
-        TRUESY, FALSESY,
+        PUT, PUTLN, UNIT, DO, DONE, IF, ELSE, INT, BOOL, CHAR,
+        TRUE, FALSE,
         /// Classes
-        IDENTSY, NUMBERSY, STRINGSY,
+        IDENTIFIER, NUMBER, STRING,
         /// Arithmethic
-        PLUSSY, MINUSSY, TIMESSY, DIVSY, MODSY,
+        PLUS, MINUS, TIMES, DIV, MOD,
         /// Relational operators
-        LTHSY, GTHSY, EQLSY, LEQSY, GEQSY, NEQSY,
+        LTH, GTH, EQUALS, LEQ, GEQ, NEQ,
         /// Boolean operators
-        NOTSY, ANDSY, ORSY,
+        NOT, AND, OR,
         /// Delimiters
-        ASSIGNSY, SEMICOLONSY, COMMASY, LPARSY, RPARSY,
-        LBRACKETSY, RBRACKETSY;
+        ASSIGN, SEMICOLON, COMMA, LPAR, RPAR,
+        LBRACKET, RBRACKET;
 
         @Override
         public String toString() {
             String str = super.toString();
-            return str.substring(0, str.length() - 2).toLowerCase();
+            return str.toLowerCase();
         }
     }
-    private SrcReader srcReader;
-    private NameManager nameManager;
-    private StringManager stringManager;
-    private Token currentToken;
+    private final SrcReader srcReader;
+    private final NameManager nameManager;
+    private final StringManager stringManager;
+    private final Token currentToken;
     private final ErrorHandler errorHandler;
 
     public Scanner(SrcReader sr, ErrorHandler errorHandler) {
@@ -67,14 +67,14 @@ public class Scanner {
     }
 
     /** Reads the next token from the source code. After a call of nextToken the
-     * following holds:
-     * - getCurrentToken().getSy() returns the kind of the current symbol
-     * - if getCurrentToken().getSy() == IDENTSY, getCurrentToken.getValue()
-     * is a unique number identifying the symbol
-     * - if getCurrentToken().getSy() == NUMBERSY, getCurrentToken.getValue()
-     * holds the value of the number
-     * - if getCurrentToken().getSy() is different from IDENTSY and NUMBERSY
-     * getCurrentToken.getValue() is undefined
+ following holds:
+ - getCurrentToken().getSy() returns the kind of the current symbol
+ - if getCurrentToken().getSy() == IDENTIFIER, getCurrentToken.getValue()
+ is a unique number identifying the symbol
+ - if getCurrentToken().getSy() == NUMBER, getCurrentToken.getValue()
+ holds the value of the number
+ - if getCurrentToken().getSy() is different from IDENTIFIER and NUMBER
+ getCurrentToken.getValue() is undefined
      *** @note Before the first call of nextToken SrcReader.getCurrentChar()
      * must return the first character of the source file.
      */
@@ -99,7 +99,7 @@ public class Scanner {
 
     private void handleDigit() {
         int n = NumberAnalyzer.readNumber(srcReader, errorHandler);
-        currentToken.setSy(Symbol.NUMBERSY);
+        currentToken.setSy(Symbol.NUMBER);
         currentToken.setValue(n);
     }
     
@@ -124,74 +124,74 @@ public class Scanner {
                 break;
 
             case '+':
-                currentToken.setSy(Symbol.PLUSSY);
+                currentToken.setSy(Symbol.PLUS);
                 srcReader.nextChar();
                 break;
 
             case '-':
-                currentToken.setSy(Symbol.MINUSSY);
+                currentToken.setSy(Symbol.MINUS);
                 srcReader.nextChar();
                 break;
 
             case '*':
-                currentToken.setSy(Symbol.TIMESSY);
+                currentToken.setSy(Symbol.TIMES);
                 srcReader.nextChar();
                 break;
 
             case '/':
-                currentToken.setSy(Symbol.DIVSY);
+                currentToken.setSy(Symbol.DIV);
                 srcReader.nextChar();
                 break;
 
             case '%':
-                currentToken.setSy(Symbol.MODSY);
+                currentToken.setSy(Symbol.MOD);
                 srcReader.nextChar();
                 break;
 
             case '<':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.LEQSY);
+                    currentToken.setSy(Symbol.LEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.LTHSY);
+                    currentToken.setSy(Symbol.LTH);
                 }
                 break;
 
             case '>':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.GEQSY);
+                    currentToken.setSy(Symbol.GEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.GTHSY);
+                    currentToken.setSy(Symbol.GTH);
                 }
                 break;
 
             case '!':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.NEQSY);
+                    currentToken.setSy(Symbol.NEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.NOTSY);
+                    currentToken.setSy(Symbol.NOT);
                 }
                 break;
 
             case '=':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.EQLSY);
+                    currentToken.setSy(Symbol.EQUALS);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.ASSIGNSY);
+                    currentToken.setSy(Symbol.ASSIGN);
                 }
                 break;
 
             case '&':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '&') {
-                    currentToken.setSy(Symbol.ANDSY);
+                    currentToken.setSy(Symbol.AND);
                     srcReader.nextChar();
                 }
                 break;
@@ -199,45 +199,45 @@ public class Scanner {
             case '|':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '|') {
-                    currentToken.setSy(Symbol.ORSY);
+                    currentToken.setSy(Symbol.OR);
                     srcReader.nextChar();
                 }
                 break;
 
             case ';':
-                currentToken.setSy(Symbol.SEMICOLONSY);
+                currentToken.setSy(Symbol.SEMICOLON);
                 srcReader.nextChar();
                 break;
 
             case ',':
-                currentToken.setSy(Symbol.COMMASY);
+                currentToken.setSy(Symbol.COMMA);
                 srcReader.nextChar();
                 break;
 
             case '(':
-                currentToken.setSy(Symbol.LPARSY);
+                currentToken.setSy(Symbol.LPAR);
                 srcReader.nextChar();
                 break;
 
             case ')':
-                currentToken.setSy(Symbol.RPARSY);
+                currentToken.setSy(Symbol.RPAR);
                 srcReader.nextChar();
                 break;
 
             case '[':
-                currentToken.setSy(Symbol.LBRACKETSY);
+                currentToken.setSy(Symbol.LBRACKET);
                 srcReader.nextChar();
                 break;
 
             case ']':
-                currentToken.setSy(Symbol.RBRACKETSY);
+                currentToken.setSy(Symbol.RBRACKET);
                 srcReader.nextChar();
                 break;
 
             case '"':
             case '\'':
                 stringManager.readString();
-                currentToken.setSy(Symbol.STRINGSY);
+                currentToken.setSy(Symbol.STRING);
                 break;
 
             default:

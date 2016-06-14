@@ -27,51 +27,51 @@ public class StatParser extends Parser {
     public boolean parse() {
         SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
         switch (scanner.getCurrentToken().getSy()) {
-            case INTSY:
-            case BOOLSY:
-            case CHARSY:
+            case INT:
+            case BOOL:
+            case CHAR:
                 VarDeclParser varDeclP = new VarDeclParser(scanner, sym, code, getErrorHandler());
                 if (!varDeclP.parse()) {
                     return false;
                 }
-                if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLONSY.toString()));
+                if (!tokenIsA(Symbol.SEMICOLON)) {
+                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLON.toString()));
                     return false;
                 }
                 break;
                 
-            case IDENTSY:
+            case IDENTIFIER:
                 AssignmentParser assignP = new AssignmentParser(scanner, sym, code, getErrorHandler());
                 if (!assignP.parse()) {
                     return false;
                 }
 
-                if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLONSY.toString()));
+                if (!tokenIsA(Symbol.SEMICOLON)) {
+                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLON.toString()));
                     return false;
                 }
 
                 break;
 
-            case PUTSY:
-            case PUTLNSY:
+            case PUT:
+            case PUTLN:
                 PutStatParser putStatP = new PutStatParser(scanner, sym, code, getErrorHandler());
                 if (!putStatP.parse()) {
                     return false;
                 }
-                if (!tokenIsA(Symbol.SEMICOLONSY)) {
-                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLONSY.toString()));
+                if (!tokenIsA(Symbol.SEMICOLON)) {
+                    getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLON.toString()));
                     return false;
                 }
                 break;
                 
-            case IFSY:
+            case IF:
                 IfStatParser ifStatP = new IfStatParser(scanner, sym, code, getErrorHandler());
                 if (!ifStatP.parse()) {
                     return false;
                 }
 
-            case DONESY: // if stat is empty
+            case DONE: // if stat is empty
                 return true;
 
             default:

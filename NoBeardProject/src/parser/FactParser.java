@@ -29,7 +29,7 @@ public class FactParser extends Parser {
     public boolean parse() {
 
         switch (scanner.getCurrentToken().getSy()) {
-            case IDENTSY:
+            case IDENTIFIER:
                 ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
                 if (!refP.parse()) {
                     return false;
@@ -38,14 +38,14 @@ public class FactParser extends Parser {
                 
                 break;
 
-            case NUMBERSY:
+            case NUMBER:
                 int val = number();
                 // sem
                 op = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, val, 0);
                 // endsem
                 break;
                 
-            case STRINGSY:
+            case STRING:
                 // sem
                 Operand.OperandType opType;
                 if (scanner.getStringLength() == 1) {
@@ -59,7 +59,7 @@ public class FactParser extends Parser {
                 scanner.nextToken();
                 break;
 
-            case LPARSY:
+            case LPAR:
                 scanner.nextToken();
                 
                 ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
@@ -68,14 +68,14 @@ public class FactParser extends Parser {
                 }
                 op = exprP.getOperand();
 
-                if (!tokenIsA(Symbol.RPARSY)) {
+                if (!tokenIsA(Symbol.RPAR)) {
                     return false;
                 }
                 break;
 
 
             default:
-                String[] sList = {Symbol.IDENTSY.toString(), Symbol.NUMBERSY.toString(), Symbol.LPARSY.toString()};
+                String[] sList = {Symbol.IDENTIFIER.toString(), Symbol.NUMBER.toString(), Symbol.LPAR.toString()};
                 getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }

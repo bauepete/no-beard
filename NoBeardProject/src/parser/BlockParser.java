@@ -27,7 +27,7 @@ public class BlockParser extends Parser {
 
     @Override
     public boolean parse() {
-        if (!tokenIsA(Symbol.DOSY)) {
+        if (!tokenIsA(Symbol.DO)) {
             return false;
         }
 
@@ -46,7 +46,7 @@ public class BlockParser extends Parser {
         sym.fixINC(incAddr, obj);
         // endsem
 
-        if (!tokenIsA(Symbol.DONESY)) {
+        if (!tokenIsA(Symbol.DONE)) {
             return false;
         }
         return true;
@@ -58,7 +58,7 @@ public class BlockParser extends Parser {
             return false;
         }
 
-        while (scanner.getCurrentToken().getSy() != Symbol.DONESY) {
+        while (scanner.getCurrentToken().getSy() != Symbol.DONE) {
             if (!statP.parse()) {
                 return false;
             }

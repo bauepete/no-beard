@@ -64,7 +64,7 @@ public class NameManagerTest {
         sr.nextChar();
         nameManager.readName(t);
 
-        assertEquals("IDENT ", Symbol.IDENTSY, t.getSy());
+        assertEquals("IDENT ", Symbol.IDENTIFIER, t.getSy());
         assertEquals("Spix ", 0, t.getValue());
         assertEquals("Current char ", ';', sr.getCurrentChar());
 
@@ -72,7 +72,7 @@ public class NameManagerTest {
         sr.nextChar();
 
         nameManager.readName(t);
-        assertEquals("IDENT ", Symbol.IDENTSY, t.getSy());
+        assertEquals("IDENT ", Symbol.IDENTIFIER, t.getSy());
         assertEquals("Spix ", 1, t.getValue());
         assertEquals("Current char ", ';', sr.getCurrentChar());
     }
@@ -138,9 +138,9 @@ public class NameManagerTest {
         srKeywords.nextChar();
         nmKeywords.readName(t);
 
-        Symbol[] expTokens = {Symbol.PUTSY, Symbol.PUTLNSY, Symbol.UNITSY, Symbol.DOSY,
-            Symbol.DONESY, Symbol.IFSY, Symbol.ELSESY, Symbol.INTSY, Symbol.BOOLSY,
-            Symbol.CHARSY, Symbol.TRUESY, Symbol.FALSESY};
+        Symbol[] expTokens = {Symbol.PUT, Symbol.PUTLN, Symbol.UNIT, Symbol.DO,
+            Symbol.DONE, Symbol.IF, Symbol.ELSE, Symbol.INT, Symbol.BOOL,
+            Symbol.CHAR, Symbol.TRUE, Symbol.FALSE};
 
         for (Symbol s : expTokens) {
             assertEquals(s, t.getSy());

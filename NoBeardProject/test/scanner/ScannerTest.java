@@ -7,9 +7,7 @@ package scanner;
 import error.ErrorHandler;
 import scanner.Scanner.Symbol;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -23,14 +21,6 @@ public class ScannerTest {
     private Scanner scanner;
 
     public ScannerTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -63,7 +53,7 @@ public class ScannerTest {
         setupReaderAndErrorHandler("# This is a comment line \n if");
         scanner.nextToken();
 
-        assertTrue("IFSY expected", scanner.getCurrentToken().getSy() == Symbol.IFSY);
+        assertTrue("IFSY expected", scanner.getCurrentToken().getSy() == Symbol.IF);
     }
 
     @Test
@@ -73,34 +63,34 @@ public class ScannerTest {
         setupReaderAndErrorHandler("();=+-*/%,");
 
         scanner.nextToken();
-        assertTrue("LPARSY expected", scanner.getCurrentToken().getSy() == Symbol.LPARSY);
+        assertTrue("LPARSY expected", scanner.getCurrentToken().getSy() == Symbol.LPAR);
 
         scanner.nextToken();
-        assertTrue("RPARSY expected", scanner.getCurrentToken().getSy() == Symbol.RPARSY);
+        assertTrue("RPARSY expected", scanner.getCurrentToken().getSy() == Symbol.RPAR);
 
         scanner.nextToken();
-        assertTrue("SEMICOLON expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        assertTrue("SEMICOLON expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
 
         scanner.nextToken();
-        assertTrue("ASSIGNSY expected", scanner.getCurrentToken().getSy() == Symbol.ASSIGNSY);
+        assertTrue("ASSIGNSY expected", scanner.getCurrentToken().getSy() == Symbol.ASSIGN);
 
         scanner.nextToken();
-        assertTrue("PLUSSY expected", scanner.getCurrentToken().getSy() == Symbol.PLUSSY);
+        assertTrue("PLUSSY expected", scanner.getCurrentToken().getSy() == Symbol.PLUS);
 
         scanner.nextToken();
-        assertTrue("MINUSSY expected", scanner.getCurrentToken().getSy() == Symbol.MINUSSY);
+        assertTrue("MINUSSY expected", scanner.getCurrentToken().getSy() == Symbol.MINUS);
 
         scanner.nextToken();
-        assertTrue("TIMESSY expected", scanner.getCurrentToken().getSy() == Symbol.TIMESSY);
+        assertTrue("TIMESSY expected", scanner.getCurrentToken().getSy() == Symbol.TIMES);
 
         scanner.nextToken();
-        assertTrue("DIVSY expected", scanner.getCurrentToken().getSy() == Symbol.DIVSY);
+        assertTrue("DIVSY expected", scanner.getCurrentToken().getSy() == Symbol.DIV);
 
         scanner.nextToken();
-        assertTrue("MODSY expected", scanner.getCurrentToken().getSy() == Symbol.MODSY);
+        assertTrue("MODSY expected", scanner.getCurrentToken().getSy() == Symbol.MOD);
 
         scanner.nextToken();
-        assertTrue("COMMASY expected", scanner.getCurrentToken().getSy() == Symbol.COMMASY);
+        assertTrue("COMMASY expected", scanner.getCurrentToken().getSy() == Symbol.COMMA);
     }
 
     @Test
@@ -110,7 +100,7 @@ public class ScannerTest {
         setupReaderAndErrorHandler("42;");
         
         scanner.nextToken();
-        assertTrue("NUMBERSY expected", scanner.getCurrentToken().getSy() == Symbol.NUMBERSY);
+        assertTrue("NUMBERSY expected", scanner.getCurrentToken().getSy() == Symbol.NUMBER);
         assertEquals("Value", 42, scanner.getCurrentToken().getValue());
         assertEquals("Expected next char", ';', sourceReader.getCurrentChar());
     }
@@ -120,14 +110,14 @@ public class ScannerTest {
         setupReaderAndErrorHandler("aVar; anotherVar;");
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
         int spix1 = scanner.getCurrentToken().getValue();
         
         scanner.nextToken();
-        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
         int spix2 = scanner.getCurrentToken().getValue();
         
         assertTrue("Expected spix1 != spix2", spix1 != spix2);
@@ -141,21 +131,21 @@ public class ScannerTest {
         setupReaderAndErrorHandler("aVar; aVar2; aVar");
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
         int spix1 = scanner.getCurrentToken().getValue();
         
         scanner.nextToken();
-        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
         int spix2 = scanner.getCurrentToken().getValue();
 
         scanner.nextToken();
-         assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLONSY);
+         assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTSY);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
         int spix3 = scanner.getCurrentToken().getValue();
         
         assertEquals("Expected spix1 = spix2", spix1, spix3);
@@ -168,12 +158,12 @@ public class ScannerTest {
         
         setupReaderAndErrorHandler("'a string' \"another string\"");
         scanner.nextToken();
-        assertEquals("Sy ", Symbol.STRINGSY, scanner.getCurrentToken().getSy());
+        assertEquals("Sy ", Symbol.STRING, scanner.getCurrentToken().getSy());
         assertEquals("Start addr ", 0, scanner.getStringAddress());
         assertEquals("Length ", 8, scanner.getStringLength());
         
         scanner.nextToken();
-        assertEquals("Sy ", Symbol.STRINGSY, scanner.getCurrentToken().getSy());
+        assertEquals("Sy ", Symbol.STRING, scanner.getCurrentToken().getSy());
         assertEquals("Start addr ", 8, scanner.getStringAddress());
         assertEquals("Length ", 14, scanner.getStringLength());
     }
@@ -185,12 +175,12 @@ public class ScannerTest {
         setupReaderAndErrorHandler("unit foo; do put x; a < 0; a != 0; true; false; putln; done done foo;");
         
         Symbol[] expectedSymbols = {
-            Symbol.UNITSY, Symbol.IDENTSY, Symbol.SEMICOLONSY, Symbol.DOSY, Symbol.PUTSY,
-            Symbol.IDENTSY, Symbol.SEMICOLONSY, Symbol.IDENTSY, Symbol.LTHSY, Symbol.NUMBERSY,
-            Symbol.SEMICOLONSY, Symbol.IDENTSY, Symbol.NEQSY, Symbol.NUMBERSY, Symbol.SEMICOLONSY,
-            Symbol.TRUESY, Symbol.SEMICOLONSY, Symbol.FALSESY, Symbol.SEMICOLONSY,
-            Symbol.PUTLNSY, Symbol.SEMICOLONSY, Symbol.DONESY,
-            Symbol.DONESY, Symbol.IDENTSY, Symbol.SEMICOLONSY
+            Symbol.UNIT, Symbol.IDENTIFIER, Symbol.SEMICOLON, Symbol.DO, Symbol.PUT,
+            Symbol.IDENTIFIER, Symbol.SEMICOLON, Symbol.IDENTIFIER, Symbol.LTH, Symbol.NUMBER,
+            Symbol.SEMICOLON, Symbol.IDENTIFIER, Symbol.NEQ, Symbol.NUMBER, Symbol.SEMICOLON,
+            Symbol.TRUE, Symbol.SEMICOLON, Symbol.FALSE, Symbol.SEMICOLON,
+            Symbol.PUTLN, Symbol.SEMICOLON, Symbol.DONE,
+            Symbol.DONE, Symbol.IDENTIFIER, Symbol.SEMICOLON
         };
         
         for (Symbol sy : expectedSymbols) {

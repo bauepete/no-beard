@@ -47,12 +47,12 @@ public class VarDeclParser extends Parser {
         }
         // endcc
 
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKETSY) {
+        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
             scanner.nextToken();
             // sem
             int val = number();
             if (val == NONUMBER) {
-                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.NUMBERSY.toString()));
+                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.NUMBER.toString()));
                 return false;
             }
             // endsem
@@ -63,7 +63,7 @@ public class VarDeclParser extends Parser {
             }
             // endcc
 
-            if (!tokenIsA(Symbol.RBRACKETSY)) {
+            if (!tokenIsA(Symbol.RBRACKET)) {
                 return false;
             }
             sym.newVar(name, elemType, val);
@@ -74,7 +74,7 @@ public class VarDeclParser extends Parser {
         }
 
 
-        if (scanner.getCurrentToken().getSy() == Symbol.ASSIGNSY) {
+        if (scanner.getCurrentToken().getSy() == Symbol.ASSIGN) {
             // sem
             obj = sym.findObject(name);
             Operand destOp = obj.createOperand();
@@ -115,20 +115,20 @@ public class VarDeclParser extends Parser {
 
     private boolean simpleType() {
         switch (scanner.getCurrentToken().getSy()) {
-            case INTSY:
+            case INT:
                 elemType = ElementType.INT;
                 break;
 
-            case CHARSY:
+            case CHAR:
                 elemType = ElementType.CHAR;
                 break;
 
-            case BOOLSY:
+            case BOOL:
                 elemType = ElementType.BOOL;
                 break;
 
             default:
-                String[] sList = {Symbol.INTSY.toString(), Symbol.CHARSY.toString(), Symbol.BOOLSY.toString()};
+                String[] sList = {Symbol.INT.toString(), Symbol.CHAR.toString(), Symbol.BOOL.toString()};
                 getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }

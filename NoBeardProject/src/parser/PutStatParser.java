@@ -32,16 +32,16 @@ public class PutStatParser extends Parser {
         boolean isParsedCorrectly = false;
 
         switch (scanner.getCurrentToken().getSy()) {
-            case PUTSY:
+            case PUT:
                 isParsedCorrectly = put();
                 break;
 
-            case PUTLNSY:
+            case PUTLN:
                 isParsedCorrectly = putln();
                 break;
 
             default:
-                String[] sList = {Symbol.PUTLNSY.toString(), Symbol.PUTSY.toString()};
+                String[] sList = {Symbol.PUTLN.toString(), Symbol.PUT.toString()};
                 getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 break;
         }
@@ -49,11 +49,11 @@ public class PutStatParser extends Parser {
     }
 
     private boolean put() {
-        if (!tokenIsA(Symbol.PUTSY)) {
+        if (!tokenIsA(Symbol.PUT)) {
             return false;
         }
 
-        if (!tokenIsA(Symbol.LPARSY)) {
+        if (!tokenIsA(Symbol.LPAR)) {
             return false;
         }
 
@@ -86,7 +86,7 @@ public class PutStatParser extends Parser {
         // endsem
 
         switch (scanner.getCurrentToken().getSy()) {
-            case COMMASY:
+            case COMMA:
                 scanner.nextToken();
 
                 if (!exprP.parse()) {
@@ -104,10 +104,10 @@ public class PutStatParser extends Parser {
                 // sem
                 wOp.emitLoadVal(code);
                 // endsem
-                if (!tokenIsA(Symbol.RPARSY)) {
-                    getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.RPARSY.toString()));
+                if (!tokenIsA(Symbol.RPAR)) {
+                    getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.RPAR.toString()));
                     // TODO: Add raiseError() and getNameManager as private methods to Parser
-                    // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPARSY)));
+                    // raiseError(new SymbolExpected(getNameManager().getString(Symbol.RPAR)));
                     return false;
                 }
                 // sem
@@ -116,7 +116,7 @@ public class PutStatParser extends Parser {
 
                 break;
 
-            case RPARSY:
+            case RPAR:
                 // cc
                 if (op.getSize() == Operand.UNDEFSIZE) {
                     getErrorHandler().raise(new Error(ErrorType.OPERAND_KIND_EXPECTED, outputableOperands()));
@@ -142,7 +142,7 @@ public class PutStatParser extends Parser {
                 break;
 
             default:
-                String[] sList = {Symbol.COMMASY.toString(), Symbol.RPARSY.toString()};
+                String[] sList = {Symbol.COMMA.toString(), Symbol.RPAR.toString()};
                 getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
                 return false;
         }
@@ -150,7 +150,7 @@ public class PutStatParser extends Parser {
     }
 
     private boolean putln() {
-        if (!tokenIsA(Symbol.PUTLNSY)) {
+        if (!tokenIsA(Symbol.PUTLN)) {
             return false;
         }
         

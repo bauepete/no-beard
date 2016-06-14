@@ -80,6 +80,7 @@ public class NoBeardParserTest {
 
         assertFalse("False expected", parser.parse());
         assertEquals("Error count expected: ", 1, errorHandler.getCount());
+        assertEquals("unit expected but found identifier", errorHandler.getAllErrors().get(0).getMessage());
     }
 
     @Test

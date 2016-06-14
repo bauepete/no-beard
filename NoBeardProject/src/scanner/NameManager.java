@@ -32,18 +32,18 @@ public class NameManager {
     private HashMap<String, Integer> names;
     private static final HashMap<String, Scanner.Symbol> keywords =
             new HashMap<String, Scanner.Symbol>(){{
-                put("unit", Symbol.UNITSY);
-                put("do", Symbol.DOSY);
-                put("put", Symbol.PUTSY);
-                put("putln", Symbol.PUTLNSY);
-                put("if", Symbol.IFSY);
-                put("else", Symbol.ELSESY);
-                put("done", Symbol.DONESY);
-                put("int", Symbol.INTSY);
-                put("char", Symbol.CHARSY);
-                put("bool", Symbol.BOOLSY);
-                put("true", Symbol.TRUESY);
-                put("false", Symbol.FALSESY);
+                put("unit", Symbol.UNIT);
+                put("do", Symbol.DO);
+                put("put", Symbol.PUT);
+                put("putln", Symbol.PUTLN);
+                put("if", Symbol.IF);
+                put("else", Symbol.ELSE);
+                put("done", Symbol.DONE);
+                put("int", Symbol.INT);
+                put("char", Symbol.CHAR);
+                put("bool", Symbol.BOOL);
+                put("true", Symbol.TRUE);
+                put("false", Symbol.FALSE);
             }};
     
     public NameManager(SrcReader sr) {
@@ -53,14 +53,14 @@ public class NameManager {
 
     /**
      * Reads a name. readName() is called if and only if SrcReader.getCurrentChar()
-     * contains a letter. readName() scans the identifier starting with this letter,
-     * checks whether it is a keyword and returns the appropriate token. If the
-     * name read is a keyword, Token.sy is set to the corresponding Symbol.
-     * If the name read is an identifier, Token.sy is set to IDENTSY and
-     * Token.value is set to a unique identifier (spix).
-     * 
-     * After a call of readName SrcReader.getCurrentChar() returns the first
-     * character of the source code that is not part of the identifier.
+ contains a letter. readName() scans the identifier starting with this letter,
+ checks whether it is a keyword and returns the appropriate token. If the
+ name read is a keyword, Token.sy is set to the corresponding Symbol.
+ If the name read is an identifier, Token.sy is set to IDENTIFIER and
+ Token.value is set to a unique identifier (spix).
+ 
+ After a call of readName SrcReader.getCurrentChar() returns the first
+ character of the source code that is not part of the identifier.
 
      * @param t Token which corresponds to the name read.
      * @see Token
@@ -70,11 +70,11 @@ public class NameManager {
         String s = readString();
         Scanner.Symbol sy = getTokenType(s);
         t.setSy(sy);
-        if (sy == Scanner.Symbol.IDENTSY) {
+        if (sy == Scanner.Symbol.IDENTIFIER) {
 
             int spix = addName(s);
 
-            t.setSy(Scanner.Symbol.IDENTSY);
+            t.setSy(Scanner.Symbol.IDENTIFIER);
             t.setValue(spix);
         }
     }
@@ -107,13 +107,13 @@ public class NameManager {
     }
 
     // if s is found in keywords it returns the keyword symbol otherwise
-    // it returns IDENTSY
+    // it returns IDENTIFIER
     private Scanner.Symbol getTokenType(String s) {
         if (keywords.containsKey(s)) {
             return keywords.get(s);
         }
         else {
-            return Scanner.Symbol.IDENTSY;
+            return Scanner.Symbol.IDENTIFIER;
         }
     }
 

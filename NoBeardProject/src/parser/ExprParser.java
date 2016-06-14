@@ -103,23 +103,23 @@ public class ExprParser extends Parser {
     }
 
     private boolean tokenIsARelop(Token currentToken) {
-        return (currentToken.getSy() == Symbol.LTHSY
-                || currentToken.getSy() == Symbol.GTHSY
-                || currentToken.getSy() == Symbol.LEQSY
-                || currentToken.getSy() == Symbol.GEQSY
-                || currentToken.getSy() == Symbol.EQLSY
-                || currentToken.getSy() == Symbol.NEQSY);
+        return (currentToken.getSy() == Symbol.LTH
+                || currentToken.getSy() == Symbol.GTH
+                || currentToken.getSy() == Symbol.LEQ
+                || currentToken.getSy() == Symbol.GEQ
+                || currentToken.getSy() == Symbol.EQUALS
+                || currentToken.getSy() == Symbol.NEQ);
     }
     
     private boolean relOp() {
         HashMap<Scanner.Symbol, Integer> rop = 
                 new HashMap<Scanner.Symbol, Integer>(){{
-                    put(Symbol.LTHSY, 0);
-                    put(Symbol.LEQSY, 1);
-                    put(Symbol.EQLSY, 2);
-                    put(Symbol.NEQSY, 3);
-                    put(Symbol.GEQSY, 4);
-                    put(Symbol.GTHSY, 5);
+                    put(Symbol.LTH, 0);
+                    put(Symbol.LEQ, 1);
+                    put(Symbol.EQUALS, 2);
+                    put(Symbol.NEQ, 3);
+                    put(Symbol.GEQ, 4);
+                    put(Symbol.GTH, 5);
                 }};
         
         if (!rop.containsKey(scanner.getCurrentToken().getSy())) {

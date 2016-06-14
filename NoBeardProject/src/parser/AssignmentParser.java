@@ -33,8 +33,8 @@ public class AssignmentParser extends Parser {
         Operand destAddrOp = destOp.emitLoadAddr(code); 
         // endsem
         
-        if (!tokenIsA(Symbol.ASSIGNSY)) {
-            getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.ASSIGNSY.toString()));
+        if (!tokenIsA(Symbol.ASSIGN)) {
+            getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.ASSIGN.toString()));
             return false;
         }
         SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());

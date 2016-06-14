@@ -27,7 +27,7 @@ public class NoBeardParser extends Parser {
 
     @Override
     public boolean parse() {
-        if (!tokenIsA(Symbol.UNITSY)) {
+        if (!tokenIsA(Symbol.UNIT)) {
             return false;
         }
 
@@ -36,7 +36,7 @@ public class NoBeardParser extends Parser {
             return false;
         }
 
-        if (!tokenIsA(Symbol.SEMICOLONSY)) {
+        if (!tokenIsA(Symbol.SEMICOLON)) {
             return false;
         }
 
@@ -55,7 +55,7 @@ public class NoBeardParser extends Parser {
         if (name1 == NOIDENT) {
             return false;
         }
-        if (!tokenIsA(Symbol.SEMICOLONSY)) {
+        if (!tokenIsA(Symbol.SEMICOLON)) {
             return false;
         }
 

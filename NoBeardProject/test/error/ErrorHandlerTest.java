@@ -90,7 +90,7 @@ public class ErrorHandlerTest {
     @Test
     public void testGetLastError() {
         eh.raise(new Error(ErrorType.NAME_ALREADY_DEFINED, "Sepp"));
-        eh.raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLONSY.toString()));
+        eh.raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.SEMICOLON.toString()));
         eh.raise(new Error(ErrorType.IDENTIFIER_EXPECTED));
         assertEquals("Last error", 22, eh.getLastError().getNumber());
 

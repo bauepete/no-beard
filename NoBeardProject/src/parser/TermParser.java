@@ -45,7 +45,7 @@ public class TermParser extends Parser {
         op = factP.getOperand();
 
         while (tokenIsMulOp()) {
-            if (tokenIsA(Symbol.ANDSY)) {
+            if (tokenIsA(Symbol.AND)) {
                 // cc
                 if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
                     return false;
@@ -138,29 +138,29 @@ public class TermParser extends Parser {
 
     private boolean tokenIsMulOp() {
         Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.TIMESSY || sy == Symbol.DIVSY || sy == Symbol.MODSY || sy == Symbol.ANDSY);
+        return (sy == Symbol.TIMES || sy == Symbol.DIV || sy == Symbol.MOD || sy == Symbol.AND);
     }
 
     private boolean mulOp() {
         switch (scanner.getCurrentToken().getSy()) {
-            case TIMESSY:
+            case TIMES:
                 mulOperator = MulopType.TIMES;
                 scanner.nextToken();
                 break;
 
-            case DIVSY:
+            case DIV:
                 mulOperator = MulopType.DIV;
                 scanner.nextToken();
                 break;
 
-            case MODSY:
+            case MOD:
                 mulOperator = MulopType.MOD;
                 scanner.nextToken();
                 break;
 
             default:
                 String [] sList = {
-                    Symbol.TIMESSY.toString(), Symbol.DIVSY.toString(), Symbol.MODSY.toString()
+                    Symbol.TIMES.toString(), Symbol.DIV.toString(), Symbol.MOD.toString()
                 };
                 getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
                 return false;

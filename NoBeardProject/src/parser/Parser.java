@@ -53,7 +53,7 @@ public abstract class Parser {
      */
     protected boolean tokenIsA(Symbol sy) {
         if (scanner.getCurrentToken().getSy() != sy) {
-            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sy.toString()));
+            getErrorHandler().throwSymbolExpectedError(sy.toString(), scanner.getCurrentToken().getSy().toString());
             return false;
         }
         scanner.nextToken();
@@ -78,8 +78,8 @@ public abstract class Parser {
      * @return The name (spix) of the identifier.
      */
     protected int ident() {
-        if (scanner.getCurrentToken().getSy() != Symbol.IDENTSY) {
-            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.IDENTSY.toString()));
+        if (scanner.getCurrentToken().getSy() != Symbol.IDENTIFIER) {
+            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.IDENTIFIER.toString()));
 //            ErrorHandler.getInstance().raise(new SynErr().new IdentifierExpected());
             return NOIDENT;
         }
@@ -89,9 +89,9 @@ public abstract class Parser {
     }
 
     protected int number() {
-        if (scanner.getCurrentToken().getSy() != Symbol.NUMBERSY) {
-            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.NUMBERSY.toString()));
-//            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBERSY.toString()));
+        if (scanner.getCurrentToken().getSy() != Symbol.NUMBER) {
+            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.NUMBER.toString()));
+//            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBER.toString()));
             return NONUMBER;
         }
         int val = scanner.getCurrentToken().getValue();

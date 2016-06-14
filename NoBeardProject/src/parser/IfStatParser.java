@@ -25,7 +25,7 @@ public class IfStatParser extends Parser {
 
     @Override
     public boolean parse() {
-        if (!tokenIsA(Symbol.IFSY)) {
+        if (!tokenIsA(Symbol.IF)) {
             return false;
         }
         ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
@@ -54,8 +54,8 @@ public class IfStatParser extends Parser {
         sym.endBlock();
         // endsem
         
-        if (scanner.getCurrentToken().getSy() == Symbol.ELSESY) {
-            if (!tokenIsA(Symbol.ELSESY)) {
+        if (scanner.getCurrentToken().getSy() == Symbol.ELSE) {
+            if (!tokenIsA(Symbol.ELSE)) {
                 return false;
             }
             
