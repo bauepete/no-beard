@@ -4,7 +4,7 @@
  */
 package symlist;
 
-import nbm.Code;
+import nbm.CodeGenerator;
 
 /**
  *
@@ -16,19 +16,19 @@ public class UnitOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         // nothing to be done;
         return new IllegalOperand();
     }
 
     @Override
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         // nothing to be done;
         return super.emitAssign(toCode, destOp);
     }
 
     @Override
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         return new IllegalOperand();
     }
     

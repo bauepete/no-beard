@@ -9,7 +9,7 @@ import error.Error.ErrorType;
 import error.ErrorHandler;
 import java.util.LinkedList;
 import java.util.List;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -23,7 +23,7 @@ import symlist.SymListManager;
  */
 public class PutStatParser extends Parser {
 
-    public PutStatParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public PutStatParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

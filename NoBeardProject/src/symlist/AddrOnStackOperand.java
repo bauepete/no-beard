@@ -4,7 +4,7 @@
  */
 package symlist;
 
-import nbm.Code;
+import nbm.CodeGenerator;
 
 /**
  *
@@ -17,17 +17,17 @@ public class AddrOnStackOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

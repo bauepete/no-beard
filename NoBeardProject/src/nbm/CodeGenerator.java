@@ -8,12 +8,12 @@ package nbm;
  *
  * @author peter
  */
-public class Code {
+public class CodeGenerator {
     
     private final byte[] prog;
     private int pc;
     
-    public Code(int codeStorageSize) {
+    public CodeGenerator(int codeStorageSize) {
         prog = new byte[codeStorageSize];
     }
     

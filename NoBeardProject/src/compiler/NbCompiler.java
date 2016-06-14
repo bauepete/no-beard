@@ -5,7 +5,7 @@
 package compiler;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import parser.NoBeardParser;
 import scanner.Scanner;
 import scanner.SrcReader;
@@ -19,14 +19,14 @@ public class NbCompiler {
     private final  Scanner scanner;
     private final  NoBeardParser parser;
     private final  SymListManager sym;
-    private final  Code code;
+    private final  CodeGenerator code;
     private final ErrorHandler errorHandler;
     
     public NbCompiler(SrcReader srcReader) {
         
         errorHandler = new ErrorHandler(srcReader);
         scanner = new Scanner(srcReader, errorHandler);
-        code = new Code(nbm.Nbm.getMAXPROG());
+        code = new CodeGenerator(nbm.Nbm.getMAXPROG());
         sym = new SymListManager(code, scanner, errorHandler);
         Operand.setSymListManager(sym);
         Operand.setStringManager(scanner.getStringManager());
@@ -34,7 +34,7 @@ public class NbCompiler {
         scanner.nextToken();
     }
 
-    public Code getCode() {
+    public CodeGenerator getCode() {
         return code;
     }
 

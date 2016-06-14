@@ -5,7 +5,7 @@
 package symlist;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.StringManager;
 
 /**
@@ -103,7 +103,7 @@ public class Operand {
         return (stringManager.getCharAt(charAt));
     }
 
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION ||
                 getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
             errorHandler().raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Operand can't be loaded on stack"));
@@ -118,7 +118,7 @@ public class Operand {
         return this;
     }
 
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         if (getKind() != OperandKind.CONSTANT && getKind() != OperandKind.VARIABLE &&
                 getKind() != OperandKind.ARGUMENT && getKind() != OperandKind.ADDRONSTACK) {
             return null;
@@ -130,7 +130,7 @@ public class Operand {
         return this;
     }
 
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         if (destOp.getKind() != OperandKind.ADDRONSTACK) {
             errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: destination operand is not on stack"));
             return false;

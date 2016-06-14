@@ -9,7 +9,7 @@ import error.ErrorHandler;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nbm.Code;
+import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import symlist.SymListManager;
 public class NoBeardParserTest {
     
     private NbCompiler compiler;
-    private Code c;
+    private CodeGenerator c;
     private SymListManager sym;
     private Scanner s;
     private NoBeardParser parser;
@@ -39,7 +39,7 @@ public class NoBeardParserTest {
 
     @Before
     public void setUp() {
-        c = new Code(256);
+        c = new CodeGenerator(256);
     }
     
     @After

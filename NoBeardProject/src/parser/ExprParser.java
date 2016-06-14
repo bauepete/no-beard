@@ -6,7 +6,7 @@ package parser;
 
 import error.ErrorHandler;
 import java.util.HashMap;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -25,7 +25,7 @@ public class ExprParser extends Parser {
     private Operand op;
     private byte ror;
 
-    public ExprParser(Scanner scanner, SymListManager sym, Code code, ErrorHandler e) {
+    public ExprParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
 

@@ -4,7 +4,7 @@
  */
 package symlist;
 
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import symlist.Operand.OperandKind;
 import symlist.Operand.OperandType;
@@ -24,7 +24,7 @@ public class VariableOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         switch (type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -43,7 +43,7 @@ public class VariableOperand extends Operand {
     }
 
     @Override
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
@@ -62,7 +62,7 @@ public class VariableOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         toCode.emitOp(Opcode.LA);
         toCode.emitByte((byte) (getCurrLevel() - getLevel()));
         toCode.emitHalfWord(valaddr);

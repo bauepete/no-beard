@@ -7,7 +7,7 @@ package parser;
 import error.Error;
 import error.Error.ErrorType;
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
@@ -24,10 +24,10 @@ public abstract class Parser {
     protected final int NONUMBER = -1;
     protected Scanner scanner;
     protected SymListManager sym;
-    protected Code code;
+    protected CodeGenerator code;
     private final ErrorHandler errorHandler;
 
-    public Parser(Scanner s, SymListManager sym, Code c, ErrorHandler errorHandler) {
+    public Parser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler errorHandler) {
         this.scanner = s;
         this.sym = sym;
         this.code = c;

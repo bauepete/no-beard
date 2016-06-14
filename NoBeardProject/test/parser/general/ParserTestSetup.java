@@ -5,7 +5,7 @@
 package parser.general;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
@@ -19,7 +19,7 @@ import symlist.SymListManager;
 public class ParserTestSetup {
     protected static Scanner scanner;
     protected static SymListManager symListManager;
-    protected static Code code;
+    protected static CodeGenerator code;
     protected static ErrorHandler errorHandler;
     
     public static byte[] getByteCode() {
@@ -30,7 +30,7 @@ public class ParserTestSetup {
         SrcReader sourceReader = new SrcStringReader(srcLine);
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
-        code = new Code(256);
+        code = new CodeGenerator(256);
         symListManager = new SymListManager(code, scanner, errorHandler);
         scanner.nextToken();
         Operand.setSymListManager(symListManager);

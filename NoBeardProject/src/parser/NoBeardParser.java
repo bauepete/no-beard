@@ -6,7 +6,7 @@ package parser;
 
 import error.ErrorHandler;
 import nbm.Nbm;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.NameManager;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -19,7 +19,7 @@ import symlist.SymListManager;
  */
 public class NoBeardParser extends Parser {
 
-    public NoBeardParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public NoBeardParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

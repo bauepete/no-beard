@@ -5,7 +5,7 @@
 package symlist;
 
 import error.Error.ErrorType;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import symlist.Operand.OperandKind;
 import symlist.Operand.OperandType;
@@ -25,7 +25,7 @@ public class ConstantOperand extends Operand {
     }
     
     @Override
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         if (super.emitLoadVal(toCode) == null) {
             return new IllegalOperand();
         }
@@ -45,7 +45,7 @@ public class ConstantOperand extends Operand {
     }
 
     @Override
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         if (!super.emitAssign(toCode, destOp)) {
             return false;
         }
@@ -81,7 +81,7 @@ public class ConstantOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         if (super.emitLoadAddr(toCode) == null) {
             return new IllegalOperand();
         }

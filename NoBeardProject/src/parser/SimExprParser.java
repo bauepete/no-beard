@@ -6,7 +6,7 @@ package parser;
 
 import error.ErrorHandler;
 import error.Error;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -29,7 +29,7 @@ public class SimExprParser extends Parser {
     }
     AddopType addOperator = AddopType.NOADD;
 
-    public SimExprParser(Scanner s, SymListManager sym, Code c, ErrorHandler eh) {
+    public SimExprParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super(s, sym, c, eh);
     }
 

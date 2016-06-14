@@ -24,11 +24,12 @@
 package parser;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm;
 import scanner.Scanner;
 import scanner.SrcReader;
 import symlist.Operand;
+import symlist.SymListEntry;
 import symlist.SymListManager;
 
 /**
@@ -39,7 +40,7 @@ public class ParserFactory {
     private static SrcReader sourceReader;
     private static ErrorHandler errorHandler;
     private static Scanner scanner;
-    private static Code codeGenerator;
+    private static CodeGenerator codeGenerator;
     private static SymListManager symbolListManager;
     
     
@@ -49,7 +50,7 @@ public class ParserFactory {
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
         
-        ParserFactory.codeGenerator = new Code(Nbm.getMAXPROG());
+        ParserFactory.codeGenerator = new CodeGenerator(Nbm.getMAXPROG());
         ParserFactory.symbolListManager = new SymListManager(codeGenerator, scanner, errorHandler);
         
         Operand.setSymListManager(symbolListManager);
@@ -65,7 +66,7 @@ public class ParserFactory {
         return symbolListManager;
     }
 
-    public static Code getCodeGenerator() {
+    public static CodeGenerator getCodeGenerator() {
         return codeGenerator;
     }
 
@@ -75,5 +76,9 @@ public class ParserFactory {
     
     public static Parser createAssignmentParser() {
         return new AssignmentParser(scanner, symbolListManager, codeGenerator, errorHandler);
+    }
+    
+    public static Parser createBlockParser(SymListEntry block) {
+        return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
     }
 }

@@ -11,7 +11,7 @@ import symlist.Operand.OperandKind;
 import symlist.Operand.OperandType;
 import java.util.ListIterator;
 import java.util.Stack;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.NameManager;
 import scanner.Scanner;
 
@@ -33,11 +33,11 @@ public class SymListManager {
     private SymListEntry currBlock;
     private int currLevel;
     private int datAddr;
-    private final Code code;
+    private final CodeGenerator code;
     private final Scanner scanner;
     private final ErrorHandler errorHandler;
 
-    public SymListManager(Code code, Scanner scanner, ErrorHandler errorHandler) {
+    public SymListManager(CodeGenerator code, Scanner scanner, ErrorHandler errorHandler) {
         //symList = new HashMap<Integer, SymListEntry>();
         symListStack = new Stack<SymListEntry>();
         blockStack = new Stack<SymListEntry>();

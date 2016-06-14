@@ -11,7 +11,7 @@ import nbm.Nbm.Opcode;
 import error.ErrorHandler;
 import error.Error.ErrorType;
 import symlist.Operand.OperandType;
-import nbm.Code;
+import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import scanner.SrcReader;
  * @author peter
  */
 public class ConstantOperandTest {
-    private Code c;
+    private CodeGenerator c;
     private Scanner scanner;
     private ErrorHandler errorHandler;
     private final ConstantOperand intOp = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
@@ -49,7 +49,7 @@ public class ConstantOperandTest {
         SrcReader sourceReader = new SrcStringReader("unit A; do done A;");
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
-        c = new Code(256);
+        c = new CodeGenerator(256);
         Operand.setStringManager(scanner.getStringManager());
         Operand.setErrorHandler(errorHandler);
     }

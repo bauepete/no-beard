@@ -7,7 +7,7 @@ package parser;
 import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import symlist.Operand;
 import symlist.Operand.OperandKind;
@@ -22,7 +22,7 @@ public class ReferenceParser extends Parser {
 
     private Operand op;
 
-    public ReferenceParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public ReferenceParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

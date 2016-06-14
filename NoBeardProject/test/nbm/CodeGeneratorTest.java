@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
  *
  * @author peter
  */
-public class CodeTest {
+public class CodeGeneratorTest {
 
-    public CodeTest() {
+    public CodeGeneratorTest() {
     }
 
     @Before
@@ -29,12 +29,12 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitOp method, of class Code.
+     * Test of emitOp method, of class CodeGenerator.
      */
     @Test
     public void testEmitOp() {
         System.out.println("testEmitOp");
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Nbm.Opcode.ADD);
 
@@ -43,13 +43,13 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitByte method, of class Code.
+     * Test of emitByte method, of class CodeGenerator.
      */
     @Test
     public void testEmitByte() {
         System.out.println("emitByte");
         byte b = 1;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.PUT);
         instance.emitByte(b);
@@ -59,13 +59,13 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class Code.
+     * Test of emitHalfWord method, of class CodeGenerator.
      */
     @Test
     public void testEmitHalfWord() {
         System.out.println("emitHalfWord");
         int halfWord = 42;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -76,13 +76,13 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class Code.
+     * Test of emitHalfWord method, of class CodeGenerator.
      */
     @Test
     public void testEmitHalfWord255() {
         System.out.println("emitHalfWord255");
         int halfWord = 255;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -93,13 +93,13 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class Code.
+     * Test of emitHalfWord method, of class CodeGenerator.
      */
     @Test
     public void testEmitHalfWord256() {
         System.out.println("emitHalfWord256");
         int halfWord = 256;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -110,13 +110,13 @@ public class CodeTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class Code.
+     * Test of emitHalfWord method, of class CodeGenerator.
      */
     @Test
     public void testEmitHalfWord65535() {
         System.out.println("emitHalfWord65535");
         int halfWord = 65535;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -127,14 +127,14 @@ public class CodeTest {
     }
 
     /**
-     * Test of fixup method, of class Code.
+     * Test of fixup method, of class CodeGenerator.
      */
     @Test
     public void testFixup() {
         System.out.println("fixup");
         int atAddr = 0;
         int halfWord = 0;
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.INC);
         int fixupAddr = instance.getPc();
@@ -155,7 +155,7 @@ public class CodeTest {
     public void testGetByteCode() {
         System.out.println("getByteCode");
 
-        Code instance = new Code(256);
+        CodeGenerator instance = new CodeGenerator(256);
         byte[] expected = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 42,

@@ -6,7 +6,7 @@ package parser;
 
 import error.Error;
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
@@ -18,7 +18,7 @@ import symlist.SymListManager;
  */
 public class AssignmentParser extends Parser {
 
-    public AssignmentParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public AssignmentParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

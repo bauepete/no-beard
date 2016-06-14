@@ -6,7 +6,7 @@ package parser;
 
 import error.Error;
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.ConstantOperand;
@@ -21,7 +21,7 @@ public class FactParser extends Parser {
 
     private Operand op;
     
-    public FactParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public FactParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

@@ -5,7 +5,7 @@
 package parser.syntax;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,14 +31,14 @@ public class StatParserTest {
     private Scanner putS;
     private Scanner noPutS;
     private SymListManager sym;
-    private Code c;
+    private CodeGenerator c;
     
     public StatParserTest() {
     }
 
     @Before
     public void setUp() {
-        c = new Code(256);
+        c = new CodeGenerator(256);
     }
     
     @After

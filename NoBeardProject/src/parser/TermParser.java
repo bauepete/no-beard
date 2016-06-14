@@ -6,7 +6,7 @@ package parser;
 
 import error.ErrorHandler;
 import error.Error;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -28,7 +28,7 @@ public class TermParser extends Parser {
     private Operand op;
     private int andChain;
 
-    public TermParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

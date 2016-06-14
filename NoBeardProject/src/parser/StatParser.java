@@ -6,7 +6,7 @@ package parser;
 
 import error.ErrorHandler;
 import error.Error;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
@@ -19,7 +19,7 @@ import symlist.SymListManager;
  */
 public class StatParser extends Parser {
 
-    public StatParser(Scanner s, SymListManager sym, Code c, ErrorHandler e) {
+    public StatParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -19,7 +19,7 @@ import symlist.SymListManager;
  */
 public class IfStatParser extends Parser {
 
-    public IfStatParser(Scanner scanner, SymListManager sym, Code code, ErrorHandler e) {
+    public IfStatParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
 

@@ -10,7 +10,7 @@ import error.Error;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nbm.Code;
+import nbm.CodeGenerator;
 import symlist.Operand.OperandType;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,7 +32,7 @@ public class OperandTest {
     private final ValueOnStackOperand vosOp = new ValueOnStackOperand(OperandType.SIMPLEBOOL, 4, 0, 1);
     private final AddrOnStackOperand aosOp = new AddrOnStackOperand(cOp);
 
-    private Code c;
+    private CodeGenerator c;
     private ErrorHandler errorHandler;
     private Scanner scanner;
 
@@ -49,7 +49,7 @@ public class OperandTest {
 
     @Before
     public void setUp() {
-        c = new Code(256);
+        c = new CodeGenerator(256);
         SrcReader sourceReader = null;
         try {
             sourceReader = new SrcFileReader("SamplePrograms/Smallest.nb");

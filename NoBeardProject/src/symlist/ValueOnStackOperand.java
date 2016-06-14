@@ -5,7 +5,7 @@
 package symlist;
 
 import error.Error;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 
 /**
@@ -24,12 +24,12 @@ public class ValueOnStackOperand extends Operand {
     }
         
     @Override
-    public Operand emitLoadVal(Code toCode) {
+    public Operand emitLoadVal(CodeGenerator toCode) {
         return new ValueOnStackOperand(this);
     }
 
     @Override
-    public boolean emitAssign(Code toCode, Operand destOp) {
+    public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         if (!super.emitAssign(toCode, destOp)) {
             return false;
         }
@@ -52,7 +52,7 @@ public class ValueOnStackOperand extends Operand {
     }
 
     @Override
-    public Operand emitLoadAddr(Code toCode) {
+    public Operand emitLoadAddr(CodeGenerator toCode) {
         return new IllegalOperand();
     }
     

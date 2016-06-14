@@ -4,7 +4,7 @@
  */
 package parser.general;
 
-import nbm.Code;
+import nbm.CodeGenerator;
 import parser.PutStatParser;
 
 /**
@@ -13,7 +13,7 @@ import parser.PutStatParser;
  */
 public class PutStatParserTestSetup extends ParserTestSetup {
 
-    public static Code getCode() {
+    public static CodeGenerator getCode() {
         return code;
     }
     

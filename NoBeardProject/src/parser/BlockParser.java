@@ -5,7 +5,7 @@
 package parser;
 
 import error.ErrorHandler;
-import nbm.Code;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -20,7 +20,7 @@ public class BlockParser extends Parser {
 
     private final SymListEntry obj;
 
-    public BlockParser(Scanner scanner, SymListManager sym, Code code, SymListEntry obj, ErrorHandler e) {
+    public BlockParser(Scanner scanner, SymListManager sym, CodeGenerator code, SymListEntry obj, ErrorHandler e) {
         super(scanner, sym, code, e);
         this.obj = obj;
     }

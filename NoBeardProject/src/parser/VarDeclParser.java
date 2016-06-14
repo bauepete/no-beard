@@ -7,7 +7,7 @@ package parser;
 import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
-import nbm.Code;
+import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
@@ -24,7 +24,7 @@ public class VarDeclParser extends Parser {
 
     private ElementType elemType;
 
-    VarDeclParser(Scanner s, SymListManager sym, Code c, ErrorHandler eh) {
+    VarDeclParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super(s, sym, c, eh);
     }
 

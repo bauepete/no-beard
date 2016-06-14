@@ -83,7 +83,7 @@ public class NbmTest {
             boolean parseOk = p.parse();
             
             if (parseOk) {
-                Code c = comp.getCode();
+                CodeGenerator c = comp.getCode();
                 m.loadProg(0, c.getByteCode());
                 m.loadDat(0, comp.getStringStorage());
                 m.runProg(0);
@@ -107,7 +107,7 @@ public class NbmTest {
             boolean parseOk = p.parse();
             
             if (parseOk) {
-                Code c = comp.getCode();
+                CodeGenerator c = comp.getCode();
                 m.loadProg(0, c.getByteCode());
                 m.loadDat(0, comp.getStringStorage());
                 m.runProg(0);
@@ -131,7 +131,7 @@ public class NbmTest {
             boolean parseOk = p.parse();
             
             if (parseOk) {
-                Code c = comp.getCode();
+                CodeGenerator c = comp.getCode();
                 m.loadProg(0, c.getByteCode());
                 m.runProg(0);
                 assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
@@ -154,7 +154,7 @@ public class NbmTest {
             boolean parseOk = p.parse();
             
             if (parseOk) {
-                Code c = comp.getCode();
+                CodeGenerator c = comp.getCode();
                 m.loadProg(0, c.getByteCode());
                 m.loadDat(0, comp.getStringStorage());
                 m.runProg(0);
@@ -179,7 +179,7 @@ public class NbmTest {
             boolean parseOk = p.parse();
             
             if (parseOk) {
-                Code c = comp.getCode();
+                CodeGenerator c = comp.getCode();
                 m.loadProg(0, c.getByteCode());
                 m.loadDat(0, comp.getStringStorage());
                 m.runProg(0);
