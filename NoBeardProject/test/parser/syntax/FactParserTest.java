@@ -5,7 +5,7 @@
 package parser.syntax;
 
 import error.Error.ErrorType;
-import parser.FactParser;
+import parser.FactorParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,17 +31,17 @@ public class FactParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class FactParser.
+     * Test of parseOldStyle method, of class FactorParser.
      */
     @Test
     public void testParseIdentifier() {
-        FactParser p = FactParserTestSetup.getIdentifierTestSetup();
+        FactorParser p = FactParserTestSetup.getIdentifierTestSetup();
         assertTrue(p.parse());
     }
 
     @Test
     public void testParseNoFact() {
-        FactParser p = FactParserTestSetup.getNoFactSetup();
+        FactorParser p = FactParserTestSetup.getNoFactSetup();
 
         assertFalse(p.parse());
         assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
@@ -49,14 +49,14 @@ public class FactParserTest {
 
     @Test
     public void testParseNumber() {
-        FactParser p = FactParserTestSetup.getNumberTestSetup();
+        FactorParser p = FactParserTestSetup.getNumberTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testParseString() {
         System.out.append("testParseString");
-        FactParser p = FactParserTestSetup.getStringTestSetup();
+        FactorParser p = FactParserTestSetup.getStringTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
@@ -64,7 +64,7 @@ public class FactParserTest {
     @Ignore
     public void testParseExpr() {
         System.out.println("testParseExpr");
-        FactParser p = FactParserTestSetup.getExprSetup();
+        FactorParser p = FactParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 }

@@ -17,18 +17,18 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class FactParser extends Parser {
+public class FactorParser extends Parser {
 
     private Operand op;
     
     private int stringLength;
     private int stringAddress;
 
-    public FactParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
+    public FactorParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 
-    FactParser() {
+    FactorParser() {
 
     }
 

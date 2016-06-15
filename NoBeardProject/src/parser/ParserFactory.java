@@ -100,7 +100,7 @@ public class ParserFactory {
         return new ReferenceParser();
     }
 
-    public static FactParser createFactorParser() {
-        return new FactParser();
+    public static FactorParser createFactorParser() {
+        return new FactorParser();
     }
 }

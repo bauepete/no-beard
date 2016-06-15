@@ -4,7 +4,7 @@
  */
 package parser.general;
 
-import parser.FactParser;
+import parser.FactorParser;
 import parser.ParserFactory;
 import symlist.SymListManager;
 
@@ -14,29 +14,29 @@ import symlist.SymListManager;
  */
 public class FactParserTestSetup extends ParserTestSetup {
 
-    public static FactParser getIdentifierTestSetup() {
+    public static FactorParser getIdentifierTestSetup() {
         return setupTestObjectsAndParser("a25");
     }
 
-    private static FactParser setupTestObjectsAndParser(String srcLine) {
+    private static FactorParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructure(srcLine);
         fillSymList(SymListManager.ElementType.INT);
         return ParserFactory.createFactorParser();
     }
 
-    public static FactParser getNumberTestSetup() {
+    public static FactorParser getNumberTestSetup() {
         return setupTestObjectsAndParser("42");
     }
 
-    public static FactParser getStringTestSetup() {
+    public static FactorParser getStringTestSetup() {
         return setupTestObjectsAndParser("'blablu'");
     }
 
-    public static FactParser getExprSetup() {
+    public static FactorParser getExprSetup() {
         return setupTestObjectsAndParser("(a + b)");
     }
 
-    public static FactParser getNoFactSetup() {
+    public static FactorParser getNoFactSetup() {
         return setupTestObjectsAndParser("{");
     }
 }

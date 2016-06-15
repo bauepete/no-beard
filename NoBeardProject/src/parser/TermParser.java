@@ -43,7 +43,7 @@ public class TermParser extends Parser {
         andChain = 0;
         // endsem
 
-        FactParser factP = new FactParser(scanner, sym, code, getErrorHandler());
+        FactorParser factP = new FactorParser(scanner, sym, code, getErrorHandler());
         if (!factP.parseOldStyle()) {
             return false;
         }

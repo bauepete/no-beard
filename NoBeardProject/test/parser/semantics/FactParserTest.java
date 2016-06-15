@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.FactParser;
+import parser.FactorParser;
 import parser.general.FactParserTestSetup;
 import symlist.Operand.OperandKind;
 
@@ -41,13 +41,13 @@ public class FactParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class FactParser.
+     * Test of parseOldStyle method, of class FactorParser.
      */
     @Test
     public void testParseIdentifier() {
         System.out.println("testParseIdentifier");
 
-        FactParser p = FactParserTestSetup.getIdentifierTestSetup();
+        FactorParser p = FactParserTestSetup.getIdentifierTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VARIABLE, p.getOperand().getKind());
@@ -58,7 +58,7 @@ public class FactParserTest {
     public void testParseNumber() {
         System.out.println("testParseNumber");
 
-        FactParser p = FactParserTestSetup.getNumberTestSetup();
+        FactorParser p = FactParserTestSetup.getNumberTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
@@ -69,7 +69,7 @@ public class FactParserTest {
     public void testParseString() {
         System.err.append("testParseString");
 
-        FactParser p = FactParserTestSetup.getStringTestSetup();
+        FactorParser p = FactParserTestSetup.getStringTestSetup();
         
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
@@ -81,7 +81,7 @@ public class FactParserTest {
     public void testParseExpr() {
         System.err.append("testParseExpr");
         
-        FactParser p = FactParserTestSetup.getExprSetup();
+        FactorParser p = FactParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());
         assertEquals("Value ", 36, p.getOperand().getValaddr());
