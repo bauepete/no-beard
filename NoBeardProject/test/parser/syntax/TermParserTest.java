@@ -5,13 +5,11 @@
 package parser.syntax;
 
 import error.Error.ErrorType;
-import error.ErrorHandler;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.TermParser;
 import parser.general.TermParserTestSetup;
 
@@ -19,6 +17,7 @@ import parser.general.TermParserTestSetup;
  *
  * @author peter
  */
+@Ignore
 public class TermParserTest {
 
     public TermParserTest() {

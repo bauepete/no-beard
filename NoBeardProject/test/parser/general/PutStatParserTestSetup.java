@@ -34,7 +34,7 @@ public class PutStatParserTestSetup extends ParserTestSetup {
     }
     
     private static PutStatParser setupTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         return new PutStatParser(scanner, symListManager, code, errorHandler);
     }
 }

@@ -56,16 +56,8 @@ public class ReferenceParser extends Parser {
     public void parseSpecificPart() {
         parseSymbol(Symbol.IDENTIFIER);
         sem(() -> foundSymbolListEntry = sym.findObject(scanner.getCurrentToken().getValue()));
-        where(foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> errorHandler.throwOperandOfKindExpected("Variable or parameter"));
+        where(foundSymbolListEntry != null && foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));
         
         sem(() -> op = foundSymbolListEntry.createOperand());
-    }
-
-    private void parseSymbol(Symbol symbol) {
-        if (parsingWasSuccessfulUntilNow) {
-            parsingWasSuccessfulUntilNow = scanner.getCurrentToken().getSy() == symbol;
-            if (!parsingWasSuccessfulUntilNow)
-                errorHandler.throwSymbolExpectedError(symbol.toString(), scanner.getCurrentToken().getSy().toString());
-        }
     }
 }

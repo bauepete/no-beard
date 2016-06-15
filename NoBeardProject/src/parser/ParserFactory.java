@@ -58,6 +58,20 @@ public class ParserFactory {
         Operand.setStringManager(scanner.getStringManager());
     }
     
+    public static void setup(SrcReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymListManager symbolListManager) {
+        ParserFactory.sourceReader = sourceReader;
+        ParserFactory.errorHandler = errorHandler;
+        ParserFactory.scanner = scanner;
+        scanner.nextToken();
+        
+        ParserFactory.codeGenerator = codeGenerator;
+        ParserFactory.symbolListManager = symbolListManager;
+        
+        Operand.setSymListManager(symbolListManager);
+        Operand.setErrorHandler(errorHandler);
+        Operand.setStringManager(scanner.getStringManager());
+    }
+    
     static Scanner getScanner() {
         return scanner;
     }

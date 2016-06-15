@@ -89,6 +89,22 @@ public class FactParser extends Parser {
 
     @Override
     public void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (scanner.getCurrentToken().getSy()) {
+            case IDENTIFIER:
+                ReferenceParser p = ParserFactory.createReferenceParser();
+                parseSymbol(p);
+                break;
+                
+            case NUMBER:
+                parseSymbol(Symbol.NUMBER);
+                break;
+                
+            case STRING:
+                parseSymbol(Symbol.STRING);
+                break;
+                
+            default:
+                throwSymbolExpected("Identifier, number, true, false, not, or '('", scanner.getCurrentToken().getSy().toString());
+        }
     }
 }

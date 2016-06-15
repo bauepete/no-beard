@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -76,6 +77,7 @@ public class NbmTest {
     }
     
     @Test
+    @Ignore
     public void testAddInt() {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/AddInt.nb"));
@@ -100,6 +102,7 @@ public class NbmTest {
     }
 
     @Test
+    @Ignore
     public void testComplexExpr() {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/ComplexExpr.nb"));
@@ -124,6 +127,7 @@ public class NbmTest {
     }
     
     @Test
+    @Ignore
     public void testPutChar() {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
@@ -147,6 +151,7 @@ public class NbmTest {
     }
     
     @Test
+    @Ignore
     public void testHelloWorld() {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
@@ -171,6 +176,7 @@ public class NbmTest {
     }
     
     @Test
+    @Ignore
     public void testVariableWorld() {
         System.out.println("testVariableWorld");
         try {

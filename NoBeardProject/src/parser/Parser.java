@@ -46,14 +46,14 @@ public abstract class Parser {
             }
         }
     }
-    protected boolean parsingWasSuccessfulUntilNow;
+    private boolean parsingWasSuccessfulUntilNow;
 
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
     protected SymListManager sym;
     protected CodeGenerator code;
-    protected final ErrorHandler errorHandler;
+    private final ErrorHandler errorHandler;
 
     public Parser() {
         this.scanner = ParserFactory.getScanner();
@@ -94,11 +94,30 @@ public abstract class Parser {
         return parsingWasSuccessfulUntilNow;
     }
 
+    protected void parseSymbol(Symbol symbol) {
+        if (parsingWasSuccessfulUntilNow) {
+            parsingWasSuccessfulUntilNow = scanner.getCurrentToken().getSy() == symbol;
+            if (!parsingWasSuccessfulUntilNow) {
+                errorHandler.throwSymbolExpectedError(symbol.toString(), scanner.getCurrentToken().getSy().toString());
+            }
+        }
+    }
+
+    protected void parseSymbol(ReferenceParser p) {
+        parsingWasSuccessfulUntilNow = parsingWasSuccessfulUntilNow && p.parse();
+    }
+    
+    protected void throwSymbolExpected(String expected, String actual) {
+        errorHandler.throwSymbolExpectedError(expected, actual);
+        parsingWasSuccessfulUntilNow = false;
+    }
+
     /**
      * Checks whether the current token is a specific symbol.
      *
      * @param sy The symbol to be checked for.
      * @return true if current token is sy, false otherwise.
+     * @deprecated
      */
     protected boolean tokenIsA(Symbol sy) {
         if (scanner.getCurrentToken().getSy() != sy) {

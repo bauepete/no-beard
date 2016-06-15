@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import parser.ParserFactory;
 import parser.ReferenceParser;
+import parser.general.ReferenceParserTestSetup;
 import scanner.SrcStringReader;
 import symlist.Operand;
 import symlist.SymListManager;
@@ -57,26 +58,18 @@ public class ReferenceParserTest {
      */
     @Test
     public void testParseSimpleIdentifier() {
-        ParserFactory.setup(new SrcStringReader("x"));
-        ReferenceParser p = ParserFactory.createReferenceParser();
-        ParserFactory.getSymbolListManager().newUnit(1);
-        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
-        
+        ReferenceParser p = ReferenceParserTestSetup.getSimpleIdentifierTestSetup();
         assertTrue(p.parse());
         assertEquals(Operand.OperandKind.VARIABLE, p.getOperand().getKind());
     }
 
     @Test
     public void testParsingNonVariableFails() {
-        ParserFactory.setup(new SrcStringReader("x"));
-        ReferenceParser p = ParserFactory.createReferenceParser();
-        ParserFactory.getSymbolListManager().newUnit(0);
-
+        ReferenceParser p = ReferenceParserTestSetup.getNoVariableTestSetup();
         assertFalse(p.parse());
 
         error.Error e = ParserFactory.getErrorHandler().getAllErrors().get(0);
         assertEquals(error.Error.ErrorType.OPERAND_KIND_EXPECTED.getNumber(), e.getNumber());
-//        assertEquals("identifier expected but found number", e.getMessage());
     }
 
 }

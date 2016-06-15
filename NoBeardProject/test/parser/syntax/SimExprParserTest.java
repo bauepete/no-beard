@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.SimExprParser;
 import parser.general.SimExprParserTestSetup;
 
@@ -17,6 +18,7 @@ import parser.general.SimExprParserTestSetup;
  *
  * @author peter
  */
+@Ignore
 public class SimExprParserTest {
 
     public SimExprParserTest() {

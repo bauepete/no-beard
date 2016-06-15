@@ -18,7 +18,7 @@ public class ExprParserTestSetup extends ParserTestSetup {
     }
         
     private static ExprParser setupTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         fillSymList(SymListManager.ElementType.INT);
         return new ExprParser(scanner, symListManager, code, errorHandler);
     }

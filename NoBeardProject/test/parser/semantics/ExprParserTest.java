@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.ExprParser;
 import parser.general.ExprParserTestSetup;
 
@@ -43,6 +44,7 @@ public class ExprParserTest {
      * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
+    @Ignore
     public void testParseSimpleRel() {
         System.out.println("parseSimpleRel");
         byte[] expected = {
@@ -59,6 +61,7 @@ public class ExprParserTest {
      * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
+    @Ignore
     public void testParseAndRel() {
         System.out.println("parseAndRel");
         byte[] expected = {
@@ -81,6 +84,7 @@ public class ExprParserTest {
      * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
+    @Ignore
     public void testParseOrRel() {
         System.out.println("parseOrRel");
         byte[] expected = {
@@ -103,6 +107,7 @@ public class ExprParserTest {
      * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
+    @Ignore
     public void testParseAndOrRel() {
         System.out.println("parseAndOrRel");
         // ((a < b) && (b > 1)) || (a < 0)

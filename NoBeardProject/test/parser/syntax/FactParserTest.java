@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import parser.general.FactParserTestSetup;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -20,11 +21,11 @@ public class FactParserTest {
 
     public FactParserTest() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -34,38 +35,36 @@ public class FactParserTest {
      */
     @Test
     public void testParseIdentifier() {
-        System.out.println("testParseIdentifier");
         FactParser p = FactParserTestSetup.getIdentifierTestSetup();
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertTrue(p.parse());
     }
-    
+
+    @Test
+    public void testParseNoFact() {
+        FactParser p = FactParserTestSetup.getNoFactSetup();
+
+        assertFalse(p.parse());
+        assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
+    }
+
     @Test
     public void testParseNumber() {
-        System.out.println("testParseNumber");
         FactParser p = FactParserTestSetup.getNumberTestSetup();
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertEquals("Parse ", true, p.parse());
     }
-    
+
     @Test
     public void testParseString() {
         System.out.append("testParseString");
         FactParser p = FactParserTestSetup.getStringTestSetup();
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertEquals("Parse ", true, p.parse());
     }
-    
+
     @Test
+    @Ignore
     public void testParseExpr() {
         System.out.println("testParseExpr");
         FactParser p = FactParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
-    }
-    
-    @Test
-    public void testParseNoFact() {
-        System.out.println("testParseNoFact");
-        FactParser p = FactParserTestSetup.getNoFactSetup();
-        
-        assertEquals("Parse ", false, p.parseOldStyle());
-        assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
     }
 }

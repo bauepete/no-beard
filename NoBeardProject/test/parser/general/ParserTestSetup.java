@@ -6,6 +6,7 @@ package parser.general;
 
 import error.ErrorHandler;
 import nbm.CodeGenerator;
+import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
@@ -26,7 +27,21 @@ public class ParserTestSetup {
         return code.getByteCode();
     }
     
-    protected static void setupInfraStructure(String srcLine) {
+    protected static void setupInfraStructure(String sourceLine) {
+        SrcReader sourceReader = new SrcStringReader(sourceLine);
+        errorHandler = new ErrorHandler(sourceReader);
+        scanner = new Scanner(sourceReader, errorHandler);
+        code = new CodeGenerator(256);
+        symListManager = new SymListManager(code, scanner, errorHandler);
+        
+        ParserFactory.setup(sourceReader, errorHandler, scanner, code, symListManager);
+    }
+    
+    /**
+     * @deprecated 
+     * @param srcLine 
+     */
+    protected static void setupInfraStructureOld(String srcLine) {
         SrcReader sourceReader = new SrcStringReader(srcLine);
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);

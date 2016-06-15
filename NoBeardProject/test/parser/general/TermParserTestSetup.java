@@ -34,13 +34,13 @@ public class TermParserTestSetup extends ParserTestSetup {
     }
 
     private static TermParser setupTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
         return new TermParser(scanner, symListManager, code, errorHandler);
     }
 
     private static TermParser setupBoolTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         fillSymList(SymListManager.ElementType.BOOL);
         return new TermParser(scanner, symListManager, code, errorHandler);
     }

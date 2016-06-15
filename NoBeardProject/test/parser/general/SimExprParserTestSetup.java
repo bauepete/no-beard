@@ -46,13 +46,13 @@ public class SimExprParserTestSetup extends ParserTestSetup {
     }
 
     static private SimExprParser setupTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
         return new SimExprParser(scanner, symListManager, code, errorHandler);
     }
 
     static private SimExprParser setupBoolTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         fillSymList(SymListManager.ElementType.BOOL);
         return new SimExprParser(scanner, symListManager, code, errorHandler);
     }

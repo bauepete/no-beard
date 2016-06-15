@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.IfStatParser;
 import parser.general.IfStatParserTestSetup;
 
@@ -15,6 +16,7 @@ import parser.general.IfStatParserTestSetup;
  *
  * @author peter
  */
+@Ignore
 public class IfStatParserTest {
 
     public IfStatParserTest() {

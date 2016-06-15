@@ -5,10 +5,10 @@
 package parser.syntax;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.ExprParser;
 import parser.general.ExprParserTestSetup;
 
@@ -16,6 +16,7 @@ import parser.general.ExprParserTestSetup;
  *
  * @author peter
  */
+@Ignore
 public class ExprParserTest {
     
     public ExprParserTest() {

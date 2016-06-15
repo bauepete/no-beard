@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.NoBeardParser;
 import scanner.Scanner;
 import scanner.SrcFileReader;
@@ -25,6 +26,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
+@Ignore
 public class NoBeardParserTest {
     
     private NbCompiler compiler;

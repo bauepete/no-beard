@@ -22,7 +22,7 @@ public class IfStatParserTestSetup extends ParserTestSetup {
     }
     
     private static IfStatParser setupTestObjectsAndParser(String srcLine) {
-        setupInfraStructure(srcLine);
+        setupInfraStructureOld(srcLine);
         fillSymList(SymListManager.ElementType.INT);
         return new IfStatParser(scanner, symListManager, code, errorHandler);
     }

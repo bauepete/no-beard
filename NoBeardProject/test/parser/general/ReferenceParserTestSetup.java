@@ -21,50 +21,33 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser.syntax;
+package parser.general;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import parser.ParserFactory;
 import parser.ReferenceParser;
-import parser.general.ReferenceParserTestSetup;
-import scanner.SrcStringReader;
+import symlist.SymListManager;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class ReferenceParserTest {
-    
-    public ReferenceParserTest() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+public class ReferenceParserTestSetup extends ParserTestSetup {
 
-    /**
-     * Test parsing a simple identifier.
-     */
-    @Test
-    public void testParseSimpleIdentifier() {
-        ReferenceParser p = ReferenceParserTestSetup.getSimpleIdentifierTestSetup();
-        assertTrue(p.parse());
+    public static ReferenceParser getSimpleIdentifierTestSetup() {
+        setupInfraStructure("x");
+        ParserFactory.getSymbolListManager().newUnit(1);
+        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+        return ParserFactory.createReferenceParser();
     }
     
-    @Test
-    public void testParsingNumberFails() {
-        ReferenceParser p = ReferenceParserTestSetup.getNumberTestSetup();
-        assertFalse(p.parse());
-        
-        error.Error e = ParserFactory.getErrorHandler().getAllErrors().get(0);
-        assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), e.getNumber());
-        assertEquals("identifier expected but found number", e.getMessage());
-    }    
+    public static ReferenceParser getNoVariableTestSetup() {
+        setupInfraStructure("x");
+        ParserFactory.getSymbolListManager().newUnit(0);
+        return ParserFactory.createReferenceParser();
+    }
+    
+    public static ReferenceParser getNumberTestSetup() {
+        setupInfraStructure("3");
+        return ParserFactory.createReferenceParser();
+    }
 }
