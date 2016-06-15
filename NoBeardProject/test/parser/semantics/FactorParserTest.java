@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.FactorParser;
-import parser.general.FactParserTestSetup;
+import parser.general.FactorParserTestSetup;
 import symlist.Operand;
 import symlist.Operand.OperandKind;
 
@@ -20,9 +20,9 @@ import symlist.Operand.OperandKind;
  *
  * @author peter
  */
-public class FactParserTest {
+public class FactorParserTest {
 
-    public FactParserTest() {
+    public FactorParserTest() {
     }
 
     @Before
@@ -40,7 +40,7 @@ public class FactParserTest {
     public void testParseIdentifier() {
         System.out.println("testParseIdentifier");
 
-        FactorParser p = FactParserTestSetup.getIdentifierTestSetup();
+        FactorParser p = FactorParserTestSetup.getIdentifierTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VARIABLE, p.getOperand().getKind());
@@ -51,7 +51,7 @@ public class FactParserTest {
     public void testParseNumber() {
         System.out.println("testParseNumber");
 
-        FactorParser p = FactParserTestSetup.getNumberTestSetup();
+        FactorParser p = FactorParserTestSetup.getNumberTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
@@ -60,7 +60,7 @@ public class FactParserTest {
 
     @Test
     public void testSingleChar() {
-        FactorParser p = FactParserTestSetup.getSingleCharTestSetup();
+        FactorParser p = FactorParserTestSetup.getSingleCharTestSetup();
         
         assertTrue(p.parse());
         assertEquals(OperandKind.CONSTANT, p.getOperand().getKind());
@@ -71,7 +71,7 @@ public class FactParserTest {
     
     @Test
     public void testParseString() {
-        FactorParser p = FactParserTestSetup.getStringTestSetup();
+        FactorParser p = FactorParserTestSetup.getStringTestSetup();
         
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
@@ -83,7 +83,7 @@ public class FactParserTest {
     @Test
     @Ignore
     public void testParseExpr() {
-        FactorParser p = FactParserTestSetup.getExprSetup();
+        FactorParser p = FactorParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());
         assertEquals("Value ", 36, p.getOperand().getValaddr());

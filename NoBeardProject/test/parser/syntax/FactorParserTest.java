@@ -9,7 +9,7 @@ import parser.FactorParser;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import parser.general.FactParserTestSetup;
+import parser.general.FactorParserTestSetup;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 
@@ -17,9 +17,9 @@ import org.junit.Ignore;
  *
  * @author peter
  */
-public class FactParserTest {
+public class FactorParserTest {
 
-    public FactParserTest() {
+    public FactorParserTest() {
     }
 
     @Before
@@ -35,13 +35,13 @@ public class FactParserTest {
      */
     @Test
     public void testParseIdentifier() {
-        FactorParser p = FactParserTestSetup.getIdentifierTestSetup();
+        FactorParser p = FactorParserTestSetup.getIdentifierTestSetup();
         assertTrue(p.parse());
     }
 
     @Test
     public void testParseNoFact() {
-        FactorParser p = FactParserTestSetup.getNoFactSetup();
+        FactorParser p = FactorParserTestSetup.getNoFactSetup();
 
         assertFalse(p.parse());
         assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
@@ -49,14 +49,14 @@ public class FactParserTest {
 
     @Test
     public void testParseNumber() {
-        FactorParser p = FactParserTestSetup.getNumberTestSetup();
+        FactorParser p = FactorParserTestSetup.getNumberTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testParseString() {
         System.out.append("testParseString");
-        FactorParser p = FactParserTestSetup.getStringTestSetup();
+        FactorParser p = FactorParserTestSetup.getStringTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
@@ -64,7 +64,7 @@ public class FactParserTest {
     @Ignore
     public void testParseExpr() {
         System.out.println("testParseExpr");
-        FactorParser p = FactParserTestSetup.getExprSetup();
+        FactorParser p = FactorParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 }

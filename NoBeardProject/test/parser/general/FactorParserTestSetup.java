@@ -12,7 +12,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class FactParserTestSetup extends ParserTestSetup {
+public class FactorParserTestSetup extends ParserTestSetup {
 
     public static FactorParser getIdentifierTestSetup() {
         return setupTestObjectsAndParser("a25");
