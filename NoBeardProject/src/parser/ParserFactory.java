@@ -24,6 +24,8 @@
 package parser;
 
 import error.ErrorHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import nbm.CodeGenerator;
 import nbm.Nbm;
 import scanner.Scanner;
@@ -88,19 +90,23 @@ public class ParserFactory {
         return errorHandler;
     }
     
+    public static <T extends Parser> T create(Class c) {
+        T t = null;
+        try {
+            t = (T) c.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ParserFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+        }
+        return t;
+    }
+    
     public static Parser createAssignmentParser() {
         return new AssignmentParser(scanner, symbolListManager, codeGenerator, errorHandler);
     }
     
     public static Parser createBlockParser(SymListEntry block) {
         return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
-    }
-
-    public static ReferenceParser createReferenceParser() {
-        return new ReferenceParser();
-    }
-
-    public static FactorParser createFactorParser() {
-        return new FactorParser();
     }
 }

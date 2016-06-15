@@ -24,7 +24,7 @@ public class AssignmentParser extends Parser {
 
     @Override
     public boolean parseOldStyle() {
-        ReferenceParser refP = ParserFactory.createReferenceParser();//new ReferenceParser(scanner, sym, code, getErrorHandler());
+        ReferenceParser refP = ParserFactory.create(ReferenceParser.class);
         if (!refP.parseOldStyle()) {
             return false;
         }

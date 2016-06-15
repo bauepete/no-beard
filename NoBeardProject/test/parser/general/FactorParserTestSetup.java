@@ -21,7 +21,7 @@ public class FactorParserTestSetup extends ParserTestSetup {
     private static FactorParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructure(srcLine);
         fillSymList(SymListManager.ElementType.INT);
-        return ParserFactory.createFactorParser();
+        return ParserFactory.create(FactorParser.class);
     }
 
     public static FactorParser getNumberTestSetup() {

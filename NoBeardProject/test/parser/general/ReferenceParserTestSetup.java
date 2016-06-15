@@ -37,17 +37,17 @@ public class ReferenceParserTestSetup extends ParserTestSetup {
         setupInfraStructure("x");
         ParserFactory.getSymbolListManager().newUnit(1);
         ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
-        return ParserFactory.createReferenceParser();
+        return ParserFactory.create(ReferenceParser.class);
     }
     
     public static ReferenceParser getNoVariableTestSetup() {
         setupInfraStructure("x");
         ParserFactory.getSymbolListManager().newUnit(0);
-        return ParserFactory.createReferenceParser();
+        return ParserFactory.create(ReferenceParser.class);
     }
     
     public static ReferenceParser getNumberTestSetup() {
         setupInfraStructure("3");
-        return ParserFactory.createReferenceParser();
+        return ParserFactory.create(ReferenceParser.class);
     }
 }

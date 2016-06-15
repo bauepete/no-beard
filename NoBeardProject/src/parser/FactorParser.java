@@ -38,7 +38,7 @@ public class FactorParser extends Parser {
 
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
-                ReferenceParser refP = ParserFactory.createReferenceParser();
+                ReferenceParser refP = ParserFactory.create(ReferenceParser.class);
                 if (!refP.parseOldStyle()) {
                     return false;
                 }
@@ -97,7 +97,7 @@ public class FactorParser extends Parser {
     public void parseSpecificPart() {
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
-                ReferenceParser p = ParserFactory.createReferenceParser();
+                ReferenceParser p = ParserFactory.create(ReferenceParser.class);
                 parseSymbol(p);
                 sem(() -> op = p.getOperand());
                 break;
