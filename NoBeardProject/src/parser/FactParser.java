@@ -21,8 +21,15 @@ public class FactParser extends Parser {
 
     private Operand op;
     
+    private int stringLength;
+    private int stringAddress;
+
     public FactParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
+    }
+
+    FactParser() {
+
     }
 
     @Override
@@ -35,23 +42,22 @@ public class FactParser extends Parser {
                     return false;
                 }
                 op = refP.getOperand();
-                
+
                 break;
 
             case NUMBER:
-                int val = number();
+                int val = parseNumber();
                 // sem
                 op = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, val, 0);
                 // endsem
                 break;
-                
+
             case STRING:
                 // sem
                 Operand.OperandType opType;
                 if (scanner.getStringLength() == 1) {
                     opType = Operand.OperandType.SIMPLECHAR;
-                }
-                else {
+                } else {
                     opType = Operand.OperandType.ARRAYCHAR;
                 }
                 op = new ConstantOperand(opType, scanner.getStringLength(), scanner.getStringAddress(), 0);
@@ -61,7 +67,7 @@ public class FactParser extends Parser {
 
             case LPAR:
                 scanner.nextToken();
-                
+
                 ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
                 if (!exprP.parseOldStyle()) {
                     return false;
@@ -73,7 +79,6 @@ public class FactParser extends Parser {
                 }
                 break;
 
-
             default:
                 String[] sList = {Symbol.IDENTIFIER.toString(), Symbol.NUMBER.toString(), Symbol.LPAR.toString()};
                 getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
@@ -82,7 +87,7 @@ public class FactParser extends Parser {
 
         return true;
     }
-    
+
     public Operand getOperand() {
         return op;
     }
@@ -93,18 +98,31 @@ public class FactParser extends Parser {
             case IDENTIFIER:
                 ReferenceParser p = ParserFactory.createReferenceParser();
                 parseSymbol(p);
+                sem(() -> op = p.getOperand());
                 break;
-                
+
             case NUMBER:
-                parseSymbol(Symbol.NUMBER);
+                int val = parseNumber();
+                sem(() -> op = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, val, 0));
                 break;
-                
+
             case STRING:
                 parseSymbol(Symbol.STRING);
+                sem(() -> {
+                    Operand.OperandType operandType = stringLength == 1 ? Operand.OperandType.SIMPLECHAR : Operand.OperandType.ARRAYCHAR;
+                    op = new ConstantOperand(operandType, stringLength, stringAddress, 0);
+                });
+
                 break;
-                
+
             default:
                 throwSymbolExpected("Identifier, number, true, false, not, or '('", scanner.getCurrentToken().getSy().toString());
         }
+    }
+    
+    private void parseString() {
+        parseSymbol(Symbol.STRING);
+        stringLength = scanner.getStringLength();
+        stringAddress = scanner.getStringAddress();
     }
 }

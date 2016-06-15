@@ -158,7 +158,7 @@ public abstract class Parser {
         return spix;
     }
 
-    protected int number() {
+    protected int parseNumber() {
         if (scanner.getCurrentToken().getSy() != Symbol.NUMBER) {
             getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.NUMBER.toString()));
 //            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBER.toString()));

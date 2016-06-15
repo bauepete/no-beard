@@ -99,4 +99,8 @@ public class ParserFactory {
     public static ReferenceParser createReferenceParser() {
         return new ReferenceParser();
     }
+
+    public static FactParser createFactorParser() {
+        return new FactParser();
+    }
 }

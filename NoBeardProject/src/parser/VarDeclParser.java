@@ -50,7 +50,7 @@ public class VarDeclParser extends Parser {
         if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
             scanner.nextToken();
             // sem
-            int val = number();
+            int val = parseNumber();
             if (val == NONUMBER) {
                 getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.NUMBER.toString()));
                 return false;
