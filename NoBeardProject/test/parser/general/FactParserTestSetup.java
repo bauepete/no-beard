@@ -39,4 +39,8 @@ public class FactParserTestSetup extends ParserTestSetup {
     public static FactorParser getNoFactSetup() {
         return setupTestObjectsAndParser("{");
     }
+
+    public static FactorParser getSingleCharTestSetup() {
+        return setupTestObjectsAndParser("'c'");
+    }
 }

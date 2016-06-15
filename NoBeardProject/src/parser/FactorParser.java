@@ -37,7 +37,7 @@ public class FactorParser extends Parser {
 
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
-                ReferenceParser refP = ParserFactory.createReferenceParser(); // new ReferenceParser(scanner, sym, code, getErrorHandler());
+                ReferenceParser refP = ParserFactory.createReferenceParser();
                 if (!refP.parseOldStyle()) {
                     return false;
                 }
@@ -107,7 +107,7 @@ public class FactorParser extends Parser {
                 break;
 
             case STRING:
-                parseSymbol(Symbol.STRING);
+                parseString();
                 sem(() -> {
                     Operand.OperandType operandType = stringLength == 1 ? Operand.OperandType.SIMPLECHAR : Operand.OperandType.ARRAYCHAR;
                     op = new ConstantOperand(operandType, stringLength, stringAddress, 0);

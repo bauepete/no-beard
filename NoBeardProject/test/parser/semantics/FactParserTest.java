@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.FactorParser;
 import parser.general.FactParserTestSetup;
+import symlist.Operand;
 import symlist.Operand.OperandKind;
 
 /**
@@ -22,14 +23,6 @@ import symlist.Operand.OperandKind;
 public class FactParserTest {
 
     public FactParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -66,21 +59,30 @@ public class FactParserTest {
     }
 
     @Test
+    public void testSingleChar() {
+        FactorParser p = FactParserTestSetup.getSingleCharTestSetup();
+        
+        assertTrue(p.parse());
+        assertEquals(OperandKind.CONSTANT, p.getOperand().getKind());
+        assertEquals(Operand.OperandType.SIMPLECHAR, p.getOperand().getType());
+        assertEquals(0, p.getOperand().getValaddr());
+        assertEquals(1, p.getOperand().getSize());
+    }
+    
+    @Test
     public void testParseString() {
-        System.err.append("testParseString");
-
         FactorParser p = FactParserTestSetup.getStringTestSetup();
         
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
+        assertEquals(Operand.OperandType.ARRAYCHAR, p.getOperand().getType());
+        assertEquals(6, p.getOperand().getSize());
         assertEquals("Value ", 0, p.getOperand().getValaddr());
     }
     
     @Test
     @Ignore
     public void testParseExpr() {
-        System.err.append("testParseExpr");
-        
         FactorParser p = FactParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());
         assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());

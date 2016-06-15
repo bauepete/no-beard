@@ -32,9 +32,8 @@ import org.junit.Test;
 import parser.ParserFactory;
 import parser.ReferenceParser;
 import parser.general.ReferenceParserTestSetup;
-import scanner.SrcStringReader;
+import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.SymListManager;
 
 /**
  *
@@ -62,6 +61,13 @@ public class ReferenceParserTest {
         assertTrue(p.parse());
         assertEquals(Operand.OperandKind.VARIABLE, p.getOperand().getKind());
     }
+    
+    @Test
+    public void testScannerPosition() {
+        ReferenceParser p = ReferenceParserTestSetup.getSimpleIdentifierTestSetup();
+        p.parse();
+        assertEquals(Symbol.EOFSY, ReferenceParserTestSetup.getScanner().getCurrentToken().getSy());
+    }
 
     @Test
     public void testParsingNonVariableFails() {
@@ -71,5 +77,4 @@ public class ReferenceParserTest {
         error.Error e = ParserFactory.getErrorHandler().getAllErrors().get(0);
         assertEquals(error.Error.ErrorType.OPERAND_KIND_EXPECTED.getNumber(), e.getNumber());
     }
-
 }

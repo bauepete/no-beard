@@ -10,6 +10,7 @@ import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import scanner.Token;
 import symlist.Operand;
 import symlist.Operand.OperandType;
 import symlist.SymListManager;
@@ -48,6 +49,7 @@ public abstract class Parser {
     }
     private boolean parsingWasSuccessfulUntilNow;
 
+    protected Token lastParsedToken;
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
@@ -96,11 +98,13 @@ public abstract class Parser {
 
     protected void parseSymbol(Symbol symbol) {
         if (parsingWasSuccessfulUntilNow) {
-            parsingWasSuccessfulUntilNow = scanner.getCurrentToken().getSy() == symbol;
+            lastParsedToken = scanner.getCurrentToken();
+            parsingWasSuccessfulUntilNow = lastParsedToken.getSy() == symbol;
             if (!parsingWasSuccessfulUntilNow) {
-                errorHandler.throwSymbolExpectedError(symbol.toString(), scanner.getCurrentToken().getSy().toString());
+                errorHandler.throwSymbolExpectedError(symbol.toString(), lastParsedToken.getSy().toString());
             }
         }
+        scanner.nextToken();
     }
 
     protected void parseSymbol(ReferenceParser p) {
