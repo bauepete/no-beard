@@ -40,7 +40,7 @@ public class Scanner {
     private final SrcReader srcReader;
     private final NameManager nameManager;
     private final StringManager stringManager;
-    private final Token currentToken;
+    private Token currentToken;
     private final ErrorHandler errorHandler;
 
     public Scanner(SrcReader sr, ErrorHandler errorHandler) {
@@ -237,7 +237,11 @@ public class Scanner {
             case '"':
             case '\'':
                 stringManager.readString();
-                currentToken.setSy(Symbol.STRING);
+                StringToken st = new StringToken();
+                st.setSy(Symbol.STRING);
+                st.setAddress(stringManager.getStringAddress());
+                st.setLength(stringManager.getStringLength());
+                currentToken = st;
                 break;
 
             default:
@@ -253,23 +257,6 @@ public class Scanner {
      */
     public Token getCurrentToken() {
         return currentToken;
-    }
-
-    /**
-     * 
-     * @return The start address of the last recently detected string in the
-     * string list.
-     */
-    public int getStringAddress() {
-        return stringManager.getStringAddress();
-    }
-
-    /**
-     * 
-     * @return The length of the last recently detected string.
-     */
-    public int getStringLength() {
-        return stringManager.getStringLength();
     }
 
     // ---------------------- Private methods ------------------------------

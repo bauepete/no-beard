@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.PutStatParser;
 import parser.general.PutStatParserTestSetup;
 
@@ -53,6 +54,7 @@ public class PutStatParserTest {
      * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
+    @Ignore
     public void testParsePutChar() {
         System.out.println("testParsePutChar");
         
@@ -61,6 +63,7 @@ public class PutStatParserTest {
     }
     
     @Test
+    @Ignore
     public void testParsePutString() {
         System.out.println("testParsePutString");
         

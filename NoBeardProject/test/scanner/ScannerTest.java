@@ -158,14 +158,16 @@ public class ScannerTest {
         
         setupReaderAndErrorHandler("'a string' \"another string\"");
         scanner.nextToken();
-        assertEquals("Sy ", Symbol.STRING, scanner.getCurrentToken().getSy());
-        assertEquals("Start addr ", 0, scanner.getStringAddress());
-        assertEquals("Length ", 8, scanner.getStringLength());
+        StringToken st = (StringToken)scanner.getCurrentToken();
+        assertEquals("Sy ", Symbol.STRING, st.getSy());
+        assertEquals("Start addr ", 0, st.getAddress());
+        assertEquals("Length ", 8, st.getLength());
         
         scanner.nextToken();
-        assertEquals("Sy ", Symbol.STRING, scanner.getCurrentToken().getSy());
-        assertEquals("Start addr ", 8, scanner.getStringAddress());
-        assertEquals("Length ", 14, scanner.getStringLength());
+        st = (StringToken)scanner.getCurrentToken();
+        assertEquals("Sy ", Symbol.STRING, st.getSy());
+        assertEquals("Start addr ", 8, st.getAddress());
+        assertEquals("Length ", 14, st.getLength());
     }
     
     @Test

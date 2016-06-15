@@ -49,7 +49,7 @@ public abstract class Parser {
     }
     private boolean parsingWasSuccessfulUntilNow;
 
-    protected Token lastParsedToken;
+    private Token lastParsedToken;
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
@@ -110,7 +110,7 @@ public abstract class Parser {
     protected void parseSymbol(ReferenceParser p) {
         parsingWasSuccessfulUntilNow = parsingWasSuccessfulUntilNow && p.parse();
     }
-    
+
     protected void throwSymbolExpected(String expected, String actual) {
         errorHandler.throwSymbolExpectedError(expected, actual);
         parsingWasSuccessfulUntilNow = false;
@@ -135,6 +135,10 @@ public abstract class Parser {
 
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    protected Token getLastParsedToken() {
+        return lastParsedToken;
     }
 
     protected boolean operandIsA(Operand op, OperandType opType) {

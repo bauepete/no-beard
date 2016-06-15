@@ -9,6 +9,7 @@ import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import scanner.StringToken;
 import symlist.ConstantOperand;
 import symlist.Operand;
 import symlist.SymListManager;
@@ -55,12 +56,12 @@ public class FactorParser extends Parser {
             case STRING:
                 // sem
                 Operand.OperandType opType;
-                if (scanner.getStringLength() == 1) {
-                    opType = Operand.OperandType.SIMPLECHAR;
-                } else {
-                    opType = Operand.OperandType.ARRAYCHAR;
-                }
-                op = new ConstantOperand(opType, scanner.getStringLength(), scanner.getStringAddress(), 0);
+//                if (scanner.getStringLength() == 1) {
+//                    opType = Operand.OperandType.SIMPLECHAR;
+//                } else {
+//                    opType = Operand.OperandType.ARRAYCHAR;
+//                }
+//                op = new ConstantOperand(opType, scanner.getStringLength(), scanner.getStringAddress(), 0);
                 // endsem
                 scanner.nextToken();
                 break;
@@ -122,7 +123,8 @@ public class FactorParser extends Parser {
     
     private void parseString() {
         parseSymbol(Symbol.STRING);
-        stringLength = scanner.getStringLength();
-        stringAddress = scanner.getStringAddress();
+        StringToken st = (StringToken)getLastParsedToken();
+        stringLength = st.getLength();
+        stringAddress = st.getAddress();
     }
 }
