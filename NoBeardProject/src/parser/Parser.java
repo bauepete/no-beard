@@ -25,10 +25,21 @@ public abstract class Parser {
         public void doSemanticAction();
     }
     public void sem(SemanticAction semanticAction) {
-        if (parsingWasSuccessfullUntilNow)
+        if (parsingWasSuccessfulUntilNow)
             semanticAction.doSemanticAction();
     }
-    private boolean parsingWasSuccessfullUntilNow = true;
+    
+    @FunctionalInterface
+    protected interface ContextualConditionFailHandler {
+        public boolean handleErrorCase();
+    }
+    public void where(boolean conditionIsTrue, ContextualConditionFailHandler h) {
+        if (parsingWasSuccessfulUntilNow) {
+            if (!conditionIsTrue)
+                h.handleErrorCase();
+        }
+    }
+    private boolean parsingWasSuccessfulUntilNow = true;
     
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
@@ -44,8 +55,21 @@ public abstract class Parser {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * Does the parsing and returns whether this was successful or not
+     * @return true if parsing was successful, false otherwise.
+     */
     public abstract boolean parse();
 
+    /**
+     * 
+     * @return true if parse() was not called yet or parsing was successful,
+     * false otherwise.
+     */
+    public boolean parsingWasSuccessful() {
+        return parsingWasSuccessfulUntilNow;
+    }
+    
     /**
      * Checks whether the current token is a specific symbol.
      * @param sy The symbol to be checked for.
@@ -54,6 +78,7 @@ public abstract class Parser {
     protected boolean tokenIsA(Symbol sy) {
         if (scanner.getCurrentToken().getSy() != sy) {
             getErrorHandler().throwSymbolExpectedError(sy.toString(), scanner.getCurrentToken().getSy().toString());
+            parsingWasSuccessfulUntilNow = false;
             return false;
         }
         scanner.nextToken();

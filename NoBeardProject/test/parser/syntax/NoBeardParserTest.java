@@ -54,7 +54,9 @@ public class NoBeardParserTest {
         System.out.println("parse");
         
         setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
-        assertTrue("True expected", parser.parse());
+        boolean parsingSuccessful = parser.parse();
+        assertTrue("True expected", parsingSuccessful);
+        assertEquals(parsingSuccessful, parser.parsingWasSuccessful());
         
         setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
         assertTrue("True expected", parser.parse());
@@ -63,6 +65,15 @@ public class NoBeardParserTest {
         assertTrue("True expected", parser.parse());
     }
     
+    private void setupTest(SrcReader sr) {
+        compiler = new NbCompiler(sr);
+        errorHandler = compiler.getErrorHandler();
+        s = compiler.getScanner();
+        sym = compiler.getSymListManager();
+        c = compiler.getCode();
+        parser = compiler.getParser();
+    }
+
     @Test
     public void testParseEmpty() {
         System.out.println("parse");
@@ -78,7 +89,9 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unti foo; do put x; done foo;"));
 
-        assertFalse("False expected", parser.parse());
+        boolean parsingWasSuccessFul = parser.parse();
+        assertFalse("False expected", parsingWasSuccessFul);
+        assertEquals(parsingWasSuccessFul, parser.parsingWasSuccessful());
         assertEquals("Error count expected: ", 1, errorHandler.getCount());
         assertEquals("unit expected but found identifier", errorHandler.getAllErrors().get(0).getMessage());
     }
@@ -104,14 +117,5 @@ public class NoBeardParserTest {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    private void setupTest(SrcReader sr) {
-        compiler = new NbCompiler(sr);
-        errorHandler = compiler.getErrorHandler();
-        s = compiler.getScanner();
-        sym = compiler.getSymListManager();
-        c = compiler.getCode();
-        parser = compiler.getParser();
     }
 }
