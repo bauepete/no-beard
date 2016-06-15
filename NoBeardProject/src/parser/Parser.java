@@ -107,7 +107,7 @@ public abstract class Parser {
         scanner.nextToken();
     }
 
-    protected void parseSymbol(ReferenceParser p) {
+    protected void parseSymbol(Parser p) {
         parsingWasSuccessfulUntilNow = parsingWasSuccessfulUntilNow && p.parse();
     }
 

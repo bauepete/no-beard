@@ -4,6 +4,7 @@
  */
 package parser.general;
 
+import parser.ParserFactory;
 import parser.TermParser;
 import symlist.SymListManager;
 
@@ -14,15 +15,15 @@ import symlist.SymListManager;
 public class TermParserTestSetup extends ParserTestSetup {
 
     public static TermParser getMulTermSetup() {
-        return setupTestObjects("a * b * c");
+        return setupTestObjectsAndParser("a * b * c");
     }
     
     public static TermParser getDivTermSetup() {
-        return setupTestObjects("1 / 2 / a");
+        return setupTestObjectsAndParser("1 / 2 / a");
     }
     
     public static TermParser getModTermSetup() {
-        return setupTestObjects("10 % b % c");
+        return setupTestObjectsAndParser("10 % b % c");
     }
     
     public static TermParser getAndTermSetup() {
@@ -30,17 +31,17 @@ public class TermParserTestSetup extends ParserTestSetup {
     }
 
     public static TermParser getNoTermSetup() {
-        return setupTestObjects("-b");
+        return setupTestObjectsAndParser("-b");
     }
 
-    private static TermParser setupTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
+    private static TermParser setupTestObjectsAndParser(String srcLine) {
+        setupInfraStructure(srcLine);
         ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
-        return new TermParser(scanner, symListManager, code, errorHandler);
+        return ParserFactory.create(TermParser.class);
     }
 
     private static TermParser setupBoolTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
+        setupInfraStructure(srcLine);
         fillSymList(SymListManager.ElementType.BOOL);
         return new TermParser(scanner, symListManager, code, errorHandler);
     }

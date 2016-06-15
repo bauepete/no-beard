@@ -20,11 +20,6 @@ import symlist.SymListManager;
  */
 public class TermParser extends Parser {
 
-    @Override
-    public void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     private enum MulopType {
 
         NOMUL, TIMES, DIV, MOD
@@ -35,6 +30,51 @@ public class TermParser extends Parser {
 
     public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
+    }
+
+    public TermParser() {
+
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        FactorParser factorParser = ParserFactory.create(FactorParser.class);
+        parseSymbol(factorParser);
+        sem(() -> op = factorParser.getOperand());
+
+        while (currentTokenIsAMulOp()) {
+            parseMulOp();
+            parseSymbol(factorParser);
+        }
+    }
+
+    private boolean currentTokenIsAMulOp() {
+        Symbol sy = scanner.getCurrentToken().getSy();
+        return (sy == Symbol.TIMES || sy == Symbol.DIV || sy == Symbol.MOD || sy == Symbol.AND);
+    }
+
+    private boolean parseMulOp() {
+        switch (scanner.getCurrentToken().getSy()) {
+            case TIMES:
+                mulOperator = MulopType.TIMES;
+                scanner.nextToken();
+                break;
+
+            case DIV:
+                mulOperator = MulopType.DIV;
+                scanner.nextToken();
+                break;
+
+            case MOD:
+                mulOperator = MulopType.MOD;
+                scanner.nextToken();
+                break;
+                
+            case AND:
+                scanner.nextToken();
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -49,7 +89,7 @@ public class TermParser extends Parser {
         }
         op = factP.getOperand();
 
-        while (tokenIsMulOp()) {
+        while (currentTokenIsAMulOp()) {
             if (tokenIsA(Symbol.AND)) {
                 // cc
                 if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
@@ -79,7 +119,7 @@ public class TermParser extends Parser {
                 op = op2.emitLoadVal(code);
                 // ensem
             } else {
-                if (!mulOp()) {
+                if (!parseMulOp()) {
                     return false;
                 }
 
@@ -139,37 +179,5 @@ public class TermParser extends Parser {
 
     public Operand getOperand() {
         return op;
-    }
-
-    private boolean tokenIsMulOp() {
-        Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.TIMES || sy == Symbol.DIV || sy == Symbol.MOD || sy == Symbol.AND);
-    }
-
-    private boolean mulOp() {
-        switch (scanner.getCurrentToken().getSy()) {
-            case TIMES:
-                mulOperator = MulopType.TIMES;
-                scanner.nextToken();
-                break;
-
-            case DIV:
-                mulOperator = MulopType.DIV;
-                scanner.nextToken();
-                break;
-
-            case MOD:
-                mulOperator = MulopType.MOD;
-                scanner.nextToken();
-                break;
-
-            default:
-                String [] sList = {
-                    Symbol.TIMES.toString(), Symbol.DIV.toString(), Symbol.MOD.toString()
-                };
-                getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, sList));
-                return false;
-        }
-        return true;
     }
 }

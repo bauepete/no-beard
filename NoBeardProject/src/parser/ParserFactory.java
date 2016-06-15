@@ -95,7 +95,7 @@ public class ParserFactory {
         try {
             t = (T) c.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ParserFactory.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ParserFactory.class.getName()).log(Level.SEVERE, "ParserFactory: Was not able to instantiate parser", ex);
         }
         finally {
         }
