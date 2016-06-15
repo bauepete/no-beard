@@ -45,10 +45,6 @@ public class ErrorHandler {
         System.err.println();
     }
 
-    public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
-        raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
-    }
-    
     public void raise(Error e) {
         e.setLineNumber(sourceCodeInfo.getCurrentLine());
         errorCounts[e.getErrorClass().ordinal()]++;
@@ -64,5 +60,13 @@ public class ErrorHandler {
     
     public Error getLastError() {
         return lastError;
+    }
+
+     public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
+        raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
+    }
+    
+   public void throwOperandOfKindExpected(String toString) {
+        raise(new Error(Error.ErrorType.OPERAND_KIND_EXPECTED, toString));
     }
 }

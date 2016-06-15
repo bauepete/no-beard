@@ -24,7 +24,7 @@ public class AssignmentParser extends Parser {
 
     @Override
     public boolean parseOldStyle() {
-        ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
+        ReferenceParser refP = ParserFactory.createReferenceParser();//new ReferenceParser(scanner, sym, code, getErrorHandler());
         if (!refP.parseOldStyle()) {
             return false;
         }
@@ -55,5 +55,10 @@ public class AssignmentParser extends Parser {
         srcOp.emitAssign(code, destAddrOp);
         // endsem
         return true;
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

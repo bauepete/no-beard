@@ -70,7 +70,7 @@ public class ParserFactory {
         return codeGenerator;
     }
 
-    static ErrorHandler getErrorHandler() {
+    public static ErrorHandler getErrorHandler() {
         return errorHandler;
     }
     
@@ -80,5 +80,9 @@ public class ParserFactory {
     
     public static Parser createBlockParser(SymListEntry block) {
         return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
+    }
+
+    public static ReferenceParser createReferenceParser() {
+        return new ReferenceParser();
     }
 }

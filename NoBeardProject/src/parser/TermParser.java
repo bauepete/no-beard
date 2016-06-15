@@ -20,6 +20,11 @@ import symlist.SymListManager;
  */
 public class TermParser extends Parser {
 
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private enum MulopType {
 
         NOMUL, TIMES, DIV, MOD

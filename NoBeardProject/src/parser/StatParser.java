@@ -87,4 +87,9 @@ public class StatParser extends Parser {
 
         return (opType == OperandType.SIMPLECHAR || opType == OperandType.SIMPLEINT);
     }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

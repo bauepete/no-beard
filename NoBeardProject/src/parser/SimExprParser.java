@@ -23,6 +23,11 @@ public class SimExprParser extends Parser {
     private Operand op;
     private int orChain;
 
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private enum AddopType {
 
         NOADD, PLUS, MINUS

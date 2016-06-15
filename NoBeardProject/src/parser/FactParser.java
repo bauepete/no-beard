@@ -30,7 +30,7 @@ public class FactParser extends Parser {
 
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
-                ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
+                ReferenceParser refP = ParserFactory.createReferenceParser(); // new ReferenceParser(scanner, sym, code, getErrorHandler());
                 if (!refP.parseOldStyle()) {
                     return false;
                 }
@@ -85,5 +85,10 @@ public class FactParser extends Parser {
     
     public Operand getOperand() {
         return op;
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

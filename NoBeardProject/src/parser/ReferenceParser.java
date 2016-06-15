@@ -4,15 +4,12 @@
  */
 package parser;
 
-import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
-import nbm.CodeGenerator;
-import scanner.Scanner;
+import scanner.Scanner.Symbol;
 import symlist.Operand;
 import symlist.Operand.OperandKind;
 import symlist.SymListEntry;
-import symlist.SymListManager;
 
 /**
  *
@@ -20,11 +17,8 @@ import symlist.SymListManager;
  */
 public class ReferenceParser extends Parser {
 
+    private SymListEntry foundSymbolListEntry;
     private Operand op;
-
-    public ReferenceParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
-        super(s, sym, c, e);
-    }
 
     @Override
     public boolean parseOldStyle() {
@@ -56,5 +50,22 @@ public class ReferenceParser extends Parser {
 
     public Operand getOperand() {
         return op;
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        parseSymbol(Symbol.IDENTIFIER);
+        sem(() -> foundSymbolListEntry = sym.findObject(scanner.getCurrentToken().getValue()));
+        where(foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> errorHandler.throwOperandOfKindExpected("Variable or parameter"));
+        
+        sem(() -> op = foundSymbolListEntry.createOperand());
+    }
+
+    private void parseSymbol(Symbol symbol) {
+        if (parsingWasSuccessfulUntilNow) {
+            parsingWasSuccessfulUntilNow = scanner.getCurrentToken().getSy() == symbol;
+            if (!parsingWasSuccessfulUntilNow)
+                errorHandler.throwSymbolExpectedError(symbol.toString(), scanner.getCurrentToken().getSy().toString());
+        }
     }
 }

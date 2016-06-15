@@ -78,4 +78,9 @@ public class IfStatParser extends Parser {
         code.fixup(jumpAddr, code.getPc());
         return true;
     }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

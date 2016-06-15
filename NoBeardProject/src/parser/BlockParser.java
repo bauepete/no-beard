@@ -69,4 +69,9 @@ public class BlockParser extends Parser {
     private boolean isNamedBlock() {
         return (obj.isNamedBlockEntry());
     }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

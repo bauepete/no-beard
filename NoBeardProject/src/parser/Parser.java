@@ -22,31 +22,45 @@ public abstract class Parser {
 
     @FunctionalInterface
     protected interface SemanticAction {
+
         public void doSemanticAction();
     }
+
     public void sem(SemanticAction semanticAction) {
-        if (parsingWasSuccessfulUntilNow)
-            semanticAction.doSemanticAction();
-    }
-    
-    @FunctionalInterface
-    protected interface ContextualConditionFailHandler {
-        public boolean handleErrorCase();
-    }
-    public void where(boolean conditionIsTrue, ContextualConditionFailHandler h) {
         if (parsingWasSuccessfulUntilNow) {
-            if (!conditionIsTrue)
-                h.handleErrorCase();
+            semanticAction.doSemanticAction();
         }
     }
-    private boolean parsingWasSuccessfulUntilNow = true;
-    
+
+    @FunctionalInterface
+    protected interface ContextualConditionFailHandler {
+
+        public void handleErrorCase();
+    }
+
+    public void where(boolean conditionIsTrue, ContextualConditionFailHandler h) {
+        if (parsingWasSuccessfulUntilNow) {
+            if (!conditionIsTrue) {
+                h.handleErrorCase();
+                parsingWasSuccessfulUntilNow = false;
+            }
+        }
+    }
+    protected boolean parsingWasSuccessfulUntilNow;
+
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
     protected SymListManager sym;
     protected CodeGenerator code;
-    private final ErrorHandler errorHandler;
+    protected final ErrorHandler errorHandler;
+
+    public Parser() {
+        this.scanner = ParserFactory.getScanner();
+        this.sym = ParserFactory.getSymbolListManager();
+        this.code = ParserFactory.getCodeGenerator();
+        this.errorHandler = ParserFactory.getErrorHandler();
+    }
 
     public Parser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler errorHandler) {
         this.scanner = s;
@@ -57,21 +71,32 @@ public abstract class Parser {
 
     /**
      * Does the parsing and returns whether this was successful or not
+     *
      * @return true if parsing was successful, false otherwise.
+     * @deprecated
      */
     public abstract boolean parseOldStyle();
 
+    public abstract void parseSpecificPart();
+
+    public final boolean parse() {
+        parsingWasSuccessfulUntilNow = true;
+        parseSpecificPart();
+        return parsingWasSuccessfulUntilNow;
+    }
+
     /**
-     * 
-     * @return true if parseOldStyle() was not called yet or parsing was successful,
- false otherwise.
+     *
+     * @return true if parseOldStyle() was not called yet or parsing was
+     * successful, false otherwise.
      */
     public boolean parsingWasSuccessful() {
         return parsingWasSuccessfulUntilNow;
     }
-    
+
     /**
      * Checks whether the current token is a specific symbol.
+     *
      * @param sy The symbol to be checked for.
      * @return true if current token is sy, false otherwise.
      */
@@ -84,7 +109,7 @@ public abstract class Parser {
         scanner.nextToken();
         return true;
     }
-    
+
     public ErrorHandler getErrorHandler() {
         return errorHandler;
     }
@@ -100,6 +125,7 @@ public abstract class Parser {
 
     /**
      * Checks whether the current token is an identifier.
+     *
      * @return The name (spix) of the identifier.
      */
     protected int ident() {

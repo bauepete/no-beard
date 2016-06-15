@@ -74,4 +74,9 @@ public class NoBeardParser extends Parser {
         BlockParser blockP = new BlockParser(scanner, sym, code, obj, getErrorHandler());
         return blockP.parseOldStyle();
     }
+
+    @Override
+    public void parseSpecificPart() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
