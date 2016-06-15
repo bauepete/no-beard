@@ -26,7 +26,7 @@ public class NoBeardParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         if (!tokenIsA(Symbol.UNIT)) {
             return false;
         }
@@ -72,6 +72,6 @@ public class NoBeardParser extends Parser {
 
     private boolean block(SymListEntry obj) {
         BlockParser blockP = new BlockParser(scanner, sym, code, obj, getErrorHandler());
-        return blockP.parse();
+        return blockP.parseOldStyle();
     }
 }

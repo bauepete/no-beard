@@ -40,7 +40,7 @@ public class IfStatParserTest {
     }
     
     /**
-     * Test of parse method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfStatParser.
      */
     @Test
     public void testSimpleIf() {
@@ -57,12 +57,12 @@ public class IfStatParserTest {
         };
         
         IfStatParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
-        assertTrue(instance.parse());
+        assertTrue(instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parse method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfStatParser.
      */
     @Test
     public void testIfElse() {
@@ -83,7 +83,7 @@ public class IfStatParserTest {
             Opcode.PUT.byteCode(), 1,       // put simple char
         };
         IfStatParser instance = IfStatParserTestSetup.getIfElseTestSetup();
-        assertTrue(instance.parse());
+        assertTrue(instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
 }

@@ -39,25 +39,25 @@ public class PutStatParserTest {
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutInt() {
         System.out.println("testParsePutInt");
         
         PutStatParser p = PutStatParserTestSetup.getPutIntSetup();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutChar() {
         System.out.println("testParsePutChar");
         
         PutStatParser p = PutStatParserTestSetup.getPutCharSetup();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
     
     @Test
@@ -65,17 +65,17 @@ public class PutStatParserTest {
         System.out.println("testParsePutString");
         
         PutStatParser p = PutStatParserTestSetup.getPutStringSetup();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
     
     
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutln() {
         System.out.println("testParsePutln");
         PutStatParser p = PutStatParserTestSetup.getPutlnSetup();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 }

@@ -27,7 +27,7 @@ public class ReferenceParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         int name = ident();
         if (name == NOIDENT) {
             return false;

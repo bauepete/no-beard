@@ -34,7 +34,7 @@ public class SimExprParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
 
         // sem
         orChain = 0;
@@ -47,7 +47,7 @@ public class SimExprParser extends Parser {
         }
 
         TermParser termP = new TermParser(scanner, sym, code, getErrorHandler());
-        if (!termP.parse()) {
+        if (!termP.parseOldStyle()) {
             return false;
         }
         Operand op1 = termP.getOperand();
@@ -83,7 +83,7 @@ public class SimExprParser extends Parser {
                 orChain = code.getPc() - 2;
                 // endsem
                 
-                if (!termP.parse()) {
+                if (!termP.parseOldStyle()) {
                     return false;
                 }
                 
@@ -112,7 +112,7 @@ public class SimExprParser extends Parser {
                 // endsem
 
 
-                if (!termP.parse()) {
+                if (!termP.parseOldStyle()) {
                     return false;
                 }
                 Operand op2 = termP.getOperand();

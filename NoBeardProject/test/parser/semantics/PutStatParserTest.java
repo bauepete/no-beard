@@ -40,7 +40,7 @@ public class PutStatParserTest {
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutInt() {
@@ -53,13 +53,13 @@ public class PutStatParserTest {
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutIntSetup();
-        assertTrue("Parse: ", instance.parse());
+        assertTrue("Parse: ", instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutChar() {
@@ -72,13 +72,13 @@ public class PutStatParserTest {
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutCharSetup();
-        assertTrue("Parse: ", instance.parse());
+        assertTrue("Parse: ", instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutString() {
@@ -92,13 +92,13 @@ public class PutStatParserTest {
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutStringSetup();
-        assertTrue("Parse: ", instance.parse());
+        assertTrue("Parse: ", instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
 
     /**
-     * Test of parse method, of class PutStatParser.
+     * Test of parseOldStyle method, of class PutStatParser.
      */
     @Test
     public void testParsePutln() {
@@ -109,7 +109,7 @@ public class PutStatParserTest {
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutlnSetup();
-        assertTrue("Parse: ", instance.parse());
+        assertTrue("Parse: ", instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }

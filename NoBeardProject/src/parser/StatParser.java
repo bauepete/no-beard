@@ -24,14 +24,14 @@ public class StatParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
         switch (scanner.getCurrentToken().getSy()) {
             case INT:
             case BOOL:
             case CHAR:
                 VarDeclParser varDeclP = new VarDeclParser(scanner, sym, code, getErrorHandler());
-                if (!varDeclP.parse()) {
+                if (!varDeclP.parseOldStyle()) {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLON)) {
@@ -42,7 +42,7 @@ public class StatParser extends Parser {
                 
             case IDENTIFIER:
                 AssignmentParser assignP = new AssignmentParser(scanner, sym, code, getErrorHandler());
-                if (!assignP.parse()) {
+                if (!assignP.parseOldStyle()) {
                     return false;
                 }
 
@@ -56,7 +56,7 @@ public class StatParser extends Parser {
             case PUT:
             case PUTLN:
                 PutStatParser putStatP = new PutStatParser(scanner, sym, code, getErrorHandler());
-                if (!putStatP.parse()) {
+                if (!putStatP.parseOldStyle()) {
                     return false;
                 }
                 if (!tokenIsA(Symbol.SEMICOLON)) {
@@ -67,7 +67,7 @@ public class StatParser extends Parser {
                 
             case IF:
                 IfStatParser ifStatP = new IfStatParser(scanner, sym, code, getErrorHandler());
-                if (!ifStatP.parse()) {
+                if (!ifStatP.parseOldStyle()) {
                     return false;
                 }
 

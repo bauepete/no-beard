@@ -24,12 +24,12 @@ public class IfStatParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         if (!tokenIsA(Symbol.IF)) {
             return false;
         }
         ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
-        if (!exprP.parse()) {
+        if (!exprP.parseOldStyle()) {
             return false;
         }
         Operand op = exprP.getOperand();
@@ -47,7 +47,7 @@ public class IfStatParser extends Parser {
         // endsem
         
         BlockParser blockP = new BlockParser(scanner, sym, code, sym.getCurrBlock(), getErrorHandler());
-        if (!blockP.parse()) {
+        if (!blockP.parseOldStyle()) {
             return false;
         }
         // sem
@@ -68,7 +68,7 @@ public class IfStatParser extends Parser {
             sym.newBlock();
             // endsem
             
-            if (!blockP.parse()) {
+            if (!blockP.parseOldStyle()) {
                 return false;
             }
             

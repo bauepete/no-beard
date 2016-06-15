@@ -33,27 +33,27 @@ public class TermParserTest {
     }
 
     /**
-     * Test of parse method, of class TermParser.
+     * Test of parseOldStyle method, of class TermParser.
      */
     @Test
     public void testParseMul() {
         System.out.println("testParseMul");
         TermParser p = TermParserTestSetup.getMulTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
     }
     
     @Test
     public void testParseDiv() {
         System.out.println("testParseDiv");
         TermParser p = TermParserTestSetup.getDivTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
     }
     
     @Test
     public void testParseMod() {
         System.out.println("testParseMod");
         TermParser p = TermParserTestSetup.getModTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
     }
     
   
@@ -62,14 +62,14 @@ public class TermParserTest {
         System.out.println("testParseAndTerm");
         TermParser p = TermParserTestSetup.getAndTermSetup();
         
-        assertTrue("Parse ", p.parse());
+        assertTrue("Parse ", p.parseOldStyle());
     }
     
     @Test
     public void testParseNoTerm() {
         System.out.println("testParseNoTerm");
         TermParser p = TermParserTestSetup.getNoTermSetup();
-        assertEquals("Parse", false, p.parse());
+        assertEquals("Parse", false, p.parseOldStyle());
         assertEquals("Last error", ErrorType.SYMBOL_EXPECTED.getNumber(), p.getErrorHandler().getLastError().getNumber());
     }
 }

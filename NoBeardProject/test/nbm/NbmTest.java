@@ -80,7 +80,7 @@ public class NbmTest {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/AddInt.nb"));
             NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parse();
+            boolean parseOk = p.parseOldStyle();
             
             if (parseOk) {
                 CodeGenerator c = comp.getCode();
@@ -104,7 +104,7 @@ public class NbmTest {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/ComplexExpr.nb"));
             NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parse();
+            boolean parseOk = p.parseOldStyle();
             
             if (parseOk) {
                 CodeGenerator c = comp.getCode();
@@ -128,7 +128,7 @@ public class NbmTest {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
             NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parse();
+            boolean parseOk = p.parseOldStyle();
             
             if (parseOk) {
                 CodeGenerator c = comp.getCode();
@@ -151,7 +151,7 @@ public class NbmTest {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
             NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parse();
+            boolean parseOk = p.parseOldStyle();
             
             if (parseOk) {
                 CodeGenerator c = comp.getCode();
@@ -176,7 +176,7 @@ public class NbmTest {
         try {
             NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
             NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parse();
+            boolean parseOk = p.parseOldStyle();
             
             if (parseOk) {
                 CodeGenerator c = comp.getCode();

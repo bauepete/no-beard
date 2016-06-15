@@ -26,12 +26,12 @@ public class FactParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
 
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
                 ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
-                if (!refP.parse()) {
+                if (!refP.parseOldStyle()) {
                     return false;
                 }
                 op = refP.getOperand();
@@ -63,7 +63,7 @@ public class FactParser extends Parser {
                 scanner.nextToken();
                 
                 ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
-                if (!exprP.parse()) {
+                if (!exprP.parseOldStyle()) {
                     return false;
                 }
                 op = exprP.getOperand();

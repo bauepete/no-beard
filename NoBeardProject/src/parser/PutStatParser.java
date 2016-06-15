@@ -28,7 +28,7 @@ public class PutStatParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         boolean isParsedCorrectly = false;
 
         switch (scanner.getCurrentToken().getSy()) {
@@ -58,7 +58,7 @@ public class PutStatParser extends Parser {
         }
 
         ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
-        if (!exprP.parse()) {
+        if (!exprP.parseOldStyle()) {
             return false;
         }
 
@@ -89,7 +89,7 @@ public class PutStatParser extends Parser {
             case COMMA:
                 scanner.nextToken();
 
-                if (!exprP.parse()) {
+                if (!exprP.parseOldStyle()) {
                     return false;
                 }
                 // sem

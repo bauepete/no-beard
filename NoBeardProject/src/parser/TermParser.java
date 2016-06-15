@@ -33,13 +33,13 @@ public class TermParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         // sem
         andChain = 0;
         // endsem
 
         FactParser factP = new FactParser(scanner, sym, code, getErrorHandler());
-        if (!factP.parse()) {
+        if (!factP.parseOldStyle()) {
             return false;
         }
         op = factP.getOperand();
@@ -59,7 +59,7 @@ public class TermParser extends Parser {
                 andChain = code.getPc() - 2;
                 // endsem
 
-                if (!factP.parse()) {
+                if (!factP.parseOldStyle()) {
                     return false;
                 }
                 Operand op2 = factP.getOperand();
@@ -88,7 +88,7 @@ public class TermParser extends Parser {
                 // sem
                 op.emitLoadVal(code);
                 // endsem
-                if (!factP.parse()) {
+                if (!factP.parseOldStyle()) {
                     return false;
                 }
 

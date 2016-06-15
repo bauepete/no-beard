@@ -46,7 +46,7 @@ public class StatParserTest {
     }
 
     /**
-     * Test of parse method, of class StatParser.
+     * Test of parseOldStyle method, of class StatParser.
      */
     @Test
     public void testParseAssignStat() {
@@ -59,7 +59,7 @@ public class StatParserTest {
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         
     }
     
@@ -70,7 +70,7 @@ public class StatParserTest {
     }
 
     /**
-     * Test of parse method, of class StatParser.
+     * Test of parseOldStyle method, of class StatParser.
      */
     @Test
     public void testParsePutStat() {
@@ -79,12 +79,12 @@ public class StatParserTest {
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         
     }
 
     /**
-     * Test of parse method, of class StatParser.
+     * Test of parseOldStyle method, of class StatParser.
      */
     @Test
     public void testParseSimplePutStat() {
@@ -93,11 +93,11 @@ public class StatParserTest {
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         
     }
     /**
-     * Test of parse method, of class StatParser.
+     * Test of parseOldStyle method, of class StatParser.
      */
     @Test
     public void testParseNoAssignStat() {
@@ -110,11 +110,11 @@ public class StatParserTest {
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);
-        assertEquals("Parse ", false, p.parse());
+        assertEquals("Parse ", false, p.parseOldStyle());
         
     }
     /**
-     * Test of parse method, of class StatParser.
+     * Test of parseOldStyle method, of class StatParser.
      */
     @Test
     public void testParseNoPutStat() {
@@ -123,7 +123,7 @@ public class StatParserTest {
         scanner.nextToken();
         
         StatParser p = new StatParser(scanner, sym, c, errorHandler);
-        assertEquals("Parse ", false, p.parse());
+        assertEquals("Parse ", false, p.parseOldStyle());
         
     }
 }

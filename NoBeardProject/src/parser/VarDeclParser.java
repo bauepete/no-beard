@@ -29,7 +29,7 @@ public class VarDeclParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
 
         if (!type()) {
             return false;
@@ -82,7 +82,7 @@ public class VarDeclParser extends Parser {
             // endsem
             scanner.nextToken();
             SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
-            if (!exprP.parse()) {
+            if (!exprP.parseOldStyle()) {
                 return false;
             }
             // sem

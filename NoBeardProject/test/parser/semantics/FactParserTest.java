@@ -40,7 +40,7 @@ public class FactParserTest {
     }
 
     /**
-     * Test of parse method, of class FactParser.
+     * Test of parseOldStyle method, of class FactParser.
      */
     @Test
     public void testParseIdentifier() {
@@ -48,7 +48,7 @@ public class FactParserTest {
 
         FactParser p = FactParserTestSetup.getIdentifierTestSetup();
 
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         assertEquals("Operand ", OperandKind.VARIABLE, p.getOperand().getKind());
         assertEquals("Value ", 32, p.getOperand().getValaddr());
     }
@@ -59,7 +59,7 @@ public class FactParserTest {
 
         FactParser p = FactParserTestSetup.getNumberTestSetup();
 
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
         assertEquals("Value ", 42, p.getOperand().getValaddr());
     }
@@ -70,7 +70,7 @@ public class FactParserTest {
 
         FactParser p = FactParserTestSetup.getStringTestSetup();
         
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
         assertEquals("Value ", 0, p.getOperand().getValaddr());
     }
@@ -80,7 +80,7 @@ public class FactParserTest {
         System.err.append("testParseExpr");
         
         FactParser p = FactParserTestSetup.getExprSetup();
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());
         assertEquals("Value ", 36, p.getOperand().getValaddr());
     }   

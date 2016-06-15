@@ -56,7 +56,7 @@ public class NoBeardParserTest {
     }
 
     /**
-     * Test of parse method, of class NoBeardParser.
+     * Test of parseOldStyle method, of class NoBeardParser.
      */
     @Test
     public void testBlockIdentMismatch() {
@@ -65,7 +65,7 @@ public class NoBeardParserTest {
         setupTest(new SrcStringReader("unit foo; do put (x); done fox;"));
 
         ErrorHandler eh = comp.getErrorHandler();
-        assertFalse("False expected", p.parse());
+        assertFalse("False expected", p.parseOldStyle());
         assertEquals("Sem err count", 1, eh.getCount(error.Error.ErrorClass.SEMANTICAL));
         assertEquals("Last error", error.Error.ErrorType.OPERAND_KIND_EXPECTED.getNumber(), eh.getLastError().getNumber());
     }
@@ -82,7 +82,7 @@ public class NoBeardParserTest {
         setupTest(new SrcStringReader("unit foo; do done foo;"));
 
 
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", p.parseOldStyle());
         assertCodeEquals("Code ", expected, code.getByteCode());
     }
 
@@ -99,7 +99,7 @@ public class NoBeardParserTest {
         };
         setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
 
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", p.parseOldStyle());
         assertCodeEquals("Code ", expected1, code.getByteCode());
 
         byte[] expected2 = {
@@ -115,7 +115,7 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
 
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", p.parseOldStyle());
         assertCodeEquals("Code ", expected2, code.getByteCode());
 
         byte[] expected3 = {
@@ -137,7 +137,7 @@ public class NoBeardParserTest {
         setupTest(new SrcStringReader("unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;"));
 
 
-        assertTrue("True expected", p.parse());
+        assertTrue("True expected", p.parseOldStyle());
         assertCodeEquals("Code ", expected3, code.getByteCode());
     }
 
@@ -156,7 +156,7 @@ public class NoBeardParserTest {
             Opcode.HALT.byteCode()
         };
         setupTest(new SrcStringReader("unit foo; do char x = \"x\"; put(x); done foo;"));
-        assertEquals("Parse: ", true, p.parse());
+        assertEquals("Parse: ", true, p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
     }
 
@@ -177,7 +177,7 @@ public class NoBeardParserTest {
         try {
             setupTest(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
             
-            assertEquals("Parse: ", true, p.parse());
+            assertEquals("Parse: ", true, p.parseOldStyle());
             AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
             
         } catch (FileNotFoundException ex) {
@@ -209,7 +209,7 @@ public class NoBeardParserTest {
         try {
             setupTest(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
             
-            assertEquals("Parse: ", true, p.parse());
+            assertEquals("Parse: ", true, p.parseOldStyle());
             AssemblerCodeChecker.assertCodeEquals("Code ", expected, code.getByteCode());
             
         } catch (FileNotFoundException ex) {

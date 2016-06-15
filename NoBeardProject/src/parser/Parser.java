@@ -59,12 +59,12 @@ public abstract class Parser {
      * Does the parsing and returns whether this was successful or not
      * @return true if parsing was successful, false otherwise.
      */
-    public abstract boolean parse();
+    public abstract boolean parseOldStyle();
 
     /**
      * 
-     * @return true if parse() was not called yet or parsing was successful,
-     * false otherwise.
+     * @return true if parseOldStyle() was not called yet or parsing was successful,
+ false otherwise.
      */
     public boolean parsingWasSuccessful() {
         return parsingWasSuccessfulUntilNow;

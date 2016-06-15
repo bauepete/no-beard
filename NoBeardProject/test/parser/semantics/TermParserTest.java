@@ -40,7 +40,7 @@ public class TermParserTest {
     }
 
     /**
-     * Test of parse method, of class TermParser.
+     * Test of parseOldStyle method, of class TermParser.
      */
     @Test
     public void testParseMul() {
@@ -54,12 +54,12 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getMulTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parse method, of class TermParser.
+     * Test of parseOldStyle method, of class TermParser.
      */
     @Test
     public void testParseDiv() {
@@ -74,12 +74,12 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getDivTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
     
     /**
-     * Test of parse method, of class TermParser.
+     * Test of parseOldStyle method, of class TermParser.
      */
     @Test
     public void testParseMod() {
@@ -94,7 +94,7 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getModTermSetup();
-        assertEquals("Parse", true, p.parse());
+        assertEquals("Parse", true, p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
     
@@ -117,7 +117,7 @@ public class TermParserTest {
         };
         
         TermParser p = TermParserTestSetup.getAndTermSetup();
-        assertTrue("Parse", p.parse());
+        assertTrue("Parse", p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getByteCode());
     }
 }

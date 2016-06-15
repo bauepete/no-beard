@@ -30,42 +30,42 @@ public class ExprParserTest {
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseSimpleRel() {
         System.out.println("parseSimpleRel");
         ExprParser p = ExprParserTestSetup.getSimpleRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseAndRel() {
         System.out.println("parseAndRel");
         ExprParser p = ExprParserTestSetup.getAndRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseOrRel() {
         System.out.println("parseOrRel");
         ExprParser p = ExprParserTestSetup.getOrRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseAndOrRel() {
         System.out.println("parseAndOrRel");
         ExprParser p = ExprParserTestSetup.getAndOrRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
     }
 }

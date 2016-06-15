@@ -40,7 +40,7 @@ public class ExprParserTest {
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseSimpleRel() {
@@ -51,12 +51,12 @@ public class ExprParserTest {
             Opcode.REL.byteCode(), 0
         };
         ExprParser p = ExprParserTestSetup.getSimpleRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseAndRel() {
@@ -73,12 +73,12 @@ public class ExprParserTest {
             Opcode.LIT.byteCode(), 0, 0     // 25:
         };
         ExprParser p = ExprParserTestSetup.getAndRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseOrRel() {
@@ -95,12 +95,12 @@ public class ExprParserTest {
             Opcode.LIT.byteCode(), 0, 1
         };
         ExprParser p = ExprParserTestSetup.getOrRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parse method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExprParser.
      */
     @Test
     public void testParseAndOrRel() {
@@ -125,7 +125,7 @@ public class ExprParserTest {
             
         };
         ExprParser p = ExprParserTestSetup.getAndOrRel();
-        assertTrue(p.parse());
+        assertTrue(p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
     }
 }

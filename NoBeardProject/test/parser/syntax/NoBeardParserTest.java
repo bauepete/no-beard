@@ -47,22 +47,22 @@ public class NoBeardParserTest {
     }
 
     /**
-     * Test of parse method, of class NoBeardParser.
+     * Test of parseOldStyle method, of class NoBeardParser.
      */
     @Test
     public void testParse() {
         System.out.println("parse");
         
         setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
-        boolean parsingSuccessful = parser.parse();
+        boolean parsingSuccessful = parser.parseOldStyle();
         assertTrue("True expected", parsingSuccessful);
         assertEquals(parsingSuccessful, parser.parsingWasSuccessful());
         
         setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
-        assertTrue("True expected", parser.parse());
+        assertTrue("True expected", parser.parseOldStyle());
         
         setupTest(new SrcStringReader("unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;"));
-        assertTrue("True expected", parser.parse());
+        assertTrue("True expected", parser.parseOldStyle());
     }
     
     private void setupTest(SrcReader sr) {
@@ -80,7 +80,7 @@ public class NoBeardParserTest {
         
         setupTest(new SrcStringReader("unit foo; do done foo;"));
 
-        assertTrue("True expected", parser.parse());
+        assertTrue("True expected", parser.parseOldStyle());
     }
     
     @Test
@@ -89,7 +89,7 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unti foo; do put x; done foo;"));
 
-        boolean parsingWasSuccessFul = parser.parse();
+        boolean parsingWasSuccessFul = parser.parseOldStyle();
         assertFalse("False expected", parsingWasSuccessFul);
         assertEquals(parsingWasSuccessFul, parser.parsingWasSuccessful());
         assertEquals("Error count expected: ", 1, errorHandler.getCount());
@@ -102,7 +102,7 @@ public class NoBeardParserTest {
 
         setupTest(new SrcStringReader("unit; do put x; done foo;"));
         
-        assertFalse("False expected", parser.parse());
+        assertFalse("False expected", parser.parseOldStyle());
         assertEquals("Last error", error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
 
@@ -113,7 +113,7 @@ public class NoBeardParserTest {
         try {
             setupTest(new SrcFileReader("SamplePrograms/Smallest.nb"));
 
-            assertTrue("True expected", parser.parse());
+            assertTrue("True expected", parser.parseOldStyle());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
         }

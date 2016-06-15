@@ -29,22 +29,22 @@ public class IfStatParserTest {
     }
 
     /**
-     * Test of parse method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfStatParser.
      */
     @Test
     public void testSimpleIf() {
         System.out.println("parseSimpleIf");
         IfStatParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
-        assertTrue(instance.parse());
+        assertTrue(instance.parseOldStyle());
     }
 
     /**
-     * Test of parse method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfStatParser.
      */
     @Test
     public void testIfElse() {
         System.out.println("testIfElse");
         IfStatParser instance = IfStatParserTestSetup.getIfElseTestSetup();
-        assertTrue(instance.parse());
+        assertTrue(instance.parseOldStyle());
     }
 }

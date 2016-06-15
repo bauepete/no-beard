@@ -26,7 +26,7 @@ public class BlockParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         if (!tokenIsA(Symbol.DO)) {
             return false;
         }
@@ -54,12 +54,12 @@ public class BlockParser extends Parser {
 
     private boolean statSeq() {
         StatParser statP = new StatParser(scanner, sym, code, getErrorHandler());
-        if (!statP.parse()) {
+        if (!statP.parseOldStyle()) {
             return false;
         }
 
         while (scanner.getCurrentToken().getSy() != Symbol.DONE) {
-            if (!statP.parse()) {
+            if (!statP.parseOldStyle()) {
                 return false;
             }
         }

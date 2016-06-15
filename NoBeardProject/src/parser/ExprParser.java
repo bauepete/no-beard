@@ -30,10 +30,10 @@ public class ExprParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
 
         SimExprParser simExprP = new SimExprParser(scanner, sym, code, getErrorHandler());
-        if (!simExprP.parse()) {
+        if (!simExprP.parseOldStyle()) {
             return false;
         }
         op = simExprP.getOperand();
@@ -60,7 +60,7 @@ public class ExprParser extends Parser {
             }
             // endsem
             
-            if (!simExprP.parse()) {
+            if (!simExprP.parseOldStyle()) {
                 return false;
             }
             Operand op2 = simExprP.getOperand();

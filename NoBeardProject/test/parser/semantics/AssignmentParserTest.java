@@ -42,7 +42,7 @@ public class AssignmentParserTest {
     }
 
     /**
-     * Test of parse method, of class AssignmentParser.
+     * Test of parseOldStyle method, of class AssignmentParser.
      */
     @Test
     public void testParse() {
@@ -59,7 +59,7 @@ public class AssignmentParserTest {
 
         Parser p = ParserFactory.createAssignmentParser();
 
-        assertEquals("Parse ", true, p.parse());
+        assertEquals("Parse ", true, p.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, ParserFactory.getCodeGenerator().getByteCode());
     }
 }

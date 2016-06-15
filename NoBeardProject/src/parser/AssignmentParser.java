@@ -23,9 +23,9 @@ public class AssignmentParser extends Parser {
     }
 
     @Override
-    public boolean parse() {
+    public boolean parseOldStyle() {
         ReferenceParser refP = new ReferenceParser(scanner, sym, code, getErrorHandler());
-        if (!refP.parse()) {
+        if (!refP.parseOldStyle()) {
             return false;
         }
         // sem
@@ -38,7 +38,7 @@ public class AssignmentParser extends Parser {
             return false;
         }
         SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
-        if (!exprP.parse()) {
+        if (!exprP.parseOldStyle()) {
             return false;
         }
         // sem
