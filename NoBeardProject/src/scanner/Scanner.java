@@ -66,19 +66,23 @@ public class Scanner {
         return srcReader.getCurrentLine();
     }
 
-    /** Reads the next token from the source code. After a call of nextToken the
- following holds:
- - getCurrentToken().getSy() returns the kind of the current symbol
- - if getCurrentToken().getSy() == IDENTIFIER, getCurrentToken.getValue()
- is a unique number identifying the symbol
- - if getCurrentToken().getSy() == NUMBER, getCurrentToken.getValue()
- holds the value of the number
- - if getCurrentToken().getSy() is different from IDENTIFIER and NUMBER
- getCurrentToken.getValue() is undefined
+    /**
+     * Reads the next token from the source code. After a call of nextToken the
+     * following holds:
+     * - getCurrentToken().getSy() returns the kind of the
+     * current symbol
+     * - if getCurrentToken().getSy() == IDENTIFIER,
+     * getCurrentToken.getValue() is a unique number identifying the symbol
+     * - if getCurrentToken().getSy() == NUMBER, getCurrentToken.getValue() holds the
+     * value of the number
+     * - if getCurrentToken().getSy() is different from IDENTIFIER and NUMBER
+     * getCurrentToken.getValue() is undefined
+     *
      *** @note Before the first call of nextToken SrcReader.getCurrentChar()
      * must return the first character of the source file.
      */
     public void nextToken() {
+        currentToken = new Token();
         currentToken.setSy(Symbol.NOSY);
 
         do {
@@ -102,7 +106,7 @@ public class Scanner {
         currentToken.setSy(Symbol.NUMBER);
         currentToken.setValue(n);
     }
-    
+
     private void handleName() {
         nameManager.readName(currentToken);
     }
@@ -250,8 +254,10 @@ public class Scanner {
         }
     }
 
-    /** Returns the token scanned by the last call of nextToken(). All the assumptions
-     *** in next_symbol also hold for current_token.
+    /**
+     * Returns the token scanned by the last call of nextToken(). All the
+     * assumptions ** in next_symbol also hold for current_token.
+     *
      *** @return The current token.
      *** @see nextToken()
      */

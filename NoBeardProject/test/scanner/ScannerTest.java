@@ -92,6 +92,16 @@ public class ScannerTest {
         scanner.nextToken();
         assertTrue("COMMASY expected", scanner.getCurrentToken().getSy() == Symbol.COMMA);
     }
+    
+    @Test
+    public void testGetCurrentTokenKeepsUnchanged() {
+        setupReaderAndErrorHandler("(;");
+        scanner.nextToken();
+        Token firstToken = scanner.getCurrentToken();
+        scanner.nextToken();
+        Token secondToken = scanner.getCurrentToken();
+        assertTrue(firstToken != secondToken);
+    }
 
     @Test
     public void testNumber() {
