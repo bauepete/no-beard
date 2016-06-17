@@ -69,4 +69,14 @@ public class ErrorHandler {
    public void throwOperandOfKindExpected(String toString) {
         raise(new Error(Error.ErrorType.OPERAND_KIND_EXPECTED, toString));
     }
+
+   /**
+    * If a given operator requires a specific operand and the given operand
+    * does not match this requirement, this error is to be thrown.
+    * @param operator
+    * @param requiredOperand 
+    */
+    public void throwOperatorOperandTypeMismatch(String operator, String requiredOperand) {
+        raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
+    }
 }

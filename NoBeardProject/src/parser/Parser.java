@@ -109,6 +109,7 @@ public abstract class Parser {
 
     protected void parseSymbol(Parser p) {
         parsingWasSuccessfulUntilNow = parsingWasSuccessfulUntilNow && p.parse();
+        lastParsedToken = p.getLastParsedToken();
     }
 
     protected void throwSymbolExpected(String expected, String actual) {

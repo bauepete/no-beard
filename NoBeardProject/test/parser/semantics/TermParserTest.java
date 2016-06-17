@@ -6,12 +6,9 @@ package parser.semantics;
 
 import nbm.Nbm.Opcode;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.TermParser;
 import parser.general.TermParserTestSetup;
 
@@ -19,18 +16,9 @@ import parser.general.TermParserTestSetup;
  *
  * @author peter
  */
-@Ignore
 public class TermParserTest {
 
     public TermParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -56,7 +44,7 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getMulTermSetup();
-        assertEquals("Parse", true, p.parseOldStyle());
+        assertEquals("Parse", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
 
@@ -76,7 +64,7 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getDivTermSetup();
-        assertEquals("Parse", true, p.parseOldStyle());
+        assertEquals("Parse", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
     
@@ -96,7 +84,7 @@ public class TermParserTest {
         };
 
         TermParser p = TermParserTestSetup.getModTermSetup();
-        assertEquals("Parse", true, p.parseOldStyle());
+        assertEquals("Parse", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, TermParserTestSetup.getByteCode());
     }
     
@@ -119,7 +107,7 @@ public class TermParserTest {
         };
         
         TermParser p = TermParserTestSetup.getAndTermSetup();
-        assertTrue("Parse", p.parseOldStyle());
+        assertTrue("Parse", p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getByteCode());
     }
 }

@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.Parser;
 import parser.ParserFactory;
 import scanner.SrcStringReader;
@@ -45,6 +46,7 @@ public class AssignmentParserTest {
      * Test of parseOldStyle method, of class AssignmentParser.
      */
     @Test
+    @Ignore
     public void testParse() {
         System.out.println("parse");
         byte[] expResult = {

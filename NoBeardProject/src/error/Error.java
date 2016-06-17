@@ -31,6 +31,7 @@ public class Error {
         TYPES_EXPECTED(55, ErrorClass.SEMANTICAL, "Types %l expected"),
         POSITIVE_ARRAY_SIZE_EXPECTED(56, ErrorClass.SEMANTICAL, "Array size spezifier has to be a positive integer."),
         NO_NESTED_MODULES(57, ErrorClass.SEMANTICAL, "Nested modules are not allowed"),
+        OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s1 requires a %s2 operand"),
         GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s");
 
         private final int errorNumber;
