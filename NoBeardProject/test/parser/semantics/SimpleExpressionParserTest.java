@@ -12,17 +12,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.SimExprParser;
-import parser.general.SimExprParserTestSetup;
+import parser.SimpleExpressionParser;
+import parser.general.SimpleExpressionParserTestSetup;
 
 /**
  *
  * @author peter
  */
 @Ignore
-public class SimExprParserTest {
+public class SimpleExpressionParserTest {
 
-    public SimExprParserTest() {
+    public SimpleExpressionParserTest() {
     }
 
     @BeforeClass
@@ -42,7 +42,7 @@ public class SimExprParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testAdd() {
@@ -54,14 +54,14 @@ public class SimExprParserTest {
             Opcode.ADD.byteCode()
         };
 
-        SimExprParser p = SimExprParserTestSetup.getAddTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testSub() {
@@ -73,14 +73,14 @@ public class SimExprParserTest {
             Opcode.SUB.byteCode()
         };
 
-        SimExprParser p = SimExprParserTestSetup.getSubTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testNegAdd() {
@@ -93,14 +93,14 @@ public class SimExprParserTest {
             Opcode.ADD.byteCode()
         };
 
-        SimExprParser p = SimExprParserTestSetup.getNegAddTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testNeg() {
@@ -110,14 +110,14 @@ public class SimExprParserTest {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.NEG.byteCode(),};
 
-        SimExprParser p = SimExprParserTestSetup.getNegTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testParseAddMul() {
@@ -131,14 +131,14 @@ public class SimExprParserTest {
             Opcode.SUB.byteCode()
         };
 
-        SimExprParser p = SimExprParserTestSetup.getAddMulTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testComplexExpr() {
@@ -154,14 +154,14 @@ public class SimExprParserTest {
             Opcode.DIV.byteCode(),
             Opcode.NEG.byteCode(),};
 
-        SimExprParser p = SimExprParserTestSetup.getComplexExprTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testOrExpr() {
@@ -178,8 +178,8 @@ public class SimExprParserTest {
             Opcode.LIT.byteCode(), 0, 1
         };
         
-        SimExprParser p = SimExprParserTestSetup.getOrExprTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code", expected, SimExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 }

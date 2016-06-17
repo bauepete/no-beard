@@ -32,7 +32,7 @@ public class ExprParser extends Parser {
     @Override
     public boolean parseOldStyle() {
 
-        SimExprParser simExprP = new SimExprParser(scanner, sym, code, getErrorHandler());
+        SimpleExpressionParser simExprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
         if (!simExprP.parseOldStyle()) {
             return false;
         }

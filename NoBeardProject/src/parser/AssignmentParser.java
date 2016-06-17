@@ -37,7 +37,7 @@ public class AssignmentParser extends Parser {
             getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.ASSIGN.toString()));
             return false;
         }
-        SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
+        SimpleExpressionParser exprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parseOldStyle()) {
             return false;
         }

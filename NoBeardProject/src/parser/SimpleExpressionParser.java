@@ -18,7 +18,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class SimExprParser extends Parser {
+public class SimpleExpressionParser extends Parser {
 
     private Operand op;
     private int orChain;
@@ -34,7 +34,7 @@ public class SimExprParser extends Parser {
     }
     AddopType addOperator = AddopType.NOADD;
 
-    public SimExprParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
+    public SimpleExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super(s, sym, c, eh);
     }
 

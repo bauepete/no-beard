@@ -25,7 +25,7 @@ public class StatParser extends Parser {
 
     @Override
     public boolean parseOldStyle() {
-        SimExprParser exprP = new SimExprParser(scanner, sym, code, getErrorHandler());
+        SimpleExpressionParser exprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
         switch (scanner.getCurrentToken().getSy()) {
             case INT:
             case BOOL:

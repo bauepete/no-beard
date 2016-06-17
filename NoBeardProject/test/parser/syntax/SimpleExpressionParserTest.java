@@ -11,17 +11,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.SimExprParser;
-import parser.general.SimExprParserTestSetup;
+import parser.SimpleExpressionParser;
+import parser.general.SimpleExpressionParserTestSetup;
 
 /**
  *
  * @author peter
  */
 @Ignore
-public class SimExprParserTest {
+public class SimpleExpressionParserTest {
 
-    public SimExprParserTest() {
+    public SimpleExpressionParserTest() {
     }
 
     @BeforeClass
@@ -41,61 +41,61 @@ public class SimExprParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class SimExprParser.
+     * Test of parseOldStyle method, of class SimpleExpressionParser.
      */
     @Test
     public void testAdd() {
         System.out.println("testAdd");
-        SimExprParser p = SimExprParserTestSetup.getAddTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testSub() {
         System.out.println("testSub");
-        SimExprParser p = SimExprParserTestSetup.getSubTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testNegAdd() {
         System.out.println("testNegAdd");
-        SimExprParser p = SimExprParserTestSetup.getNegAddTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testNeg() {
         System.out.println("testNeg");
-        SimExprParser p = SimExprParserTestSetup.getNegTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testAddMul() {
         System.out.println("testAddMul");
-        SimExprParser p = SimExprParserTestSetup.getAddMulTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testComplexExpr() {
         System.out.println("testComplexExpr");
-        SimExprParser p = SimExprParserTestSetup.getComplexExprTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testNoExpr() {
         System.out.println("testNoExpr");
-        SimExprParser p = SimExprParserTestSetup.getNoExprTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNoExprTestSetup();
         assertEquals("Parse ", false, p.parseOldStyle());
     }
     
     @Test
     public void testOrExpr() {
         System.out.println("testOrExpr");
-        SimExprParser p = SimExprParserTestSetup.getOrExprTestSetup();
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parseOldStyle());
     }
 }
