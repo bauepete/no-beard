@@ -7,6 +7,7 @@ package parser;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;
+import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -18,15 +19,11 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class SimpleExpressionParser extends Parser {
+public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
 
     private Operand op;
-    private int orChain;
-
-    @Override
-    public void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    private int positionOfLastOrJump;
+    Nbm.Opcode opCode;
 
     private enum AddopType {
 
@@ -35,17 +32,60 @@ public class SimpleExpressionParser extends Parser {
     AddopType addOperator = AddopType.NOADD;
 
     public SimpleExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
-        super(s, sym, c, eh);
+        super();
+    }
+    
+    public SimpleExpressionParser() {
+        
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        sem(() -> positionOfLastOrJump = 0);
+
+        if (currentTokenIsAnAddOp()) {
+            parseAddOp();
+        }
+        TermParser termParser = ParserFactory.create(TermParser.class);
+        parseSymbol(termParser);
+
+        while (currentTokenIsAnAddOp()) {
+            parseAddOp();
+            if (getLastParsedToken().getSy() == Scanner.Symbol.OR) {
+                handleBooleanTerm(termParser);
+            } else {
+                handleIntegerTerm(termParser);
+            }
+        }
+    }
+
+    private boolean currentTokenIsAnAddOp() {
+        Symbol sy = scanner.getCurrentToken().getSy();
+        return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
+    }
+
+    private void parseAddOp() {
+        Scanner.Symbol currentAddOp = scanner.getCurrentToken().getSy();
+        parseSymbol(currentAddOp);
+        opCode = OperatorToOpCodeMap.getOpCode(currentAddOp);
+    }
+
+    private void handleBooleanTerm(TermParser termParser) {
+        parseSymbol(termParser);
+    }
+
+    private void handleIntegerTerm(TermParser termParser) {
+        parseSymbol(termParser);
     }
 
     @Override
     public boolean parseOldStyle() {
 
         // sem
-        orChain = 0;
+        positionOfLastOrJump = 0;
         // endsem
-        
-        if (tokenIsAddOp()) {
+
+        if (currentTokenIsAnAddOp()) {
             if (!addOp()) {
                 return false;
             }
@@ -72,7 +112,7 @@ public class SimpleExpressionParser extends Parser {
         }
         // endsem
 
-        while (tokenIsAddOp()) {
+        while (currentTokenIsAnAddOp()) {
             if (scanner.getCurrentToken().getSy() == Symbol.OR) {
                 scanner.nextToken();
                 // cc
@@ -80,29 +120,29 @@ public class SimpleExpressionParser extends Parser {
                     return false;
                 }
                 // ccend
-                
+
                 // sem
                 op.emitLoadVal(code);
                 code.emitOp(Opcode.TJMP);
-                code.emitHalfWord(orChain);
-                orChain = code.getPc() - 2;
+                code.emitHalfWord(positionOfLastOrJump);
+                positionOfLastOrJump = code.getPc() - 2;
                 // endsem
-                
+
                 if (!termP.parseOldStyle()) {
                     return false;
                 }
-                
+
                 // cc
                 Operand op2 = termP.getOperand();
                 if (!operandIsA(op2, OperandType.SIMPLEBOOL)) {
                     return false;
                 }
                 // endcc
-                
+
                 // sem
                 op = op2.emitLoadVal(code);
                 // endsem
-                
+
             } else {
                 if (!addOp()) {
                     return false;
@@ -115,7 +155,6 @@ public class SimpleExpressionParser extends Parser {
                 // sem
                 op.emitLoadVal(code);
                 // endsem
-
 
                 if (!termP.parseOldStyle()) {
                     return false;
@@ -138,13 +177,13 @@ public class SimpleExpressionParser extends Parser {
 
         }
         // sem
-        if (orChain != 0) {
+        if (positionOfLastOrJump != 0) {
             code.emitOp(Opcode.JMP);
             code.emitHalfWord(code.getPc() + 5);
-            while (orChain != 0) {
-                int next = code.getCodeHalfWord(orChain);
-                code.fixup(orChain, code.getPc());
-                orChain = next;
+            while (positionOfLastOrJump != 0) {
+                int next = code.getCodeHalfWord(positionOfLastOrJump);
+                code.fixup(positionOfLastOrJump, code.getPc());
+                positionOfLastOrJump = next;
             }
             code.emitOp(Opcode.LIT);
             code.emitHalfWord(1);
@@ -155,11 +194,6 @@ public class SimpleExpressionParser extends Parser {
 
     public Operand getOperand() {
         return op;
-    }
-
-    private boolean tokenIsAddOp() {
-        Symbol sy = scanner.getCurrentToken().getSy();
-        return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
     }
 
     private boolean addOp() {

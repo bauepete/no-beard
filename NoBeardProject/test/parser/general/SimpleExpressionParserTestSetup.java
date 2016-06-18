@@ -4,6 +4,7 @@
  */
 package parser.general;
 
+import parser.ParserFactory;
 import parser.SimpleExpressionParser;
 import symlist.SymListManager;
 
@@ -46,14 +47,14 @@ public class SimpleExpressionParserTestSetup extends ParserTestSetup {
     }
 
     static private SimpleExpressionParser setupTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
+        setupInfraStructure(srcLine);
         ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
-        return new SimpleExpressionParser(scanner, symListManager, code, errorHandler);
+        return ParserFactory.create(SimpleExpressionParser.class);
     }
 
     static private SimpleExpressionParser setupBoolTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
+        setupInfraStructure(srcLine);
         fillSymList(SymListManager.ElementType.BOOL);
-        return new SimpleExpressionParser(scanner, symListManager, code, errorHandler);
+        return ParserFactory.create(SimpleExpressionParser.class);
     }
 }

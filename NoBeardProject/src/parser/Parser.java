@@ -58,6 +58,7 @@ public abstract class Parser {
     private final ErrorHandler errorHandler;
 
     public Parser() {
+        this.lastParsedToken = new Token();
         this.scanner = ParserFactory.getScanner();
         this.sym = ParserFactory.getSymbolListManager();
         this.code = ParserFactory.getCodeGenerator();

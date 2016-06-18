@@ -31,6 +31,7 @@ public class TermParser extends Parser {
     }
 
     public TermParser() {
+        this.op = new Operand(Operand.OperandKind.ILLEGAL, OperandType.VOID, 0, 0, 0);
 
     }
 
@@ -44,9 +45,9 @@ public class TermParser extends Parser {
         while (currentTokenIsAMulOp()) {
             parseMulOp();
             if (getLastParsedToken().getSy() == Symbol.AND) {
-                handleBooleanFactors(factorParser);
+                handleBooleanFactor(factorParser);
             } else {
-                handleIntegerFactors(factorParser);
+                handleIntegerFactor(factorParser);
             }
         }
         sem(() -> {
@@ -67,7 +68,7 @@ public class TermParser extends Parser {
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
     }
 
-    private void handleBooleanFactors(FactorParser factorParser) {
+    private void handleBooleanFactor(FactorParser factorParser) {
         checkOperandForBeing(OperandType.SIMPLEBOOL);
         maintainAndChain();
         parseSymbol(factorParser);
@@ -98,7 +99,7 @@ public class TermParser extends Parser {
         sem(() -> op = op2.emitLoadVal(code));
     }
 
-    private void handleIntegerFactors(FactorParser factorParser) {
+    private void handleIntegerFactor(FactorParser factorParser) {
         checkOperandForBeing(OperandType.SIMPLEINT);
         sem(() -> op.emitLoadVal(code));
         parseSymbol(factorParser);
