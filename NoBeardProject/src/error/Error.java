@@ -22,16 +22,16 @@ public class Error {
         SYMBOL_EXPECTED(21, ErrorClass.SYNTAX, "%s0 expected but found %s1"),
         IDENTIFIER_EXPECTED(22, ErrorClass.SYNTAX, "Identifier expected"),
         GENERAL_SYN_ERROR(49, ErrorClass.SYNTAX, "General syntax error: %s"),
-        // TODO: following message should be replaced by "Block %s1 can't can't end with name %s2"
+        // TODO: following message should be replaced by "Block %s1 ends with name %s2"
         BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name start differs from block name end: %s"),
         OPERAND_KIND_EXPECTED(52, ErrorClass.SEMANTICAL, "%s expected"),
         // TODO: following message should be replaced by "%s can't be converted to %s"
         INCOMPATIBLE_TYPES(53, ErrorClass.SEMANTICAL, "The following types are not compatible: %s"),
-        NAME_ALREADY_DEFINED(54, ErrorClass.SEMANTICAL, "Identifier %s already defined"),
+        NAME_ALREADY_DEFINED(54, ErrorClass.SEMANTICAL, "Identifier %s is already defined"),
         TYPES_EXPECTED(55, ErrorClass.SEMANTICAL, "Types %l expected"),
-        POSITIVE_ARRAY_SIZE_EXPECTED(56, ErrorClass.SEMANTICAL, "Array size spezifier has to be a positive integer."),
+        POSITIVE_ARRAY_SIZE_EXPECTED(56, ErrorClass.SEMANTICAL, "Array size must be a positive integer"),
         NO_NESTED_MODULES(57, ErrorClass.SEMANTICAL, "Nested modules are not allowed"),
-        OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s1 requires a %s2 operand"),
+        OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s0 requires a %s1 operand"),
         GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s");
 
         private final int errorNumber;

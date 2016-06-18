@@ -30,10 +30,20 @@ import symlist.Operand;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public abstract class SimpleExpressionRelatedParser extends Parser {
-    protected Operand op;
-    private void checkOperandForBeing(final Operand.OperandType requestedType) {
-        where(op.getType() == requestedType,
-                () -> getErrorHandler().throwOperatorOperandTypeMismatch(getLastParsedToken().getSy().toString(), "bool"));
+
+    protected Operand exportedOperand;
+    protected Operand op2;
+
+    public final Operand getOperand() {
+        return exportedOperand;
     }
 
+    protected void checkOperandForBeing(final Operand op, final Operand.OperandType requestedType, String usedOperator) {
+        where(op != null && op.getType() == requestedType,
+                () -> getErrorHandler().throwOperatorOperandTypeMismatch(usedOperator, requestedType.toString()));
+    }
+
+    protected void fetchOperand(SimpleExpressionRelatedParser factorParser) {
+        sem(() -> op2 = factorParser.getOperand());
+    }
 }

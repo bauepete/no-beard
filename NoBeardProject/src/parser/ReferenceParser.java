@@ -4,8 +4,6 @@
  */
 package parser;
 
-import error.Error;
-import error.Error.ErrorType;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
 import symlist.Operand.OperandKind;
@@ -22,29 +20,6 @@ public class ReferenceParser extends Parser {
 
     @Override
     public boolean parseOldStyle() {
-        int name = ident();
-        if (name == NOIDENT) {
-            return false;
-        }
-        // sem
-        SymListEntry obj = sym.findObject(name);
-        // endsem
-
-        // cc
-        if (obj.getKind() != OperandKind.VARIABLE) {
-            getErrorHandler().raise(new Error(ErrorType.OPERAND_KIND_EXPECTED, "Variable"));
-            return false;
-        }
-        
-        // sem
-        op = obj.createOperand();
-        // endsem
-        
-        if (op.getKind() != OperandKind.VARIABLE) {
-            getErrorHandler().raise(new Error(ErrorType.OPERAND_KIND_EXPECTED, "Variable"));
-            return false;
-        }
-        // endcc
         return true;
     }
 

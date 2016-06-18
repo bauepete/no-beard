@@ -17,21 +17,18 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class TermParser extends Parser {
+public class TermParser extends SimpleExpressionRelatedParser {
 
     private nbm.Nbm.Opcode opCode;
     
-    private Operand op;
-    private Operand op2;
-
     private int positionOfLastAndJump;
 
     public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
-        super(s, sym, c, e);
+        super();
     }
 
     public TermParser() {
-        this.op = new Operand(Operand.OperandKind.ILLEGAL, OperandType.VOID, 0, 0, 0);
+        this.exportedOperand = new Operand(Operand.OperandKind.ILLEGAL, OperandType.VOID, 0, 0, 0);
 
     }
 
@@ -40,14 +37,14 @@ public class TermParser extends Parser {
         sem(() -> positionOfLastAndJump = 0);
         FactorParser factorParser = ParserFactory.create(FactorParser.class);
         parseSymbol(factorParser);
-        sem(() -> op = factorParser.getOperand());
+        sem(() -> exportedOperand = factorParser.getOperand());
 
         while (currentTokenIsAMulOp()) {
             parseMulOp();
             if (getLastParsedToken().getSy() == Symbol.AND) {
                 handleBooleanFactor(factorParser);
             } else {
-                handleIntegerFactor(factorParser);
+                handleIntegerFactor(factorParser, getLastParsedToken().getSy().toString());
             }
         }
         sem(() -> {
@@ -69,42 +66,33 @@ public class TermParser extends Parser {
     }
 
     private void handleBooleanFactor(FactorParser factorParser) {
-        checkOperandForBeing(OperandType.SIMPLEBOOL);
+        checkOperandForBeing(exportedOperand, OperandType.SIMPLEBOOL, "and");
         maintainAndChain();
         parseSymbol(factorParser);
         fetchOperand(factorParser);
-        checkOperandForBeing(OperandType.SIMPLEBOOL);
+        checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "and");
         EmitCodeForLoadingValueAndTakeOverOperand();
-    }
-
-    private void checkOperandForBeing(final OperandType requestedType) {
-        where(op.getType() == requestedType,
-                () -> getErrorHandler().throwOperatorOperandTypeMismatch("and", "bool"));
     }
 
     private void maintainAndChain() {
         sem(() -> {
-            op.emitLoadVal(code);
+            exportedOperand.emitLoadVal(code);
             code.emitOp(Opcode.FJMP);
             code.emitHalfWord(positionOfLastAndJump);
             positionOfLastAndJump = code.getPc() - 2;
         });
     }
 
-    private void fetchOperand(FactorParser factorParser) {
-        sem(() -> op2 = factorParser.getOperand());
-    }
-
     private void EmitCodeForLoadingValueAndTakeOverOperand() {
-        sem(() -> op = op2.emitLoadVal(code));
+        sem(() -> exportedOperand = op2.emitLoadVal(code));
     }
 
-    private void handleIntegerFactor(FactorParser factorParser) {
-        checkOperandForBeing(OperandType.SIMPLEINT);
-        sem(() -> op.emitLoadVal(code));
+    private void handleIntegerFactor(FactorParser factorParser, String usedOperator) {
+        checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
+        sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(factorParser);
         fetchOperand(factorParser);
-        checkOperandForBeing(OperandType.SIMPLEINT);
+        checkOperandForBeing(op2, OperandType.SIMPLEINT, usedOperator);
         EmitCodeForLoadingValueAndTakeOverOperand();
         sem(() -> code.emitOp(opCode));
     }
@@ -124,9 +112,5 @@ public class TermParser extends Parser {
     @Override
     public boolean parseOldStyle() {
         return true;
-    }
-
-    public Operand getOperand() {
-        return op;
     }
 }

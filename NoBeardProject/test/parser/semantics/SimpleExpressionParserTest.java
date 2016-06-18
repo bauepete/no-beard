@@ -6,12 +6,9 @@ package parser.semantics;
 
 import nbm.Nbm.Opcode;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.SimpleExpressionParser;
 import parser.general.SimpleExpressionParserTestSetup;
 
@@ -19,18 +16,9 @@ import parser.general.SimpleExpressionParserTestSetup;
  *
  * @author peter
  */
-@Ignore
 public class SimpleExpressionParserTest {
 
     public SimpleExpressionParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before
@@ -42,11 +30,10 @@ public class SimpleExpressionParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class SimpleExpressionParser.
+     * Test add expression
      */
     @Test
     public void testAdd() {
-        System.out.println("testAdd");
 
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32,
@@ -56,7 +43,7 @@ public class SimpleExpressionParserTest {
 
         SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
 
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
 

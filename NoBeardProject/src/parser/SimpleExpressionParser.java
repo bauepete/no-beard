@@ -21,7 +21,6 @@ import symlist.SymListManager;
  */
 public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
 
-    private Operand op;
     private int positionOfLastOrJump;
     Nbm.Opcode opCode;
 
@@ -48,13 +47,14 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
         }
         TermParser termParser = ParserFactory.create(TermParser.class);
         parseSymbol(termParser);
+        sem(() -> exportedOperand = termParser.getOperand());
 
         while (currentTokenIsAnAddOp()) {
             parseAddOp();
             if (getLastParsedToken().getSy() == Scanner.Symbol.OR) {
                 handleBooleanTerm(termParser);
             } else {
-                handleIntegerTerm(termParser);
+                handleIntegerTerm(termParser, getLastParsedToken().getSy().toString());
             }
         }
     }
@@ -74,8 +74,11 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
         parseSymbol(termParser);
     }
 
-    private void handleIntegerTerm(TermParser termParser) {
+    private void handleIntegerTerm(TermParser termParser, String usedOperator) {
+        checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
+        sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(termParser);
+        fetchOperand(termParser);
     }
 
     @Override
@@ -105,10 +108,10 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
 
         // sem
         if (addOperator == AddopType.MINUS) {
-            op = op1.emitLoadVal(code);
+            exportedOperand = op1.emitLoadVal(code);
             code.emitOp(Opcode.NEG);
         } else {
-            op = op1;
+            exportedOperand = op1;
         }
         // endsem
 
@@ -116,13 +119,13 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
             if (scanner.getCurrentToken().getSy() == Symbol.OR) {
                 scanner.nextToken();
                 // cc
-                if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
+                if (!operandIsA(exportedOperand, OperandType.SIMPLEBOOL)) {
                     return false;
                 }
                 // ccend
 
                 // sem
-                op.emitLoadVal(code);
+                exportedOperand.emitLoadVal(code);
                 code.emitOp(Opcode.TJMP);
                 code.emitHalfWord(positionOfLastOrJump);
                 positionOfLastOrJump = code.getPc() - 2;
@@ -140,7 +143,7 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
                 // endcc
 
                 // sem
-                op = op2.emitLoadVal(code);
+                exportedOperand = op2.emitLoadVal(code);
                 // endsem
 
             } else {
@@ -148,12 +151,12 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
                     return false;
                 }
                 // cc
-                if (!operandIsA(op, OperandType.SIMPLEINT)) {
+                if (!operandIsA(exportedOperand, OperandType.SIMPLEINT)) {
                     return false;
                 }
                 // endcc
                 // sem
-                op.emitLoadVal(code);
+                exportedOperand.emitLoadVal(code);
                 // endsem
 
                 if (!termP.parseOldStyle()) {
@@ -166,7 +169,7 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
                 }
                 // endcc
                 // sem
-                op = op2.emitLoadVal(code);
+                exportedOperand = op2.emitLoadVal(code);
                 if (addOperator == AddopType.PLUS) {
                     code.emitOp(Opcode.ADD);
                 } else {
@@ -190,10 +193,6 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
         }
         // endsem
         return true;
-    }
-
-    public Operand getOperand() {
-        return op;
     }
 
     private boolean addOp() {

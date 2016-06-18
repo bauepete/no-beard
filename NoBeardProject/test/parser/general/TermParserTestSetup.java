@@ -34,6 +34,10 @@ public class TermParserTestSetup extends ParserTestSetup {
         return setupTestObjectsAndParser("-b");
     }
 
+    public static TermParser getTypeMismatchSetup() {
+        return setupBoolTestObjects("a && 10");
+    }
+
     private static TermParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructure(srcLine);
         ParserTestSetup.fillSymList(SymListManager.ElementType.INT);

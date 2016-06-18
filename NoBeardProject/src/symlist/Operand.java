@@ -24,14 +24,30 @@ public class Operand {
 
     public enum OperandType {
 
-        SIMPLEINT, SIMPLECHAR, SIMPLEBOOL,
-        ARRAYCHAR, ARRAYINT, ARRAYBOOL,
-        VOID, ERRORTYPE
+        SIMPLEINT("int"),
+        SIMPLECHAR("char"),
+        SIMPLEBOOL("bool"),
+        ARRAYCHAR("array of char"),
+        ARRAYINT("array of int"),
+        ARRAYBOOL("array of bool"),
+        VOID("void"),
+        ERRORTYPE("error operand type!!!");
+
+        private final String displayName;
+
+        OperandType(String displayName) {
+            this.displayName = displayName;
+        }
+
+        @Override
+        public String toString() {
+            return displayName;
+        }
     }
-    
+
     protected static SymListManager symListManager = null;
     protected static StringManager stringManager = null;
-    private static  ErrorHandler errorHandler;
+    private static ErrorHandler errorHandler;
     protected OperandKind kind;
     protected OperandType type;
     protected int size;
@@ -62,7 +78,7 @@ public class Operand {
     public static void setStringManager(StringManager stringManager) {
         Operand.stringManager = stringManager;
     }
-    
+
     public static void setErrorHandler(ErrorHandler eh) {
         errorHandler = eh;
     }
@@ -104,12 +120,12 @@ public class Operand {
     }
 
     public Operand emitLoadVal(CodeGenerator toCode) {
-        if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION ||
-                getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
+        if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION
+                || getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
             errorHandler().raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Operand can't be loaded on stack"));
             return null;
         }
-        
+
         if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT) {
             String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
             errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
@@ -119,12 +135,12 @@ public class Operand {
     }
 
     public Operand emitLoadAddr(CodeGenerator toCode) {
-        if (getKind() != OperandKind.CONSTANT && getKind() != OperandKind.VARIABLE &&
-                getKind() != OperandKind.ARGUMENT && getKind() != OperandKind.ADDRONSTACK) {
+        if (getKind() != OperandKind.CONSTANT && getKind() != OperandKind.VARIABLE
+                && getKind() != OperandKind.ARGUMENT && getKind() != OperandKind.ADDRONSTACK) {
             return null;
         }
-        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT &&
-                getType() != OperandType.ARRAYBOOL && getType() != OperandType.ARRAYCHAR && getType() != OperandType.ARRAYINT) {
+        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT
+                && getType() != OperandType.ARRAYBOOL && getType() != OperandType.ARRAYCHAR && getType() != OperandType.ARRAYINT) {
             return null;
         }
         return this;
@@ -138,7 +154,7 @@ public class Operand {
 
         if (!typesOk(destOp)) {
             String[] tList = {OperandType.SIMPLEINT.toString(), OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
-                              OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
+                OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
             errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
             return false;
         }
@@ -147,7 +163,7 @@ public class Operand {
             errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: illegal source operand"));
             return false;
         }
-        
+
         if (getType() != destOp.getType()) {
             String[] tList = {getType().toString(), destOp.getType().toString()};
             errorHandler.raise(new error.Error(error.Error.ErrorType.INCOMPATIBLE_TYPES, tList));

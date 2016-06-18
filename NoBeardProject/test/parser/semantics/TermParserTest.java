@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.ParserFactory;
 import parser.TermParser;
 import parser.general.TermParserTestSetup;
 
@@ -30,7 +31,7 @@ public class TermParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class TermParser.
+     * Tests parsing a multiplication.
      */
     @Test
     public void testParseMul() {
@@ -49,7 +50,7 @@ public class TermParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class TermParser.
+     * Tests parsing a division.
      */
     @Test
     public void testParseDiv() {
@@ -69,7 +70,7 @@ public class TermParserTest {
     }
     
     /**
-     * Test of parseOldStyle method, of class TermParser.
+     * Tests parsing the mod operation.
      */
     @Test
     public void testParseMod() {
@@ -109,5 +110,13 @@ public class TermParserTest {
         TermParser p = TermParserTestSetup.getAndTermSetup();
         assertTrue("Parse", p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code", expected, TermParserTestSetup.getByteCode());
+    }
+    
+    @Test
+    public void testOperatorOperandTypeMismatch() {
+        TermParser p = TermParserTestSetup.getTypeMismatchSetup();
+        
+        assertFalse(p.parse());
+        assertEquals("Operator and requires a bool operand", ParserFactory.getErrorHandler().getAllErrors().get(0).getMessage());
     }
 }
