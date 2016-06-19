@@ -17,7 +17,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class FactorParser extends SimpleExpressionRelatedParser {
+public class FactorParser extends OperandExportingParser {
     
     private int stringLength;
     private int stringAddress;

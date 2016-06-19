@@ -29,7 +29,7 @@ import symlist.Operand;
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public abstract class SimpleExpressionRelatedParser extends Parser {
+public abstract class OperandExportingParser extends Parser {
 
     protected Operand exportedOperand;
     protected Operand op2;
@@ -43,7 +43,7 @@ public abstract class SimpleExpressionRelatedParser extends Parser {
                 () -> getErrorHandler().throwOperatorOperandTypeMismatch(usedOperator, requestedType.toString()));
     }
 
-    protected void fetchOperand(SimpleExpressionRelatedParser factorParser) {
+    protected void fetchOperand(OperandExportingParser factorParser) {
         sem(() -> op2 = factorParser.getOperand());
     }
 

@@ -17,7 +17,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class TermParser extends SimpleExpressionRelatedParser {
+public class TermParser extends OperandExportingParser {
 
     private nbm.Nbm.Opcode opCode;
     

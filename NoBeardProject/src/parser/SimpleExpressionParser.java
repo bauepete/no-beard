@@ -19,7 +19,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
+public class SimpleExpressionParser extends OperandExportingParser {
 
     private int positionOfLastOrJump;
     private Nbm.Opcode opCode;
