@@ -71,7 +71,7 @@ public class TermParser extends SimpleExpressionRelatedParser {
         parseSymbol(factorParser);
         fetchOperand(factorParser);
         checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "and");
-        EmitCodeForLoadingValueAndTakeOverOperand();
+        emitCodeForLoadingValue();
     }
 
     private void maintainAndChain() {
@@ -83,17 +83,13 @@ public class TermParser extends SimpleExpressionRelatedParser {
         });
     }
 
-    private void EmitCodeForLoadingValueAndTakeOverOperand() {
-        sem(() -> exportedOperand = op2.emitLoadVal(code));
-    }
-
     private void handleIntegerFactor(FactorParser factorParser, String usedOperator) {
         checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(factorParser);
         fetchOperand(factorParser);
         checkOperandForBeing(op2, OperandType.SIMPLEINT, usedOperator);
-        EmitCodeForLoadingValueAndTakeOverOperand();
+        emitCodeForLoadingValue();
         sem(() -> code.emitOp(opCode));
     }
 

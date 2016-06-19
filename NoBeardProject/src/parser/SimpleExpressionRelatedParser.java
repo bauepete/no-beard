@@ -46,4 +46,8 @@ public abstract class SimpleExpressionRelatedParser extends Parser {
     protected void fetchOperand(SimpleExpressionRelatedParser factorParser) {
         sem(() -> op2 = factorParser.getOperand());
     }
+
+    protected final void emitCodeForLoadingValue() {
+        sem(() -> exportedOperand = op2.emitLoadVal(code));
+    }
 }
