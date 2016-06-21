@@ -19,7 +19,7 @@ import symlist.SymListManager;
  */
 public class SimpleExpressionParser extends OperandExportingParser {
 
-    private int positionOfLastOrJump;
+    private int positionOfLastBooleanOperatorJump;
     private Nbm.Opcode opCode;
 
     public SimpleExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
@@ -57,8 +57,8 @@ public class SimpleExpressionParser extends OperandExportingParser {
             }
         }
         sem(() -> {
-            if (positionOfLastOrJump != 0) {
-                fixOrChain();
+            if (positionOfLastBooleanOperatorJump != 0) {
+                fixBooleanOperatorChain();
             }
         });
     }
@@ -82,29 +82,29 @@ public class SimpleExpressionParser extends OperandExportingParser {
 
     private void handleBooleanTerm(TermParser termParser) {
         checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "or");
-        maintainOrChain();
+        maintainBooleanOperatorChain();
         parseSymbol(termParser);
         sem(() -> op2 = termParser.getOperand());
         checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "+ or -");
         emitCodeForLoadingValue();
     }
 
-    private void maintainOrChain() {
+    private void maintainBooleanOperatorChain() {
         sem(() -> {
             exportedOperand.emitLoadVal(code);
             code.emitOp(Opcode.TJMP);
-            code.emitHalfWord(positionOfLastOrJump);
-            positionOfLastOrJump = code.getPc() - 2;
+            code.emitHalfWord(positionOfLastBooleanOperatorJump);
+            positionOfLastBooleanOperatorJump = code.getPc() - 2;
         });
     }
 
-    private void fixOrChain() {
+    private void fixBooleanOperatorChain() {
         code.emitOp(Opcode.JMP);
         code.emitHalfWord(code.getPc() + 5);
-        while (positionOfLastOrJump != 0) {
-            int next = code.getCodeHalfWord(positionOfLastOrJump);
-            code.fixup(positionOfLastOrJump, code.getPc());
-            positionOfLastOrJump = next;
+        while (positionOfLastBooleanOperatorJump != 0) {
+            int next = code.getCodeHalfWord(positionOfLastBooleanOperatorJump);
+            code.fixup(positionOfLastBooleanOperatorJump, code.getPc());
+            positionOfLastBooleanOperatorJump = next;
         }
         code.emitOp(Opcode.LIT);
         code.emitHalfWord(1);
