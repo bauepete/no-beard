@@ -20,7 +20,7 @@ import symlist.SymListManager;
 public class TermParser extends OperandExportingParser {
 
     private nbm.Nbm.Opcode opCode;
-    
+
     private int positionOfLastAndJump;
 
     public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
@@ -34,7 +34,6 @@ public class TermParser extends OperandExportingParser {
 
     @Override
     public void parseSpecificPart() {
-        sem(() -> positionOfLastAndJump = 0);
         FactorParser factorParser = ParserFactory.create(FactorParser.class);
         parseSymbol(factorParser);
         sem(() -> exportedOperand = factorParser.getOperand());
@@ -67,6 +66,7 @@ public class TermParser extends OperandExportingParser {
 
     private void handleBooleanFactor(FactorParser factorParser) {
         checkOperandForBeing(exportedOperand, OperandType.SIMPLEBOOL, "and");
+        sem(() -> exportedOperand.emitLoadVal(code));
         maintainAndChain();
         parseSymbol(factorParser);
         fetchOperand(factorParser);
@@ -76,7 +76,6 @@ public class TermParser extends OperandExportingParser {
 
     private void maintainAndChain() {
         sem(() -> {
-            exportedOperand.emitLoadVal(code);
             code.emitOp(Opcode.FJMP);
             code.emitHalfWord(positionOfLastAndJump);
             positionOfLastAndJump = code.getPc() - 2;

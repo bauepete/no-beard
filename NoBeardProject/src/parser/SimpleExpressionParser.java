@@ -32,11 +32,7 @@ public class SimpleExpressionParser extends OperandExportingParser {
 
     @Override
     public void parseSpecificPart() {
-        sem(() -> positionOfLastOrJump = 0);
-
-        if (currentTokenIsAnAddOp()) {
-            parseAddOp();
-        }
+        parseLeadingSign();
         TermParser termParser = ParserFactory.create(TermParser.class);
         parseSymbol(termParser);
         sem(() -> op2 = termParser.getOperand());
@@ -65,6 +61,12 @@ public class SimpleExpressionParser extends OperandExportingParser {
                 fixOrChain();
             }
         });
+    }
+
+    private void parseLeadingSign() {
+        if (currentTokenIsAnAddOp()) {
+            parseAddOp();
+        }
     }
 
     private boolean currentTokenIsAnAddOp() {
