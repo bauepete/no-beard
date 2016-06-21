@@ -23,6 +23,8 @@
  */
 package parser;
 
+import nbm.Nbm;
+import scanner.Scanner;
 import symlist.Operand;
 
 /**
@@ -31,8 +33,59 @@ import symlist.Operand;
  */
 public abstract class OperandExportingParser extends Parser {
 
+    protected Nbm.Opcode opCode;
+    protected int positionOfLastBooleanOperatorJump;
+    
     protected Operand exportedOperand;
     protected Operand op2;
+
+        @Override
+    public void parseSpecificPart() {
+        parseLeadingSign();
+        OperandExportingParser subExpressionParser = createSubExpressionParser();
+        parseSymbol(subExpressionParser);
+        prepareExportedOperand(subExpressionParser);
+
+        while (currentTokenIsAValidOperator()) {
+            parseOperator();
+            if (operatorIsBoolean()) {
+                handleBooleanSubExpression(subExpressionParser);
+            } else {
+                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSy().toString());
+            }
+        }
+        fixBooleanOperatorChainIfNecessary();
+    }
+
+    protected abstract void parseLeadingSign();
+    
+    protected abstract OperandExportingParser createSubExpressionParser();
+    
+    protected abstract void prepareExportedOperand(OperandExportingParser subExpressionParser);
+    
+    protected abstract boolean currentTokenIsAValidOperator();
+    
+    private void parseOperator() {
+        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
+        parseSymbol(currentMulOp);
+        opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
+    }
+
+    protected abstract boolean operatorIsBoolean();
+    
+    protected abstract void handleBooleanSubExpression(OperandExportingParser subExpressionParser);
+    
+    protected abstract void handleIntegerSubExpression(OperandExportingParser subExpressionParser, String usedOperator);
+    
+    private void fixBooleanOperatorChainIfNecessary() {
+        sem(() -> {
+            if (positionOfLastBooleanOperatorJump != 0) {
+                fixBooleanOperatorChain();
+            }
+        });
+    }
+    
+    protected abstract void fixBooleanOperatorChain();
 
     public final Operand getOperand() {
         return exportedOperand;
