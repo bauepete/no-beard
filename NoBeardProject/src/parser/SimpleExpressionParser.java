@@ -35,18 +35,7 @@ public class SimpleExpressionParser extends OperandExportingParser {
         parseLeadingSign();
         TermParser termParser = ParserFactory.create(TermParser.class);
         parseSymbol(termParser);
-        sem(() -> op2 = termParser.getOperand());
-
-        where(opCode == null || op2.getType() == OperandType.SIMPLEINT,
-                () -> getErrorHandler().throwOperatorOperandTypeMismatch("+ or -", "int"));
-        sem(() -> {
-            if (opCode == Nbm.Opcode.SUB) {
-                emitCodeForLoadingValue();
-                code.emitOp(Opcode.NEG);
-            } else {
-                exportedOperand = op2;
-            }
-        });
+        prepareExportedOperand(termParser);
 
         while (currentTokenIsAnAddOp()) {
             parseAddOp();
@@ -56,9 +45,28 @@ public class SimpleExpressionParser extends OperandExportingParser {
                 handleIntegerTerm(termParser, getLastParsedToken().getSy().toString());
             }
         }
+        fixBooleanOperatorChainIfNecessary();
+    }
+
+    private void fixBooleanOperatorChainIfNecessary() {
         sem(() -> {
             if (positionOfLastBooleanOperatorJump != 0) {
                 fixBooleanOperatorChain();
+            }
+        });
+    }
+
+    private void prepareExportedOperand(TermParser termParser) {
+        sem(() -> op2 = termParser.getOperand());
+        
+        where(opCode == null || op2.getType() == OperandType.SIMPLEINT,
+                () -> getErrorHandler().throwOperatorOperandTypeMismatch("+ or -", "int"));
+        sem(() -> {
+            if (opCode == Nbm.Opcode.SUB) {
+                emitCodeForLoadingValue();
+                code.emitOp(Opcode.NEG);
+            } else {
+                exportedOperand = op2;
             }
         });
     }

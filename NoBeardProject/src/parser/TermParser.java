@@ -36,7 +36,7 @@ public class TermParser extends OperandExportingParser {
     public void parseSpecificPart() {
         FactorParser factorParser = ParserFactory.create(FactorParser.class);
         parseSymbol(factorParser);
-        sem(() -> exportedOperand = factorParser.getOperand());
+        prepareExportedOperand(factorParser);
 
         while (currentTokenIsAMulOp()) {
             parseMulOp();
@@ -46,11 +46,19 @@ public class TermParser extends OperandExportingParser {
                 handleIntegerFactor(factorParser, getLastParsedToken().getSy().toString());
             }
         }
+        fixBooleanOperatorChainIfNecessary();
+    }
+
+    private void fixBooleanOperatorChainIfNecessary() {
         sem(() -> {
             if (positionOfLastBooleanOperatorJump != 0) {
                 fixBooleanOperatorChain();
             }
         });
+    }
+
+    private void prepareExportedOperand(FactorParser factorParser) {
+        sem(() -> exportedOperand = factorParser.getOperand());
     }
 
     private boolean currentTokenIsAMulOp() {
