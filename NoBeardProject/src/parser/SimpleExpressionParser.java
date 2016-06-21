@@ -37,14 +37,6 @@ public class SimpleExpressionParser extends OperandExportingParser {
         return getLastParsedToken().getSy() == Scanner.Symbol.OR;
     }
 
-    private void fixBooleanOperatorChainIfNecessary() {
-        sem(() -> {
-            if (positionOfLastBooleanOperatorJump != 0) {
-                fixBooleanOperatorChain();
-            }
-        });
-    }
-
     @Override
     protected void prepareExportedOperand(OperandExportingParser termParser) {
         sem(() -> op2 = termParser.getOperand());
@@ -72,12 +64,6 @@ public class SimpleExpressionParser extends OperandExportingParser {
     protected boolean currentTokenIsAValidOperator() {
         Symbol sy = scanner.getCurrentToken().getSy();
         return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
-    }
-
-    private void parseOperator() {
-        Scanner.Symbol currentAddOp = scanner.getCurrentToken().getSy();
-        parseSymbol(currentAddOp);
-        opCode = OperatorToOpCodeMap.getOpCode(currentAddOp);
     }
 
     @Override

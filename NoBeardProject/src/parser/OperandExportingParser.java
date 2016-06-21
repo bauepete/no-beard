@@ -65,7 +65,7 @@ public abstract class OperandExportingParser extends Parser {
     
     protected abstract boolean currentTokenIsAValidOperator();
     
-    private void parseOperator() {
+    protected void parseOperator() {
         Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
         parseSymbol(currentMulOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
