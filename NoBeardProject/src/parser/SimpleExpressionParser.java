@@ -33,19 +33,27 @@ public class SimpleExpressionParser extends OperandExportingParser {
     @Override
     public void parseSpecificPart() {
         parseLeadingSign();
-        TermParser termParser = ParserFactory.create(TermParser.class);
-        parseSymbol(termParser);
-        prepareExportedOperand(termParser);
+        OperandExportingParser subExpressionParser = createSubExpressionParser();
+        parseSymbol(subExpressionParser);
+        prepareExportedOperand(subExpressionParser);
 
-        while (currentTokenIsAnAddOp()) {
-            parseAddOp();
-            if (getLastParsedToken().getSy() == Scanner.Symbol.OR) {
-                handleBooleanTerm(termParser);
+        while (currentTokenIsAValidOperator()) {
+            parseOperator();
+            if (operatorIsBoolean()) {
+                handleBooleanSubExpression(subExpressionParser);
             } else {
-                handleIntegerTerm(termParser, getLastParsedToken().getSy().toString());
+                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSy().toString());
             }
         }
         fixBooleanOperatorChainIfNecessary();
+    }
+
+    private static OperandExportingParser createSubExpressionParser() {
+        return ParserFactory.create(TermParser.class);
+    }
+
+    private boolean operatorIsBoolean() {
+        return getLastParsedToken().getSy() == Scanner.Symbol.OR;
     }
 
     private void fixBooleanOperatorChainIfNecessary() {
@@ -56,7 +64,7 @@ public class SimpleExpressionParser extends OperandExportingParser {
         });
     }
 
-    private void prepareExportedOperand(TermParser termParser) {
+    private void prepareExportedOperand(OperandExportingParser termParser) {
         sem(() -> op2 = termParser.getOperand());
         
         where(opCode == null || op2.getType() == OperandType.SIMPLEINT,
@@ -72,23 +80,23 @@ public class SimpleExpressionParser extends OperandExportingParser {
     }
 
     private void parseLeadingSign() {
-        if (currentTokenIsAnAddOp()) {
-            parseAddOp();
+        if (currentTokenIsAValidOperator()) {
+            parseOperator();
         }
     }
 
-    private boolean currentTokenIsAnAddOp() {
+    private boolean currentTokenIsAValidOperator() {
         Symbol sy = scanner.getCurrentToken().getSy();
         return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
     }
 
-    private void parseAddOp() {
+    private void parseOperator() {
         Scanner.Symbol currentAddOp = scanner.getCurrentToken().getSy();
         parseSymbol(currentAddOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentAddOp);
     }
 
-    private void handleBooleanTerm(TermParser termParser) {
+    private void handleBooleanSubExpression(OperandExportingParser termParser) {
         checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "or");
         maintainBooleanOperatorChain();
         parseSymbol(termParser);
@@ -118,7 +126,7 @@ public class SimpleExpressionParser extends OperandExportingParser {
         code.emitHalfWord(1);
     }
 
-    private void handleIntegerTerm(TermParser termParser, String usedOperator) {
+    private void handleIntegerSubExpression(OperandExportingParser termParser, String usedOperator) {
         checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(termParser);

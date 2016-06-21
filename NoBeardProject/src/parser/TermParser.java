@@ -34,19 +34,32 @@ public class TermParser extends OperandExportingParser {
 
     @Override
     public void parseSpecificPart() {
-        FactorParser factorParser = ParserFactory.create(FactorParser.class);
-        parseSymbol(factorParser);
-        prepareExportedOperand(factorParser);
+        parseLeadingSign();
+        OperandExportingParser subExpressionParser = createSubExpressionParser();
+        parseSymbol(subExpressionParser);
+        prepareExportedOperand(subExpressionParser);
 
-        while (currentTokenIsAMulOp()) {
-            parseMulOp();
-            if (getLastParsedToken().getSy() == Symbol.AND) {
-                handleBooleanFactor(factorParser);
+        while (currentTokenIsAValidOperator()) {
+            parseOperator();
+            if (operatorIsBoolean()) {
+                handleBooleanSubExpression(subExpressionParser);
             } else {
-                handleIntegerFactor(factorParser, getLastParsedToken().getSy().toString());
+                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSy().toString());
             }
         }
         fixBooleanOperatorChainIfNecessary();
+    }
+
+    private static OperandExportingParser createSubExpressionParser() {
+        return ParserFactory.create(FactorParser.class);
+    }
+
+    private boolean operatorIsBoolean() {
+        return getLastParsedToken().getSy() == Symbol.AND;
+    }
+    
+    private void parseLeadingSign() {
+        
     }
 
     private void fixBooleanOperatorChainIfNecessary() {
@@ -57,22 +70,22 @@ public class TermParser extends OperandExportingParser {
         });
     }
 
-    private void prepareExportedOperand(FactorParser factorParser) {
+    private void prepareExportedOperand(OperandExportingParser factorParser) {
         sem(() -> exportedOperand = factorParser.getOperand());
     }
 
-    private boolean currentTokenIsAMulOp() {
+    private boolean currentTokenIsAValidOperator() {
         Symbol sy = scanner.getCurrentToken().getSy();
         return (sy == Symbol.TIMES || sy == Symbol.DIV || sy == Symbol.MOD || sy == Symbol.AND);
     }
 
-    private void parseMulOp() {
+    private void parseOperator() {
         Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
         parseSymbol(currentMulOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
     }
 
-    private void handleBooleanFactor(FactorParser factorParser) {
+    private void handleBooleanSubExpression(OperandExportingParser factorParser) {
         checkOperandForBeing(exportedOperand, OperandType.SIMPLEBOOL, "and");
         sem(() -> exportedOperand.emitLoadVal(code));
         maintainBooleanOperatorChain();
@@ -90,7 +103,7 @@ public class TermParser extends OperandExportingParser {
         });
     }
 
-    private void handleIntegerFactor(FactorParser factorParser, String usedOperator) {
+    private void handleIntegerSubExpression(OperandExportingParser factorParser, String usedOperator) {
         checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(factorParser);
