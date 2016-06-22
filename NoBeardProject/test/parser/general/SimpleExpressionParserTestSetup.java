@@ -57,4 +57,8 @@ public class SimpleExpressionParserTestSetup extends ParserTestSetup {
         fillSymList(SymListManager.ElementType.BOOL);
         return ParserFactory.create(SimpleExpressionParser.class);
     }
+
+    public static SimpleExpressionParser getMixedOperandSetup() {
+        return setupBoolTestObjects("5 / a");
+    }
 }

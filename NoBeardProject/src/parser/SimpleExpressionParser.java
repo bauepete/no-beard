@@ -123,7 +123,6 @@ public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(termParser);
         fetchOperand(termParser);
-        //checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
         emitCodeForLoadingValue();
         sem(() -> code.emitOp(opCode));
     }

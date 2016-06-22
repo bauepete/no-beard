@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import parser.ParserFactory;
 import parser.SimpleExpressionParser;
 import parser.general.SimpleExpressionParserTestSetup;
 
@@ -170,5 +171,12 @@ public class SimpleExpressionParserTest {
         SimpleExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code", expected, SimpleExpressionParserTestSetup.getByteCode());
+    }
+    
+    @Test
+    public void testMixedOperands() {
+        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getMixedOperandSetup();
+        assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH.getNumber(), ParserFactory.getErrorHandler().getAllErrors().get(0).getNumber());
     }
 }
