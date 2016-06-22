@@ -57,7 +57,7 @@ public class PutStatParser extends Parser {
             return false;
         }
 
-        ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
+        ExpressionParser exprP = new ExpressionParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parseOldStyle()) {
             return false;
         }

@@ -28,7 +28,7 @@ public class IfStatParser extends Parser {
         if (!tokenIsA(Symbol.IF)) {
             return false;
         }
-        ExprParser exprP = new ExprParser(scanner, sym, code, getErrorHandler());
+        ExpressionParser exprP = new ExpressionParser(scanner, sym, code, getErrorHandler());
         if (!exprP.parseOldStyle()) {
             return false;
         }

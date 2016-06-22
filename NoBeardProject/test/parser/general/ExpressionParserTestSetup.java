@@ -4,34 +4,34 @@
  */
 package parser.general;
 
-import parser.ExprParser;
+import parser.ExpressionParser;
 import symlist.SymListManager;
 
 /**
  *
  * @author peter
  */
-public class ExprParserTestSetup extends ParserTestSetup {
+public class ExpressionParserTestSetup extends ParserTestSetup {
     
-    public static ExprParser getSimpleRel() {
+    public static ExpressionParser getSimpleRel() {
         return setupTestObjects("a < b");
     }
         
-    private static ExprParser setupTestObjects(String srcLine) {
+    private static ExpressionParser setupTestObjects(String srcLine) {
         setupInfraStructureOld(srcLine);
         fillSymList(SymListManager.ElementType.INT);
-        return new ExprParser(scanner, symListManager, code, errorHandler);
+        return new ExpressionParser(scanner, symListManager, code, errorHandler);
     }
     
-    public static ExprParser getAndRel() {
+    public static ExpressionParser getAndRel() {
         return setupTestObjects("(a <= b) && (b == 1)");
     }
     
-    public static ExprParser getOrRel() {
+    public static ExpressionParser getOrRel() {
         return setupTestObjects("(a != b) || (b >= 1)");
     }
     
-    public static ExprParser getAndOrRel() {
+    public static ExpressionParser getAndOrRel() {
         return setupTestObjects("((a < b) && (b > 1)) || (c < 0)");
     }
 }

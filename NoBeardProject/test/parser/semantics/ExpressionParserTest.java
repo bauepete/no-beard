@@ -12,16 +12,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.ExprParser;
-import parser.general.ExprParserTestSetup;
+import parser.ExpressionParser;
+import parser.general.ExpressionParserTestSetup;
 
 /**
  *
  * @author peter
  */
-public class ExprParserTest {
+public class ExpressionParserTest {
     
-    public ExprParserTest() {
+    public ExpressionParserTest() {
     }
 
     @BeforeClass
@@ -41,7 +41,7 @@ public class ExprParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
     @Ignore
@@ -52,13 +52,13 @@ public class ExprParserTest {
             Opcode.LV.byteCode(), 0, 0, 36,
             Opcode.REL.byteCode(), 0
         };
-        ExprParser p = ExprParserTestSetup.getSimpleRel();
+        ExpressionParser p = ExpressionParserTestSetup.getSimpleRel();
         assertTrue(p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
     @Ignore
@@ -75,13 +75,13 @@ public class ExprParserTest {
             Opcode.JMP.byteCode(), 0, 28,   // 22: finalize and expression
             Opcode.LIT.byteCode(), 0, 0     // 25:
         };
-        ExprParser p = ExprParserTestSetup.getAndRel();
+        ExpressionParser p = ExpressionParserTestSetup.getAndRel();
         assertTrue(p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
     @Ignore
@@ -98,13 +98,13 @@ public class ExprParserTest {
             Opcode.JMP.byteCode(), 0, 28,
             Opcode.LIT.byteCode(), 0, 1
         };
-        ExprParser p = ExprParserTestSetup.getOrRel();
+        ExpressionParser p = ExpressionParserTestSetup.getOrRel();
         assertTrue(p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
     @Ignore
@@ -129,8 +129,8 @@ public class ExprParserTest {
             Opcode.LIT.byteCode(), 0, 1     // 43:
             
         };
-        ExprParser p = ExprParserTestSetup.getAndOrRel();
+        ExpressionParser p = ExpressionParserTestSetup.getAndOrRel();
         assertTrue(p.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExprParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 }

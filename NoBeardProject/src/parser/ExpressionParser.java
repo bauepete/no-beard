@@ -39,12 +39,12 @@ import symlist.ValueOnStackOperand;
  *
  * @author peter
  */
-public class ExprParser extends Parser {
+public class ExpressionParser extends Parser {
 
     private Operand op;
     private byte ror;
 
-    public ExprParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
+    public ExpressionParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
 
@@ -153,6 +153,6 @@ public class ExprParser extends Parser {
 
     @Override
     public void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        setWasSuccessful(parseOldStyle());
     }
 }

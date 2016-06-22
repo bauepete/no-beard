@@ -115,6 +115,15 @@ public abstract class Parser {
     public boolean parsingWasSuccessful() {
         return parsingWasSuccessfulUntilNow;
     }
+    
+    /**
+     * Temp. protected method for migrating from old parsers.
+     * @param wasSuccessful 
+     * @deprecated 
+     */
+    protected void setWasSuccessful(boolean wasSuccessful) {
+        parsingWasSuccessfulUntilNow = wasSuccessful;
+    }
 
     protected void parseSymbol(Symbol symbol) {
         if (parsingWasSuccessfulUntilNow) {

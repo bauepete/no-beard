@@ -28,17 +28,16 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.ExprParser;
-import parser.general.ExprParserTestSetup;
+import parser.ExpressionParser;
+import parser.general.ExpressionParserTestSetup;
 
 /**
  *
  * @author peter
  */
-@Ignore
-public class ExprParserTest {
+public class ExpressionParserTest {
     
-    public ExprParserTest() {
+    public ExpressionParserTest() {
     }
 
     @Before
@@ -50,42 +49,43 @@ public class ExprParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test a simple relation.
      */
     @Test
     public void testParseSimpleRel() {
         System.out.println("parseSimpleRel");
-        ExprParser p = ExprParserTestSetup.getSimpleRel();
-        assertTrue(p.parseOldStyle());
+        ExpressionParser p = ExpressionParserTestSetup.getSimpleRel();
+        assertTrue(p.parse());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test a relation using an and.
      */
     @Test
     public void testParseAndRel() {
         System.out.println("parseAndRel");
-        ExprParser p = ExprParserTestSetup.getAndRel();
-        assertTrue(p.parseOldStyle());
+        ExpressionParser p = ExpressionParserTestSetup.getAndRel();
+        assertTrue(p.parse());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test a relation using an or.
      */
     @Test
     public void testParseOrRel() {
         System.out.println("parseOrRel");
-        ExprParser p = ExprParserTestSetup.getOrRel();
-        assertTrue(p.parseOldStyle());
+        ExpressionParser p = ExpressionParserTestSetup.getOrRel();
+        assertTrue(p.parse());
     }
 
     /**
-     * Test of parseOldStyle method, of class ExprParser.
+     * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
+    @Ignore
     public void testParseAndOrRel() {
         System.out.println("parseAndOrRel");
-        ExprParser p = ExprParserTestSetup.getAndOrRel();
+        ExpressionParser p = ExpressionParserTestSetup.getAndOrRel();
         assertTrue(p.parseOldStyle());
     }
 }
