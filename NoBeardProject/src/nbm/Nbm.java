@@ -19,7 +19,7 @@ public class Nbm {
 
     public enum Opcode {
 
-        LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
+        NOP, LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
         NOT, REL, FJMP, TJMP, JMP, PUT, INC, HALT;
 
         public byte byteCode() {
@@ -43,7 +43,7 @@ public class Nbm {
     private int top;            // Pointer to the last used byte in frame stack
     private MachineState ms;
     private final Instruction[] instructionMap = {
-        new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
+        new NoInstr(), new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
         new Not(), new Rel(), new Fjmp(), new Tjmp(), new Jmp(),
         new Put(), new Inc(), new Halt()};

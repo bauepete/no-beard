@@ -35,14 +35,45 @@ public class OperatorToOpCodeMap {
     private final static HashMap<Scanner.Symbol, Nbm.Opcode> mulOpSymbolToOpCodeMap;
     static {
         mulOpSymbolToOpCodeMap = new HashMap<>();
+        // Relational operators
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LTH, Nbm.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LEQ, Nbm.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.EQUALS, Nbm.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.NEQ, Nbm.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GEQ, Nbm.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GTH, Nbm.Opcode.REL);
+        // And operators
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.PLUS, Nbm.Opcode.ADD);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MINUS, Nbm.Opcode.SUB);
+        
+        // Multiplication operators
         mulOpSymbolToOpCodeMap.put(Scanner.Symbol.TIMES, Nbm.Opcode.MUL);
         mulOpSymbolToOpCodeMap.put(Scanner.Symbol.DIV, Nbm.Opcode.DIV);
         mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MOD, Nbm.Opcode.MOD);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.PLUS, Nbm.Opcode.ADD);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MINUS, Nbm.Opcode.SUB);
     }
     
     public static Nbm.Opcode getOpCode(Scanner.Symbol symbol) {
-        return mulOpSymbolToOpCodeMap.get(symbol);
+        if (mulOpSymbolToOpCodeMap.containsKey(symbol))
+            return mulOpSymbolToOpCodeMap.get(symbol);
+        else
+            return Nbm.Opcode.NOP;
+    }
+
+    public static int getOperand(Scanner.Symbol symbol) {
+        switch (symbol) {
+            case LTH:
+                return 0;
+            case LEQ:
+                return 1;
+            case EQUALS:
+                return 2;
+            case NEQ:
+                return 3;
+            case GEQ:
+                return 4;
+            case GTH:
+                return 5;
+        }
+        return -1;
     }
 }
