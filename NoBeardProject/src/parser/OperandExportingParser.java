@@ -1,16 +1,16 @@
 /*
- * Copyright ©2015. Created by P. Bauer (p.bauer@htl-leonding.ac.at), Department
- * of Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
- * 4060 Leonding, AUSTRIA. All Rights Reserved. Permission to use, copy, modify,
- * and distribute this software and its documentation for educational,
- * research, and not-for-profit purposes, without fee and without a signed
- * licensing agreement, is hereby granted, provided that the above copyright
- * notice, this paragraph and the following two paragraphs appear in all
- * copies, modifications, and distributions. Contact the Head of Informatics,
- * Media Technique and Design, HTBLA Leonding, Limesstr. 12 - 14, 4060 Leonding,
- * Austria, for commercial licensing opportunities.
+ * Copyright ©2015, 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
  * 
- * IN NO EVENT SHALL HTBLA LEONDING BE  LIABLE TO ANY PARTY FOR DIRECT,
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
  * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
  * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
  * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -23,8 +23,6 @@
  */
 package parser;
 
-import nbm.Nbm;
-import scanner.Scanner;
 import symlist.Operand;
 
 /**
@@ -32,75 +30,10 @@ import symlist.Operand;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public abstract class OperandExportingParser extends Parser {
-
-    protected Nbm.Opcode opCode;
-    protected int positionOfLastBooleanOperatorJump;
-    
     protected Operand exportedOperand;
-    protected Operand op2;
-
-        @Override
-    public void parseSpecificPart() {
-        parseLeadingSign();
-        OperandExportingParser subExpressionParser = createSubExpressionParser();
-        parseSymbol(subExpressionParser);
-        prepareExportedOperand(subExpressionParser);
-
-        while (currentTokenIsAValidOperator()) {
-            parseOperator();
-            if (operatorIsBoolean()) {
-                handleBooleanSubExpression(subExpressionParser);
-            } else {
-                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSy().toString());
-            }
-        }
-        fixBooleanOperatorChainIfNecessary();
-    }
-
-    protected abstract void parseLeadingSign();
-    
-    protected abstract OperandExportingParser createSubExpressionParser();
-    
-    protected abstract void prepareExportedOperand(OperandExportingParser subExpressionParser);
-    
-    protected abstract boolean currentTokenIsAValidOperator();
-    
-    protected void parseOperator() {
-        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
-        parseSymbol(currentMulOp);
-        opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
-    }
-
-    protected abstract boolean operatorIsBoolean();
-    
-    protected abstract void handleBooleanSubExpression(OperandExportingParser subExpressionParser);
-    
-    protected abstract void handleIntegerSubExpression(OperandExportingParser subExpressionParser, String usedOperator);
-    
-    private void fixBooleanOperatorChainIfNecessary() {
-        sem(() -> {
-            if (positionOfLastBooleanOperatorJump != 0) {
-                fixBooleanOperatorChain();
-            }
-        });
-    }
-    
-    protected abstract void fixBooleanOperatorChain();
 
     public final Operand getOperand() {
         return exportedOperand;
     }
 
-    protected void checkOperandForBeing(final Operand op, final Operand.OperandType requestedType, String usedOperator) {
-        where(op != null && op.getType() == requestedType,
-                () -> getErrorHandler().throwOperatorOperandTypeMismatch(usedOperator, requestedType.toString()));
-    }
-
-    protected void fetchOperand(OperandExportingParser factorParser) {
-        sem(() -> op2 = factorParser.getOperand());
-    }
-
-    protected final void emitCodeForLoadingValue() {
-        sem(() -> exportedOperand = op2.emitLoadVal(code));
-    }
 }

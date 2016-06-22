@@ -4,10 +4,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/semantics/NoBeardParserTest.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/PutStatParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/semantics/ExprParserTest.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/ExprParserTestSetup.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/SimpleExpressionRelatedParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/OperandExportingParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/SimpleExpressionParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/ExprParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/FactorParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/TermParser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/syntax/ExprParserTest.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/Parser.java</file>
         </group>
     </open-files>
 </project-private>
