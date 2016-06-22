@@ -79,7 +79,6 @@ public class FactorParserTest {
     }
     
     @Test
-    @Ignore
     public void testParseExpr() {
         FactorParser p = FactorParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());

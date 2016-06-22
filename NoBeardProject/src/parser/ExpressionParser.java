@@ -96,6 +96,7 @@ public class ExpressionParser extends OperandExportingParser {
         Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
         parseSymbol(currentMulOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
+        ror = OperatorToOpCodeMap.getOperand(currentMulOp);
     }
 
     private void emitCodeForLoadingOperand() {

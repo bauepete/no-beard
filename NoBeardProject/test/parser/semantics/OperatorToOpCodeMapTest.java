@@ -23,7 +23,6 @@
  */
 package parser.semantics;
 
-import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.Before;

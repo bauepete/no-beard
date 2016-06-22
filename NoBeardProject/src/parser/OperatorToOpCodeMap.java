@@ -59,7 +59,7 @@ public class OperatorToOpCodeMap {
             return Nbm.Opcode.NOP;
     }
 
-    public static int getOperand(Scanner.Symbol symbol) {
+    public static byte getOperand(Scanner.Symbol symbol) {
         switch (symbol) {
             case LTH:
                 return 0;

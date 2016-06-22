@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.ExpressionParser;
 import parser.general.ExpressionParserTestSetup;
 
@@ -44,7 +43,6 @@ public class ExpressionParserTest {
      * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
-    @Ignore
     public void testParseSimpleRel() {
         System.out.println("parseSimpleRel");
         byte[] expected = {
@@ -53,7 +51,7 @@ public class ExpressionParserTest {
             Opcode.REL.byteCode(), 0
         };
         ExpressionParser p = ExpressionParserTestSetup.getSimpleRel();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
@@ -61,7 +59,6 @@ public class ExpressionParserTest {
      * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
-    @Ignore
     public void testParseAndRel() {
         System.out.println("parseAndRel");
         byte[] expected = {
@@ -76,7 +73,7 @@ public class ExpressionParserTest {
             Opcode.LIT.byteCode(), 0, 0     // 25:
         };
         ExpressionParser p = ExpressionParserTestSetup.getAndRel();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
@@ -84,7 +81,6 @@ public class ExpressionParserTest {
      * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
-    @Ignore
     public void testParseOrRel() {
         System.out.println("parseOrRel");
         byte[] expected = {
@@ -99,7 +95,7 @@ public class ExpressionParserTest {
             Opcode.LIT.byteCode(), 0, 1
         };
         ExpressionParser p = ExpressionParserTestSetup.getOrRel();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 
@@ -107,7 +103,6 @@ public class ExpressionParserTest {
      * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
-    @Ignore
     public void testParseAndOrRel() {
         System.out.println("parseAndOrRel");
         // ((a < b) && (b > 1)) || (a < 0)
@@ -130,7 +125,7 @@ public class ExpressionParserTest {
             
         };
         ExpressionParser p = ExpressionParserTestSetup.getAndOrRel();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, ExpressionParserTestSetup.getByteCode());
     }
 }

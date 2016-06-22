@@ -127,10 +127,9 @@ public class SimpleExpressionParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class SimpleExpressionParser.
+     * Test a simple expression with sub expression.
      */
     @Test
-    @Ignore
     public void testComplexExpr() {
         System.out.println("testComplexExpr");
         // "-5 * (a + b)/17"

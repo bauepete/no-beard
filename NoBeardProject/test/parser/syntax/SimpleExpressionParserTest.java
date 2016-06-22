@@ -68,7 +68,6 @@ public class SimpleExpressionParserTest {
     }
 
     @Test
-    @Ignore
     public void testComplexExpr() {
         System.out.println("testComplexExpr");
         SimpleExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();

@@ -61,7 +61,6 @@ public class FactorParserTest {
     }
 
     @Test
-    @Ignore
     public void testParseExpr() {
         System.out.println("testParseExpr");
         FactorParser p = FactorParserTestSetup.getExprSetup();
