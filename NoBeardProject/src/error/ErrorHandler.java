@@ -6,6 +6,7 @@ package error;
 
 import java.util.LinkedList;
 import java.util.List;
+import symlist.Operand;
 
 /**
  *
@@ -78,5 +79,9 @@ public class ErrorHandler {
     */
     public void throwOperatorOperandTypeMismatch(String operator, String requiredOperand) {
         raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
+    }
+
+    public void throwOperandsAreIncompatible(int size, Operand.OperandType type, int size0, Operand.OperandType type0) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

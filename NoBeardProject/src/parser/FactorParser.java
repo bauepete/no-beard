@@ -76,6 +76,10 @@ public class FactorParser extends OperandExportingParser {
                 });
 
                 break;
+                
+            case LPAR:
+                parseExpression();
+                break;
 
             default:
                 throwSymbolExpected("Identifier, number, true, false, not, or '('", scanner.getCurrentToken().getSy().toString());
@@ -87,5 +91,13 @@ public class FactorParser extends OperandExportingParser {
         StringToken st = (StringToken)getLastParsedToken();
         stringLength = st.getLength();
         stringAddress = st.getAddress();
+    }
+    
+    private void parseExpression() {
+        parseSymbol(Symbol.LPAR);
+        OperandExportingParser p = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(p);
+        sem(() -> exportedOperand = p.getOperand());
+        parseSymbol(Symbol.RPAR);
     }
 }

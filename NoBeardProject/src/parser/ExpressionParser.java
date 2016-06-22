@@ -24,14 +24,12 @@
 package parser;
 
 import error.ErrorHandler;
-import java.util.HashMap;
 import nbm.CodeGenerator;
+import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import scanner.Token;
 import symlist.Operand;
-import symlist.Operand.OperandType;
 import symlist.SymListManager;
 import symlist.ValueOnStackOperand;
 
@@ -39,60 +37,96 @@ import symlist.ValueOnStackOperand;
  *
  * @author peter
  */
-public class ExpressionParser extends Parser {
+public class ExpressionParser extends OperandExportingParser {
 
-    private Operand op;
     private byte ror;
+    private Nbm.Opcode opCode;
+    Operand op2;
 
     public ExpressionParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
-        super(scanner, sym, code, e);
+        super();
+    }
+
+    public ExpressionParser() {
+
+    }
+
+    @Override
+    public void parseSpecificPart() {
+        OperandExportingParser simExprP = parseLeftHandSide();
+        if (currentTokenIsARelationalOperator()) {
+            parseRightHandSide(simExprP);
+        }
     }
 
     @Override
     public boolean parseOldStyle() {
+        return true;
+    }
 
-        SimpleExpressionParser simExprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
-        if (!simExprP.parseOldStyle()) {
-            return false;
-        }
-        op = simExprP.getOperand();
+    private OperandExportingParser parseLeftHandSide() {
+        OperandExportingParser simExprP = ParserFactory.create(SimpleExpressionParser.class);
+        parseSymbol(simExprP);
+        sem(() -> exportedOperand = simExprP.getOperand());
+        return simExprP;
+    }
+    private boolean currentTokenIsARelationalOperator() {
+        Scanner.Symbol currentSymbol = scanner.getCurrentToken().getSy();
+        return (currentSymbol == Symbol.LTH
+                || currentSymbol == Symbol.GTH
+                || currentSymbol == Symbol.LEQ
+                || currentSymbol == Symbol.GEQ
+                || currentSymbol == Symbol.EQUALS
+                || currentSymbol == Symbol.NEQ);
+    }
 
-        if (tokenIsARelop(scanner.getCurrentToken())) {
-            
-            if (!relOp()) {
-                return false;
-            }
-            
-            // sem
-            switch (op.getType()) {
+    private void parseRightHandSide(OperandExportingParser simExprP) {
+        parseOperator();
+        emitCodeForLoadingOperand();
+
+        parseSymbol(simExprP);
+        sem(() -> op2 = simExprP.getOperand());
+        checkOperandsForBeingCompatible();
+
+        emitCodeForComparing();
+        sem(() -> exportedOperand = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, exportedOperand.getValaddr(), exportedOperand.getCurrLevel()));
+    }
+    
+    protected void parseOperator() {
+        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
+        parseSymbol(currentMulOp);
+        opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
+    }
+
+    private void emitCodeForLoadingOperand() {
+        sem(() -> {
+            switch (exportedOperand.getType()) {
                 case SIMPLEBOOL:
                 case SIMPLECHAR:
                 case SIMPLEINT:
-                    op.emitLoadVal(code);
+                    exportedOperand.emitLoadVal(code);
                     break;
-                    
+
                 case ARRAYBOOL:
                 case ARRAYCHAR:
                 case ARRAYINT:
-                    op.emitLoadAddr(code);
+                    exportedOperand.emitLoadAddr(code);
                     break;
             }
-            // endsem
-            
-            if (!simExprP.parseOldStyle()) {
-                return false;
-            }
-            Operand op2 = simExprP.getOperand();
-            // cc
-            if (op.getSize() == Operand.UNDEFSIZE || op2.getSize() == Operand.UNDEFSIZE ||
-                    op.getType() != op2.getType() || op.getSize() != op2.getSize()) {
-                String[] tList = {op.getType().toString(), op2.getType().toString()};
-                getErrorHandler().raise(new error.Error(error.Error.ErrorType.INCOMPATIBLE_TYPES, tList));
-                return false;
-            }
-            // endcc
-            
-            // sem
+        });
+    }
+
+    private void checkOperandsForBeingCompatible() {
+        boolean operandsSizeIsUndefined = exportedOperand.getSize() == Operand.UNDEFSIZE || op2.getSize() == Operand.UNDEFSIZE;
+        boolean typesAreCompatible = exportedOperand.getType() == op2.getType();
+        boolean sizesAreCompatible = exportedOperand.getSize() == op2.getSize();
+
+        where(!operandsSizeIsUndefined && typesAreCompatible && sizesAreCompatible,
+                () -> getErrorHandler().throwOperandsAreIncompatible(exportedOperand.getSize(), exportedOperand.getType(), op2.getSize(), op2.getType()));
+    }
+
+    private void emitCodeForComparing() {
+        sem(() -> {
             switch (op2.getType()) {
                 case SIMPLEBOOL:
                 case SIMPLECHAR:
@@ -101,58 +135,11 @@ public class ExpressionParser extends Parser {
                     code.emitOp(Opcode.REL);
                     code.emitByte(ror);
                     break;
-                    
+
                 default:
-                    int line = scanner.getCurrentLine();
-                    String[] tList = {
-                        OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
-                        OperandType.SIMPLEINT.toString()
-                    };
-                    getErrorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
+                    getErrorHandler().throwOperatorOperandTypeMismatch("Relational operators", "bool, char or int");
                     break;
             }
-            op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, op.getValaddr(), op.getCurrLevel());
-            // ensem
-        }
-        return true;
-    }
-
-    public Operand getOperand() {
-        return op;
-    }
-
-    private boolean tokenIsARelop(Token currentToken) {
-        return (currentToken.getSy() == Symbol.LTH
-                || currentToken.getSy() == Symbol.GTH
-                || currentToken.getSy() == Symbol.LEQ
-                || currentToken.getSy() == Symbol.GEQ
-                || currentToken.getSy() == Symbol.EQUALS
-                || currentToken.getSy() == Symbol.NEQ);
-    }
-    
-    private boolean relOp() {
-        HashMap<Scanner.Symbol, Integer> rop = 
-                new HashMap<Scanner.Symbol, Integer>(){{
-                    put(Symbol.LTH, 0);
-                    put(Symbol.LEQ, 1);
-                    put(Symbol.EQUALS, 2);
-                    put(Symbol.NEQ, 3);
-                    put(Symbol.GEQ, 4);
-                    put(Symbol.GTH, 5);
-                }};
-        
-        if (!rop.containsKey(scanner.getCurrentToken().getSy())) {
-            return false;
-        }
-        
-        int r = rop.get(scanner.getCurrentToken().getSy());
-        ror = (byte) r;
-        scanner.nextToken();
-        return true;
-    }
-
-    @Override
-    public void parseSpecificPart() {
-        setWasSuccessful(parseOldStyle());
+        });
     }
 }

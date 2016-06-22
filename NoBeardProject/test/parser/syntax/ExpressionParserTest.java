@@ -82,7 +82,6 @@ public class ExpressionParserTest {
      * Test of parseOldStyle method, of class ExpressionParser.
      */
     @Test
-    @Ignore
     public void testParseAndOrRel() {
         System.out.println("parseAndOrRel");
         ExpressionParser p = ExpressionParserTestSetup.getAndOrRel();

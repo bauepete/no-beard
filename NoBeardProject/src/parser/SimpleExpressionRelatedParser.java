@@ -35,10 +35,10 @@ public abstract class SimpleExpressionRelatedParser extends OperandExportingPars
 
     protected Nbm.Opcode opCode;
     protected int positionOfLastBooleanOperatorJump;
-    
+
     protected Operand op2;
 
-        @Override
+    @Override
     public void parseSpecificPart() {
         parseLeadingSign();
         OperandExportingParser subExpressionParser = createSubExpressionParser();
@@ -57,13 +57,13 @@ public abstract class SimpleExpressionRelatedParser extends OperandExportingPars
     }
 
     protected abstract void parseLeadingSign();
-    
+
     protected abstract OperandExportingParser createSubExpressionParser();
-    
+
     protected abstract void prepareExportedOperand(OperandExportingParser subExpressionParser);
-    
+
     protected abstract boolean currentTokenIsAValidOperator();
-    
+
     protected void parseOperator() {
         Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
         parseSymbol(currentMulOp);
@@ -71,11 +71,11 @@ public abstract class SimpleExpressionRelatedParser extends OperandExportingPars
     }
 
     protected abstract boolean operatorIsBoolean();
-    
+
     protected abstract void handleBooleanSubExpression(OperandExportingParser subExpressionParser);
-    
+
     protected abstract void handleIntegerSubExpression(OperandExportingParser subExpressionParser, String usedOperator);
-    
+
     private void fixBooleanOperatorChainIfNecessary() {
         sem(() -> {
             if (positionOfLastBooleanOperatorJump != 0) {
@@ -83,7 +83,7 @@ public abstract class SimpleExpressionRelatedParser extends OperandExportingPars
             }
         });
     }
-    
+
     protected abstract void fixBooleanOperatorChain();
 
     protected void checkOperandForBeing(final Operand op, final Operand.OperandType requestedType, String usedOperator) {

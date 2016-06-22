@@ -5,6 +5,7 @@
 package parser.general;
 
 import parser.ExpressionParser;
+import parser.ParserFactory;
 import symlist.SymListManager;
 
 /**
@@ -18,9 +19,9 @@ public class ExpressionParserTestSetup extends ParserTestSetup {
     }
         
     private static ExpressionParser setupTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
+        setupInfraStructure(srcLine);
         fillSymList(SymListManager.ElementType.INT);
-        return new ExpressionParser(scanner, symListManager, code, errorHandler);
+        return ParserFactory.create(ExpressionParser.class);
     }
     
     public static ExpressionParser getAndRel() {
