@@ -58,6 +58,12 @@ public class ReferenceParserTest {
     }
     
     @Test
+    public void testParsingArrayReference() {
+        ReferenceParser p = ReferenceParserTestSetup.getArrayReferenceSetup();
+        assertTrue(p.parse());
+    }
+    
+    @Test
     public void testParsingNumberFails() {
         ReferenceParser p = ReferenceParserTestSetup.getNumberTestSetup();
         assertFalse(p.parse());

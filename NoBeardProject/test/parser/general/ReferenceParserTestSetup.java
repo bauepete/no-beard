@@ -50,4 +50,11 @@ public class ReferenceParserTestSetup extends ParserTestSetup {
         setupInfraStructure("3");
         return ParserFactory.create(ReferenceParser.class);
     }
+
+    public static ReferenceParser getArrayReferenceSetup() {
+        setupInfraStructure("x[3]");
+        ParserFactory.getSymbolListManager().newUnit(1);
+        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+        return ParserFactory.create(ReferenceParser.class);
+    }
 }

@@ -53,5 +53,12 @@ public class ReferenceParser extends Parser {
         where(foundSymbolListEntry != null && foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));
         
         sem(() -> op = foundSymbolListEntry.createOperand());
+        
+        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+            parseSymbol(Symbol.LBRACKET);
+            ExpressionParser p = ParserFactory.create(ExpressionParser.class);
+            parseSymbol(p);
+            parseSymbol(Symbol.RBRACKET);
+        }
     }
 }
