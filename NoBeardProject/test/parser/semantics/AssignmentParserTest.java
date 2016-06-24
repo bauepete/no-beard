@@ -6,9 +6,7 @@ package parser.semantics;
 
 import nbm.Nbm.Opcode;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -24,14 +22,6 @@ import symlist.SymListManager;
 public class AssignmentParserTest {
 
     public AssignmentParserTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
     }
 
     @Before

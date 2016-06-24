@@ -101,6 +101,10 @@ public abstract class Parser {
 
     public abstract void parseSpecificPart();
 
+    /**
+     * 
+     * @return 
+     */
     public final boolean parse() {
         parsingWasSuccessfulUntilNow = true;
         parseSpecificPart();
@@ -186,24 +190,14 @@ public abstract class Parser {
      * @return The name (spix) of the identifier.
      */
     protected int ident() {
-        if (scanner.getCurrentToken().getSy() != Symbol.IDENTIFIER) {
-            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.IDENTIFIER.toString()));
-//            ErrorHandler.getInstance().raise(new SynErr().new IdentifierExpected());
-            return NOIDENT;
-        }
-        int spix = scanner.getCurrentToken().getValue();
-        scanner.nextToken();
+        parseSymbol(Symbol.IDENTIFIER);
+        int spix = getLastParsedToken().getValue();
         return spix;
     }
 
     protected int parseNumber() {
-        if (scanner.getCurrentToken().getSy() != Symbol.NUMBER) {
-            getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, Symbol.NUMBER.toString()));
-//            ErrorHandler.getInstance().raise(new SynErr().new SymbolExpected(Symbol.NUMBER.toString()));
-            return NONUMBER;
-        }
-        int val = scanner.getCurrentToken().getValue();
-        scanner.nextToken();
+        parseSymbol(Symbol.NUMBER);
+        int val = getLastParsedToken().getValue();
         return val;
     }
 }
