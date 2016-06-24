@@ -52,7 +52,7 @@ public class ExpressionParser extends OperandExportingParser {
     }
 
     @Override
-    public void parseSpecificPart() {
+    protected void parseSpecificPart() {
         OperandExportingParser simExprP = parseLeftHandSide();
         if (currentTokenIsARelationalOperator()) {
             parseRightHandSide(simExprP);

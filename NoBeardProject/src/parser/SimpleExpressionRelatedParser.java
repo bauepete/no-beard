@@ -39,7 +39,7 @@ public abstract class SimpleExpressionRelatedParser extends OperandExportingPars
     protected Operand op2;
 
     @Override
-    public void parseSpecificPart() {
+    protected void parseSpecificPart() {
         parseLeadingSign();
         OperandExportingParser subExpressionParser = createSubExpressionParser();
         parseSymbol(subExpressionParser);

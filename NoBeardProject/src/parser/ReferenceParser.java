@@ -47,7 +47,7 @@ public class ReferenceParser extends Parser {
     }
 
     @Override
-    public void parseSpecificPart() {
+    protected void parseSpecificPart() {
         parseSymbol(Symbol.IDENTIFIER);
         sem(() -> foundSymbolListEntry = sym.findObject(getLastParsedToken().getValue()));
         where(foundSymbolListEntry != null && foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));

@@ -71,7 +71,7 @@ public class BlockParser extends Parser {
     }
 
     @Override
-    public void parseSpecificPart() {
+    protected void parseSpecificPart() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

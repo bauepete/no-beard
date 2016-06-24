@@ -4,7 +4,6 @@
  */
 package parser;
 
-import error.Error;
 import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;

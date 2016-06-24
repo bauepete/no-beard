@@ -55,7 +55,7 @@ public class FactorParser extends OperandExportingParser {
     }
 
     @Override
-    public void parseSpecificPart() {
+    protected void parseSpecificPart() {
         switch (scanner.getCurrentToken().getSy()) {
             case IDENTIFIER:
                 ReferenceParser p = ParserFactory.create(ReferenceParser.class);

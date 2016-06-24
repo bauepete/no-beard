@@ -99,7 +99,7 @@ public abstract class Parser {
      */
     public abstract boolean parseOldStyle();
 
-    public abstract void parseSpecificPart();
+    protected abstract void parseSpecificPart();
 
     /**
      * 
