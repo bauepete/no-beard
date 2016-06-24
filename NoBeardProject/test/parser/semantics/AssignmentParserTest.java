@@ -4,6 +4,9 @@
  */
 package parser.semantics;
 
+import error.ErrorHandler;
+import error.SourceCodeInfo;
+import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.Before;
@@ -12,6 +15,8 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.Parser;
 import parser.ParserFactory;
+import scanner.Scanner;
+import scanner.SrcReader;
 import scanner.SrcStringReader;
 import symlist.SymListManager;
 
@@ -36,7 +41,6 @@ public class AssignmentParserTest {
      * Test of parseOldStyle method, of class AssignmentParser.
      */
     @Test
-    @Ignore
     public void testParse() {
         System.out.println("parse");
         byte[] expResult = {
@@ -44,14 +48,18 @@ public class AssignmentParserTest {
             Opcode.LIT.byteCode(), 0, 3,
             Opcode.STO.byteCode()
         };
+        SrcReader srcReader = new SrcStringReader("x = 3");
+        ErrorHandler errorHandler = new ErrorHandler(srcReader);
+        CodeGenerator codeGen = new CodeGenerator(32);
+        Scanner scanner = new Scanner(srcReader, errorHandler);
 
-        ParserFactory.setup(new SrcStringReader("x = 3"));
+        ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymListManager(codeGen, scanner, errorHandler));
         ParserFactory.getSymbolListManager().newUnit(1);
         ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
 
         Parser p = ParserFactory.createAssignmentParser();
 
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, ParserFactory.getCodeGenerator().getByteCode());
     }
 }

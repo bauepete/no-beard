@@ -26,7 +26,7 @@ public class Error {
         BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name start differs from block name end: %s"),
         OPERAND_KIND_EXPECTED(52, ErrorClass.SEMANTICAL, "%s expected"),
         // TODO: following message should be replaced by "%s can't be converted to %s"
-        INCOMPATIBLE_TYPES(53, ErrorClass.SEMANTICAL, "The following types are not compatible: %s"),
+        INCOMPATIBLE_TYPES(53, ErrorClass.SEMANTICAL, "Incompatible types or size: %s0 cannot be converted to %s1 or operand of size %s2 cannot get an assignment of an operand of size %s3"),
         NAME_ALREADY_DEFINED(54, ErrorClass.SEMANTICAL, "Identifier %s is already defined"),
         TYPES_EXPECTED(55, ErrorClass.SEMANTICAL, "Types %l expected"),
         POSITIVE_ARRAY_SIZE_EXPECTED(56, ErrorClass.SEMANTICAL, "Array size must be a positive integer"),

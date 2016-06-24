@@ -18,47 +18,51 @@ import symlist.SymListManager;
  */
 public class AssignmentParser extends Parser {
 
+    private Operand destOp;
+    private Operand destAddrOp;
+    private Operand srcOp;
+    
+    /**
+     * 
+     * @param s
+     * @param sym
+     * @param c
+     * @param e 
+     * @deprecated 
+     */
     public AssignmentParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
-        super(s, sym, c, e);
+        super();
     }
 
-    @Override
-    public boolean parseOldStyle() {
-        ReferenceParser refP = ParserFactory.create(ReferenceParser.class);
-        if (!refP.parseOldStyle()) {
-            return false;
-        }
-        // sem
-        Operand destOp = refP.getOperand();
-        Operand destAddrOp = destOp.emitLoadAddr(code); 
-        // endsem
-        
-        if (!tokenIsA(Symbol.ASSIGN)) {
-            getErrorHandler().raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, Symbol.ASSIGN.toString()));
-            return false;
-        }
-        SimpleExpressionParser exprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
-        if (!exprP.parseOldStyle()) {
-            return false;
-        }
-        // sem
-        Operand srcOp = exprP.getOperand();
-        // endsem
-        // cc
-        if (srcOp.getType() != destOp.getType() || srcOp.getSize() != destOp.getSize()) {
-            String[] opList = {srcOp.getType().toString(), destOp.getType().toString()};
-            getErrorHandler().raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, opList));
-            return false;
-        }
-        // endcc
-        // sem
-        srcOp.emitAssign(code, destAddrOp);
-        // endsem
-        return true;
+    public AssignmentParser() {
+
     }
 
     @Override
     public void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ReferenceParser referenceParser = ParserFactory.create(ReferenceParser.class);
+        parseSymbol(referenceParser);
+        sem(() -> {
+            destOp = referenceParser.getOperand();
+            destAddrOp = destOp.emitLoadAddr(code);
+        });
+        parseSymbol(Symbol.ASSIGN);
+        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(expressionParser);
+        
+        sem(() -> srcOp = expressionParser.getOperand());
+        where(srcOp.getType() == destOp.getType() && srcOp.getSize() == destOp.getSize(),
+                () -> getErrorHandler().throwOperandsAreIncompatible(srcOp.getSize(), srcOp.getType(), destOp.getSize(), destOp.getType()));
+        sem(() -> srcOp.emitAssign(code, destAddrOp));
+    }
+
+    /**
+     * 
+     * @return 
+     * @deprecated 
+     */
+    @Override
+    public boolean parseOldStyle() {
+        return true;
     }
 }

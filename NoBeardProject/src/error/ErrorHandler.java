@@ -81,7 +81,7 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
     }
 
-    public void throwOperandsAreIncompatible(int size, Operand.OperandType type, int size0, Operand.OperandType type0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.OperandType typeOfOp1, Integer sizeOfOp2, Operand.OperandType typeOfOp2) {
+        raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
     }
 }
