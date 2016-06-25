@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import parser.SimpleExpressionParser;
+import parser.AddExpressionParser;
 import parser.general.SimpleExpressionParserTestSetup;
 
 /**
@@ -30,61 +30,61 @@ public class SimpleExpressionParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class SimpleExpressionParser.
+     * Test of parseOldStyle method, of class AddExpressionParser.
      */
     @Test
     public void testAdd() {
         System.out.println("testAdd");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testSub() {
         System.out.println("testSub");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testNegAdd() {
         System.out.println("testNegAdd");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testNeg() {
         System.out.println("testNeg");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testAddMul() {
         System.out.println("testAddMul");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testComplexExpr() {
         System.out.println("testComplexExpr");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
         assertEquals("Parse ", true, p.parseOldStyle());
     }
 
     @Test
     public void testNoExpr() {
         System.out.println("testNoExpr");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNoExprTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getNoExprTestSetup();
         assertEquals("Parse ", false, p.parse());
     }
     
     @Test
     public void testOrExpr() {
         System.out.println("testOrExpr");
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parse());
     }
 }

@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.ParserFactory;
-import parser.SimpleExpressionParser;
+import parser.AddExpressionParser;
 import parser.general.SimpleExpressionParserTestSetup;
 
 /**
@@ -43,7 +43,7 @@ public class SimpleExpressionParserTest {
             Opcode.ADD.byteCode()
         };
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -62,7 +62,7 @@ public class SimpleExpressionParserTest {
             Opcode.SUB.byteCode()
         };
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -82,7 +82,7 @@ public class SimpleExpressionParserTest {
             Opcode.ADD.byteCode()
         };
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -99,7 +99,7 @@ public class SimpleExpressionParserTest {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.NEG.byteCode(),};
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -120,7 +120,7 @@ public class SimpleExpressionParserTest {
             Opcode.SUB.byteCode()
         };
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -143,7 +143,7 @@ public class SimpleExpressionParserTest {
             Opcode.DIV.byteCode(),
             Opcode.NEG.byteCode(),};
 
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, SimpleExpressionParserTestSetup.getByteCode());
@@ -167,14 +167,14 @@ public class SimpleExpressionParserTest {
             Opcode.LIT.byteCode(), 0, 1
         };
         
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();
         assertTrue(p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code", expected, SimpleExpressionParserTestSetup.getByteCode());
     }
     
     @Test
     public void testMixedOperands() {
-        SimpleExpressionParser p = SimpleExpressionParserTestSetup.getMixedOperandSetup();
+        AddExpressionParser p = SimpleExpressionParserTestSetup.getMixedOperandSetup();
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH.getNumber(), ParserFactory.getErrorHandler().getAllErrors().get(0).getNumber());
     }

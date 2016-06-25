@@ -17,9 +17,9 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class IfStatParser extends Parser {
+public class IfParser extends Parser {
 
-    public IfStatParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
+    public IfParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
 

@@ -65,7 +65,7 @@ public class ExpressionParser extends OperandExportingParser {
     }
 
     private OperandExportingParser parseLeftHandSide() {
-        OperandExportingParser simExprP = ParserFactory.create(SimpleExpressionParser.class);
+        OperandExportingParser simExprP = ParserFactory.create(AddExpressionParser.class);
         parseSymbol(simExprP);
         sem(() -> exportedOperand = simExprP.getOperand());
         return simExprP;

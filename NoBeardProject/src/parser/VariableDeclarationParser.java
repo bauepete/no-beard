@@ -20,11 +20,11 @@ import symlist.SymListManager.ElementType;
  *
  * @author peter
  */
-public class VarDeclParser extends Parser {
+public class VariableDeclarationParser extends Parser {
 
     private ElementType elemType;
 
-    VarDeclParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
+    VariableDeclarationParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super(s, sym, c, eh);
     }
 
@@ -81,7 +81,7 @@ public class VarDeclParser extends Parser {
             Operand destAddrOp = destOp.emitLoadAddr(code);
             // endsem
             scanner.nextToken();
-            SimpleExpressionParser exprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
+            AddExpressionParser exprP = new AddExpressionParser(scanner, sym, code, getErrorHandler());
             if (!exprP.parseOldStyle()) {
                 return false;
             }

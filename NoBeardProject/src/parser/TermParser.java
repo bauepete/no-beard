@@ -36,7 +36,7 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class TermParser extends SimpleExpressionRelatedParser {
+public class TermParser extends ExpressionRelatedParser {
 
     public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
         super();

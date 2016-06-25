@@ -31,7 +31,7 @@ import symlist.Operand;
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public abstract class SimpleExpressionRelatedParser extends OperandExportingParser {
+public abstract class ExpressionRelatedParser extends OperandExportingParser {
 
     protected Nbm.Opcode opCode;
     protected int positionOfLastBooleanOperatorJump;

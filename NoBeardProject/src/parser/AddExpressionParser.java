@@ -36,13 +36,13 @@ import symlist.SymListManager;
  *
  * @author peter
  */
-public class SimpleExpressionParser extends SimpleExpressionRelatedParser {
+public class AddExpressionParser extends ExpressionRelatedParser {
 
-    public SimpleExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
+    public AddExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super();
     }
 
-    public SimpleExpressionParser() {
+    public AddExpressionParser() {
 
     }
 

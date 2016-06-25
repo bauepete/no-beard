@@ -25,12 +25,12 @@ public class StatParser extends Parser {
 
     @Override
     public boolean parseOldStyle() {
-        SimpleExpressionParser exprP = new SimpleExpressionParser(scanner, sym, code, getErrorHandler());
+        AddExpressionParser exprP = new AddExpressionParser(scanner, sym, code, getErrorHandler());
         switch (scanner.getCurrentToken().getSy()) {
             case INT:
             case BOOL:
             case CHAR:
-                VarDeclParser varDeclP = new VarDeclParser(scanner, sym, code, getErrorHandler());
+                VariableDeclarationParser varDeclP = new VariableDeclarationParser(scanner, sym, code, getErrorHandler());
                 if (!varDeclP.parseOldStyle()) {
                     return false;
                 }
@@ -66,7 +66,7 @@ public class StatParser extends Parser {
                 break;
                 
             case IF:
-                IfStatParser ifStatP = new IfStatParser(scanner, sym, code, getErrorHandler());
+                IfParser ifStatP = new IfParser(scanner, sym, code, getErrorHandler());
                 if (!ifStatP.parseOldStyle()) {
                     return false;
                 }

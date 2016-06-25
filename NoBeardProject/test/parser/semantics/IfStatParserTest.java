@@ -6,7 +6,7 @@ package parser.semantics;
 
 import nbm.Nbm.Opcode;
 import parser.general.IfStatParserTestSetup;
-import parser.IfStatParser;
+import parser.IfParser;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class IfStatParserTest {
     }
     
     /**
-     * Test of parseOldStyle method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfParser.
      */
     @Test
     public void testSimpleIf() {
@@ -58,13 +58,13 @@ public class IfStatParserTest {
             Opcode.PUT.byteCode(), 1        // put simple char
         };
         
-        IfStatParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
+        IfParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
         assertTrue(instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
 
     /**
-     * Test of parseOldStyle method, of class IfStatParser.
+     * Test of parseOldStyle method, of class IfParser.
      */
     @Test
     public void testIfElse() {
@@ -84,7 +84,7 @@ public class IfStatParserTest {
             Opcode.LIT.byteCode(), 0, 1,    // width of column
             Opcode.PUT.byteCode(), 1,       // put simple char
         };
-        IfStatParser instance = IfStatParserTestSetup.getIfElseTestSetup();
+        IfParser instance = IfStatParserTestSetup.getIfElseTestSetup();
         assertTrue(instance.parseOldStyle());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
     }
