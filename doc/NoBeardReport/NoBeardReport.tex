@@ -178,13 +178,13 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 		\startrule{Put}{``put'' ``('' Expression \{``,'' Expression\} ``)''``;''}
 		\alternativeend{``putln'' ``;''}
 		\\
-		\completerule{If}{``if'' Expression Block $|$ ``else'' Block}
+		\completerule{If}{``if'' Expression Block [ ``else'' Block ]}
 		\\
 		\completerule{Assignment}{Reference ``='' Expression ``;''}
 		\completerule{Reference}{Identifier [ ``['' Expression``]'']}
 		\\
-		\completerule{Expression}{SimpleExpression RelOp SimpleExpression}
-		\completerule{SimpleExpression}{[AddOp] Term \{AddOp Term\}}
+		\completerule{Expression}{AddExpression [RelOp AddExpression]}
+		\completerule{AddExpression}{[AddOp] Term \{AddOp Term\}}
 		\completerule{Term}{Factor \{MulOp Factor\}}
 		\completerule{Factor}{Reference $|$ number $|$ string $|$ ``('' Expression ``)''}
 		\\
