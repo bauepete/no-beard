@@ -2,15 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
-import symlist.Operand.Kind;
+import symboltable.AddrOnStackOperand;
+import symboltable.Operand;
+import symboltable.ConstantOperand;
+import symboltable.VariableOperand;
+import symboltable.Operand.Kind;
 import scanner.Scanner;
 import parser.semantics.AssemblerCodeChecker;
 import nbm.Nbm.Opcode;
 import error.ErrorHandler;
 import error.Error.ErrorType;
-import symlist.Operand.Type;
+import symboltable.Operand.Type;
 import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.AfterClass;

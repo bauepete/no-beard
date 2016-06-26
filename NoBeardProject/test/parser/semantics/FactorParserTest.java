@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.FactorParser;
 import parser.general.FactorParserTestSetup;
-import symlist.Operand;
-import symlist.Operand.Kind;
+import symboltable.Operand;
+import symboltable.Operand.Kind;
 
 /**
  *

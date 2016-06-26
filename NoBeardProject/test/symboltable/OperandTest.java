@@ -2,8 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
+import symboltable.Operand;
+import symboltable.AddrOnStackOperand;
+import symboltable.ConstantOperand;
+import symboltable.ValueOnStackOperand;
+import symboltable.VariableOperand;
 import scanner.Scanner;
 import error.ErrorHandler;
 import error.Error;
@@ -11,7 +16,7 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nbm.CodeGenerator;
-import symlist.Operand.Type;
+import symboltable.Operand.Type;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

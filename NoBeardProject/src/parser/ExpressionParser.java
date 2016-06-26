@@ -29,9 +29,9 @@ import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand;
-import symlist.SymListManager;
-import symlist.ValueOnStackOperand;
+import symboltable.Operand;
+import symboltable.SymListManager;
+import symboltable.ValueOnStackOperand;
 
 /**
  *

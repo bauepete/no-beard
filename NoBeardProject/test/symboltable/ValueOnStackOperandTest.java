@@ -2,9 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
-import symlist.Operand.Kind;
+import symboltable.AddrOnStackOperand;
+import symboltable.Operand;
+import symboltable.ConstantOperand;
+import symboltable.VariableOperand;
+import symboltable.ValueOnStackOperand;
+import symboltable.Operand.Kind;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;

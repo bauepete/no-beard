@@ -9,9 +9,9 @@ import error.Error;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand;
-import symlist.Operand.Type;
-import symlist.SymListManager;
+import symboltable.Operand;
+import symboltable.Operand.Type;
+import symboltable.SymListManager;
 
 /**
  *

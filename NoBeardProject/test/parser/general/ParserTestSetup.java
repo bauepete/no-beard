@@ -10,8 +10,8 @@ import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symlist.Operand;
-import symlist.SymListManager;
+import symboltable.Operand;
+import symboltable.SymListManager;
 
 /**
  *

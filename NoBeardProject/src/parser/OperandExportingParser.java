@@ -23,7 +23,7 @@
  */
 package parser;
 
-import symlist.Operand;
+import symboltable.Operand;
 
 /**
  *

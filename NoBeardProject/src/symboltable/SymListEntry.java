@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
 
 /**
@@ -68,7 +68,7 @@ public class SymListEntry {
     }
 
     public Operand createOperand() {
-        Operand op = null;
+        Operand op;
 
         switch (kind) {
             case ANONYMOUSBLOCK:

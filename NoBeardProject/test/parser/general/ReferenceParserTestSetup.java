@@ -25,7 +25,7 @@ package parser.general;
 
 import parser.ParserFactory;
 import parser.ReferenceParser;
-import symlist.SymListManager;
+import symboltable.SymListManager;
 
 /**
  *

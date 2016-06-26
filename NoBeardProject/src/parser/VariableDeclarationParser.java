@@ -10,11 +10,11 @@ import error.Error.ErrorType;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand;
-import symlist.Operand.Kind;
-import symlist.SymListEntry;
-import symlist.SymListManager;
-import symlist.SymListManager.ElementType;
+import symboltable.Operand;
+import symboltable.Operand.Kind;
+import symboltable.SymListEntry;
+import symboltable.SymListManager;
+import symboltable.SymListManager.ElementType;
 
 /**
  *

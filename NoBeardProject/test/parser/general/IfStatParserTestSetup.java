@@ -5,7 +5,7 @@
 package parser.general;
 
 import parser.IfParser;
-import symlist.SymListManager;
+import symboltable.SymListManager;
 
 /**
  *

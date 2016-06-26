@@ -8,8 +8,8 @@ import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand;
-import symlist.SymListManager;
+import symboltable.Operand;
+import symboltable.SymListManager;
 
 /**
  *

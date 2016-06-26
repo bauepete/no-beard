@@ -10,8 +10,8 @@ import nbm.CodeGenerator;
 import scanner.NameManager;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.SymListEntry;
-import symlist.SymListManager;
+import symboltable.SymListEntry;
+import symboltable.SymListManager;
 
 /**
  *

@@ -25,7 +25,7 @@ package parser;
 
 import nbm.Nbm;
 import scanner.Scanner;
-import symlist.Operand;
+import symboltable.Operand;
 
 /**
  *

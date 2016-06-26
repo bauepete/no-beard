@@ -18,7 +18,7 @@ import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symlist.SymListManager;
+import symboltable.SymListManager;
 
 /**
  *

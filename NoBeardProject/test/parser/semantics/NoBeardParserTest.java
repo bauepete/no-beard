@@ -23,7 +23,7 @@ import scanner.Scanner;
 import scanner.SrcFileReader;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symlist.SymListManager;
+import symboltable.SymListManager;
 
 /**
  *

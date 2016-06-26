@@ -24,9 +24,9 @@
 package parser;
 
 import scanner.Scanner.Symbol;
-import symlist.Operand;
-import symlist.Operand.Kind;
-import symlist.SymListEntry;
+import symboltable.Operand;
+import symboltable.Operand.Kind;
+import symboltable.SymListEntry;
 
 /**
  *

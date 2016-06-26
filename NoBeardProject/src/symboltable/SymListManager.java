@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
 import error.Error;
 import error.Error.ErrorType;
 import error.ErrorHandler;
-import symlist.Operand.Kind;
-import symlist.Operand.Type;
+import symboltable.Operand.Kind;
+import symboltable.Operand.Type;
 import java.util.ListIterator;
 import java.util.Stack;
 import nbm.CodeGenerator;

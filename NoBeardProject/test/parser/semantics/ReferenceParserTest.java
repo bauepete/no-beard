@@ -33,7 +33,7 @@ import parser.ParserFactory;
 import parser.ReferenceParser;
 import parser.general.ReferenceParserTestSetup;
 import scanner.Scanner.Symbol;
-import symlist.Operand;
+import symboltable.Operand;
 
 /**
  *

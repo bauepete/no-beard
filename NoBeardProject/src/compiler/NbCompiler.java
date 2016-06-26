@@ -9,8 +9,8 @@ import nbm.CodeGenerator;
 import parser.NoBeardParser;
 import scanner.Scanner;
 import scanner.SrcReader;
-import symlist.Operand;
-import symlist.SymListManager;
+import symboltable.Operand;
+import symboltable.SymListManager;
 /**
  *
  * @author peter

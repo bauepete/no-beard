@@ -6,7 +6,7 @@ package parser.general;
 
 import parser.ExpressionParser;
 import parser.ParserFactory;
-import symlist.SymListManager;
+import symboltable.SymListManager;
 
 /**
  *

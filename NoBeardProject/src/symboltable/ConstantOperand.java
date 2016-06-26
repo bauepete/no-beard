@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package symlist;
+package symboltable;
 
 import error.Error.ErrorType;
 import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import symlist.Operand.Kind;
-import symlist.Operand.Type;
+import symboltable.Operand.Kind;
+import symboltable.Operand.Type;
 
 /**
  *

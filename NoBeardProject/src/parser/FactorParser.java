@@ -28,9 +28,9 @@ import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.StringToken;
-import symlist.ConstantOperand;
-import symlist.Operand;
-import symlist.SymListManager;
+import symboltable.ConstantOperand;
+import symboltable.Operand;
+import symboltable.SymListManager;
 
 /**
  *

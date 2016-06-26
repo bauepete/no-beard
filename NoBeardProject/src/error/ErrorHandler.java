@@ -6,7 +6,7 @@ package error;
 
 import java.util.LinkedList;
 import java.util.List;
-import symlist.Operand;
+import symboltable.Operand;
 
 /**
  *

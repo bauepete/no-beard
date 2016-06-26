@@ -30,9 +30,9 @@ import nbm.CodeGenerator;
 import nbm.Nbm;
 import scanner.Scanner;
 import scanner.SrcReader;
-import symlist.Operand;
-import symlist.SymListEntry;
-import symlist.SymListManager;
+import symboltable.Operand;
+import symboltable.SymListEntry;
+import symboltable.SymListManager;
 
 /**
  *
