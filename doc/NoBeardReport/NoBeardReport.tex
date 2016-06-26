@@ -6,17 +6,13 @@
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{epstopdf}
-\usepackage[usenames, dvipsnames]{color}
+\usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{hyperref}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \newcommand{\leongage}{NoBeard}
 
-%\newenvironment{grammar}
-%	{\begin{tabular}[b]{lcl}}
-%	{\end{tabular}}
-%\newcommand{\rewritten}{$\to$}
 \newcommand{\alternative}{$\mid \;$}
 \newcommand{\emptystring}{$\varepsilon$}
 
@@ -32,6 +28,7 @@
 \newcommand{\alternativeend}[1]{ & $|$ & #1.\\}
 \newcommand{\finishrule}[1]{ & & #1.\\}
 
+% ----------------------------------------------- Definition of attributed grammar environment
 \newenvironment{atg}[1][6cm]
 	{\begin{tabular}[b]{lclp{#1}}}
 	{\end{tabular}}
@@ -47,14 +44,13 @@
 	
 \newcommand{\where}{\underline{where} }
 
-\author{P. Bauer}
-\date{V.\_01.00.00}                                           % Activate to display a given date or no date
-
-% -------------------------------------------------- Definition of lstlisting for NoBeard ------------------------------------------------------------------
+% --------------------------------------------------- Definition of colors used in source code listings ----------------------------------------------
 \definecolor{srcred}{rgb}{0.6,0,0}
 \definecolor{srcpurple}{rgb}{0.5,0,0.35}
 \definecolor{srcgreen}{rgb}{0.25,0.5,0.35}
 \definecolor{srcblue}{rgb}{0.25,0.35,0.75}
+
+% -------------------------------------------------- Definition of lstlisting for NoBeard ------------------------------------------------------------------
 \lstdefinelanguage{NoBeard}{
 	basicstyle=\ttfamily,
 	frame=single,
@@ -67,13 +63,60 @@
 	showstringspaces=false
 }
 
+% --------------------------------- Definition of lstlisting for AsmDef the language to define assember commands -----------------------
+\lstdefinelanguage{AsmDef}{
+	basicstyle=\ttfamily,
+	frame=single,
+	sensitive=true,
+	tabsize=3,
+	morekeywords = {push, pop, printf, dat, prog, top, db, pc, ms},
+	morecomment=[l][\color{srcgreen}]{//},
+	morestring=[b][\color{srcred}]{"},
+	keywordstyle=\color{srcpurple},
+	showspaces=false,
+	showstringspaces=false
+}
+
+% ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
+\newcommand{\onebyteinstruction}[1]{
+\begin{tabular}{|p{3.9em}|}
+\hline
+\tiny{Byte 0} \\ \hline
+#1  \\ \hline
+\end{tabular}
+}
+
+\newcommand{\twobyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} \\ \hline
+#1 & #2 \\ \hline
+\end{tabular}
+}
+
+\newcommand{\threebyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} \\ \hline
+#1 & \multicolumn{2}{c |}{#2} \\ \hline
+\end{tabular}
+}
+
+\newcommand{\fourbyteinstructiona}[3]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|p{9em}|}
+\hline
+\tiny{0} & \tiny{1} & \tiny{2} & \tiny{3} \\ \hline
+#1 & #2 & \multicolumn{2}{c |}{#3} \\ \hline
+\end{tabular}
+}
+
+% ---------------------------------------------------------------------- Start of document -----------------------------------------------------------------
 \begin{document}
 \begin{titlepage}
 \begin{center}
 \includegraphics[scale=0.3]{no_beard_1.jpg} \\[2em]
-%\includegraphics[scale=0.3]{no_beard_2.jpg} \\[2em]
 {\Huge A Formal Description of \leongage} \\[1em]
-{\large v 01.02.00} \\[2em]
+{\large v 1.2} \\[2em]
 {\Large P. Bauer} \\[1em]
 HTBLA Leonding \\
 Limesstr. 14 - 18 \\
@@ -82,7 +125,18 @@ Austria
 \end{center}
 \end{titlepage}
 
-%\maketitle
+\section*{Revisions}
+\begin{tabular}{|l|l|p{.5\textwidth}|}
+\hline
+\cellcolor{Gray}\textcolor{White}{Date} & \cellcolor{Gray}\textcolor{White}{Author} & \cellcolor{Gray}\textcolor{White}{Change} \\ \hline
+June 25, 2016 & P. Bauer & Added more detailed description of the machine and added all assembler instructions used so far.  \\ \hline
+June 12, 2016 & P. Bauer & Changed environment for grammar and formatting of source code. \\ \hline
+June 5, 2014 & P. Bauer & {\bf Released v. 1.1}  \\ \hline
+June 5, 2012 & P. Bauer & {\bf Released v. 1.0}  \\ \hline
+\end{tabular}
+
+\pagebreak
+
 \tableofcontents
 \chapter{Introduction}
 According to a web article (see \cite{khason_computer_2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is/are are bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
@@ -194,16 +248,48 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 	\end{grammar}
 
 \chapter{The \leongage{} Machine}
+\lstset{language=AsmDef}
 \section{Overview}
-The virtual machine being target for \leongage{} programs is a stack machine with instructions of variable length. The word
-width of the \leongage{} machine is 4 bytes.
+The virtual machine being target for \leongage{} programs is a stack machine with instructions of variable length and has the following components. The word width of the \leongage{} machine is 4 bytes.
 
-\begin{description}
-	\item[dat[MAX\_DATA]] The data memory is byte addressed and is separated into three parts: String constants,
-	activation records, and expression stack. Figure
+\begin{tabular}{p{.2\textwidth}p{.71\textwidth}}
+	\lstinline$prog[MAX_PROG]$ & The {\em program memory} which is byte addressed. \\
 	
-	The expression stack is addressed word-wise only.
-\end{description}
+	\lstinline$dat[MAX_DATA]$] & The {\em data memory} is byte addressed and is separated into two parts:
+	\begin{itemize}
+		\item String constants
+		\item Stack frames of the currently running functions
+	\end{itemize}
+	Figure~\ref{fig:datamemory} shows this. Before a program is started the string constants are stored in constant memory. On top of this the stack frames are maintained as follows: Every time a function is called a frame is added. It holds data for the function arguments, local variables, some auxiliary data and its expression stack (shortly called stack in the sequel). As soon as the function ends, its frame is removed. A more detailed description of stack frames is given in section~\ref{sec:stackframes}.
+	
+	The expression stack is used to store data needed for each statement. It grows and shrinks as needed and is empty at the end of each statement. The stack is addressed word-wise only. The functions \lstinline$push()$ and \lstinline$pop()$ are used to add and remove values to and from the stack, respectively. \\
+	
+	\lstinline$top$ & Address of the start of the last used word on the stack. \\
+	\lstinline$db$ & {\em Data Base}: Address of the first byte of the currently running function's stack frame. \\
+	\lstinline$pc$ & {\em Program Counter}: Start address of the next instruction in \lstinline$prog$ to be executed.\\
+	\lstinline$ms$ & {\em Machine State}: The \leongage{} machine may have three different states:
+	\begin{itemize}
+		\item \lstinline$run$: The machine runs
+		\item \lstinline$stop$: The machine stops. Usually when the end of program is reached.
+		\item \lstinline$error$: Error state
+	\end{itemize}
+\end{tabular}
+
+\begin{figure}\label{fig:datamemory}
+\begin{center}
+\begin{tabular}{p{8em}|p{8em}|}
+\cline{2-2}
+\parbox[t][3em][t]{8em}{\hfill 0} & String Constants \\[3em] \cline{2-2}
+& Stack frame 1 \\[2em] \cline{2-2}
+& Stack frame 2 \\[2em] \cline{2-2}
+& \ldots \\[2em] \cline{2-2}
+\parbox[b][4em][b]{8em}{\hfill MAX\_DATA} & free \\ \cline{2-2}
+\end{tabular}
+\end{center}
+\caption{Data Memory of the \leongage{} Machine}
+\end{figure}
+
+\section{Stack Frames}\label{sec:stackframes}
 
 \section{Runtime Structure of a \leongage{} Program}
 The \leongage{} Machine follows the following fixed execution cycle:
@@ -214,7 +300,6 @@ The \leongage{} Machine follows the following fixed execution cycle:
 \end{enumerate}
 The very first instruction is fetched from {\tt prog[startPc]} where {\tt startPc} has to be provided as an argument when starting the program. From this point of time onwards the program is executed until the machine state changes from {\em run}.
 
-\lstset{language=Java, tabsize=2, basicstyle=\small}
 \begin{lstlisting}
 runProg(startPc) {
 	db = start byte of first free word in dat;
@@ -223,7 +308,7 @@ runProg(startPc) {
 	ms = run;
 	
 	while (ms == run) {
-		fetch instruction (opcode and operands) which starts at prog[pc];
+		fetch instruction which starts at prog[pc];
 		pc = pc + length of instruction;
 		execute instruction
 	}
@@ -233,55 +318,403 @@ runProg(startPc) {
 \section{Instructions}
 \leongage{} instructions have a variable length. Every instruction has one opcode and either zero, or one, or two operands. When describing the instructions we use the following conventions:
 
-\begin{tabular}{clcl}
-Name & Range & Size & Description \\
-n & 0 ... 65535 & 2 Bytes & Unsigned number \\
-b & 0 ... 65535 & 2 Bytes & Code address (absolute number)
-\end{tabular}
-\section{List of Assembler Instructions}
-\lstset{language=[x86masm]Assembler, tabsize=2, basicstyle=\footnotesize}
+Each instruction is described in one of the following subsections. The title of the subsection is the mnemonic by which the instruction is identified on assembler level. Then a table follows which shows the size of the instruction and which bytes carry which information. For all instructions the first byte is dedicated to the op code, which is the id by which the instruction is identified on machine language level.
 
-\begin{tabular}{p{2em}|p{2em}|l|p{7cm}|l}
-	Op code & Mnem-onic & ops & Description & Size \\ \hline
-	0 & LIT & n & Load Literal & 3 Bytes \\
-	&&&
-	\begin{lstlisting}
-	Push(n);
-	\end{lstlisting}\\ \hline
-	
-	1 & LA & d, a & Load Address & 4 Bytes\\
-	&&&
-	\begin{lstlisting}
-	base = db;
-	for (i= 0; i < d; i++) {
-		base = dat[base ... base + 3];
-	}
-	Push(base + a);
-	\end{lstlisting} \\ \hline
-	
-	2 & LV & d, a & Load Value & 4 Bytes \\
-	&&&
-	\begin{lstlisting}
-	base = db;
-	for (i = 0; i < d; i++) {
-		base = dat[base ... base + 3];
-	}
-	adr = base + a;
-	Push(dat[addr ... addr + 3]);
-	\end{lstlisting} \\ \hline
-	
-	3 & LC & d, a & Load Character & 4 Bytes \\
-	&&&
-	\begin{lstlisting}
-	base = db;
-	for (i = 0; i < d; i++) {
-		base = dat[base ... base + 3];
-	}
-	lw = 000dat[base + a];
-	Push(lw);
-	\end{lstlisting} \\
-	&&& The local word to be pushed onto the stack is filled with three trailing binary zeros following the character to be loaded from {\tt dat}. \\ \hline
+The remaining bytes, if any, are dedicated to the operands of the instruction. When describing these we use the following conventions:
+
+\begin{tabular}{llcp{18.8em}}
+Name & Range & Size & Description \\
+Literal & 0 ... 65535 & 2 Bytes & Unsigned integer number. \\
+Displacement & 0 ... 256 & 1 Byte & Static difference in hierarchy between declaration and usage of an object. \\
+DataAddress & 0 ... 65535 & 2 Bytes & Data address relative to the start of its stack frame.
 \end{tabular}
+
+Each of these subsections ends with a description of its operation: First a description in human language is given which is then followed by a formal definition.
+
+% ----------------------------- NOP ----------------------------
+\subsection{NOP}
+\subsubsection{Instruction}
+\onebyteinstruction{0x00}
+
+\subsubsection{Operation}
+Empty instruction. Does nothing
+
+\begin{lstlisting}
+NOP
+\end{lstlisting}
+
+% ----------------------------- LIT ----------------------------
+\subsection{LIT}
+\subsubsection{Instruction}
+\threebyteinstruction{0x01}{Literal}
+
+\subsubsection{Operation}
+Pushes a value on the expression stack.
+
+\begin{lstlisting}
+LIT Literal
+push(Literal);
+\end{lstlisting}
+
+% ----------------------------- LA ----------------------------
+\subsection{LA}
+\subsubsection{Instruction}
+\fourbyteinstructiona{0x02}{Displacement}{DataAddress}
+
+\subsubsection{Operation}
+Loads an address on the stack.
+
+	\begin{lstlisting}
+	LA Displacement DataAddress
+	base = db;
+	for (i= 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	push(base + DataAddress);
+	\end{lstlisting}
+
+% ----------------------------- LV ----------------------------
+\subsection{LV}
+\subsubsection{Instruction}
+\fourbyteinstructiona{0x03}{Displacement}{DataAddress}
+
+\subsubsection{Operation}
+Loads a value on the stack.
+
+	\begin{lstlisting}
+	LV Displacement DataAddress
+	base = db;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	adr = base + DataAddress;
+	push(dat[addr ... addr + 3]);
+	\end{lstlisting}
+
+% ----------------------------- LC ----------------------------
+\subsection{LC}
+\subsubsection{Instruction}
+\fourbyteinstructiona{0x04}{Displacement}{DataAddress}
+
+\subsubsection{Operation}
+Loads a character on the stack.
+
+	\begin{lstlisting}
+	LC Displacement DataAddress
+	base = db;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	// fill 3 bytes of zeros to get a full word
+	lw = 000dat[base + Address];
+	push(lw);
+	\end{lstlisting}
+
+% ----------------------------- STO ----------------------------
+\subsection{STO}
+\subsubsection{Instruction}
+\onebyteinstruction{0x07}
+
+\subsubsection{Operation}
+Stores a value on an address.
+
+	\begin{lstlisting}
+	STO
+	x = pop();
+	a = pop();
+	dat[a ... a + 3] = x;
+	\end{lstlisting}
+
+% ----------------------------- STC ----------------------------
+\subsection{STC}
+\subsubsection{Instruction}
+\onebyteinstruction{0x08}
+
+\subsubsection{Operation}
+Stores a character on an address.
+
+	\begin{lstlisting}
+	STC
+	x = pop();
+	a = pop();
+	// Only take the rightmost byte
+	dat[a] = 000x;
+	\end{lstlisting}
+
+% ----------------------------- ASSN ----------------------------
+\subsection{ASSN}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0A}
+
+\subsubsection{Operation}
+Array assignment.
+
+	\begin{lstlisting}
+	ASSN
+	n = pop();
+	src = pop();
+	dest = pop();
+	for (i = 0; i < n; i++)
+	   dat[dest + i] = dat[src + i];
+	\end{lstlisting}
+
+% ----------------------------- NEG ----------------------------
+\subsection{NEG}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0B}
+
+\subsubsection{Operation}
+Negates the top of the stack.
+
+	\begin{lstlisting}
+	NEG
+	x = pop();
+	push(-x);
+	\end{lstlisting}
+
+% ----------------------------- ADD ----------------------------
+\subsection{ADD}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0C}
+
+\subsubsection{Operation}
+Adds the top two values of the stack.
+
+	\begin{lstlisting}
+	ADD
+	push(pop() + pop());
+	\end{lstlisting}
+
+% ----------------------------- SUB ----------------------------
+\subsection{SUB}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0D}
+
+\subsubsection{Operation}
+Subtracts the top two values of the stack.
+
+	\begin{lstlisting}
+	SUB
+	y = pop();
+	x = pop();
+	push(x - y);
+	\end{lstlisting}
+
+% ----------------------------- MUL ----------------------------
+\subsection{MUL}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0E}
+
+\subsubsection{Operation}
+Multiplies the top two values of the stack.
+
+	\begin{lstlisting}
+	MUL
+	push(pop() * pop());
+	\end{lstlisting}
+
+% ----------------------------- DIV ----------------------------
+\subsection{DIV}
+\subsubsection{Instruction}
+\onebyteinstruction{0x0F}
+
+\subsubsection{Operation}
+Divides the top two values of the stack.
+
+	\begin{lstlisting}
+	DIV
+	y = pop();
+	x = pop();
+	push(x / y);
+	\end{lstlisting}
+
+% ----------------------------- MOD ----------------------------
+\subsection{MOD}
+\subsubsection{Instruction}
+\onebyteinstruction{0x10}
+
+\subsubsection{Operation}
+Calculates the remainder of the division of the top values of the stack.
+
+	\begin{lstlisting}
+	MOD
+	y = pop();
+	x = pop();
+	push(x % y);
+	\end{lstlisting}
+
+% ----------------------------- NOT ----------------------------
+\subsection{NOT}
+\subsubsection{Instruction}
+\onebyteinstruction{0x11}
+
+\subsubsection{Operation}
+Calculates the remainder of the division of the top values of the stack.
+
+	\begin{lstlisting}
+	NOT
+	x = pop();
+	if (x == 0)
+	   push(1);
+	else
+	   push(0);
+	\end{lstlisting}
+
+% ----------------------------- REL ----------------------------
+\subsection{REL}
+\subsubsection{Instruction}
+\twobyteinstruction{0x12}{RelOp}
+
+\subsubsection{Operation}
+Compares two values of the stack and pushes the result back on the stack. The operand \lstinline$RelOp$ can have six different values:
+\begin{itemize}
+	\item 0 for encoding $<$ (smaller than)
+	\item 1 for encoding $<=$ (smaller or equal than)
+	\item 2 for encoding == (equals)
+	\item 3 for encoding != (not equals)
+	\item 4 for encoding $>=$ (greater or equal than)
+	\item 0 for encoding $>$ (greater than)
+\end{itemize}
+	\begin{lstlisting}
+	REL RelOp
+	y = pop();
+	x = pop();
+	switch(RelOp) {
+		case 0:
+			if (x < y) push(1); else push(0);
+			break;
+		case 1:
+			if (x <= y) push(1); else push(0);
+			break;
+		case 2:
+			if (x == y) push(1); else push(0);
+			break;
+		case 3:
+			if (x != y) push(1); else push(0);
+			break;
+		case 4:
+			if (x >= y) push(1); else push(0);
+			break;
+		case 5:
+			if (x > y) push(1); else push(0);
+			break;
+	}
+	\end{lstlisting}
+
+% ----------------------------- FJMP ----------------------------
+\subsection{FJMP}
+\subsubsection{Instruction}
+\threebyteinstruction{0x16}{NewPc}
+
+\subsubsection{Operation}
+Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is false.
+
+	\begin{lstlisting}
+	FJMP newPc
+	x = pop();
+	if (x == 0)
+	   pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- TJMP ----------------------------
+\subsection{TJMP}
+\subsubsection{Instruction}
+\threebyteinstruction{0x17}{NewPc}
+
+\subsubsection{Operation}
+Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is true.
+
+	\begin{lstlisting}
+	TJMP newPc
+	x = pop();
+	if (x == 1)
+	   pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- JMP ----------------------------
+\subsection{JMP}
+\subsubsection{Instruction}
+\threebyteinstruction{0x18}{NewPc}
+
+\subsubsection{Operation}
+Unconditional jump: Sets \lstinline$pc$ to \lstinline$newPc$.
+
+	\begin{lstlisting}
+	JMP newPc
+	pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- PUT ----------------------------
+\subsection{PUT}
+\subsubsection{Instruction}
+\twobyteinstruction{0x1A}{Type}
+
+\subsubsection{Operation}
+Writes data to the terminal. Depending on \lstinline$Type$ different data types are printed:
+
+\begin{itemize}
+	\item 0: An \lstinline$int$ with a specific column width is printed
+	\item 1: A \lstinline$char$ with a specific column width is printed
+	\item 2: a \lstinline$string$ with a specific column width is printed
+	\item 3: a new line is printed
+\end{itemize}
+
+	\begin{lstlisting}
+	PUT Type
+	switch(Type) {
+		case 0:
+			width = pop();
+			x = pop();
+			// + means string concatenation in the next line
+			formatString = "%" + width + "d";
+			printf(formatString, x);
+			break;
+		case 1:
+			width= pop();
+			x = pop();
+			printf("%c", x);
+			for (i = 0; i < width - 1; i++)
+				printf(" ");
+			break;
+		case 2:
+			width = pop();
+			strLen = pop();
+			strAddr = pop();
+			printf("%s", dat[strAddr ... strAddr + strLen - 1]);
+			for (i = n; i < width - 1; i++)
+				printf(" ");
+			break;
+		case 3:
+			printf("\n");
+			break;
+	}
+	\end{lstlisting}
+
+% ----------------------------- INC ----------------------------
+\subsection{INC}
+\subsubsection{Instruction}
+\threebyteinstruction{0x1D}{Size}
+
+\subsubsection{Operation}
+Increases the size of the stack frame by \lstinline$Size$.
+
+	\begin{lstlisting}
+	INC Size
+	top += Size;
+	\end{lstlisting}
+
+% ----------------------------- HALT ----------------------------
+\subsection{HALT}
+\subsubsection{Instruction}
+\onebyteinstruction{0x1F}
+
+\subsubsection{Operation}
+Halts the machine.
+
+	\begin{lstlisting}
+	HALT
+	ms = stop;
+	\end{lstlisting}
 
 \chapter{Symbol List}
 
