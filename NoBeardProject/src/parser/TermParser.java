@@ -29,7 +29,7 @@ import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -43,7 +43,7 @@ public class TermParser extends ExpressionRelatedParser {
     }
 
     public TermParser() {
-        this.exportedOperand = new Operand(Operand.OperandKind.ILLEGAL, OperandType.VOID, 0, 0, 0);
+        this.exportedOperand = new Operand(Operand.Kind.ILLEGAL, Type.VOID, 0, 0, 0);
 
     }
 
@@ -75,12 +75,12 @@ public class TermParser extends ExpressionRelatedParser {
 
     @Override
     protected void handleBooleanSubExpression(OperandExportingParser factorParser) {
-        checkOperandForBeing(exportedOperand, OperandType.SIMPLEBOOL, "and");
+        checkOperandForBeing(exportedOperand, Type.SIMPLEBOOL, "and");
         sem(() -> exportedOperand.emitLoadVal(code));
         maintainBooleanOperatorChain();
         parseSymbol(factorParser);
         fetchOperand(factorParser);
-        checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "and");
+        checkOperandForBeing(op2, Type.SIMPLEBOOL, "and");
         emitCodeForLoadingValue();
     }
 
@@ -94,11 +94,11 @@ public class TermParser extends ExpressionRelatedParser {
 
     @Override
     protected void handleIntegerSubExpression(OperandExportingParser factorParser, String usedOperator) {
-        checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
+        checkOperandForBeing(exportedOperand, Type.SIMPLEINT, usedOperator);
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(factorParser);
         fetchOperand(factorParser);
-        checkOperandForBeing(op2, OperandType.SIMPLEINT, usedOperator);
+        checkOperandForBeing(op2, Type.SIMPLEINT, usedOperator);
         emitCodeForLoadingValue();
         sem(() -> code.emitOp(opCode));
     }

@@ -6,8 +6,8 @@ package symlist;
 
 import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import symlist.Operand.OperandKind;
-import symlist.Operand.OperandType;
+import symlist.Operand.Kind;
+import symlist.Operand.Type;
 
 /**
  *
@@ -15,8 +15,8 @@ import symlist.Operand.OperandType;
  */
 public class VariableOperand extends Operand {
 
-    public VariableOperand(OperandType type, int size, int valaddr, int level) {
-        super(OperandKind.VARIABLE, type, size, valaddr, level);
+    public VariableOperand(Type type, int size, int valaddr, int level) {
+        super(Kind.VARIABLE, type, size, valaddr, level);
     }
 
     public VariableOperand(Operand op) {

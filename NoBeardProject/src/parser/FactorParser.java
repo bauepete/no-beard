@@ -65,13 +65,13 @@ public class FactorParser extends OperandExportingParser {
 
             case NUMBER:
                 int val = parseNumber();
-                sem(() -> exportedOperand = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, val, 0));
+                sem(() -> exportedOperand = new ConstantOperand(Operand.Type.SIMPLEINT, 4, val, 0));
                 break;
 
             case STRING:
                 parseString();
                 sem(() -> {
-                    Operand.OperandType operandType = stringLength == 1 ? Operand.OperandType.SIMPLECHAR : Operand.OperandType.ARRAYCHAR;
+                    Operand.Type operandType = stringLength == 1 ? Operand.Type.SIMPLECHAR : Operand.Type.ARRAYCHAR;
                     exportedOperand = new ConstantOperand(operandType, stringLength, stringAddress, 0);
                 });
 

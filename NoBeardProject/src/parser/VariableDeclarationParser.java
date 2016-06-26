@@ -11,7 +11,7 @@ import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 import symlist.SymListEntry;
 import symlist.SymListManager;
 import symlist.SymListManager.ElementType;
@@ -41,7 +41,7 @@ public class VariableDeclarationParser extends Parser {
         }
         // cc
         SymListEntry obj = sym.findObject(name);
-        if (obj.getKind() != OperandKind.ILLEGAL) {
+        if (obj.getKind() != Kind.ILLEGAL) {
             getErrorHandler().raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, scanner.getNameManager().getStringName(name)));
             return false;
         }

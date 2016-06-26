@@ -59,7 +59,7 @@ public class ReferenceParserTest {
     public void testParseSimpleIdentifier() {
         ReferenceParser p = ReferenceParserTestSetup.getSimpleIdentifierTestSetup();
         assertTrue(p.parse());
-        assertEquals(Operand.OperandKind.VARIABLE, p.getOperand().getKind());
+        assertEquals(Operand.Kind.VARIABLE, p.getOperand().getKind());
     }
     
     @Test

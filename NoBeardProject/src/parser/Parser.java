@@ -31,7 +31,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.Token;
 import symlist.Operand;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -175,7 +175,7 @@ public abstract class Parser {
         return lastParsedToken;
     }
 
-    protected boolean operandIsA(Operand op, OperandType opType) {
+    protected boolean operandIsA(Operand op, Type opType) {
         if (op.getType() != opType) {
             getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, opType.toString()));
             //ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(opType.toString()));

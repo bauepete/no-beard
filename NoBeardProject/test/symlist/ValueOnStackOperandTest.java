@@ -4,7 +4,7 @@
  */
 package symlist;
 
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;
@@ -52,10 +52,10 @@ public class ValueOnStackOperandTest {
         toCode = new CodeGenerator(256);
         errorHandler = new ErrorHandler(new SrcStringReader(""));
         
-        intSrcOp = new ConstantOperand(Operand.OperandType.SIMPLEINT, 4, 17, 0);
-        intDestOp = new VariableOperand(Operand.OperandType.SIMPLEINT, 4, 32, 0);
-        charSrcOp = new ConstantOperand(Operand.OperandType.SIMPLECHAR, 4, 17, 0);
-        charDestOp = new VariableOperand(Operand.OperandType.SIMPLECHAR, 4, 32, 0);
+        intSrcOp = new ConstantOperand(Operand.Type.SIMPLEINT, 4, 17, 0);
+        intDestOp = new VariableOperand(Operand.Type.SIMPLEINT, 4, 32, 0);
+        charSrcOp = new ConstantOperand(Operand.Type.SIMPLECHAR, 4, 17, 0);
+        charDestOp = new VariableOperand(Operand.Type.SIMPLECHAR, 4, 32, 0);
         
         intVosSrcOp = new ValueOnStackOperand(intSrcOp);
         intAosDestOp = new AddrOnStackOperand(intDestOp);
@@ -73,8 +73,8 @@ public class ValueOnStackOperandTest {
     @Test
     public void testEmitLoadVal() {
         System.out.println("emitLoadVal");
-        Operand op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, 32, 0);
-        assertEquals(OperandKind.VALUEONSTACK, op.emitLoadVal(toCode).getKind());
+        Operand op = new ValueOnStackOperand(Operand.Type.SIMPLEBOOL, 4, 32, 0);
+        assertEquals(Kind.VALUEONSTACK, op.emitLoadVal(toCode).getKind());
         assertEquals(0, toCode.getPc());
     }
 
@@ -112,8 +112,8 @@ public class ValueOnStackOperandTest {
         System.out.println("testEmitAssignToArrInt");
         
         Operand.setErrorHandler(errorHandler);
-        Operand srcOp = new ValueOnStackOperand(Operand.OperandType.ARRAYINT, 40, 0, 0);
-        Operand destOp = new AddrOnStackOperand(new VariableOperand(Operand.OperandType.ARRAYINT, 40, 0, 0));
+        Operand srcOp = new ValueOnStackOperand(Operand.Type.ARRAYINT, 40, 0, 0);
+        Operand destOp = new AddrOnStackOperand(new VariableOperand(Operand.Type.ARRAYINT, 40, 0, 0));
         assertFalse(srcOp.emitAssign(toCode, destOp));
         assertEquals(0, toCode.getPc());
         assertEquals(Error.ErrorType.TYPES_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
@@ -126,7 +126,7 @@ public class ValueOnStackOperandTest {
     public void testEmitLoadAddr() {
         System.out.println("emitLoadAddr");
         
-        Operand op = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, 32, 0);
-        assertEquals(OperandKind.ILLEGAL, op.emitLoadAddr(toCode).getKind());
+        Operand op = new ValueOnStackOperand(Operand.Type.SIMPLEBOOL, 4, 32, 0);
+        assertEquals(Kind.ILLEGAL, op.emitLoadAddr(toCode).getKind());
     }
 }

@@ -11,8 +11,8 @@ import nbm.CodeGenerator;
  * @author peter
  */
 public class UnitOperand extends Operand {
-    UnitOperand(OperandType opType, int size, int valaddr, int level) {
-        super(OperandKind.UNIT, opType, size, valaddr, level);
+    UnitOperand(Type opType, int size, int valaddr, int level) {
+        super(Kind.UNIT, opType, size, valaddr, level);
     }
 
     @Override

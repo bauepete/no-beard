@@ -4,13 +4,13 @@
  */
 package symlist;
 
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 import scanner.Scanner;
 import parser.semantics.AssemblerCodeChecker;
 import nbm.Nbm.Opcode;
 import error.ErrorHandler;
 import error.Error.ErrorType;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -29,9 +29,9 @@ public class ConstantOperandTest {
     private CodeGenerator c;
     private Scanner scanner;
     private ErrorHandler errorHandler;
-    private final ConstantOperand intOp = new ConstantOperand(OperandType.SIMPLEINT, 4, 42, 0);
-    private final ConstantOperand charOp = new ConstantOperand(OperandType.SIMPLECHAR, 1, 0, 0);
-    private final ConstantOperand strOp = new ConstantOperand(OperandType.ARRAYCHAR, 10, 0, 0);
+    private final ConstantOperand intOp = new ConstantOperand(Type.SIMPLEINT, 4, 42, 0);
+    private final ConstantOperand charOp = new ConstantOperand(Type.SIMPLECHAR, 1, 0, 0);
+    private final ConstantOperand strOp = new ConstantOperand(Type.ARRAYCHAR, 10, 0, 0);
     
     public ConstantOperandTest() {
     }
@@ -69,14 +69,14 @@ public class ConstantOperandTest {
             Opcode.LIT.byteCode(), 0, 42
         };
         Operand rOp = intOp.emitLoadVal(c);
-        assertEquals(OperandKind.VALUEONSTACK, rOp.getKind());
+        assertEquals(Kind.VALUEONSTACK, rOp.getKind());
         AssemblerCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
         
         byte[] expChar = {
             Opcode.LIT.byteCode(), 0, 42
         };
         rOp = charOp.emitLoadVal(c);
-        assertEquals(OperandKind.VALUEONSTACK, rOp.getKind());
+        assertEquals(Kind.VALUEONSTACK, rOp.getKind());
         AssemblerCodeChecker.assertCodeEquals("Code ", expChar, c.getByteCode());
     }
 
@@ -87,7 +87,7 @@ public class ConstantOperandTest {
     public void testEmitAssignToSimpleInt() {
         System.out.println("testEmitAssignToSimpleInt");
         
-        Operand destV = new VariableOperand(OperandType.SIMPLEINT, 4, 32, 0);
+        Operand destV = new VariableOperand(Type.SIMPLEINT, 4, 32, 0);
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
@@ -106,7 +106,7 @@ public class ConstantOperandTest {
     public void testEmitAssignToSimpleChar() {
         System.out.println("testEmitAssignToSimpleChar");
         
-        Operand destV = new VariableOperand(OperandType.SIMPLECHAR, 1, 32, 0);
+        Operand destV = new VariableOperand(Type.SIMPLECHAR, 1, 32, 0);
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
@@ -124,7 +124,7 @@ public class ConstantOperandTest {
     public void testEmitAssignToArrayChar() {
         System.out.println("testEmitAssignToArrayChar");
         
-        Operand destV = new VariableOperand(OperandType.ARRAYCHAR, 10, 32, 0);
+        Operand destV = new VariableOperand(Type.ARRAYCHAR, 10, 32, 0);
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
@@ -143,8 +143,8 @@ public class ConstantOperandTest {
     public void testEmitAssignToOtherArray() {
         System.out.println("testEmitAssignToOtherArray");
         
-        Operand srcArray = new ConstantOperand(OperandType.ARRAYBOOL, 10, 0, 0);
-        Operand destV = new VariableOperand(OperandType.ARRAYBOOL, 10, 32, 0);
+        Operand srcArray = new ConstantOperand(Type.ARRAYBOOL, 10, 0, 0);
+        Operand destV = new VariableOperand(Type.ARRAYBOOL, 10, 32, 0);
         Operand destAos = new AddrOnStackOperand(destV);
         
         assertFalse(srcArray.emitAssign(c, destAos));
@@ -163,7 +163,7 @@ public class ConstantOperandTest {
         };
         
         Operand rv = charOp.emitLoadAddr(c);
-        assertEquals(OperandKind.ADDRONSTACK, rv.getKind());
+        assertEquals(Kind.ADDRONSTACK, rv.getKind());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, c.getByteCode());
     }
 
@@ -175,7 +175,7 @@ public class ConstantOperandTest {
         System.out.println("testEmitLoadAddrToInvalidType");
         
         Operand rv = intOp.emitLoadAddr(c);
-        assertEquals(OperandKind.ILLEGAL, rv.getKind());
+        assertEquals(Kind.ILLEGAL, rv.getKind());
         assertEquals(0, c.getPc());
     }
 }

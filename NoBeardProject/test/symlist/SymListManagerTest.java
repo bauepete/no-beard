@@ -4,9 +4,9 @@
  */
 package symlist;
 
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import scanner.Scanner;
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 import nbm.CodeGenerator;
 import error.ErrorHandler;
 import error.Error;
@@ -65,18 +65,18 @@ public class SymListManagerTest {
     public void testNewUnit() {
         System.out.println("newUnit");
 
-        assertEquals(OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
-        assertEquals(OperandType.VOID, symListMgr.getCurrBlock().getType());
+        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(Type.VOID, symListMgr.getCurrBlock().getType());
         assertEquals(1, symListMgr.getCurrLevel());
         SymListEntry unitObj = symListMgr.findObject(0);
-        assertEquals(unitObj.getKind(), OperandKind.UNIT);
+        assertEquals(unitObj.getKind(), Kind.UNIT);
     }
 
     @Test
     public void testNestedUnitsFail() {
         symListMgr.newUnit(1);
         assertEquals(1, symListMgr.getCurrLevel());
-        assertEquals(OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
         assertEquals(ErrorType.NO_NESTED_MODULES.getNumber(), errorHandler.getLastError().getNumber());
     }
 
@@ -146,18 +146,18 @@ public class SymListManagerTest {
         System.out.println("testNewFuncFail");
 
         symListMgr.newVar(1, SymListManager.ElementType.INT);
-        symListMgr.newFunc(1, OperandType.SIMPLEBOOL);
+        symListMgr.newFunc(1, Type.SIMPLEBOOL);
         assertEquals(ErrorType.NAME_ALREADY_DEFINED.getNumber(), errorHandler.getLastError().getNumber());
         assertEquals(1, symListMgr.getCurrLevel());
         assertEquals(0, symListMgr.getCurrBlock().getName());
-        assertEquals(OperandKind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
     }
 
     @Test
     public void testNewFunc() {
         System.out.println("testNewFunc");
 
-        symListMgr.newFunc(1, OperandType.ARRAYINT);
+        symListMgr.newFunc(1, Type.ARRAYINT);
         assertEquals(2, symListMgr.getCurrLevel());
         assertEquals(32, symListMgr.getDatAddr());
     }
@@ -167,7 +167,7 @@ public class SymListManagerTest {
         System.out.println("testEndBlock");
 
         symListMgr.newVar(0, SymListManager.ElementType.INT);
-        symListMgr.newFunc(1, OperandType.VOID);
+        symListMgr.newFunc(1, Type.VOID);
         symListMgr.newVar(0, SymListManager.ElementType.CHAR);
         symListMgr.newBlock();
         symListMgr.newVar(0, SymListManager.ElementType.INT);
@@ -218,21 +218,21 @@ public class SymListManagerTest {
         symListMgr.newVar(1, SymListManager.ElementType.CHAR);
         symListMgr.newVar(2, SymListManager.ElementType.INT);
 
-        assertEquals("Kind expected: ", Operand.OperandKind.UNIT, symListMgr.findObject(0).getKind());
-        assertEquals("Type expected: ", Operand.OperandType.VOID, symListMgr.findObject(0).getType());
+        assertEquals("Kind expected: ", Operand.Kind.UNIT, symListMgr.findObject(0).getKind());
+        assertEquals("Type expected: ", Operand.Type.VOID, symListMgr.findObject(0).getType());
         assertEquals("Size expected: ", 5, symListMgr.findObject(0).getSize());
 
-        assertEquals("Kind expected: ", Operand.OperandKind.VARIABLE, symListMgr.findObject(1).getKind());
-        assertEquals("Type expected: ", Operand.OperandType.SIMPLECHAR, symListMgr.findObject(1).getType());
+        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symListMgr.findObject(1).getKind());
+        assertEquals("Type expected: ", Operand.Type.SIMPLECHAR, symListMgr.findObject(1).getType());
         assertEquals("Size expected: ", 1, symListMgr.findObject(1).getSize());
         assertEquals("Address expected: ", 32, symListMgr.findObject(1).getAddr());
 
-        assertEquals("Kind expected: ", Operand.OperandKind.VARIABLE, symListMgr.findObject(2).getKind());
-        assertEquals("Type expected: ", Operand.OperandType.SIMPLEINT, symListMgr.findObject(2).getType());
+        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symListMgr.findObject(2).getKind());
+        assertEquals("Type expected: ", Operand.Type.SIMPLEINT, symListMgr.findObject(2).getType());
         assertEquals("Size expected: ", 4, symListMgr.findObject(2).getSize());
         assertEquals("Address expected: ", 36, symListMgr.findObject(2).getAddr());
 
-        assertEquals("Kind ", Operand.OperandKind.ILLEGAL, symListMgr.findObject(4).getKind());
+        assertEquals("Kind ", Operand.Kind.ILLEGAL, symListMgr.findObject(4).getKind());
     }
 
     @Test()

@@ -25,7 +25,7 @@ package parser;
 
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 import symlist.SymListEntry;
 
 /**
@@ -50,7 +50,7 @@ public class ReferenceParser extends Parser {
     protected void parseSpecificPart() {
         parseSymbol(Symbol.IDENTIFIER);
         sem(() -> foundSymbolListEntry = sym.findObject(getLastParsedToken().getValue()));
-        where(foundSymbolListEntry != null && foundSymbolListEntry.getKind() == OperandKind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));
+        where(foundSymbolListEntry != null && foundSymbolListEntry.getKind() == Kind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));
         
         sem(() -> op = foundSymbolListEntry.createOperand());
         

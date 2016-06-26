@@ -86,7 +86,7 @@ public abstract class ExpressionRelatedParser extends OperandExportingParser {
 
     protected abstract void fixBooleanOperatorChain();
 
-    protected void checkOperandForBeing(final Operand op, final Operand.OperandType requestedType, String usedOperator) {
+    protected void checkOperandForBeing(final Operand op, final Operand.Type requestedType, String usedOperator) {
         where(op != null && op.getType() == requestedType,
                 () -> getErrorHandler().throwOperatorOperandTypeMismatch(usedOperator, requestedType.toString()));
     }

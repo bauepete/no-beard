@@ -10,7 +10,7 @@ import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -34,7 +34,7 @@ public class IfParser extends Parser {
         }
         Operand op = exprP.getOperand();
         // cc
-        if (!operandIsA(op, OperandType.SIMPLEBOOL)) {
+        if (!operandIsA(op, Type.SIMPLEBOOL)) {
             return false;
         }
         // sem

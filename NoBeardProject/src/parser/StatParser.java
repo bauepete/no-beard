@@ -10,7 +10,7 @@ import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -83,9 +83,9 @@ public class StatParser extends Parser {
     }
 
     private boolean isOperandToPut(Operand op) {
-        OperandType opType = op.getType();
+        Type opType = op.getType();
 
-        return (opType == OperandType.SIMPLECHAR || opType == OperandType.SIMPLEINT);
+        return (opType == Type.SIMPLECHAR || opType == Type.SIMPLEINT);
     }
 
     @Override

@@ -7,8 +7,8 @@ package symlist;
 import error.Error.ErrorType;
 import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import symlist.Operand.OperandKind;
-import symlist.Operand.OperandType;
+import symlist.Operand.Kind;
+import symlist.Operand.Type;
 
 /**
  *
@@ -16,8 +16,8 @@ import symlist.Operand.OperandType;
  */
 public class ConstantOperand extends Operand {
     
-    public ConstantOperand(OperandType type, int size, int valaddr, int level) {
-        super(OperandKind.CONSTANT, type, size, valaddr, level);
+    public ConstantOperand(Type type, int size, int valaddr, int level) {
+        super(Kind.CONSTANT, type, size, valaddr, level);
     }
     
     public ConstantOperand(Operand op) {
@@ -72,8 +72,8 @@ public class ConstantOperand extends Operand {
                 break;
                 
             default:
-                String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
-                    OperandType.SIMPLEINT.toString(), OperandType.ARRAYCHAR.toString()};
+                String[] tList = {Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(),
+                    Type.SIMPLEINT.toString(), Type.ARRAYCHAR.toString()};
                 errorHandler().raise(new error.Error(ErrorType.TYPES_EXPECTED, tList));
                 return false;
         }
@@ -88,12 +88,12 @@ public class ConstantOperand extends Operand {
         
         Operand returnedOp;
         
-        if (getType() == OperandType.SIMPLECHAR || getType() == OperandType.ARRAYCHAR) {
+        if (getType() == Type.SIMPLECHAR || getType() == Type.ARRAYCHAR) {
             toCode.emitOp(Opcode.LIT);
             toCode.emitHalfWord(valaddr);
             returnedOp = new AddrOnStackOperand(this);
         } else {
-            String[] tList = {OperandType.SIMPLECHAR.toString(), OperandType.ARRAYCHAR.toString()};
+            String[] tList = {Type.SIMPLECHAR.toString(), Type.ARRAYCHAR.toString()};
             errorHandler().raise(new error.Error(ErrorType.TYPES_EXPECTED, tList));
             returnedOp = new IllegalOperand();
         }

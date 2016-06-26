@@ -14,7 +14,7 @@ import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symlist.Operand;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -71,7 +71,7 @@ public class PutStatParser extends Parser {
         // endcc
 
         // sem
-        if (op.getType() == OperandType.ARRAYCHAR) {
+        if (op.getType() == Type.ARRAYCHAR) {
             op.emitLoadAddr(code);
             if (op.getSize() == Operand.UNDEFSIZE) {
                 code.emitOp(Opcode.LIT);
@@ -96,8 +96,8 @@ public class PutStatParser extends Parser {
                 Operand wOp = exprP.getOperand();
                 // endsem
                 // cc
-                if (wOp.getType() != OperandType.SIMPLEINT) {
-                    getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, OperandType.SIMPLEINT.toString()));
+                if (wOp.getType() != Type.SIMPLEINT) {
+                    getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, Type.SIMPLEINT.toString()));
                     return false;
                 }
                 // endcc
@@ -161,12 +161,12 @@ public class PutStatParser extends Parser {
         return true;
     }
 
-    private final OperandType[] OUTPUTABLE_OPERANDS = {
-        OperandType.SIMPLECHAR, OperandType.SIMPLEINT, OperandType.ARRAYCHAR
+    private final Type[] OUTPUTABLE_OPERANDS = {
+        Type.SIMPLECHAR, Type.SIMPLEINT, Type.ARRAYCHAR
     };
     
     private boolean isOperandToPut(Operand op) {
-        for (OperandType operand : OUTPUTABLE_OPERANDS) {
+        for (Type operand : OUTPUTABLE_OPERANDS) {
             if (operand == op.getType())
                 return true;
         }
@@ -176,12 +176,12 @@ public class PutStatParser extends Parser {
     private String[] outputableOperands() {
         List<String> opList = new LinkedList();
         
-        for (OperandType operand: OUTPUTABLE_OPERANDS)
+        for (Type operand: OUTPUTABLE_OPERANDS)
             opList.add(operand.toString());
         return (String[]) opList.toArray();
     }
 
-    private void emitPut(OperandType type) {
+    private void emitPut(Type type) {
         switch (type) {
             case SIMPLEINT:
                 code.emitOp(Opcode.PUT);

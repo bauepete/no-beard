@@ -12,7 +12,7 @@ import org.junit.Ignore;
 import parser.FactorParser;
 import parser.general.FactorParserTestSetup;
 import symlist.Operand;
-import symlist.Operand.OperandKind;
+import symlist.Operand.Kind;
 
 /**
  *
@@ -41,7 +41,7 @@ public class FactorParserTest {
         FactorParser p = FactorParserTestSetup.getIdentifierTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        assertEquals("Operand ", OperandKind.VARIABLE, p.getOperand().getKind());
+        assertEquals("Operand ", Kind.VARIABLE, p.getOperand().getKind());
         assertEquals("Value ", 32, p.getOperand().getValaddr());
     }
 
@@ -52,7 +52,7 @@ public class FactorParserTest {
         FactorParser p = FactorParserTestSetup.getNumberTestSetup();
 
         assertEquals("Parse ", true, p.parse());
-        assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
+        assertEquals("Operand ", Kind.CONSTANT, p.getOperand().getKind());
         assertEquals("Value ", 42, p.getOperand().getValaddr());
     }
 
@@ -61,8 +61,8 @@ public class FactorParserTest {
         FactorParser p = FactorParserTestSetup.getSingleCharTestSetup();
         
         assertTrue(p.parse());
-        assertEquals(OperandKind.CONSTANT, p.getOperand().getKind());
-        assertEquals(Operand.OperandType.SIMPLECHAR, p.getOperand().getType());
+        assertEquals(Kind.CONSTANT, p.getOperand().getKind());
+        assertEquals(Operand.Type.SIMPLECHAR, p.getOperand().getType());
         assertEquals(0, p.getOperand().getValaddr());
         assertEquals(1, p.getOperand().getSize());
     }
@@ -72,8 +72,8 @@ public class FactorParserTest {
         FactorParser p = FactorParserTestSetup.getStringTestSetup();
         
         assertEquals("Parse ", true, p.parse());
-        assertEquals("Operand ", OperandKind.CONSTANT, p.getOperand().getKind());
-        assertEquals(Operand.OperandType.ARRAYCHAR, p.getOperand().getType());
+        assertEquals("Operand ", Kind.CONSTANT, p.getOperand().getKind());
+        assertEquals(Operand.Type.ARRAYCHAR, p.getOperand().getType());
         assertEquals(6, p.getOperand().getSize());
         assertEquals("Value ", 0, p.getOperand().getValaddr());
     }
@@ -82,7 +82,7 @@ public class FactorParserTest {
     public void testParseExpr() {
         FactorParser p = FactorParserTestSetup.getExprSetup();
         assertEquals("Parse ", true, p.parse());
-        assertEquals("Operand ", OperandKind.VALUEONSTACK, p.getOperand().getKind());
+        assertEquals("Operand ", Kind.VALUEONSTACK, p.getOperand().getKind());
         assertEquals("Value ", 36, p.getOperand().getValaddr());
     }   
 }

@@ -4,8 +4,6 @@
  */
 package symlist;
 
-import symlist.Operand.OperandKind;
-import symlist.Operand.OperandType;
 
 /**
  *
@@ -13,14 +11,14 @@ import symlist.Operand.OperandType;
  */
 public class SymListEntry {
 
-    private int name;
-    private OperandKind kind;
-    private OperandType type;
+    private final int name;
+    private final Operand.Kind kind;
+    private final Operand.Type type;
     private int size;
     private int addr;
-    private int level;
+    private final int level;
 
-    public SymListEntry(int name, OperandKind kind, OperandType type, int size, int addr, int level) {
+    public SymListEntry(int name, Operand.Kind kind, Operand.Type type, int size, int addr, int level) {
         this.name = name;
         this.kind = kind;
         this.type = type;
@@ -29,7 +27,7 @@ public class SymListEntry {
         this.level = level;
     }
 
-    public OperandKind getKind() {
+    public Operand.Kind getKind() {
         return kind;
     }
 
@@ -41,7 +39,7 @@ public class SymListEntry {
         return name;
     }
 
-    public OperandType getType() {
+    public Operand.Type getType() {
         return type;
     }
 
@@ -66,7 +64,7 @@ public class SymListEntry {
     }
     
     public boolean isNamedBlockEntry() {
-        return (kind == OperandKind.FUNCTION || kind == OperandKind.UNIT);
+        return (kind == Operand.Kind.FUNCTION || kind == Operand.Kind.UNIT);
     }
 
     public Operand createOperand() {

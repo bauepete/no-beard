@@ -89,7 +89,7 @@ public class ExpressionParser extends OperandExportingParser {
         checkOperandsForBeingCompatible();
 
         emitCodeForComparing();
-        sem(() -> exportedOperand = new ValueOnStackOperand(Operand.OperandType.SIMPLEBOOL, 4, exportedOperand.getValaddr(), exportedOperand.getCurrLevel()));
+        sem(() -> exportedOperand = new ValueOnStackOperand(Operand.Type.SIMPLEBOOL, 4, exportedOperand.getValaddr(), exportedOperand.getCurrLevel()));
     }
     
     protected void parseOperator() {

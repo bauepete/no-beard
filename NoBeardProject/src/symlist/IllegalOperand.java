@@ -13,7 +13,7 @@ import nbm.CodeGenerator;
 public class IllegalOperand extends Operand {
 
     public IllegalOperand() {
-        super(OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+        super(Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
     }
 
     @Override

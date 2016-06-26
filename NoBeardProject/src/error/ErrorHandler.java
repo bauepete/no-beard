@@ -81,7 +81,7 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
     }
 
-    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.OperandType typeOfOp1, Integer sizeOfOp2, Operand.OperandType typeOfOp2) {
+    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.Type typeOfOp1, Integer sizeOfOp2, Operand.Type typeOfOp2) {
         raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
     }
 }

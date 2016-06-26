@@ -14,7 +14,7 @@ import scanner.StringManager;
  */
 public class Operand {
 
-    public enum OperandKind {
+    public enum Kind {
 
         CONSTANT, VARIABLE, ARGUMENT,
         VALUEONSTACK, ADDRONSTACK,
@@ -22,7 +22,7 @@ public class Operand {
         ILLEGAL
     }
 
-    public enum OperandType {
+    public enum Type {
 
         SIMPLEINT("int"),
         SIMPLECHAR("char"),
@@ -35,7 +35,7 @@ public class Operand {
 
         private final String displayName;
 
-        OperandType(String displayName) {
+        Type(String displayName) {
             this.displayName = displayName;
         }
 
@@ -48,14 +48,14 @@ public class Operand {
     protected static SymListManager symListManager = null;
     protected static StringManager stringManager = null;
     private static ErrorHandler errorHandler;
-    protected OperandKind kind;
-    protected OperandType type;
+    protected Kind kind;
+    protected Type type;
     protected int size;
     protected int valaddr;
     protected int level;
     public static final int UNDEFSIZE = -1;
 
-    public Operand(OperandKind kind, OperandType type, int size, int valaddr, int level) {
+    public Operand(Kind kind, Type type, int size, int valaddr, int level) {
         this.kind = kind;
         this.type = type;
         this.size = size;
@@ -83,7 +83,7 @@ public class Operand {
         errorHandler = eh;
     }
 
-    public OperandKind getKind() {
+    public Kind getKind() {
         return kind;
     }
 
@@ -95,7 +95,7 @@ public class Operand {
         return size;
     }
 
-    public OperandType getType() {
+    public Type getType() {
         return type;
     }
 
@@ -120,14 +120,14 @@ public class Operand {
     }
 
     public Operand emitLoadVal(CodeGenerator toCode) {
-        if (getKind() == OperandKind.ANONYMOUSBLOCK || getKind() == OperandKind.FUNCTION
-                || getKind() == OperandKind.ILLEGAL || getKind() == OperandKind.UNIT) {
+        if (getKind() == Kind.ANONYMOUSBLOCK || getKind() == Kind.FUNCTION
+                || getKind() == Kind.ILLEGAL || getKind() == Kind.UNIT) {
             errorHandler().raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Operand can't be loaded on stack"));
             return null;
         }
 
-        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT) {
-            String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
+        if (getType() != Type.SIMPLEBOOL && getType() != Type.SIMPLECHAR && getType() != Type.SIMPLEINT) {
+            String[] tList = {Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(), Type.SIMPLEINT.toString()};
             errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
             return null;
         }
@@ -135,26 +135,26 @@ public class Operand {
     }
 
     public Operand emitLoadAddr(CodeGenerator toCode) {
-        if (getKind() != OperandKind.CONSTANT && getKind() != OperandKind.VARIABLE
-                && getKind() != OperandKind.ARGUMENT && getKind() != OperandKind.ADDRONSTACK) {
+        if (getKind() != Kind.CONSTANT && getKind() != Kind.VARIABLE
+                && getKind() != Kind.ARGUMENT && getKind() != Kind.ADDRONSTACK) {
             return null;
         }
-        if (getType() != OperandType.SIMPLEBOOL && getType() != OperandType.SIMPLECHAR && getType() != OperandType.SIMPLEINT
-                && getType() != OperandType.ARRAYBOOL && getType() != OperandType.ARRAYCHAR && getType() != OperandType.ARRAYINT) {
+        if (getType() != Type.SIMPLEBOOL && getType() != Type.SIMPLECHAR && getType() != Type.SIMPLEINT
+                && getType() != Type.ARRAYBOOL && getType() != Type.ARRAYCHAR && getType() != Type.ARRAYINT) {
             return null;
         }
         return this;
     }
 
     public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
-        if (destOp.getKind() != OperandKind.ADDRONSTACK) {
+        if (destOp.getKind() != Kind.ADDRONSTACK) {
             errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: destination operand is not on stack"));
             return false;
         }
 
         if (!typesOk(destOp)) {
-            String[] tList = {OperandType.SIMPLEINT.toString(), OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(),
-                OperandType.ARRAYINT.toString(), OperandType.ARRAYBOOL.toString(), OperandType.ARRAYCHAR.toString()};
+            String[] tList = {Type.SIMPLEINT.toString(), Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(),
+                Type.ARRAYINT.toString(), Type.ARRAYBOOL.toString(), Type.ARRAYCHAR.toString()};
             errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
             return false;
         }
@@ -177,12 +177,12 @@ public class Operand {
     }
 
     private boolean typesOk(Operand destOp) {
-        return (destOp.getType() != OperandType.ERRORTYPE && destOp.getType() != OperandType.VOID
-                && getType() != OperandType.ERRORTYPE && getType() != OperandType.VOID);
+        return (destOp.getType() != Type.ERRORTYPE && destOp.getType() != Type.VOID
+                && getType() != Type.ERRORTYPE && getType() != Type.VOID);
     }
 
     private boolean srcKindOk() {
-        return (getKind() != OperandKind.ILLEGAL && getKind() != OperandKind.ANONYMOUSBLOCK
-                && getKind() != OperandKind.FUNCTION && getKind() != OperandKind.UNIT);
+        return (getKind() != Kind.ILLEGAL && getKind() != Kind.ANONYMOUSBLOCK
+                && getKind() != Kind.FUNCTION && getKind() != Kind.UNIT);
     }
 }

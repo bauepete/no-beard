@@ -7,8 +7,8 @@ package symlist;
 import error.Error;
 import error.Error.ErrorType;
 import error.ErrorHandler;
-import symlist.Operand.OperandKind;
-import symlist.Operand.OperandType;
+import symlist.Operand.Kind;
+import symlist.Operand.Type;
 import java.util.ListIterator;
 import java.util.Stack;
 import nbm.CodeGenerator;
@@ -65,7 +65,7 @@ public class SymListManager {
                 return node;
             }
         }
-        return new SymListEntry(name, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+        return new SymListEntry(name, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
     }
 
     public int getCurrLevel() {
@@ -80,12 +80,12 @@ public class SymListManager {
         return datAddr;
     }
 
-    public boolean newFunc(int name, OperandType operandType) {
+    public boolean newFunc(int name, Type operandType) {
         if (doesNameExistInCurrentScope(name)) {
             raiseNameAlreadyDefined(name);
             return false;
         }
-        SymListEntry func = new SymListEntry(name, OperandKind.FUNCTION, operandType, 0, 0, currLevel);
+        SymListEntry func = new SymListEntry(name, Kind.FUNCTION, operandType, 0, 0, currLevel);
         addBlockNode(func);
         return true;
     }
@@ -108,13 +108,13 @@ public class SymListManager {
             return false;
         }
 
-        SymListEntry proc = new SymListEntry(name, OperandKind.UNIT, OperandType.VOID, 0, 0, currLevel);
+        SymListEntry proc = new SymListEntry(name, Kind.UNIT, Type.VOID, 0, 0, currLevel);
         addBlockNode(proc);
         return true;
     }
 
     private boolean doesNameExistInCurrentScope(int name) {
-        return (findObjectInCurrentScope(name).getType() != OperandType.ERRORTYPE);
+        return (findObjectInCurrentScope(name).getType() != Type.ERRORTYPE);
     }
 
     private SymListEntry findObjectInCurrentScope(int name) {
@@ -123,13 +123,13 @@ public class SymListManager {
         while (i.hasPrevious()) {
             SymListEntry node = i.previous();
             if (node.getLevel() != getCurrLevel()) {
-                return new SymListEntry(0, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+                return new SymListEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
             }
             if (node.getName() == name) {
                 return node;
             }
         }
-        return new SymListEntry(0, OperandKind.ILLEGAL, OperandType.ERRORTYPE, 0, 0, 0);
+        return new SymListEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
     }
 
     private void addBlockNode(SymListEntry node) {
@@ -148,7 +148,7 @@ public class SymListManager {
      * Creates an anonymous block node and adds it to the symbol list.
      */
     public void newBlock() {
-        SymListEntry block = new SymListEntry(NONAME, OperandKind.ANONYMOUSBLOCK, OperandType.VOID, 0, 0, currLevel);
+        SymListEntry block = new SymListEntry(NONAME, Kind.ANONYMOUSBLOCK, Type.VOID, 0, 0, currLevel);
         addBlockNode(block);
     }
 
@@ -167,42 +167,42 @@ public class SymListManager {
             return false;
         }
 
-        OperandType opType = OperandType.ERRORTYPE;
+        Type opType = Type.ERRORTYPE;
         int opSize = 0;
 
         switch (t) {
             case INT:
                 opSize = 4;
                 if (maxInd > 1) {
-                    opType = OperandType.ARRAYINT;
+                    opType = Type.ARRAYINT;
                 } else {
                     maxInd = 1;
-                    opType = OperandType.SIMPLEINT;
+                    opType = Type.SIMPLEINT;
                 }
                 break;
 
             case CHAR:
                 opSize = 1;
                 if (maxInd > 1) {
-                    opType = OperandType.ARRAYCHAR;
+                    opType = Type.ARRAYCHAR;
                 } else {
                     maxInd = 1;
-                    opType = OperandType.SIMPLECHAR;
+                    opType = Type.SIMPLECHAR;
                 }
                 break;
 
             case BOOL:
                 opSize = 4;
                 if (maxInd > 1) {
-                    opType = OperandType.ARRAYBOOL;
+                    opType = Type.ARRAYBOOL;
                 } else {
                     maxInd = 1;
-                    opType = OperandType.SIMPLEBOOL;
+                    opType = Type.SIMPLEBOOL;
                 }
                 break;
         }
 
-        SymListEntry var = new SymListEntry(name, OperandKind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
+        SymListEntry var = new SymListEntry(name, Kind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
         symListStack.push(var);
         currBlock.addSize(var.getSize());
         datAddr += var.getSize();
@@ -257,7 +257,7 @@ public class SymListManager {
             symListStack.pop();
         }
         
-        if (symListStack.peek().getKind() == OperandKind.ANONYMOUSBLOCK)
+        if (symListStack.peek().getKind() == Kind.ANONYMOUSBLOCK)
             symListStack.pop();
         
         if (blockStack.empty()) {

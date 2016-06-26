@@ -14,13 +14,13 @@ import nbm.Nbm.Opcode;
  */
 public class ValueOnStackOperand extends Operand {
 
-    public ValueOnStackOperand(OperandType type, int size, int valaddr, int level) {
-        super(OperandKind.VALUEONSTACK, type, size, valaddr, level);
+    public ValueOnStackOperand(Type type, int size, int valaddr, int level) {
+        super(Kind.VALUEONSTACK, type, size, valaddr, level);
     }
 
     public ValueOnStackOperand(Operand op) {
         super(op);
-        this.kind = OperandKind.VALUEONSTACK;
+        this.kind = Kind.VALUEONSTACK;
     }
         
     @Override
@@ -44,7 +44,7 @@ public class ValueOnStackOperand extends Operand {
                 break;
                 
             default:
-                String[] tList = {OperandType.SIMPLEBOOL.toString(), OperandType.SIMPLECHAR.toString(), OperandType.SIMPLEINT.toString()};
+                String[] tList = {Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(), Type.SIMPLEINT.toString()};
                 errorHandler().raise(new Error(Error.ErrorType.TYPES_EXPECTED, tList));
                 return false;
         }

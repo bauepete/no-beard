@@ -29,7 +29,7 @@ import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symlist.Operand.OperandType;
+import symlist.Operand.Type;
 import symlist.SymListManager;
 
 /**
@@ -60,7 +60,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
     protected void prepareExportedOperand(OperandExportingParser termParser) {
         sem(() -> op2 = termParser.getOperand());
         
-        where(opCode == null || op2.getType() == OperandType.SIMPLEINT,
+        where(opCode == null || op2.getType() == Type.SIMPLEINT,
                 () -> getErrorHandler().throwOperatorOperandTypeMismatch("+ or -", "int"));
         sem(() -> {
             if (opCode == Nbm.Opcode.SUB) {
@@ -87,11 +87,11 @@ public class AddExpressionParser extends ExpressionRelatedParser {
 
     @Override
     protected void handleBooleanSubExpression(OperandExportingParser termParser) {
-        checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "or");
+        checkOperandForBeing(op2, Type.SIMPLEBOOL, "or");
         maintainBooleanOperatorChain();
         parseSymbol(termParser);
         sem(() -> op2 = termParser.getOperand());
-        checkOperandForBeing(op2, OperandType.SIMPLEBOOL, "+ or -");
+        checkOperandForBeing(op2, Type.SIMPLEBOOL, "+ or -");
         emitCodeForLoadingValue();
     }
 
@@ -119,7 +119,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
 
     @Override
     protected void handleIntegerSubExpression(OperandExportingParser termParser, String usedOperator) {
-        checkOperandForBeing(exportedOperand, OperandType.SIMPLEINT, usedOperator);
+        checkOperandForBeing(exportedOperand, Type.SIMPLEINT, usedOperator);
         sem(() -> exportedOperand.emitLoadVal(code));
         parseSymbol(termParser);
         fetchOperand(termParser);
