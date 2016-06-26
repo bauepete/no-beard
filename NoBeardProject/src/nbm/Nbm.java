@@ -31,8 +31,8 @@ public class Nbm {
     public static final int STACKEMPTY = -1;
     
     // --------------------- Locally used data -----------------------------
-    private static final int MAXPROG = 1024;   // Size of program memory
-    private static final int MAXDAT = 1024;    // Size of data memory
+    private static final int MAX_PROG = 1024;   // Size of program memory
+    private static final int MAX_DATA = 1024;    // Size of data memory
     private static final int LINKAREA = 28;    // Space to store house keeping data when functions are called
     private static final int WORDSIZE = 4;     // Size of one word in bytes
     private final byte[] prog;
@@ -382,8 +382,8 @@ public class Nbm {
 
     /// Constructor
     public Nbm() {
-        prog = new byte[MAXPROG];
-        dat = new byte[MAXDAT];
+        prog = new byte[MAX_PROG];
+        dat = new byte[MAX_DATA];
         ms = MachineState.RUN;
         db = 0;
         top = db + LINKAREA;
@@ -392,11 +392,11 @@ public class Nbm {
 
     // ------------------- Setters and Getters ---------------------
     public static int getMAXDAT() {
-        return MAXDAT;
+        return MAX_DATA;
     }
 
     public static int getMAXPROG() {
-        return MAXPROG;
+        return MAX_PROG;
     }
 
     public MachineState getState() {
@@ -405,7 +405,7 @@ public class Nbm {
 
     public boolean loadDat(int atAddr, byte[] data) {
         int i = 0;
-        while ((atAddr + i) < MAXDAT && i < data.length) {
+        while ((atAddr + i) < MAX_DATA && i < data.length) {
             dat[atAddr + i] = data[i];
             i++;
         }
@@ -415,7 +415,7 @@ public class Nbm {
 
     public boolean loadProg(int atAddr, byte[] data) {
         int i = 0;
-        while ((atAddr + i) < MAXPROG && i < data.length) {
+        while ((atAddr + i) < MAX_PROG && i < data.length) {
             prog[atAddr + i] = data[i];
             i++;
         }
