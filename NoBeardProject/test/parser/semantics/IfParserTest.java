@@ -20,9 +20,9 @@ import org.junit.Ignore;
  * @author peter
  */
 @Ignore
-public class IfStatParserTest {
+public class IfParserTest {
     
-    public IfStatParserTest() {
+    public IfParserTest() {
     }
 
     @BeforeClass

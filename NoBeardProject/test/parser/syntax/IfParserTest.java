@@ -17,9 +17,9 @@ import parser.general.IfStatParserTestSetup;
  * @author peter
  */
 @Ignore
-public class IfStatParserTest {
+public class IfParserTest {
 
-    public IfStatParserTest() {
+    public IfParserTest() {
     }
 
     @Before
