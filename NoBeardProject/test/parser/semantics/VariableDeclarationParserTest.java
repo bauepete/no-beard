@@ -55,11 +55,20 @@ public class VariableDeclarationParserTest {
      * Test simple int.
      */
     @Test
-    public void testSymbolTableContent() {
+    public void testSymbolTableContentOfSimpleIntDeclaration() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleIntTestSetup();
         instance.parse();
         SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
         assertEquals(Operand.Kind.VARIABLE, e.getKind());
         assertEquals(Operand.Type.SIMPLEINT, e.getType());
+        assertEquals(4, e.getSize());
+    }
+    
+    @Test
+    public void testSymbolTableContentOfSimpleCharDeclaration() {
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleCharTestSetup();
+        instance.parse();
+        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        assertEquals(Operand.Type.SIMPLECHAR, e.getType());
     }
 }

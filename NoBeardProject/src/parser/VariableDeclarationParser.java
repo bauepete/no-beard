@@ -26,6 +26,7 @@ package parser;
 import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
+import java.util.HashMap;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -41,8 +42,18 @@ import symboltable.SymListManager.ElementType;
  */
 public class VariableDeclarationParser extends Parser {
 
+    private Symbol parsedType;
     private SymListManager.ElementType basicType;
     private int maxIndex;
+    
+    private static final HashMap<Symbol, SymListManager.ElementType> symbolToElementTypeMap;
+    
+    static {
+        symbolToElementTypeMap = new HashMap<>();
+        symbolToElementTypeMap.put(Symbol.BOOL, ElementType.BOOL);
+        symbolToElementTypeMap.put(Symbol.INT, ElementType.INT);
+        symbolToElementTypeMap.put(Symbol.CHAR, ElementType.CHAR);        
+    }
 
     VariableDeclarationParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super();
@@ -50,11 +61,12 @@ public class VariableDeclarationParser extends Parser {
 
     public VariableDeclarationParser() {
     }
-
+    
     @Override
     protected void parseSpecificPart() {
         assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
-        parseSymbol(scanner.getCurrentToken().getSy());
+        parsedType = scanner.getCurrentToken().getSy();
+        parseSymbol(parsedType);
         
         if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
             parseArraySpecification();
@@ -63,7 +75,7 @@ public class VariableDeclarationParser extends Parser {
         }
         
         parseSymbol(Symbol.IDENTIFIER);
-        sem(() -> sym.newVar(getLastParsedToken().getValue(), ElementType.INT, maxIndex));
+        sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxIndex));
         parseSymbol(Symbol.SEMICOLON);
     }
 
