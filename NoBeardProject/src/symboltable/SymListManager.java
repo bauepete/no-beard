@@ -39,8 +39,8 @@ public class SymListManager {
 
     public SymListManager(CodeGenerator code, Scanner scanner, ErrorHandler errorHandler) {
         //symList = new HashMap<Integer, SymListEntry>();
-        symListStack = new Stack<SymListEntry>();
-        blockStack = new Stack<SymListEntry>();
+        symListStack = new Stack<>();
+        blockStack = new Stack<>();
         datAddrStack = new Stack();
         this.code = code;
         this.scanner = scanner;
