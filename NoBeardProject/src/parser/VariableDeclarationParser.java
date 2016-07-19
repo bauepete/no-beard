@@ -1,6 +1,25 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright ©2012 to 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding, 
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
+ * 
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package parser;
 
@@ -25,7 +44,36 @@ public class VariableDeclarationParser extends Parser {
     private ElementType elemType;
 
     VariableDeclarationParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
-        super(s, sym, c, eh);
+        super();
+    }
+
+    public VariableDeclarationParser() {
+    }
+
+    @Override
+    protected void parseSpecificPart() {
+        assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
+        parseSymbol(scanner.getCurrentToken().getSy());
+        parseSymbol(Symbol.IDENTIFIER);
+        parseSymbol(Symbol.SEMICOLON);
+    }
+
+    /**
+     * Checks whether the current symbol is one of the symbols given as arguments.
+     * @param symbol One of the possible symbols.
+     * @param furtherSymbols Further possible symbols.
+     */
+    protected void assertThatCurrentSymbolIsOf(Symbol symbol, Symbol... furtherSymbols) {
+        if (!parsingWasSuccessful()) return;
+        
+        Symbol currentSymbol = scanner.getCurrentToken().getSy();
+        boolean properSymbolFound = currentSymbol == symbol;
+        
+        setWasSuccessful(properSymbolFound);
+        for (Symbol sy : furtherSymbols) {
+            properSymbolFound = properSymbolFound || currentSymbol == sy;
+            setWasSuccessful(properSymbolFound);
+        }
     }
 
     @Override
@@ -72,7 +120,6 @@ public class VariableDeclarationParser extends Parser {
             sym.newVar(name, elemType);
             // endsem
         }
-
 
         if (scanner.getCurrentToken().getSy() == Symbol.ASSIGN) {
             // sem
@@ -134,10 +181,5 @@ public class VariableDeclarationParser extends Parser {
         }
         scanner.nextToken();
         return true;
-    }
-
-    @Override
-    protected void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
