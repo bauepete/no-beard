@@ -21,13 +21,12 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser.syntax;
+package parser.semantics;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.ParserFactory;
 import parser.VariableDeclarationParser;
 import parser.general.ParserTestSetup;
 import parser.general.VariableDeclarationParserTestSetup;
@@ -53,51 +52,14 @@ public class VariableDeclarationParserTest {
     }
 
     /**
-     * Test simple integer declaration.
+     * Test simple int.
      */
     @Test
-    public void testSimpleInt() {
+    public void testSymbolTableContent() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleIntTestSetup();
-        boolean expResult = true;
-        boolean result = instance.parse();
-        assertEquals(expResult, result);
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
-    }
-
-    /**
-     * Test simple char declaration.
-     */
-    @Test
-    public void testSimpleChar() {
-        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleCharTestSetup();
-        assertTrue(instance.parse());
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
-    }
-    /**
-     * Test invalid variable declaration.
-     */
-    @Test
-    public void testInvalidDeclaration() {
-        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getInvalidDeclarationTestSetup();
-        assertFalse(instance.parse());
-    }
-    
-    @Test
-    public void testSimpleBool() {
-        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleBoolTestSetup();
-        assertTrue(instance.parse());
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
-    }
-    
-    @Test
-    public void testIntArray() {
-        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getIntArrayTestSetup();
-        assertTrue(instance.parse());
-    }
-    
-    @Test
-    public void testInvalidArray() {
-        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getInvalidArrayTestSetup();
-        assertFalse(instance.parse());
+        instance.parse();
+        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        assertEquals(Operand.Kind.VARIABLE, e.getKind());
+        assertEquals(Operand.Type.SIMPLEINT, e.getType());
     }
 }

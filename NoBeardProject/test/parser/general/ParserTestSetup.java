@@ -31,6 +31,10 @@ public class ParserTestSetup {
     public static Scanner getScanner() {
         return scanner;
     }
+    
+    public static SymListManager getSymListManager() {
+        return symListManager;
+    }
 
     protected static void setupInfraStructure(String sourceLine) {
         SrcReader sourceReader = new SrcStringReader(sourceLine);

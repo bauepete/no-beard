@@ -41,7 +41,8 @@ import symboltable.SymListManager.ElementType;
  */
 public class VariableDeclarationParser extends Parser {
 
-    private ElementType elemType;
+    private SymListManager.ElementType basicType;
+    private int maxIndex;
 
     VariableDeclarationParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
         super();
@@ -57,15 +58,18 @@ public class VariableDeclarationParser extends Parser {
         
         if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
             parseArraySpecification();
+        } else {
+            sem(() -> maxIndex = 0);
         }
         
         parseSymbol(Symbol.IDENTIFIER);
+        sem(() -> sym.newVar(getLastParsedToken().getValue(), ElementType.INT, maxIndex));
         parseSymbol(Symbol.SEMICOLON);
     }
 
     private void parseArraySpecification() {
         parseSymbol(Symbol.LBRACKET);
-        parseNumber();
+        sem(() -> maxIndex = parseNumber() - 1);
         parseSymbol(Symbol.RBRACKET);
     }
 
@@ -125,10 +129,10 @@ public class VariableDeclarationParser extends Parser {
             if (!tokenIsA(Symbol.RBRACKET)) {
                 return false;
             }
-            sym.newVar(name, elemType, val);
+            sym.newVar(name, basicType, val);
         } else {
             // sem
-            sym.newVar(name, elemType);
+            sym.newVar(name, basicType);
             // endsem
         }
 
@@ -174,15 +178,15 @@ public class VariableDeclarationParser extends Parser {
     private boolean simpleType() {
         switch (scanner.getCurrentToken().getSy()) {
             case INT:
-                elemType = ElementType.INT;
+                basicType = ElementType.INT;
                 break;
 
             case CHAR:
-                elemType = ElementType.CHAR;
+                basicType = ElementType.CHAR;
                 break;
 
             case BOOL:
-                elemType = ElementType.BOOL;
+                basicType = ElementType.BOOL;
                 break;
 
             default:
