@@ -91,4 +91,16 @@ public class VariableDeclarationParserTest extends ParserTestSetup {
         assertTrue(instance.parse());
         assertEquals(Scanner.Symbol.EOFSY, getScanner().getCurrentToken().getSy());
     }
+    
+    @Test
+    public void testIntArray() {
+        VariableDeclarationParser instance = setupTestObjectsAndParser("int[20] x;");
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testInvalidArray() {
+        VariableDeclarationParser instance = setupTestObjectsAndParser("bool[k] x;");
+        assertFalse(instance.parse());
+    }
 }

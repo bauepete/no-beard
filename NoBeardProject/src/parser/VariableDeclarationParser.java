@@ -54,6 +54,12 @@ public class VariableDeclarationParser extends Parser {
     protected void parseSpecificPart() {
         assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
         parseSymbol(scanner.getCurrentToken().getSy());
+        
+        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+            parseSymbol(Symbol.LBRACKET);
+            parseNumber();
+            parseSymbol(Symbol.RBRACKET);
+        }
         parseSymbol(Symbol.IDENTIFIER);
         parseSymbol(Symbol.SEMICOLON);
     }
