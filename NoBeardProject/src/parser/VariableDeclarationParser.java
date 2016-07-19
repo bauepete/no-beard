@@ -56,12 +56,17 @@ public class VariableDeclarationParser extends Parser {
         parseSymbol(scanner.getCurrentToken().getSy());
         
         if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
-            parseSymbol(Symbol.LBRACKET);
-            parseNumber();
-            parseSymbol(Symbol.RBRACKET);
+            parseArraySpecification();
         }
+        
         parseSymbol(Symbol.IDENTIFIER);
         parseSymbol(Symbol.SEMICOLON);
+    }
+
+    private void parseArraySpecification() {
+        parseSymbol(Symbol.LBRACKET);
+        parseNumber();
+        parseSymbol(Symbol.RBRACKET);
     }
 
     /**
