@@ -157,11 +157,11 @@ public class SymListManager {
      *
      * @param name The name of the variable.
      * @param t Type of the variable (INT, CHAR, ..., ARRAYINT, ...)
-     * @param maxInd Size of array. 1 in case of simple variable.
+     * @param maxNumberOfElements Size of array. 1 in case of simple variable.
      * @return true if creating and adding the var node was successful, false
      * otherwise.
      */
-    public boolean newVar(int name, ElementType t, int maxInd) {
+    public boolean newVar(int name, ElementType t, int maxNumberOfElements) {
         if (doesNameExistInCurrentScope(name)) {
             raiseNameAlreadyDefined(name);
             return false;
@@ -173,36 +173,36 @@ public class SymListManager {
         switch (t) {
             case INT:
                 opSize = 4;
-                if (maxInd > 1) {
+                if (maxNumberOfElements > 1) {
                     opType = Type.ARRAYINT;
                 } else {
-                    maxInd = 1;
+                    maxNumberOfElements = 1;
                     opType = Type.SIMPLEINT;
                 }
                 break;
 
             case CHAR:
                 opSize = 1;
-                if (maxInd > 1) {
+                if (maxNumberOfElements > 1) {
                     opType = Type.ARRAYCHAR;
                 } else {
-                    maxInd = 1;
+                    maxNumberOfElements = 1;
                     opType = Type.SIMPLECHAR;
                 }
                 break;
 
             case BOOL:
                 opSize = 4;
-                if (maxInd > 1) {
+                if (maxNumberOfElements > 1) {
                     opType = Type.ARRAYBOOL;
                 } else {
-                    maxInd = 1;
+                    maxNumberOfElements = 1;
                     opType = Type.SIMPLEBOOL;
                 }
                 break;
         }
 
-        SymListEntry var = new SymListEntry(name, Kind.VARIABLE, opType, opSize * maxInd, datAddr, currLevel);
+        SymListEntry var = new SymListEntry(name, Kind.VARIABLE, opType, opSize * maxNumberOfElements, datAddr, currLevel);
         symListStack.push(var);
         currBlock.addSize(var.getSize());
         datAddr += var.getSize();
