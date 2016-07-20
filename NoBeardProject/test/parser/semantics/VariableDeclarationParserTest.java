@@ -70,5 +70,15 @@ public class VariableDeclarationParserTest {
         instance.parse();
         SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
         assertEquals(Operand.Type.SIMPLECHAR, e.getType());
+        assertEquals(1, e.getSize());
+    }
+    
+    @Test
+    public void testSymbolTableContentOfIntArrayDeclaration() {
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getIntArrayTestSetup();
+        instance.parse();
+        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        assertEquals(Operand.Type.ARRAYINT, e.getType());
+        assertEquals(42 * 4, e.getSize());
     }
 }

@@ -44,7 +44,7 @@ public class VariableDeclarationParser extends Parser {
 
     private Symbol parsedType;
     private SymListManager.ElementType basicType;
-    private int maxIndex;
+    private int maxNumberOfElements;
     
     private static final HashMap<Symbol, SymListManager.ElementType> symbolToElementTypeMap;
     
@@ -71,17 +71,17 @@ public class VariableDeclarationParser extends Parser {
         if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
             parseArraySpecification();
         } else {
-            sem(() -> maxIndex = 0);
+            sem(() -> maxNumberOfElements = 1);
         }
         
         parseSymbol(Symbol.IDENTIFIER);
-        sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxIndex));
+        sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
         parseSymbol(Symbol.SEMICOLON);
     }
 
     private void parseArraySpecification() {
         parseSymbol(Symbol.LBRACKET);
-        sem(() -> maxIndex = parseNumber() - 1);
+        sem(() -> maxNumberOfElements = parseNumber());
         parseSymbol(Symbol.RBRACKET);
     }
 
