@@ -81,4 +81,10 @@ public class VariableDeclarationParserTest {
         assertEquals(Operand.Type.ARRAYINT, e.getType());
         assertEquals(42 * 4, e.getSize());
     }
+    
+    @Test
+    public void testNameAlreadyDefined() {
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getNameAlreadyDefinedSetup();
+        assertFalse(instance.parse());
+    }
 }

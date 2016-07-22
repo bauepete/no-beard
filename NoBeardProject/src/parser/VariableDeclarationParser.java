@@ -74,7 +74,8 @@ public class VariableDeclarationParser extends Parser {
             sem(() -> maxNumberOfElements = 1);
         }
         
-        parseSymbol(Symbol.IDENTIFIER);
+        int name = parseIdentifier();
+        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefed(getLastParsedToken().toString()));
         sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
         parseSymbol(Symbol.SEMICOLON);
     }
@@ -110,7 +111,7 @@ public class VariableDeclarationParser extends Parser {
             return false;
         }
 
-        int name = ident();
+        int name = parseIdentifier();
         if (name == NOIDENT) {
             return false;
         }

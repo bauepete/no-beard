@@ -102,8 +102,8 @@ public abstract class Parser {
     protected abstract void parseSpecificPart();
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public final boolean parse() {
         parsingWasSuccessfulUntilNow = true;
@@ -119,16 +119,21 @@ public abstract class Parser {
     public boolean parsingWasSuccessful() {
         return parsingWasSuccessfulUntilNow;
     }
-    
+
     /**
      * Temp. protected method for migrating from old parsers.
-     * @param wasSuccessful 
-     * @deprecated 
+     *
+     * @param wasSuccessful
+     * @deprecated
      */
     protected void setWasSuccessful(boolean wasSuccessful) {
         parsingWasSuccessfulUntilNow = wasSuccessful;
     }
 
+    /**
+     * Parses a terminal symbol.
+     * @param symbol Symbol to be parsed.
+     */
     protected void parseSymbol(Symbol symbol) {
         if (parsingWasSuccessfulUntilNow) {
             lastParsedToken = scanner.getCurrentToken();
@@ -140,9 +145,35 @@ public abstract class Parser {
         scanner.nextToken();
     }
 
+    /**
+     * Parses a non-terminal symbol represented by an extra parser.
+     * @param p Parser representing the non-terminal symbol.
+     */
     protected void parseSymbol(Parser p) {
         parsingWasSuccessfulUntilNow = parsingWasSuccessfulUntilNow && p.parse();
         lastParsedToken = p.getLastParsedToken();
+    }
+
+    /**
+     * Parses an identifier.
+     *
+     * @return The name (spix) of the identifier.
+     */
+    protected int parseIdentifier() {
+        parseSymbol(Symbol.IDENTIFIER);
+        int spix = getLastParsedToken().getValue();
+        return spix;
+    }
+
+    /**
+     * Parses a number.
+     *
+     * @return The value of the parsed number
+     */
+    protected int parseNumber() {
+        parseSymbol(Symbol.NUMBER);
+        int val = getLastParsedToken().getValue();
+        return val;
     }
 
     protected void throwSymbolExpected(String expected, String actual) {
@@ -182,22 +213,5 @@ public abstract class Parser {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Checks whether the current token is an identifier.
-     *
-     * @return The name (spix) of the identifier.
-     */
-    protected int ident() {
-        parseSymbol(Symbol.IDENTIFIER);
-        int spix = getLastParsedToken().getValue();
-        return spix;
-    }
-
-    protected int parseNumber() {
-        parseSymbol(Symbol.NUMBER);
-        int val = getLastParsedToken().getValue();
-        return val;
     }
 }

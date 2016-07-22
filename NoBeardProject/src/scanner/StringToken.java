@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015. Created by P. Bauer (p.bauer@htl-leonding.ac.at), Department
+ * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at), Department
  * of Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
  * 4060 Leonding, AUSTRIA. All Rights Reserved. Permission to use, copy, modify,
  * and distribute this software and its documentation for educational,

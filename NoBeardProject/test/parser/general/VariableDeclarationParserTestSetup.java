@@ -26,6 +26,7 @@ package parser.general;
 import parser.ParserFactory;
 import parser.VariableDeclarationParser;
 import static parser.general.ParserTestSetup.setupInfraStructure;
+import symboltable.SymListManager;
 
 /**
  *
@@ -62,5 +63,11 @@ public class VariableDeclarationParserTestSetup extends ParserTestSetup {
 
     public static VariableDeclarationParser getInvalidArrayTestSetup() {
         return setupTestObjectsAndParser("int[k] x;");
+    }
+
+    public static VariableDeclarationParser getNameAlreadyDefinedSetup() {
+        VariableDeclarationParser p = setupTestObjectsAndParser("int x;");
+        symListManager.newVar(0, SymListManager.ElementType.INT, 1);
+        return p;
     }
 }

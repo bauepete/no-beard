@@ -31,7 +31,7 @@ public class NoBeardParser extends Parser {
             return false;
         }
 
-        int name = ident();
+        int name = parseIdentifier();
         if (name == NOIDENT) {
             return false;
         }
@@ -51,7 +51,7 @@ public class NoBeardParser extends Parser {
 
         sem(() -> code.emitOp(Nbm.Opcode.HALT));
 
-        int name1 = ident();
+        int name1 = parseIdentifier();
         if (name1 == NOIDENT) {
             return false;
         }
