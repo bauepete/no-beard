@@ -53,6 +53,8 @@ public class AssignmentParser extends Parser {
         where(srcOp.getType() == destOp.getType() && srcOp.getSize() == destOp.getSize(),
                 () -> getErrorHandler().throwOperandsAreIncompatible(srcOp.getSize(), srcOp.getType(), destOp.getSize(), destOp.getType()));
         sem(() -> srcOp.emitAssign(code, destAddrOp));
+        
+        parseSymbol(Symbol.SEMICOLON);
     }
 
     /**
