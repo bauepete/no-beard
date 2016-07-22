@@ -75,14 +75,15 @@ public class VariableDeclarationParser extends Parser {
         }
         
         int name = parseIdentifier();
-        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefed(getLastParsedToken().toString()));
+        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().toString()));
         sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
         parseSymbol(Symbol.SEMICOLON);
     }
 
     private void parseArraySpecification() {
         parseSymbol(Symbol.LBRACKET);
-        sem(() -> maxNumberOfElements = parseNumber());
+        maxNumberOfElements = parseNumber();
+        where(maxNumberOfElements > 0, () -> getErrorHandler().throwPositiveArraySizeExpected());
         parseSymbol(Symbol.RBRACKET);
     }
 

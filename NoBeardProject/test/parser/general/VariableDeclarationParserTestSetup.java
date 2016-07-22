@@ -70,4 +70,9 @@ public class VariableDeclarationParserTestSetup extends ParserTestSetup {
         symListManager.newVar(0, SymListManager.ElementType.INT, 1);
         return p;
     }
+
+    public static VariableDeclarationParser getNegativeArraySizeSetup() {
+        VariableDeclarationParser p = setupTestObjectsAndParser("bool[-5] x;");
+        return p;
+    }
 }

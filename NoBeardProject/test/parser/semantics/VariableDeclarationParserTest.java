@@ -87,4 +87,10 @@ public class VariableDeclarationParserTest {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getNameAlreadyDefinedSetup();
         assertFalse(instance.parse());
     }
+    
+    @Test
+    public void testNegativeArraySize() {
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getNegativeArraySizeSetup();
+        assertFalse(instance.parse());
+    }
 }

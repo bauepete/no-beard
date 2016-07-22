@@ -27,13 +27,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.ParserFactory;
 import parser.VariableDeclarationParser;
-import parser.general.ParserTestSetup;
 import parser.general.VariableDeclarationParserTestSetup;
 import scanner.Scanner;
-import symboltable.Operand;
-import symboltable.SymListEntry;
 
 /**
  *

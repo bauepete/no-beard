@@ -85,7 +85,11 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
     }
 
-    public void throwVariableAlreadyDefed(String variableName) {
+    public void throwVariableAlreadyDefined(String variableName) {
         raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, variableName));
+    }
+
+    public void throwPositiveArraySizeExpected() {
+        raise(new Error(Error.ErrorType.POSITIVE_ARRAY_SIZE_EXPECTED));
     }
 }
