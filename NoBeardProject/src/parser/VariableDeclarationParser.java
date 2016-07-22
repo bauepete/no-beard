@@ -64,27 +64,17 @@ public class VariableDeclarationParser extends Parser {
     
     @Override
     protected void parseSpecificPart() {
-        assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
-        parsedType = scanner.getCurrentToken().getSy();
-        parseSymbol(parsedType);
-        
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
-            parseArraySpecification();
-        } else {
-            sem(() -> maxNumberOfElements = 1);
-        }
-        
+        parseSimpleType();
+        parseArraySpecificationIfNecessary();
         int name = parseIdentifier();
-        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().toString()));
-        sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
+        validateAndAddIdentifierToSymbolTable(name);
         parseSymbol(Symbol.SEMICOLON);
     }
 
-    private void parseArraySpecification() {
-        parseSymbol(Symbol.LBRACKET);
-        maxNumberOfElements = parseNumber();
-        where(maxNumberOfElements > 0, () -> getErrorHandler().throwPositiveArraySizeExpected());
-        parseSymbol(Symbol.RBRACKET);
+    private void parseSimpleType() {
+        assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
+        parsedType = scanner.getCurrentToken().getSy();
+        parseSymbol(parsedType);
     }
 
     /**
@@ -103,6 +93,26 @@ public class VariableDeclarationParser extends Parser {
             properSymbolFound = properSymbolFound || currentSymbol == sy;
             setWasSuccessful(properSymbolFound);
         }
+    }
+
+    private void parseArraySpecificationIfNecessary() {
+        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+            parseArraySpecification();
+        } else {
+            sem(() -> maxNumberOfElements = 1);
+        }
+    }
+
+    private void parseArraySpecification() {
+        parseSymbol(Symbol.LBRACKET);
+        maxNumberOfElements = parseNumber();
+        where(maxNumberOfElements > 0, () -> getErrorHandler().throwPositiveArraySizeExpected());
+        parseSymbol(Symbol.RBRACKET);
+    }
+
+    private void validateAndAddIdentifierToSymbolTable(int name) {
+        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().toString()));
+        sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
     }
 
     @Override
