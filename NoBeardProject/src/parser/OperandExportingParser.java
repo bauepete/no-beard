@@ -23,6 +23,7 @@
  */
 package parser;
 
+import symboltable.IllegalOperand;
 import symboltable.Operand;
 
 /**
@@ -30,10 +31,15 @@ import symboltable.Operand;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public abstract class OperandExportingParser extends Parser {
+
     protected Operand exportedOperand;
 
     public final Operand getOperand() {
-        return exportedOperand;
+        if (exportedOperand != null) {
+            return exportedOperand;
+        } else {
+            return new IllegalOperand();
+        }
     }
 
 }

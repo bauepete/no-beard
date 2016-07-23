@@ -8,6 +8,7 @@ import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import symboltable.IllegalOperand;
 import symboltable.Operand;
 import symboltable.SymListManager;
 
@@ -34,7 +35,9 @@ public class AssignmentParser extends Parser {
     }
 
     public AssignmentParser() {
-
+        destOp = new IllegalOperand();
+        destAddrOp = new IllegalOperand();
+        srcOp = new IllegalOperand();
     }
 
     @Override

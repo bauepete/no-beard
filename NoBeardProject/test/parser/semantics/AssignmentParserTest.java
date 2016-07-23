@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.AssignmentParser;
 import parser.Parser;
 import parser.ParserFactory;
 import scanner.Scanner;
@@ -56,14 +57,34 @@ public class AssignmentParserTest {
     }
 
     private Parser setupTestEnvironmentAndParser(final String srcLine) {
+        setupParserFactory(srcLine);
+        fillSymbolList();
+        return ParserFactory.createAssignmentParser();
+    }
+
+    private void setupParserFactory(final String srcLine) {
         SrcReader srcReader = new SrcStringReader(srcLine);
         ErrorHandler errorHandler = new ErrorHandler(srcReader);
         CodeGenerator codeGen = new CodeGenerator(32);
         scanner = new Scanner(srcReader, errorHandler);
         ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymListManager(codeGen, scanner, errorHandler));
+    }
+
+    private void fillSymbolList() {
         ParserFactory.getSymbolListManager().newUnit(1);
         ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
-        Parser p = ParserFactory.createAssignmentParser();
-        return p;
+    }
+    
+    @Test
+    public void testSemicolonMissing() {
+        Parser p = setupTestEnvironmentAndParser("x = 3");
+        assertFalse(p.parse());
+    }
+    
+    @Test
+    public void testUndefinedVariable() {
+        setupParserFactory("x = 3;");
+        Parser p = ParserFactory.create(AssignmentParser.class);
+        assertFalse(p.parse());
     }
 }
