@@ -6,7 +6,7 @@ package parser.general;
 
 import parser.ParserFactory;
 import parser.TermParser;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -40,13 +40,13 @@ public class TermParserTestSetup extends ParserTestSetup {
 
     private static TermParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructure(srcLine);
-        ParserTestSetup.fillSymList(SymListManager.ElementType.INT);
+        ParserTestSetup.fillSymList(SymbolTable.ElementType.INT);
         return ParserFactory.create(TermParser.class);
     }
 
     private static TermParser setupBoolTestObjects(String srcLine) {
         setupInfraStructure(srcLine);
-        fillSymList(SymListManager.ElementType.BOOL);
+        fillSymList(SymbolTable.ElementType.BOOL);
         return new TermParser(scanner, symListManager, code, errorHandler);
     }
 }

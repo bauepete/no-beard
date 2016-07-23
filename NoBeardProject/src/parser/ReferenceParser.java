@@ -26,7 +26,7 @@ package parser;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Kind;
-import symboltable.SymListEntry;
+import symboltable.SymbolTableEntry;
 
 /**
  *
@@ -34,7 +34,7 @@ import symboltable.SymListEntry;
  */
 public class ReferenceParser extends Parser {
 
-    private SymListEntry foundSymbolListEntry;
+    private SymbolTableEntry foundSymbolListEntry;
     private Operand op;
 
     @Override

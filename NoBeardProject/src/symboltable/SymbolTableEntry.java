@@ -9,7 +9,7 @@ package symboltable;
  *
  * @author peter
  */
-public class SymListEntry {
+public class SymbolTableEntry {
 
     private final int name;
     private final Operand.Kind kind;
@@ -18,7 +18,7 @@ public class SymListEntry {
     private int addr;
     private final int level;
 
-    public SymListEntry(int name, Operand.Kind kind, Operand.Type type, int size, int addr, int level) {
+    public SymbolTableEntry(int name, Operand.Kind kind, Operand.Type type, int size, int addr, int level) {
         this.name = name;
         this.kind = kind;
         this.type = type;

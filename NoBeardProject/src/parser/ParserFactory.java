@@ -31,8 +31,8 @@ import nbm.Nbm;
 import scanner.Scanner;
 import scanner.SrcReader;
 import symboltable.Operand;
-import symboltable.SymListEntry;
-import symboltable.SymListManager;
+import symboltable.SymbolTableEntry;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -43,7 +43,7 @@ public class ParserFactory {
     private static ErrorHandler errorHandler;
     private static Scanner scanner;
     private static CodeGenerator codeGenerator;
-    private static SymListManager symbolListManager;
+    private static SymbolTable symbolListManager;
     
     
     public static void setup(SrcReader sourceReader) {
@@ -53,14 +53,14 @@ public class ParserFactory {
         scanner.nextToken();
         
         ParserFactory.codeGenerator = new CodeGenerator(Nbm.getMAXPROG());
-        ParserFactory.symbolListManager = new SymListManager(codeGenerator, scanner, errorHandler);
+        ParserFactory.symbolListManager = new SymbolTable(codeGenerator, scanner, errorHandler);
         
         Operand.setSymListManager(symbolListManager);
         Operand.setErrorHandler(errorHandler);
         Operand.setStringManager(scanner.getStringManager());
     }
     
-    public static void setup(SrcReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymListManager symbolListManager) {
+    public static void setup(SrcReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymbolTable symbolListManager) {
         ParserFactory.sourceReader = sourceReader;
         ParserFactory.errorHandler = errorHandler;
         ParserFactory.scanner = scanner;
@@ -78,7 +78,7 @@ public class ParserFactory {
         return scanner;
     }
     
-    public static SymListManager getSymbolListManager() {
+    public static SymbolTable getSymbolListManager() {
         return symbolListManager;
     }
 
@@ -106,7 +106,7 @@ public class ParserFactory {
         return new AssignmentParser(scanner, symbolListManager, codeGenerator, errorHandler);
     }
     
-    public static Parser createBlockParser(SymListEntry block) {
+    public static Parser createBlockParser(SymbolTableEntry block) {
         return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
     }
 }

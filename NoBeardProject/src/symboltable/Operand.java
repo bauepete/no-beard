@@ -45,7 +45,7 @@ public class Operand {
         }
     }
 
-    protected static SymListManager symListManager = null;
+    protected static SymbolTable symListManager = null;
     protected static StringManager stringManager = null;
     private static ErrorHandler errorHandler;
     protected Kind kind;
@@ -71,7 +71,7 @@ public class Operand {
         this.level = op.getLevel();
     }
 
-    public static void setSymListManager(SymListManager symListManager) {
+    public static void setSymListManager(SymbolTable symListManager) {
         Operand.symListManager = symListManager;
     }
 

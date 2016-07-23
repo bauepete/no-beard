@@ -32,7 +32,7 @@ import scanner.Scanner.Symbol;
 import scanner.Token;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -72,7 +72,7 @@ public abstract class Parser {
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
     protected Scanner scanner;
-    protected SymListManager sym;
+    protected SymbolTable sym;
     protected CodeGenerator code;
     private final ErrorHandler errorHandler;
 
@@ -84,7 +84,7 @@ public abstract class Parser {
         this.errorHandler = ParserFactory.getErrorHandler();
     }
 
-    public Parser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler errorHandler) {
+    public Parser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler errorHandler) {
         this.scanner = s;
         this.sym = sym;
         this.code = c;

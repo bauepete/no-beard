@@ -32,7 +32,7 @@ import parser.general.ParserTestSetup;
 import parser.general.VariableDeclarationParserTestSetup;
 import scanner.Scanner;
 import symboltable.Operand;
-import symboltable.SymListEntry;
+import symboltable.SymbolTableEntry;
 
 /**
  *
@@ -58,7 +58,7 @@ public class VariableDeclarationParserTest {
     public void testSymbolTableContentOfSimpleIntDeclaration() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleIntTestSetup();
         instance.parse();
-        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        SymbolTableEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
         assertEquals(Operand.Kind.VARIABLE, e.getKind());
         assertEquals(Operand.Type.SIMPLEINT, e.getType());
         assertEquals(4, e.getSize());
@@ -68,7 +68,7 @@ public class VariableDeclarationParserTest {
     public void testSymbolTableContentOfSimpleCharDeclaration() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleCharTestSetup();
         instance.parse();
-        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        SymbolTableEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
         assertEquals(Operand.Type.SIMPLECHAR, e.getType());
         assertEquals(1, e.getSize());
     }
@@ -77,7 +77,7 @@ public class VariableDeclarationParserTest {
     public void testSymbolTableContentOfIntArrayDeclaration() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getIntArrayTestSetup();
         instance.parse();
-        SymListEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
+        SymbolTableEntry e = VariableDeclarationParserTestSetup.getSymListManager().findObject(0);
         assertEquals(Operand.Type.ARRAYINT, e.getType());
         assertEquals(42 * 4, e.getSize());
     }

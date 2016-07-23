@@ -5,7 +5,7 @@
 package parser.general;
 
 import parser.IfParser;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -23,7 +23,7 @@ public class IfStatParserTestSetup extends ParserTestSetup {
     
     private static IfParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructureOld(srcLine);
-        fillSymList(SymListManager.ElementType.INT);
+        fillSymList(SymbolTable.ElementType.INT);
         return new IfParser(scanner, symListManager, code, errorHandler);
     }
 }

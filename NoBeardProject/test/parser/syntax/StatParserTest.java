@@ -16,7 +16,7 @@ import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
 import symboltable.Operand;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -32,7 +32,7 @@ public class StatParserTest {
     private Scanner simplePutS;
     private Scanner putS;
     private Scanner noPutS;
-    private SymListManager sym;
+    private SymbolTable sym;
     private CodeGenerator c;
     
     public StatParserTest() {
@@ -54,9 +54,9 @@ public class StatParserTest {
     public void testParseAssignStat() {
         System.out.println("testParseAssignStat");
         setupTestObjects("a = 5;");
-        sym = new SymListManager(c, scanner, errorHandler);
+        sym = new SymbolTable(c, scanner, errorHandler);
         sym.newUnit(1);
-        sym.newVar(0, SymListManager.ElementType.INT);
+        sym.newVar(0, SymbolTable.ElementType.INT);
         Operand.setSymListManager(sym);
         scanner.nextToken();
         
@@ -105,9 +105,9 @@ public class StatParserTest {
     public void testParseNoAssignStat() {
         System.out.println("testParseNoAssignStat");
         setupTestObjects("a == 5;");
-        sym = new SymListManager(c, scanner, errorHandler);
+        sym = new SymbolTable(c, scanner, errorHandler);
         sym.newUnit(1);
-        sym.newVar(0, SymListManager.ElementType.INT);
+        sym.newVar(0, SymbolTable.ElementType.INT);
         Operand.setSymListManager(sym);
         scanner.nextToken();
         

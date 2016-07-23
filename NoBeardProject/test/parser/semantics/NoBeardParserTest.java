@@ -23,7 +23,7 @@ import scanner.Scanner;
 import scanner.SrcFileReader;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -34,7 +34,7 @@ public class NoBeardParserTest {
 
     private NbCompiler comp;
     private CodeGenerator code;
-    private SymListManager sym;
+    private SymbolTable sym;
     private Scanner scanner;
     private NoBeardParser p;
 

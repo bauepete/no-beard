@@ -32,9 +32,9 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Kind;
-import symboltable.SymListEntry;
-import symboltable.SymListManager;
-import symboltable.SymListManager.ElementType;
+import symboltable.SymbolTableEntry;
+import symboltable.SymbolTable;
+import symboltable.SymbolTable.ElementType;
 
 /**
  *
@@ -43,10 +43,10 @@ import symboltable.SymListManager.ElementType;
 public class VariableDeclarationParser extends Parser {
 
     private Symbol parsedType;
-    private SymListManager.ElementType basicType;
+    private SymbolTable.ElementType basicType;
     private int maxNumberOfElements;
     
-    private static final HashMap<Symbol, SymListManager.ElementType> symbolToElementTypeMap;
+    private static final HashMap<Symbol, SymbolTable.ElementType> symbolToElementTypeMap;
     
     static {
         symbolToElementTypeMap = new HashMap<>();
@@ -55,7 +55,7 @@ public class VariableDeclarationParser extends Parser {
         symbolToElementTypeMap.put(Symbol.CHAR, ElementType.CHAR);        
     }
 
-    VariableDeclarationParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
+    VariableDeclarationParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler eh) {
         super();
     }
 
@@ -127,7 +127,7 @@ public class VariableDeclarationParser extends Parser {
             return false;
         }
         // cc
-        SymListEntry obj = sym.findObject(name);
+        SymbolTableEntry obj = sym.findObject(name);
         if (obj.getKind() != Kind.ILLEGAL) {
             getErrorHandler().raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, scanner.getNameManager().getStringName(name)));
             return false;

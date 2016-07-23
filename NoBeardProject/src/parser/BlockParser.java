@@ -9,8 +9,8 @@ import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symboltable.SymListEntry;
-import symboltable.SymListManager;
+import symboltable.SymbolTableEntry;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -18,9 +18,9 @@ import symboltable.SymListManager;
  */
 public class BlockParser extends Parser {
 
-    private final SymListEntry obj;
+    private final SymbolTableEntry obj;
 
-    public BlockParser(Scanner scanner, SymListManager sym, CodeGenerator code, SymListEntry obj, ErrorHandler e) {
+    public BlockParser(Scanner scanner, SymbolTable sym, CodeGenerator code, SymbolTableEntry obj, ErrorHandler e) {
         super(scanner, sym, code, e);
         this.obj = obj;
     }

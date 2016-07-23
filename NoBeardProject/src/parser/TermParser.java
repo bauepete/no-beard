@@ -30,7 +30,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -38,7 +38,7 @@ import symboltable.SymListManager;
  */
 public class TermParser extends ExpressionRelatedParser {
 
-    public TermParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
+    public TermParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super();
     }
 

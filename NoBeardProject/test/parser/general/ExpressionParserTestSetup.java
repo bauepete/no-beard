@@ -6,7 +6,7 @@ package parser.general;
 
 import parser.ExpressionParser;
 import parser.ParserFactory;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -20,7 +20,7 @@ public class ExpressionParserTestSetup extends ParserTestSetup {
         
     private static ExpressionParser setupTestObjects(String srcLine) {
         setupInfraStructure(srcLine);
-        fillSymList(SymListManager.ElementType.INT);
+        fillSymList(SymbolTable.ElementType.INT);
         return ParserFactory.create(ExpressionParser.class);
     }
     

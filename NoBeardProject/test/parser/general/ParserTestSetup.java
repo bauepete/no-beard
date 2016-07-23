@@ -11,7 +11,7 @@ import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
 import symboltable.Operand;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -20,7 +20,7 @@ import symboltable.SymListManager;
 public class ParserTestSetup {
 
     protected static Scanner scanner;
-    protected static SymListManager symListManager;
+    protected static SymbolTable symListManager;
     protected static CodeGenerator code;
     protected static ErrorHandler errorHandler;
 
@@ -32,7 +32,7 @@ public class ParserTestSetup {
         return scanner;
     }
     
-    public static SymListManager getSymListManager() {
+    public static SymbolTable getSymListManager() {
         return symListManager;
     }
 
@@ -41,7 +41,7 @@ public class ParserTestSetup {
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         code = new CodeGenerator(256);
-        symListManager = new SymListManager(code, scanner, errorHandler);
+        symListManager = new SymbolTable(code, scanner, errorHandler);
 
         ParserFactory.setup(sourceReader, errorHandler, scanner, code, symListManager);
     }
@@ -54,13 +54,13 @@ public class ParserTestSetup {
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         code = new CodeGenerator(256);
-        symListManager = new SymListManager(code, scanner, errorHandler);
+        symListManager = new SymbolTable(code, scanner, errorHandler);
         scanner.nextToken();
         Operand.setSymListManager(symListManager);
         Operand.setStringManager(scanner.getStringManager());
     }
 
-    protected static void fillSymList(SymListManager.ElementType type) {
+    protected static void fillSymList(SymbolTable.ElementType type) {
         symListManager.newUnit(25);
         symListManager.newVar(0, type);
         symListManager.newVar(1, type);

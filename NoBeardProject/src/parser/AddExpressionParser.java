@@ -30,7 +30,7 @@ import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Type;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -38,7 +38,7 @@ import symboltable.SymListManager;
  */
 public class AddExpressionParser extends ExpressionRelatedParser {
 
-    public AddExpressionParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler eh) {
+    public AddExpressionParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler eh) {
         super();
     }
 

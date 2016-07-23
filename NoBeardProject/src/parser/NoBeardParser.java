@@ -10,8 +10,8 @@ import nbm.CodeGenerator;
 import scanner.NameManager;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symboltable.SymListEntry;
-import symboltable.SymListManager;
+import symboltable.SymbolTableEntry;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -19,9 +19,9 @@ import symboltable.SymListManager;
  */
 public class NoBeardParser extends Parser {
 
-    private SymListEntry unitObj;
+    private SymbolTableEntry unitObj;
     
-    public NoBeardParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
+    public NoBeardParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 
@@ -70,7 +70,7 @@ public class NoBeardParser extends Parser {
         return true;
     }
 
-    private boolean block(SymListEntry obj) {
+    private boolean block(SymbolTableEntry obj) {
         BlockParser blockP = new BlockParser(scanner, sym, code, obj, getErrorHandler());
         return blockP.parseOldStyle();
     }

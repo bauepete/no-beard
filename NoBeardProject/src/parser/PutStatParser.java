@@ -15,7 +15,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -23,7 +23,7 @@ import symboltable.SymListManager;
  */
 public class PutStatParser extends Parser {
 
-    public PutStatParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
+    public PutStatParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 

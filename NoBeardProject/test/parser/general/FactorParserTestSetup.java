@@ -6,7 +6,7 @@ package parser.general;
 
 import parser.FactorParser;
 import parser.ParserFactory;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -20,7 +20,7 @@ public class FactorParserTestSetup extends ParserTestSetup {
 
     private static FactorParser setupTestObjectsAndParser(String srcLine) {
         setupInfraStructure(srcLine);
-        fillSymList(SymListManager.ElementType.INT);
+        fillSymList(SymbolTable.ElementType.INT);
         return ParserFactory.create(FactorParser.class);
     }
 

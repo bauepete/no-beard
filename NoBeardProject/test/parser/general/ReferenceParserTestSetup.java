@@ -25,7 +25,7 @@ package parser.general;
 
 import parser.ParserFactory;
 import parser.ReferenceParser;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -36,7 +36,7 @@ public class ReferenceParserTestSetup extends ParserTestSetup {
     public static ReferenceParser getSimpleIdentifierTestSetup() {
         setupInfraStructure("x");
         ParserFactory.getSymbolListManager().newUnit(1);
-        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+        ParserFactory.getSymbolListManager().newVar(0, SymbolTable.ElementType.INT);
         return ParserFactory.create(ReferenceParser.class);
     }
     
@@ -54,7 +54,7 @@ public class ReferenceParserTestSetup extends ParserTestSetup {
     public static ReferenceParser getArrayReferenceSetup() {
         setupInfraStructure("x[3]");
         ParserFactory.getSymbolListManager().newUnit(1);
-        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+        ParserFactory.getSymbolListManager().newVar(0, SymbolTable.ElementType.INT);
         return ParserFactory.create(ReferenceParser.class);
     }
 }

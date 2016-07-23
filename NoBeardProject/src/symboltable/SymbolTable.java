@@ -19,7 +19,7 @@ import scanner.Scanner;
  *
  * @author peter
  */
-public class SymListManager {
+public class SymbolTable {
 
     public enum ElementType {
 
@@ -27,18 +27,18 @@ public class SymListManager {
     }
 
     private final int NONAME = -1;
-    private final Stack<SymListEntry> symListStack;
-    private final Stack<SymListEntry> blockStack;
+    private final Stack<SymbolTableEntry> symListStack;
+    private final Stack<SymbolTableEntry> blockStack;
     private final Stack<Integer> datAddrStack;
-    private SymListEntry currBlock;
+    private SymbolTableEntry currBlock;
     private int currLevel;
     private int datAddr;
     private final CodeGenerator code;
     private final Scanner scanner;
     private final ErrorHandler errorHandler;
 
-    public SymListManager(CodeGenerator code, Scanner scanner, ErrorHandler errorHandler) {
-        //symList = new HashMap<Integer, SymListEntry>();
+    public SymbolTable(CodeGenerator code, Scanner scanner, ErrorHandler errorHandler) {
+        //symList = new HashMap<Integer, SymbolTableEntry>();
         symListStack = new Stack<>();
         blockStack = new Stack<>();
         datAddrStack = new Stack();
@@ -48,31 +48,31 @@ public class SymListManager {
     }
 
     /**
-     * Looks up a name in the symbol list and returns the SymListEntry with this
-     * name. Lookup starts at top of the stack and the first node found matching
+     * Looks up a name in the symbol list and returns the SymbolTableEntry with this
+ name. Lookup starts at top of the stack and the first node found matching
      * the name is returned. In case name is not found a node of kind
      * Operand.ILLEGAL is returned.
      *
      * @param name The name to be looked up.
      * @return The symbol node matching the name or an illegal symbol node.
      */
-    public SymListEntry findObject(int name) {
-        ListIterator<SymListEntry> i = symListStack.listIterator(symListStack.size());
+    public SymbolTableEntry findObject(int name) {
+        ListIterator<SymbolTableEntry> i = symListStack.listIterator(symListStack.size());
 
         while (i.hasPrevious()) {
-            SymListEntry node = i.previous();
+            SymbolTableEntry node = i.previous();
             if (node.getName() == name) {
                 return node;
             }
         }
-        return new SymListEntry(name, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
+        return new SymbolTableEntry(name, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
     }
 
     public int getCurrLevel() {
         return currLevel;
     }
 
-    public SymListEntry getCurrBlock() {
+    public SymbolTableEntry getCurrBlock() {
         return currBlock;
     }
 
@@ -85,7 +85,7 @@ public class SymListManager {
             raiseNameAlreadyDefined(name);
             return false;
         }
-        SymListEntry func = new SymListEntry(name, Kind.FUNCTION, operandType, 0, 0, currLevel);
+        SymbolTableEntry func = new SymbolTableEntry(name, Kind.FUNCTION, operandType, 0, 0, currLevel);
         addBlockNode(func);
         return true;
     }
@@ -108,7 +108,7 @@ public class SymListManager {
             return false;
         }
 
-        SymListEntry proc = new SymListEntry(name, Kind.UNIT, Type.VOID, 0, 0, currLevel);
+        SymbolTableEntry proc = new SymbolTableEntry(name, Kind.UNIT, Type.VOID, 0, 0, currLevel);
         addBlockNode(proc);
         return true;
     }
@@ -117,22 +117,22 @@ public class SymListManager {
         return (findObjectInCurrentScope(name).getType() != Type.ERRORTYPE);
     }
 
-    private SymListEntry findObjectInCurrentScope(int name) {
-        ListIterator<SymListEntry> i = symListStack.listIterator(symListStack.size());
+    private SymbolTableEntry findObjectInCurrentScope(int name) {
+        ListIterator<SymbolTableEntry> i = symListStack.listIterator(symListStack.size());
 
         while (i.hasPrevious()) {
-            SymListEntry node = i.previous();
+            SymbolTableEntry node = i.previous();
             if (node.getLevel() != getCurrLevel()) {
-                return new SymListEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
+                return new SymbolTableEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
             }
             if (node.getName() == name) {
                 return node;
             }
         }
-        return new SymListEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
+        return new SymbolTableEntry(0, Kind.ILLEGAL, Type.ERRORTYPE, 0, 0, 0);
     }
 
-    private void addBlockNode(SymListEntry node) {
+    private void addBlockNode(SymbolTableEntry node) {
         symListStack.push(node);
         if (currBlock != null) {
             blockStack.push(currBlock);
@@ -148,7 +148,7 @@ public class SymListManager {
      * Creates an anonymous block node and adds it to the symbol list.
      */
     public void newBlock() {
-        SymListEntry block = new SymListEntry(NONAME, Kind.ANONYMOUSBLOCK, Type.VOID, 0, 0, currLevel);
+        SymbolTableEntry block = new SymbolTableEntry(NONAME, Kind.ANONYMOUSBLOCK, Type.VOID, 0, 0, currLevel);
         addBlockNode(block);
     }
 
@@ -202,7 +202,7 @@ public class SymListManager {
                 break;
         }
 
-        SymListEntry var = new SymListEntry(name, Kind.VARIABLE, opType, opSize * maxNumberOfElements, datAddr, currLevel);
+        SymbolTableEntry var = new SymbolTableEntry(name, Kind.VARIABLE, opType, opSize * maxNumberOfElements, datAddr, currLevel);
         symListStack.push(var);
         currBlock.addSize(var.getSize());
         datAddr += var.getSize();
@@ -228,7 +228,7 @@ public class SymListManager {
      * @param funcObj The object which start address to be defined.
      * @param startPc The start address of funcObj.
      */
-    public void defineFuncStart(SymListEntry funcObj, int startPc) {
+    public void defineFuncStart(SymbolTableEntry funcObj, int startPc) {
         if (funcObj.isNamedBlockEntry()) {
             funcObj.setAddr(startPc);
         } else {
@@ -244,7 +244,7 @@ public class SymListManager {
      * @param atAddr Address where to store the size.
      * @param blockObj Object whose size to be stored.
      */
-    public void fixINC(int atAddr, SymListEntry blockObj) {
+    public void fixINC(int atAddr, SymbolTableEntry blockObj) {
         code.fixup(atAddr, blockObj.getSize());
     }
 

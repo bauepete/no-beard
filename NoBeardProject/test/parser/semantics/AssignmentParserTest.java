@@ -18,7 +18,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -67,12 +67,12 @@ public class AssignmentParserTest {
         ErrorHandler errorHandler = new ErrorHandler(srcReader);
         CodeGenerator codeGen = new CodeGenerator(32);
         scanner = new Scanner(srcReader, errorHandler);
-        ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymListManager(codeGen, scanner, errorHandler));
+        ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymbolTable(codeGen, scanner, errorHandler));
     }
 
     private void fillSymbolList() {
         ParserFactory.getSymbolListManager().newUnit(1);
-        ParserFactory.getSymbolListManager().newVar(0, SymListManager.ElementType.INT);
+        ParserFactory.getSymbolListManager().newVar(0, SymbolTable.ElementType.INT);
     }
     
     @Test

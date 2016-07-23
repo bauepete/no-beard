@@ -11,7 +11,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -19,7 +19,7 @@ import symboltable.SymListManager;
  */
 public class IfParser extends Parser {
 
-    public IfParser(Scanner scanner, SymListManager sym, CodeGenerator code, ErrorHandler e) {
+    public IfParser(Scanner scanner, SymbolTable sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
 

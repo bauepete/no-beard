@@ -4,9 +4,9 @@
  */
 package symboltable;
 
-import symboltable.SymListEntry;
+import symboltable.SymbolTableEntry;
 import symboltable.Operand;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 import symboltable.Operand.Type;
 import scanner.Scanner;
 import symboltable.Operand.Kind;
@@ -28,14 +28,14 @@ import scanner.SrcReader;
  *
  * @author peter
  */
-public class SymListManagerTest {
+public class SymbolTableTest {
 
     private ErrorHandler errorHandler;
-    private SymListManager symListMgr;
+    private SymbolTable symListMgr;
     private CodeGenerator c;
     private NameManager n;
 
-    public SymListManagerTest() {
+    public SymbolTableTest() {
     }
 
     @Before
@@ -44,7 +44,7 @@ public class SymListManagerTest {
         SrcStringReader sr = new SrcStringReader("TestUnit; aName");
         errorHandler = new ErrorHandler(sr);
         Scanner s = prepareScanner(sr);
-        symListMgr = new SymListManager(c, s, errorHandler);
+        symListMgr = new SymbolTable(c, s, errorHandler);
 
         symListMgr.newUnit(0);
     }
@@ -62,7 +62,7 @@ public class SymListManagerTest {
     }
 
     /**
-     * Test of newUnit method, of class SymListManager.
+     * Test of newUnit method, of class SymbolTable.
      */
     @Test
     public void testNewUnit() {
@@ -71,7 +71,7 @@ public class SymListManagerTest {
         assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
         assertEquals(Type.VOID, symListMgr.getCurrBlock().getType());
         assertEquals(1, symListMgr.getCurrLevel());
-        SymListEntry unitObj = symListMgr.findObject(0);
+        SymbolTableEntry unitObj = symListMgr.findObject(0);
         assertEquals(unitObj.getKind(), Kind.UNIT);
     }
 
@@ -87,15 +87,15 @@ public class SymListManagerTest {
     public void testNewSimpleVar() {
         System.out.println("newSimpleVar");
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT);
         assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
         assertEquals(4, symListMgr.getCurrBlock().getSize());
 
-        symListMgr.newVar(2, SymListManager.ElementType.BOOL);
+        symListMgr.newVar(2, SymbolTable.ElementType.BOOL);
         assertEquals("datAddr expected ", 40, symListMgr.getDatAddr());
         assertEquals(8, symListMgr.getCurrBlock().getSize());
 
-        symListMgr.newVar(3, SymListManager.ElementType.CHAR);
+        symListMgr.newVar(3, SymbolTable.ElementType.CHAR);
         assertEquals(44, symListMgr.getDatAddr());
         assertEquals(9, symListMgr.getCurrBlock().getSize());
     }
@@ -104,15 +104,15 @@ public class SymListManagerTest {
     public void testNewArrayVar() {
         System.out.print("testNewArrayVar");
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT, 10);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT, 10);
         assertEquals(72, symListMgr.getDatAddr());
         assertEquals(40, symListMgr.getCurrBlock().getSize());
 
-        symListMgr.newVar(2, SymListManager.ElementType.BOOL, 5);
+        symListMgr.newVar(2, SymbolTable.ElementType.BOOL, 5);
         assertEquals(92, symListMgr.getDatAddr());
         assertEquals(60, symListMgr.getCurrBlock().getSize());
 
-        symListMgr.newVar(3, SymListManager.ElementType.CHAR, 15);
+        symListMgr.newVar(3, SymbolTable.ElementType.CHAR, 15);
         assertEquals(108, symListMgr.getDatAddr());
         assertEquals(75, symListMgr.getCurrBlock().getSize());
     }
@@ -121,11 +121,11 @@ public class SymListManagerTest {
     public void testNewVarFail() {
         System.out.println("testNewVarFail");
 
-        symListMgr.newVar(0, SymListManager.ElementType.INT);
+        symListMgr.newVar(0, SymbolTable.ElementType.INT);
         assertEquals(4, symListMgr.getCurrBlock().getSize());
         assertEquals(36, symListMgr.getDatAddr());
 
-        symListMgr.newVar(0, SymListManager.ElementType.BOOL);
+        symListMgr.newVar(0, SymbolTable.ElementType.BOOL);
         assertEquals(4, symListMgr.getCurrBlock().getSize());
         assertEquals(36, symListMgr.getDatAddr());
     }
@@ -134,11 +134,11 @@ public class SymListManagerTest {
     public void testNewBlock() {
         System.out.println("testNewBlock");
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT);
         symListMgr.newBlock();
         assertEquals(2, symListMgr.getCurrLevel());
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT);
         assertEquals(2, symListMgr.getCurrLevel());
         assertEquals(0, errorHandler.getCount());
         assertEquals(4, symListMgr.getCurrBlock().getSize());
@@ -148,7 +148,7 @@ public class SymListManagerTest {
     public void testNewFuncFail() {
         System.out.println("testNewFuncFail");
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT);
         symListMgr.newFunc(1, Type.SIMPLEBOOL);
         assertEquals(ErrorType.NAME_ALREADY_DEFINED.getNumber(), errorHandler.getLastError().getNumber());
         assertEquals(1, symListMgr.getCurrLevel());
@@ -169,12 +169,12 @@ public class SymListManagerTest {
     public void testEndBlock() {
         System.out.println("testEndBlock");
 
-        symListMgr.newVar(0, SymListManager.ElementType.INT);
+        symListMgr.newVar(0, SymbolTable.ElementType.INT);
         symListMgr.newFunc(1, Type.VOID);
-        symListMgr.newVar(0, SymListManager.ElementType.CHAR);
+        symListMgr.newVar(0, SymbolTable.ElementType.CHAR);
         symListMgr.newBlock();
-        symListMgr.newVar(0, SymListManager.ElementType.INT);
-        symListMgr.newVar(1, SymListManager.ElementType.INT, 5);
+        symListMgr.newVar(0, SymbolTable.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT, 5);
 
         // Test whether setup is correct
         assertEquals(0, errorHandler.getCount());
@@ -210,7 +210,7 @@ public class SymListManagerTest {
     public void testAlignDatAddrTo4() {
         System.out.println("alignDatAddrTo4");
 
-        symListMgr.newVar(2, SymListManager.ElementType.CHAR);
+        symListMgr.newVar(2, SymbolTable.ElementType.CHAR);
         assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
     }
 
@@ -218,8 +218,8 @@ public class SymListManagerTest {
     public void testGetObject() {
         System.out.println("testGetObject");
 
-        symListMgr.newVar(1, SymListManager.ElementType.CHAR);
-        symListMgr.newVar(2, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.CHAR);
+        symListMgr.newVar(2, SymbolTable.ElementType.INT);
 
         assertEquals("Kind expected: ", Operand.Kind.UNIT, symListMgr.findObject(0).getKind());
         assertEquals("Type expected: ", Operand.Type.VOID, symListMgr.findObject(0).getType());
@@ -243,9 +243,9 @@ public class SymListManagerTest {
     public void testDefineProcStart() {
         System.out.println("defineProcStart");
 
-        symListMgr.newVar(1, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.INT);
 
-        SymListEntry u = symListMgr.findObject(0);
+        SymbolTableEntry u = symListMgr.findObject(0);
         symListMgr.defineFuncStart(u, 2);
 
         assertEquals("Start PC ", 2, symListMgr.findObject(0).getAddr());
@@ -260,8 +260,8 @@ public class SymListManagerTest {
     public void testFixINC() {
         System.out.println("fixINC");
 
-        symListMgr.newVar(1, SymListManager.ElementType.CHAR);
-        symListMgr.newVar(2, SymListManager.ElementType.INT);
+        symListMgr.newVar(1, SymbolTable.ElementType.CHAR);
+        symListMgr.newVar(2, SymbolTable.ElementType.INT);
 
         c.emitOp(Opcode.INC);
         int incAddr = c.getPc();

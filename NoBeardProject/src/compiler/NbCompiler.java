@@ -10,7 +10,7 @@ import parser.NoBeardParser;
 import scanner.Scanner;
 import scanner.SrcReader;
 import symboltable.Operand;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 /**
  *
  * @author peter
@@ -18,7 +18,7 @@ import symboltable.SymListManager;
 public class NbCompiler {
     private final  Scanner scanner;
     private final  NoBeardParser parser;
-    private final  SymListManager sym;
+    private final  SymbolTable sym;
     private final  CodeGenerator code;
     private final ErrorHandler errorHandler;
     
@@ -27,7 +27,7 @@ public class NbCompiler {
         errorHandler = new ErrorHandler(srcReader);
         scanner = new Scanner(srcReader, errorHandler);
         code = new CodeGenerator(nbm.Nbm.getMAXPROG());
-        sym = new SymListManager(code, scanner, errorHandler);
+        sym = new SymbolTable(code, scanner, errorHandler);
         Operand.setSymListManager(sym);
         Operand.setStringManager(scanner.getStringManager());
         parser = new NoBeardParser(scanner, sym, code, errorHandler);
@@ -46,7 +46,7 @@ public class NbCompiler {
         return scanner;
     }
 
-    public SymListManager getSymListManager() {
+    public SymbolTable getSymListManager() {
         return sym;
     }
     

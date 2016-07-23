@@ -10,7 +10,7 @@ import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.IllegalOperand;
 import symboltable.Operand;
-import symboltable.SymListManager;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -30,7 +30,7 @@ public class AssignmentParser extends Parser {
      * @param e 
      * @deprecated 
      */
-    public AssignmentParser(Scanner s, SymListManager sym, CodeGenerator c, ErrorHandler e) {
+    public AssignmentParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super();
     }
 
