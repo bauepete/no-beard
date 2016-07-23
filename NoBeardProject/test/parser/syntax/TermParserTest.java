@@ -39,7 +39,7 @@ public class TermParserTest {
         System.out.println("testParseMul");
         TermParser p = TermParserTestSetup.getMulTermSetup();
         assertEquals("Parse", true, p.parse());
-        assertEquals(Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSy());
+        assertEquals(Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
     @Test

@@ -137,9 +137,9 @@ public abstract class Parser {
     protected void parseSymbol(Symbol symbol) {
         if (parsingWasSuccessfulUntilNow) {
             lastParsedToken = scanner.getCurrentToken();
-            parsingWasSuccessfulUntilNow = lastParsedToken.getSy() == symbol;
+            parsingWasSuccessfulUntilNow = lastParsedToken.getSymbol() == symbol;
             if (!parsingWasSuccessfulUntilNow) {
-                errorHandler.throwSymbolExpectedError(symbol.toString(), lastParsedToken.getSy().toString());
+                errorHandler.throwSymbolExpectedError(symbol.toString(), lastParsedToken.getSymbol().toString());
             }
         }
         scanner.nextToken();
@@ -189,8 +189,8 @@ public abstract class Parser {
      * @deprecated
      */
     protected boolean tokenIsA(Symbol sy) {
-        if (scanner.getCurrentToken().getSy() != sy) {
-            getErrorHandler().throwSymbolExpectedError(sy.toString(), scanner.getCurrentToken().getSy().toString());
+        if (scanner.getCurrentToken().getSymbol() != sy) {
+            getErrorHandler().throwSymbolExpectedError(sy.toString(), scanner.getCurrentToken().getSymbol().toString());
             parsingWasSuccessfulUntilNow = false;
             return false;
         }

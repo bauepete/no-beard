@@ -56,7 +56,7 @@ public class FactorParser extends OperandExportingParser {
 
     @Override
     protected void parseSpecificPart() {
-        switch (scanner.getCurrentToken().getSy()) {
+        switch (scanner.getCurrentToken().getSymbol()) {
             case IDENTIFIER:
                 ReferenceParser p = ParserFactory.create(ReferenceParser.class);
                 parseSymbol(p);
@@ -82,7 +82,7 @@ public class FactorParser extends OperandExportingParser {
                 break;
 
             default:
-                throwSymbolExpected("Identifier, number, true, false, not, or '('", scanner.getCurrentToken().getSy().toString());
+                throwSymbolExpected("Identifier, number, true, false, not, or '('", scanner.getCurrentToken().getSymbol().toString());
         }
     }
     

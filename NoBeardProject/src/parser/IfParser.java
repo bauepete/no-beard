@@ -54,7 +54,7 @@ public class IfParser extends Parser {
         sym.endBlock();
         // endsem
         
-        if (scanner.getCurrentToken().getSy() == Symbol.ELSE) {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.ELSE) {
             if (!tokenIsA(Symbol.ELSE)) {
                 return false;
             }

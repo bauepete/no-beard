@@ -26,7 +26,7 @@ public class StatParser extends Parser {
     @Override
     public boolean parseOldStyle() {
         AddExpressionParser exprP = new AddExpressionParser(scanner, sym, code, getErrorHandler());
-        switch (scanner.getCurrentToken().getSy()) {
+        switch (scanner.getCurrentToken().getSymbol()) {
             case INT:
             case BOOL:
             case CHAR:

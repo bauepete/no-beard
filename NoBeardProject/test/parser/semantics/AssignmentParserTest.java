@@ -53,7 +53,7 @@ public class AssignmentParserTest {
 
         assertEquals("Parse ", true, p.parse());
         AssemblerCodeChecker.assertCodeEquals("Code: ", expResult, ParserFactory.getCodeGenerator().getByteCode());
-        assertEquals(Symbol.EOFSY, scanner.getCurrentToken().getSy());
+        assertEquals(Symbol.EOFSY, scanner.getCurrentToken().getSymbol());
     }
 
     private Parser setupTestEnvironmentAndParser(final String srcLine) {

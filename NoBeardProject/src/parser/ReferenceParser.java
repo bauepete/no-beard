@@ -55,7 +55,7 @@ public class ReferenceParser extends Parser {
         
         sem(() -> op = foundSymbolListEntry.createOperand());
         
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             parseSymbol(Symbol.LBRACKET);
             ExpressionParser p = ParserFactory.create(ExpressionParser.class);
             parseSymbol(p);

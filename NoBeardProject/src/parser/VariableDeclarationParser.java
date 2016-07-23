@@ -73,7 +73,7 @@ public class VariableDeclarationParser extends Parser {
 
     private void parseSimpleType() {
         assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
-        parsedType = scanner.getCurrentToken().getSy();
+        parsedType = scanner.getCurrentToken().getSymbol();
         parseSymbol(parsedType);
     }
 
@@ -85,7 +85,7 @@ public class VariableDeclarationParser extends Parser {
     protected void assertThatCurrentSymbolIsOf(Symbol symbol, Symbol... furtherSymbols) {
         if (!parsingWasSuccessful()) return;
         
-        Symbol currentSymbol = scanner.getCurrentToken().getSy();
+        Symbol currentSymbol = scanner.getCurrentToken().getSymbol();
         boolean properSymbolFound = currentSymbol == symbol;
         
         setWasSuccessful(properSymbolFound);
@@ -96,7 +96,7 @@ public class VariableDeclarationParser extends Parser {
     }
 
     private void parseArraySpecificationIfNecessary() {
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             parseArraySpecification();
         } else {
             sem(() -> maxNumberOfElements = 1);
@@ -134,7 +134,7 @@ public class VariableDeclarationParser extends Parser {
         }
         // endcc
 
-        if (scanner.getCurrentToken().getSy() == Symbol.LBRACKET) {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             scanner.nextToken();
             // sem
             int val = parseNumber();
@@ -160,7 +160,7 @@ public class VariableDeclarationParser extends Parser {
             // endsem
         }
 
-        if (scanner.getCurrentToken().getSy() == Symbol.ASSIGN) {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.ASSIGN) {
             // sem
             obj = sym.findObject(name);
             Operand destOp = obj.createOperand();
@@ -200,7 +200,7 @@ public class VariableDeclarationParser extends Parser {
     }
 
     private boolean simpleType() {
-        switch (scanner.getCurrentToken().getSy()) {
+        switch (scanner.getCurrentToken().getSymbol()) {
             case INT:
                 basicType = ElementType.INT;
                 break;

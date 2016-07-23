@@ -58,7 +58,7 @@ public class BlockParser extends Parser {
             return false;
         }
 
-        while (scanner.getCurrentToken().getSy() != Symbol.DONE) {
+        while (scanner.getCurrentToken().getSymbol() != Symbol.DONE) {
             if (!statP.parseOldStyle()) {
                 return false;
             }

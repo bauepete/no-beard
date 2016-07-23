@@ -31,7 +31,7 @@ public class PutStatParser extends Parser {
     public boolean parseOldStyle() {
         boolean isParsedCorrectly = false;
 
-        switch (scanner.getCurrentToken().getSy()) {
+        switch (scanner.getCurrentToken().getSymbol()) {
             case PUT:
                 isParsedCorrectly = put();
                 break;
@@ -85,7 +85,7 @@ public class PutStatParser extends Parser {
         }
         // endsem
 
-        switch (scanner.getCurrentToken().getSy()) {
+        switch (scanner.getCurrentToken().getSymbol()) {
             case COMMA:
                 scanner.nextToken();
 

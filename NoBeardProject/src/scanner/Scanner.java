@@ -68,22 +68,22 @@ public class Scanner {
 
     /**
      * Reads the next token from the source code. After a call of nextToken the
-     * following holds:
-     * - getCurrentToken().getSy() returns the kind of the
-     * current symbol
-     * - if getCurrentToken().getSy() == IDENTIFIER,
-     * getCurrentToken.getValue() is a unique number identifying the symbol
-     * - if getCurrentToken().getSy() == NUMBER, getCurrentToken.getValue() holds the
-     * value of the number
-     * - if getCurrentToken().getSy() is different from IDENTIFIER and NUMBER
-     * getCurrentToken.getValue() is undefined
+ following holds:
+ - getCurrentToken().getSymbol() returns the kind of the
+ current symbol
+ - if getCurrentToken().getSymbol() == IDENTIFIER,
+ getCurrentToken.getValue() is a unique number identifying the symbol
+ - if getCurrentToken().getSymbol() == NUMBER, getCurrentToken.getValue() holds the
+ value of the number
+ - if getCurrentToken().getSymbol() is different from IDENTIFIER and NUMBER
+ getCurrentToken.getValue() is undefined
      *
      *** @note Before the first call of nextToken SrcReader.getCurrentChar()
      * must return the first character of the source file.
      */
     public void nextToken() {
         currentToken = new Token();
-        currentToken.setSy(Symbol.NOSY);
+        currentToken.setSymbol(Symbol.NOSY);
 
         do {
 
@@ -98,12 +98,12 @@ public class Scanner {
             }
             handleTerminals();
 
-        } while (currentToken.getSy() == Symbol.NOSY);
+        } while (currentToken.getSymbol() == Symbol.NOSY);
     }
 
     private void handleDigit() {
         int n = NumberAnalyzer.readNumber(srcReader, errorHandler);
-        currentToken.setSy(Symbol.NUMBER);
+        currentToken.setSymbol(Symbol.NUMBER);
         currentToken.setValue(n);
     }
 
@@ -120,7 +120,7 @@ public class Scanner {
                 break;
 
             case -1:
-                currentToken.setSy(Symbol.EOFSY);
+                currentToken.setSymbol(Symbol.EOFSY);
                 break;
 
             case '#':
@@ -128,74 +128,74 @@ public class Scanner {
                 break;
 
             case '+':
-                currentToken.setSy(Symbol.PLUS);
+                currentToken.setSymbol(Symbol.PLUS);
                 srcReader.nextChar();
                 break;
 
             case '-':
-                currentToken.setSy(Symbol.MINUS);
+                currentToken.setSymbol(Symbol.MINUS);
                 srcReader.nextChar();
                 break;
 
             case '*':
-                currentToken.setSy(Symbol.TIMES);
+                currentToken.setSymbol(Symbol.TIMES);
                 srcReader.nextChar();
                 break;
 
             case '/':
-                currentToken.setSy(Symbol.DIV);
+                currentToken.setSymbol(Symbol.DIV);
                 srcReader.nextChar();
                 break;
 
             case '%':
-                currentToken.setSy(Symbol.MOD);
+                currentToken.setSymbol(Symbol.MOD);
                 srcReader.nextChar();
                 break;
 
             case '<':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.LEQ);
+                    currentToken.setSymbol(Symbol.LEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.LTH);
+                    currentToken.setSymbol(Symbol.LTH);
                 }
                 break;
 
             case '>':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.GEQ);
+                    currentToken.setSymbol(Symbol.GEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.GTH);
+                    currentToken.setSymbol(Symbol.GTH);
                 }
                 break;
 
             case '!':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.NEQ);
+                    currentToken.setSymbol(Symbol.NEQ);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.NOT);
+                    currentToken.setSymbol(Symbol.NOT);
                 }
                 break;
 
             case '=':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '=') {
-                    currentToken.setSy(Symbol.EQUALS);
+                    currentToken.setSymbol(Symbol.EQUALS);
                     srcReader.nextChar();
                 } else {
-                    currentToken.setSy(Symbol.ASSIGN);
+                    currentToken.setSymbol(Symbol.ASSIGN);
                 }
                 break;
 
             case '&':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '&') {
-                    currentToken.setSy(Symbol.AND);
+                    currentToken.setSymbol(Symbol.AND);
                     srcReader.nextChar();
                 }
                 break;
@@ -203,38 +203,38 @@ public class Scanner {
             case '|':
                 srcReader.nextChar();
                 if (srcReader.getCurrentChar() == '|') {
-                    currentToken.setSy(Symbol.OR);
+                    currentToken.setSymbol(Symbol.OR);
                     srcReader.nextChar();
                 }
                 break;
 
             case ';':
-                currentToken.setSy(Symbol.SEMICOLON);
+                currentToken.setSymbol(Symbol.SEMICOLON);
                 srcReader.nextChar();
                 break;
 
             case ',':
-                currentToken.setSy(Symbol.COMMA);
+                currentToken.setSymbol(Symbol.COMMA);
                 srcReader.nextChar();
                 break;
 
             case '(':
-                currentToken.setSy(Symbol.LPAR);
+                currentToken.setSymbol(Symbol.LPAR);
                 srcReader.nextChar();
                 break;
 
             case ')':
-                currentToken.setSy(Symbol.RPAR);
+                currentToken.setSymbol(Symbol.RPAR);
                 srcReader.nextChar();
                 break;
 
             case '[':
-                currentToken.setSy(Symbol.LBRACKET);
+                currentToken.setSymbol(Symbol.LBRACKET);
                 srcReader.nextChar();
                 break;
 
             case ']':
-                currentToken.setSy(Symbol.RBRACKET);
+                currentToken.setSymbol(Symbol.RBRACKET);
                 srcReader.nextChar();
                 break;
 
@@ -242,14 +242,14 @@ public class Scanner {
             case '\'':
                 stringManager.readString();
                 StringToken st = new StringToken();
-                st.setSy(Symbol.STRING);
+                st.setSymbol(Symbol.STRING);
                 st.setAddress(stringManager.getStringAddress());
                 st.setLength(stringManager.getStringLength());
                 currentToken = st;
                 break;
 
             default:
-                currentToken.setSy(Symbol.ILLEGALSY);
+                currentToken.setSymbol(Symbol.ILLEGALSY);
                 srcReader.nextChar();
         }
     }

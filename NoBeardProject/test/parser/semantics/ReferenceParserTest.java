@@ -66,7 +66,7 @@ public class ReferenceParserTest {
     public void testScannerPosition() {
         ReferenceParser p = ReferenceParserTestSetup.getSimpleIdentifierTestSetup();
         p.parse();
-        assertEquals(Symbol.EOFSY, ReferenceParserTestSetup.getScanner().getCurrentToken().getSy());
+        assertEquals(Symbol.EOFSY, ReferenceParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 
     @Test

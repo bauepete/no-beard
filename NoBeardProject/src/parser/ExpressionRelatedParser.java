@@ -50,7 +50,7 @@ public abstract class ExpressionRelatedParser extends OperandExportingParser {
             if (operatorIsBoolean()) {
                 handleBooleanSubExpression(subExpressionParser);
             } else {
-                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSy().toString());
+                handleIntegerSubExpression(subExpressionParser, getLastParsedToken().getSymbol().toString());
             }
         }
         fixBooleanOperatorChainIfNecessary();
@@ -65,7 +65,7 @@ public abstract class ExpressionRelatedParser extends OperandExportingParser {
     protected abstract boolean currentTokenIsAValidOperator();
 
     protected void parseOperator() {
-        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSy();
+        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSymbol();
         parseSymbol(currentMulOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
     }

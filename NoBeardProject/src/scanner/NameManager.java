@@ -72,12 +72,12 @@ public class NameManager {
     public void readName(Token t) {
         String s = readString();
         Scanner.Symbol sy = getTokenType(s);
-        t.setSy(sy);
+        t.setSymbol(sy);
         if (sy == Scanner.Symbol.IDENTIFIER) {
 
             int spix = addName(s);
 
-            t.setSy(Scanner.Symbol.IDENTIFIER);
+            t.setSymbol(Scanner.Symbol.IDENTIFIER);
             t.setValue(spix);
         }
     }

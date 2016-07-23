@@ -53,7 +53,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
 
     @Override
     protected boolean operatorIsBoolean() {
-        return getLastParsedToken().getSy() == Scanner.Symbol.OR;
+        return getLastParsedToken().getSymbol() == Scanner.Symbol.OR;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
 
     @Override
     protected boolean currentTokenIsAValidOperator() {
-        Symbol sy = scanner.getCurrentToken().getSy();
+        Symbol sy = scanner.getCurrentToken().getSymbol();
         return (sy == Symbol.PLUS || sy == Symbol.MINUS || sy == Symbol.OR);
     }
 

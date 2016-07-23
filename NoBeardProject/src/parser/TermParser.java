@@ -54,7 +54,7 @@ public class TermParser extends ExpressionRelatedParser {
 
     @Override
     protected boolean operatorIsBoolean() {
-        return getLastParsedToken().getSy() == Symbol.AND;
+        return getLastParsedToken().getSymbol() == Symbol.AND;
     }
     
     @Override
@@ -69,7 +69,7 @@ public class TermParser extends ExpressionRelatedParser {
 
     @Override
     protected boolean currentTokenIsAValidOperator() {
-        Symbol sy = scanner.getCurrentToken().getSy();
+        Symbol sy = scanner.getCurrentToken().getSymbol();
         return (sy == Symbol.TIMES || sy == Symbol.DIV || sy == Symbol.MOD || sy == Symbol.AND);
     }
 

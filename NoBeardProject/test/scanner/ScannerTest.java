@@ -39,7 +39,7 @@ public class ScannerTest {
         setupReaderAndErrorHandler("# This is a comment line");
         scanner.nextToken();
 
-        assertTrue("EOFSY expected", scanner.getCurrentToken().getSy() == Symbol.EOFSY);
+        assertTrue("EOFSY expected", scanner.getCurrentToken().getSymbol() == Symbol.EOFSY);
     }
     
     private void setupReaderAndErrorHandler(String srcLine) {
@@ -53,7 +53,7 @@ public class ScannerTest {
         setupReaderAndErrorHandler("# This is a comment line \n if");
         scanner.nextToken();
 
-        assertTrue("IFSY expected", scanner.getCurrentToken().getSy() == Symbol.IF);
+        assertTrue("IFSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IF);
     }
 
     @Test
@@ -63,34 +63,34 @@ public class ScannerTest {
         setupReaderAndErrorHandler("();=+-*/%,");
 
         scanner.nextToken();
-        assertTrue("LPARSY expected", scanner.getCurrentToken().getSy() == Symbol.LPAR);
+        assertTrue("LPARSY expected", scanner.getCurrentToken().getSymbol() == Symbol.LPAR);
 
         scanner.nextToken();
-        assertTrue("RPARSY expected", scanner.getCurrentToken().getSy() == Symbol.RPAR);
+        assertTrue("RPARSY expected", scanner.getCurrentToken().getSymbol() == Symbol.RPAR);
 
         scanner.nextToken();
-        assertTrue("SEMICOLON expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
+        assertTrue("SEMICOLON expected", scanner.getCurrentToken().getSymbol() == Symbol.SEMICOLON);
 
         scanner.nextToken();
-        assertTrue("ASSIGNSY expected", scanner.getCurrentToken().getSy() == Symbol.ASSIGN);
+        assertTrue("ASSIGNSY expected", scanner.getCurrentToken().getSymbol() == Symbol.ASSIGN);
 
         scanner.nextToken();
-        assertTrue("PLUSSY expected", scanner.getCurrentToken().getSy() == Symbol.PLUS);
+        assertTrue("PLUSSY expected", scanner.getCurrentToken().getSymbol() == Symbol.PLUS);
 
         scanner.nextToken();
-        assertTrue("MINUSSY expected", scanner.getCurrentToken().getSy() == Symbol.MINUS);
+        assertTrue("MINUSSY expected", scanner.getCurrentToken().getSymbol() == Symbol.MINUS);
 
         scanner.nextToken();
-        assertTrue("TIMESSY expected", scanner.getCurrentToken().getSy() == Symbol.TIMES);
+        assertTrue("TIMESSY expected", scanner.getCurrentToken().getSymbol() == Symbol.TIMES);
 
         scanner.nextToken();
-        assertTrue("DIVSY expected", scanner.getCurrentToken().getSy() == Symbol.DIV);
+        assertTrue("DIVSY expected", scanner.getCurrentToken().getSymbol() == Symbol.DIV);
 
         scanner.nextToken();
-        assertTrue("MODSY expected", scanner.getCurrentToken().getSy() == Symbol.MOD);
+        assertTrue("MODSY expected", scanner.getCurrentToken().getSymbol() == Symbol.MOD);
 
         scanner.nextToken();
-        assertTrue("COMMASY expected", scanner.getCurrentToken().getSy() == Symbol.COMMA);
+        assertTrue("COMMASY expected", scanner.getCurrentToken().getSymbol() == Symbol.COMMA);
     }
     
     @Test
@@ -110,7 +110,7 @@ public class ScannerTest {
         setupReaderAndErrorHandler("42;");
         
         scanner.nextToken();
-        assertTrue("NUMBERSY expected", scanner.getCurrentToken().getSy() == Symbol.NUMBER);
+        assertTrue("NUMBERSY expected", scanner.getCurrentToken().getSymbol() == Symbol.NUMBER);
         assertEquals("Value", 42, scanner.getCurrentToken().getValue());
         assertEquals("Expected next char", ';', sourceReader.getCurrentChar());
     }
@@ -120,14 +120,14 @@ public class ScannerTest {
         setupReaderAndErrorHandler("aVar; anotherVar;");
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER);
         int spix1 = scanner.getCurrentToken().getValue();
         
         scanner.nextToken();
-        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
+        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSymbol() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER);
         int spix2 = scanner.getCurrentToken().getValue();
         
         assertTrue("Expected spix1 != spix2", spix1 != spix2);
@@ -141,21 +141,21 @@ public class ScannerTest {
         setupReaderAndErrorHandler("aVar; aVar2; aVar");
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER);
         int spix1 = scanner.getCurrentToken().getValue();
         
         scanner.nextToken();
-        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
+        assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSymbol() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER);
         int spix2 = scanner.getCurrentToken().getValue();
 
         scanner.nextToken();
-         assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSy() == Symbol.SEMICOLON);
+         assertTrue("SEMICOLONSY expected", scanner.getCurrentToken().getSymbol() == Symbol.SEMICOLON);
         
         scanner.nextToken();
-        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSy() == Symbol.IDENTIFIER);
+        assertTrue("IDENTSY expected", scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER);
         int spix3 = scanner.getCurrentToken().getValue();
         
         assertEquals("Expected spix1 = spix2", spix1, spix3);
@@ -169,13 +169,13 @@ public class ScannerTest {
         setupReaderAndErrorHandler("'a string' \"another string\"");
         scanner.nextToken();
         StringToken st = (StringToken)scanner.getCurrentToken();
-        assertEquals("Sy ", Symbol.STRING, st.getSy());
+        assertEquals("Sy ", Symbol.STRING, st.getSymbol());
         assertEquals("Start addr ", 0, st.getAddress());
         assertEquals("Length ", 8, st.getLength());
         
         scanner.nextToken();
         st = (StringToken)scanner.getCurrentToken();
-        assertEquals("Sy ", Symbol.STRING, st.getSy());
+        assertEquals("Sy ", Symbol.STRING, st.getSymbol());
         assertEquals("Start addr ", 8, st.getAddress());
         assertEquals("Length ", 14, st.getLength());
     }
@@ -197,12 +197,12 @@ public class ScannerTest {
         
         for (Symbol sy : expectedSymbols) {
             scanner.nextToken();
-            assertEquals(sy, scanner.getCurrentToken().getSy());
+            assertEquals(sy, scanner.getCurrentToken().getSymbol());
         }
         
         scanner.nextToken();
-        assertTrue("EOFSY expected", scanner.getCurrentToken().getSy() == Symbol.EOFSY);
+        assertTrue("EOFSY expected", scanner.getCurrentToken().getSymbol() == Symbol.EOFSY);
         scanner.nextToken();
-        assertTrue("EOFSY expected", scanner.getCurrentToken().getSy() == Symbol.EOFSY);
+        assertTrue("EOFSY expected", scanner.getCurrentToken().getSymbol() == Symbol.EOFSY);
     }
 }

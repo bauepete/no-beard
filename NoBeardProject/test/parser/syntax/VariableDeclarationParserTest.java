@@ -57,7 +57,7 @@ public class VariableDeclarationParserTest {
         boolean expResult = true;
         boolean result = instance.parse();
         assertEquals(expResult, result);
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
+        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 
     /**
@@ -67,7 +67,7 @@ public class VariableDeclarationParserTest {
     public void testSimpleChar() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleCharTestSetup();
         assertTrue(instance.parse());
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
+        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     /**
      * Test invalid variable declaration.
@@ -82,7 +82,7 @@ public class VariableDeclarationParserTest {
     public void testSimpleBool() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getSimpleBoolTestSetup();
         assertTrue(instance.parse());
-        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSy());
+        assertEquals(Scanner.Symbol.EOFSY, VariableDeclarationParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
     @Test
