@@ -17,7 +17,7 @@ public class Scanner {
 
         NOSY, EOFSY, ILLEGALSY,
         /// Keywords
-        PUT, PUTLN, UNIT, DO, DONE, IF, ELSE, INT, BOOL, CHAR,
+        UNIT, DO, DONE, PUT, PUTLN, IF, ELSE, INT, BOOL, CHAR,
         TRUE, FALSE,
         /// Classes
         IDENTIFIER, NUMBER, STRING,

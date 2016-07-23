@@ -30,23 +30,6 @@ public class NameManager {
 
     private final SrcReader sr;
     private final HashMap<String, Integer> names;
-    private static final HashMap<String, Scanner.Symbol> keywords
-            = new HashMap<String, Scanner.Symbol>() {
-                {
-                    put("unit", Symbol.UNIT);
-                    put("do", Symbol.DO);
-                    put("put", Symbol.PUT);
-                    put("putln", Symbol.PUTLN);
-                    put("if", Symbol.IF);
-                    put("else", Symbol.ELSE);
-                    put("done", Symbol.DONE);
-                    put("int", Symbol.INT);
-                    put("char", Symbol.CHAR);
-                    put("bool", Symbol.BOOL);
-                    put("true", Symbol.TRUE);
-                    put("false", Symbol.FALSE);
-                }
-            };
 
     public NameManager(SrcReader sr) {
         this.sr = sr;
@@ -71,15 +54,45 @@ public class NameManager {
      */
     public void readName(Token t) {
         String s = readString();
-        Scanner.Symbol sy = getTokenType(s);
-        t.setSymbol(sy);
-        if (sy == Scanner.Symbol.IDENTIFIER) {
-
+        Symbol readSymbol = getTokenType(s);
+        t.setSymbol(readSymbol);
+        if (readSymbol == Symbol.IDENTIFIER) {
             int spix = addName(s);
-
-            t.setSymbol(Scanner.Symbol.IDENTIFIER);
             t.setValue(spix);
+            t.setClearName(s);
         }
+    }
+
+    private String readString() {
+        StringBuilder s = new StringBuilder();
+
+        while (Character.isLetter(sr.getCurrentChar()) || Character.isDigit(sr.getCurrentChar())) {
+            s.append((char) (sr.getCurrentChar()));
+            sr.nextChar();
+        }
+        return s.toString();
+    }
+
+    // if s is found in keywords it returns the keyword symbol otherwise
+    // it returns IDENTIFIER
+    private Scanner.Symbol getTokenType(String s) {
+        Scanner.Symbol sy = KeywordTable.getSymbol(s);
+        if (sy == Symbol.NOSY) {
+            return Symbol.IDENTIFIER;
+        } else {
+            return sy;
+        }
+    }
+
+    private int addName(String s) {
+        int spix;
+        if (names.containsKey(s)) {
+            spix = names.get(s);
+        } else {
+            spix = names.size();
+            names.put(s, spix);
+        }
+        return spix;
     }
 
     /**
@@ -98,36 +111,5 @@ public class NameManager {
             }
         }
         return name;
-    }
-
-    private String readString() {
-        StringBuilder s = new StringBuilder();
-
-        while (Character.isLetter(sr.getCurrentChar()) || Character.isDigit(sr.getCurrentChar())) {
-            s.append((char) (sr.getCurrentChar()));
-            sr.nextChar();
-        }
-        return s.toString();
-    }
-
-    // if s is found in keywords it returns the keyword symbol otherwise
-    // it returns IDENTIFIER
-    private Scanner.Symbol getTokenType(String s) {
-        if (keywords.containsKey(s)) {
-            return keywords.get(s);
-        } else {
-            return Scanner.Symbol.IDENTIFIER;
-        }
-    }
-
-    private int addName(String s) {
-        int spix;
-        if (names.containsKey(s)) {
-            spix = names.get(s);
-        } else {
-            spix = names.size();
-            names.put(s, spix);
-        }
-        return spix;
     }
 }
