@@ -4,9 +4,6 @@
  */
 package symboltable;
 
-import symboltable.SymbolTableEntry;
-import symboltable.Operand;
-import symboltable.SymbolTable;
 import symboltable.Operand.Type;
 import scanner.Scanner;
 import symboltable.Operand.Kind;
@@ -21,7 +18,6 @@ import org.junit.Test;
 import scanner.SrcStringReader;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import scanner.NameManager;
 import scanner.SrcReader;
 
 /**
@@ -31,22 +27,21 @@ import scanner.SrcReader;
 public class SymbolTableTest {
 
     private ErrorHandler errorHandler;
-    private SymbolTable symListMgr;
-    private CodeGenerator c;
-    private NameManager n;
+    private SymbolTable symbolTable;
+    private CodeGenerator codeGenerator;
 
     public SymbolTableTest() {
     }
 
     @Before
     public void setUp() {
-        c = new CodeGenerator(256);
+        codeGenerator = new CodeGenerator(256);
         SrcStringReader sr = new SrcStringReader("TestUnit; aName");
         errorHandler = new ErrorHandler(sr);
-        Scanner s = prepareScanner(sr);
-        symListMgr = new SymbolTable(c, s, errorHandler);
+        Scanner scanner = prepareScanner(sr);
+        symbolTable = new SymbolTable(codeGenerator, scanner, errorHandler);
 
-        symListMgr.newUnit(0);
+        symbolTable.newUnit(0);
     }
     
     private Scanner prepareScanner(SrcReader sr) {
@@ -66,20 +61,18 @@ public class SymbolTableTest {
      */
     @Test
     public void testNewUnit() {
-        System.out.println("newUnit");
-
-        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
-        assertEquals(Type.VOID, symListMgr.getCurrBlock().getType());
-        assertEquals(1, symListMgr.getCurrLevel());
-        SymbolTableEntry unitObj = symListMgr.findObject(0);
+        assertEquals(Kind.UNIT, symbolTable.getCurrBlock().getKind());
+        assertEquals(Type.VOID, symbolTable.getCurrBlock().getType());
+        assertEquals(1, symbolTable.getCurrLevel());
+        SymbolTableEntry unitObj = symbolTable.findObject(0);
         assertEquals(unitObj.getKind(), Kind.UNIT);
     }
 
     @Test
     public void testNestedUnitsFail() {
-        symListMgr.newUnit(1);
-        assertEquals(1, symListMgr.getCurrLevel());
-        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
+        symbolTable.newUnit(1);
+        assertEquals(1, symbolTable.getCurrLevel());
+        assertEquals(Kind.UNIT, symbolTable.getCurrBlock().getKind());
         assertEquals(ErrorType.NO_NESTED_MODULES.getNumber(), errorHandler.getLastError().getNumber());
     }
 
@@ -87,120 +80,120 @@ public class SymbolTableTest {
     public void testNewSimpleVar() {
         System.out.println("newSimpleVar");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT);
-        assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
-        assertEquals(4, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(1, SymbolTable.ElementType.INT);
+        assertEquals("datAddr expected ", 36, symbolTable.getDatAddr());
+        assertEquals(4, symbolTable.getCurrBlock().getSize());
 
-        symListMgr.newVar(2, SymbolTable.ElementType.BOOL);
-        assertEquals("datAddr expected ", 40, symListMgr.getDatAddr());
-        assertEquals(8, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(2, SymbolTable.ElementType.BOOL);
+        assertEquals("datAddr expected ", 40, symbolTable.getDatAddr());
+        assertEquals(8, symbolTable.getCurrBlock().getSize());
 
-        symListMgr.newVar(3, SymbolTable.ElementType.CHAR);
-        assertEquals(44, symListMgr.getDatAddr());
-        assertEquals(9, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(3, SymbolTable.ElementType.CHAR);
+        assertEquals(44, symbolTable.getDatAddr());
+        assertEquals(9, symbolTable.getCurrBlock().getSize());
     }
 
     @Test
     public void testNewArrayVar() {
         System.out.print("testNewArrayVar");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT, 10);
-        assertEquals(72, symListMgr.getDatAddr());
-        assertEquals(40, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(1, SymbolTable.ElementType.INT, 10);
+        assertEquals(72, symbolTable.getDatAddr());
+        assertEquals(40, symbolTable.getCurrBlock().getSize());
 
-        symListMgr.newVar(2, SymbolTable.ElementType.BOOL, 5);
-        assertEquals(92, symListMgr.getDatAddr());
-        assertEquals(60, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(2, SymbolTable.ElementType.BOOL, 5);
+        assertEquals(92, symbolTable.getDatAddr());
+        assertEquals(60, symbolTable.getCurrBlock().getSize());
 
-        symListMgr.newVar(3, SymbolTable.ElementType.CHAR, 15);
-        assertEquals(108, symListMgr.getDatAddr());
-        assertEquals(75, symListMgr.getCurrBlock().getSize());
+        symbolTable.newVar(3, SymbolTable.ElementType.CHAR, 15);
+        assertEquals(108, symbolTable.getDatAddr());
+        assertEquals(75, symbolTable.getCurrBlock().getSize());
     }
 
     @Test
     public void testNewVarFail() {
         System.out.println("testNewVarFail");
 
-        symListMgr.newVar(0, SymbolTable.ElementType.INT);
-        assertEquals(4, symListMgr.getCurrBlock().getSize());
-        assertEquals(36, symListMgr.getDatAddr());
+        symbolTable.newVar(0, SymbolTable.ElementType.INT);
+        assertEquals(4, symbolTable.getCurrBlock().getSize());
+        assertEquals(36, symbolTable.getDatAddr());
 
-        symListMgr.newVar(0, SymbolTable.ElementType.BOOL);
-        assertEquals(4, symListMgr.getCurrBlock().getSize());
-        assertEquals(36, symListMgr.getDatAddr());
+        symbolTable.newVar(0, SymbolTable.ElementType.BOOL);
+        assertEquals(4, symbolTable.getCurrBlock().getSize());
+        assertEquals(36, symbolTable.getDatAddr());
     }
 
     @Test
     public void testNewBlock() {
         System.out.println("testNewBlock");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT);
-        symListMgr.newBlock();
-        assertEquals(2, symListMgr.getCurrLevel());
+        symbolTable.newVar(1, SymbolTable.ElementType.INT);
+        symbolTable.newBlock();
+        assertEquals(2, symbolTable.getCurrLevel());
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT);
-        assertEquals(2, symListMgr.getCurrLevel());
+        symbolTable.newVar(1, SymbolTable.ElementType.INT);
+        assertEquals(2, symbolTable.getCurrLevel());
         assertEquals(0, errorHandler.getCount());
-        assertEquals(4, symListMgr.getCurrBlock().getSize());
+        assertEquals(4, symbolTable.getCurrBlock().getSize());
     }
 
     @Test
     public void testNewFuncFail() {
         System.out.println("testNewFuncFail");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT);
-        symListMgr.newFunc(1, Type.SIMPLEBOOL);
+        symbolTable.newVar(1, SymbolTable.ElementType.INT);
+        symbolTable.newFunc(1, Type.SIMPLEBOOL);
         assertEquals(ErrorType.NAME_ALREADY_DEFINED.getNumber(), errorHandler.getLastError().getNumber());
-        assertEquals(1, symListMgr.getCurrLevel());
-        assertEquals(0, symListMgr.getCurrBlock().getName());
-        assertEquals(Kind.UNIT, symListMgr.getCurrBlock().getKind());
+        assertEquals(1, symbolTable.getCurrLevel());
+        assertEquals(0, symbolTable.getCurrBlock().getName());
+        assertEquals(Kind.UNIT, symbolTable.getCurrBlock().getKind());
     }
 
     @Test
     public void testNewFunc() {
         System.out.println("testNewFunc");
 
-        symListMgr.newFunc(1, Type.ARRAYINT);
-        assertEquals(2, symListMgr.getCurrLevel());
-        assertEquals(32, symListMgr.getDatAddr());
+        symbolTable.newFunc(1, Type.ARRAYINT);
+        assertEquals(2, symbolTable.getCurrLevel());
+        assertEquals(32, symbolTable.getDatAddr());
     }
 
     @Test
     public void testEndBlock() {
         System.out.println("testEndBlock");
 
-        symListMgr.newVar(0, SymbolTable.ElementType.INT);
-        symListMgr.newFunc(1, Type.VOID);
-        symListMgr.newVar(0, SymbolTable.ElementType.CHAR);
-        symListMgr.newBlock();
-        symListMgr.newVar(0, SymbolTable.ElementType.INT);
-        symListMgr.newVar(1, SymbolTable.ElementType.INT, 5);
+        symbolTable.newVar(0, SymbolTable.ElementType.INT);
+        symbolTable.newFunc(1, Type.VOID);
+        symbolTable.newVar(0, SymbolTable.ElementType.CHAR);
+        symbolTable.newBlock();
+        symbolTable.newVar(0, SymbolTable.ElementType.INT);
+        symbolTable.newVar(1, SymbolTable.ElementType.INT, 5);
 
         // Test whether setup is correct
         assertEquals(0, errorHandler.getCount());
-        assertEquals(3, symListMgr.getCurrLevel());
-        assertEquals(24, symListMgr.getCurrBlock().getSize());
-        assertEquals(56, symListMgr.getDatAddr());
+        assertEquals(3, symbolTable.getCurrLevel());
+        assertEquals(24, symbolTable.getCurrBlock().getSize());
+        assertEquals(56, symbolTable.getDatAddr());
 
-        symListMgr.endBlock();
-        assertEquals(2, symListMgr.getCurrLevel());
-        assertEquals(1, symListMgr.getCurrBlock().getSize());
-        assertEquals(36, symListMgr.getDatAddr());
+        symbolTable.endBlock();
+        assertEquals(2, symbolTable.getCurrLevel());
+        assertEquals(1, symbolTable.getCurrBlock().getSize());
+        assertEquals(36, symbolTable.getDatAddr());
 
-        symListMgr.endBlock();
-        assertEquals(1, symListMgr.getCurrLevel());
-        assertEquals(4, symListMgr.getCurrBlock().getSize());
-        assertEquals(36, symListMgr.getDatAddr());
+        symbolTable.endBlock();
+        assertEquals(1, symbolTable.getCurrLevel());
+        assertEquals(4, symbolTable.getCurrBlock().getSize());
+        assertEquals(36, symbolTable.getDatAddr());
 
-        symListMgr.endBlock();
-        assertEquals(null, symListMgr.getCurrBlock());
+        symbolTable.endBlock();
+        assertEquals(null, symbolTable.getCurrBlock());
     }
 
     @Test
     public void testTwoModulesHavingSameName() {
-        symListMgr.endBlock();
+        symbolTable.endBlock();
         
-        symListMgr.newUnit(0);
+        symbolTable.newUnit(0);
         assertEquals("SemErr ", 1, errorHandler.getCount(Error.ErrorClass.SEMANTICAL));
         assertEquals("Errors count", 1, errorHandler.getCount());
         assertEquals("Error ", ErrorType.NAME_ALREADY_DEFINED.getNumber(), errorHandler.getLastError().getNumber());
@@ -210,32 +203,32 @@ public class SymbolTableTest {
     public void testAlignDatAddrTo4() {
         System.out.println("alignDatAddrTo4");
 
-        symListMgr.newVar(2, SymbolTable.ElementType.CHAR);
-        assertEquals("datAddr expected ", 36, symListMgr.getDatAddr());
+        symbolTable.newVar(2, SymbolTable.ElementType.CHAR);
+        assertEquals("datAddr expected ", 36, symbolTable.getDatAddr());
     }
 
     @Test
     public void testGetObject() {
         System.out.println("testGetObject");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.CHAR);
-        symListMgr.newVar(2, SymbolTable.ElementType.INT);
+        symbolTable.newVar(1, SymbolTable.ElementType.CHAR);
+        symbolTable.newVar(2, SymbolTable.ElementType.INT);
 
-        assertEquals("Kind expected: ", Operand.Kind.UNIT, symListMgr.findObject(0).getKind());
-        assertEquals("Type expected: ", Operand.Type.VOID, symListMgr.findObject(0).getType());
-        assertEquals("Size expected: ", 5, symListMgr.findObject(0).getSize());
+        assertEquals("Kind expected: ", Operand.Kind.UNIT, symbolTable.findObject(0).getKind());
+        assertEquals("Type expected: ", Operand.Type.VOID, symbolTable.findObject(0).getType());
+        assertEquals("Size expected: ", 5, symbolTable.findObject(0).getSize());
 
-        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symListMgr.findObject(1).getKind());
-        assertEquals("Type expected: ", Operand.Type.SIMPLECHAR, symListMgr.findObject(1).getType());
-        assertEquals("Size expected: ", 1, symListMgr.findObject(1).getSize());
-        assertEquals("Address expected: ", 32, symListMgr.findObject(1).getAddr());
+        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symbolTable.findObject(1).getKind());
+        assertEquals("Type expected: ", Operand.Type.SIMPLECHAR, symbolTable.findObject(1).getType());
+        assertEquals("Size expected: ", 1, symbolTable.findObject(1).getSize());
+        assertEquals("Address expected: ", 32, symbolTable.findObject(1).getAddr());
 
-        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symListMgr.findObject(2).getKind());
-        assertEquals("Type expected: ", Operand.Type.SIMPLEINT, symListMgr.findObject(2).getType());
-        assertEquals("Size expected: ", 4, symListMgr.findObject(2).getSize());
-        assertEquals("Address expected: ", 36, symListMgr.findObject(2).getAddr());
+        assertEquals("Kind expected: ", Operand.Kind.VARIABLE, symbolTable.findObject(2).getKind());
+        assertEquals("Type expected: ", Operand.Type.SIMPLEINT, symbolTable.findObject(2).getType());
+        assertEquals("Size expected: ", 4, symbolTable.findObject(2).getSize());
+        assertEquals("Address expected: ", 36, symbolTable.findObject(2).getAddr());
 
-        assertEquals("Kind ", Operand.Kind.ILLEGAL, symListMgr.findObject(4).getKind());
+        assertEquals("Kind ", Operand.Kind.ILLEGAL, symbolTable.findObject(4).getKind());
     }
 
     @Test()
@@ -243,15 +236,15 @@ public class SymbolTableTest {
     public void testDefineProcStart() {
         System.out.println("defineProcStart");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.INT);
+        symbolTable.newVar(1, SymbolTable.ElementType.INT);
 
-        SymbolTableEntry u = symListMgr.findObject(0);
-        symListMgr.defineFuncStart(u, 2);
+        SymbolTableEntry u = symbolTable.findObject(0);
+        symbolTable.defineFuncStart(u, 2);
 
-        assertEquals("Start PC ", 2, symListMgr.findObject(0).getAddr());
+        assertEquals("Start PC ", 2, symbolTable.findObject(0).getAddr());
 
-        u = symListMgr.findObject(1);
-        symListMgr.defineFuncStart(u, 2);
+        u = symbolTable.findObject(1);
+        symbolTable.defineFuncStart(u, 2);
         assertEquals("SemErr ", 1, errorHandler.getCount(Error.ErrorClass.SEMANTICAL));
         assertEquals("Addr of var ", 32, u.getAddr());
     }
@@ -260,14 +253,14 @@ public class SymbolTableTest {
     public void testFixINC() {
         System.out.println("fixINC");
 
-        symListMgr.newVar(1, SymbolTable.ElementType.CHAR);
-        symListMgr.newVar(2, SymbolTable.ElementType.INT);
+        symbolTable.newVar(1, SymbolTable.ElementType.CHAR);
+        symbolTable.newVar(2, SymbolTable.ElementType.INT);
 
-        c.emitOp(Opcode.INC);
-        int incAddr = c.getPc();
-        c.emitHalfWord(0);
-        symListMgr.fixINC(incAddr, symListMgr.findObject(0));
+        codeGenerator.emitOp(Opcode.INC);
+        int incAddr = codeGenerator.getPc();
+        codeGenerator.emitHalfWord(0);
+        symbolTable.fixINC(incAddr, symbolTable.findObject(0));
 
-        assertEquals("INC size ", 5, c.getCodeHalfWord(incAddr));
+        assertEquals("INC size ", 5, codeGenerator.getCodeHalfWord(incAddr));
     }
 }

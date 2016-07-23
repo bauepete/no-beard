@@ -48,9 +48,9 @@ public class SymbolTable {
     }
 
     /**
-     * Looks up a name in the symbol list and returns the SymbolTableEntry with this
- name. Lookup starts at top of the stack and the first node found matching
-     * the name is returned. In case name is not found a node of kind
+     * Looks up a name in the symbol list and returns the SymbolTableEntry with
+     * this name. Lookup starts at top of the stack and the first node found
+     * matching the name is returned. In case name is not found a node of kind
      * Operand.ILLEGAL is returned.
      *
      * @param name The name to be looked up.
@@ -256,10 +256,11 @@ public class SymbolTable {
         while (!symListStack.empty() && symListStack.peek().getLevel() == getCurrLevel()) {
             symListStack.pop();
         }
-        
-        if (symListStack.peek().getKind() == Kind.ANONYMOUSBLOCK)
+
+        if (symListStack.peek().getKind() == Kind.ANONYMOUSBLOCK) {
             symListStack.pop();
-        
+        }
+
         if (blockStack.empty()) {
             currBlock = null;
         } else {
