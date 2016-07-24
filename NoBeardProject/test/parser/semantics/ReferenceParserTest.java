@@ -68,6 +68,12 @@ public class ReferenceParserTest {
         p.parse();
         assertEquals(Symbol.EOFSY, ReferenceParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
+    
+    @Test
+    public void testReferenceUndefinedName() {
+        ReferenceParser p = ReferenceParserTestSetup.getUndefinedNameTestSetup();
+        assertFalse(p.parse());
+    }
 
     @Test
     public void testParsingNonVariableFails() {

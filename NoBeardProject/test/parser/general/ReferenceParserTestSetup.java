@@ -57,4 +57,10 @@ public class ReferenceParserTestSetup extends ParserTestSetup {
         ParserFactory.getSymbolListManager().newVar(0, SymbolTable.ElementType.INT);
         return ParserFactory.create(ReferenceParser.class);
     }
+
+    public static ReferenceParser getUndefinedNameTestSetup() {
+        setupInfraStructure("x");
+        ParserFactory.getSymbolListManager().newUnit(1);
+        return ParserFactory.create(ReferenceParser.class);
+    }
 }

@@ -93,7 +93,7 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.POSITIVE_ARRAY_SIZE_EXPECTED));
     }
 
-    public void throwNameNotDefined(String name) {
+    public void throwNameUndefined(String name) {
         raise(new Error(Error.ErrorType.NAME_UNDEFINED, name));
     }
 }

@@ -111,7 +111,7 @@ public class VariableDeclarationParser extends Parser {
     }
 
     private void validateAndAddIdentifierToSymbolTable(int name) {
-        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().toString()));
+        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().getClearName()));
         sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
     }
 
