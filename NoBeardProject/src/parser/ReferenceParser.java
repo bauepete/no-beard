@@ -34,7 +34,7 @@ import symboltable.SymbolTableEntry;
  */
 public class ReferenceParser extends Parser {
 
-    private SymbolTableEntry foundSymbolListEntry;
+    private SymbolTableEntry foundSymbolListEntry = new SymbolTableEntry(NOIDENT, Kind.ILLEGAL, Operand.Type.VOID, 0, 0, 0);
     private Operand op;
 
     @Override
