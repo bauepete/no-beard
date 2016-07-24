@@ -25,6 +25,16 @@ public class BlockParser extends Parser {
         this.obj = obj;
     }
 
+    public BlockParser() {
+        this.obj = null;
+    }
+
+    @Override
+    protected void parseSpecificPart() {
+        parseSymbol(Symbol.DO);
+        parseSymbol(Symbol.DONE);
+    }
+
     @Override
     public boolean parseOldStyle() {
         if (!tokenIsA(Symbol.DO)) {
@@ -68,10 +78,5 @@ public class BlockParser extends Parser {
 
     private boolean isNamedBlock() {
         return (obj.isNamedBlockEntry());
-    }
-
-    @Override
-    protected void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
