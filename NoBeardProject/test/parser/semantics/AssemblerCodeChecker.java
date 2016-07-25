@@ -17,4 +17,8 @@ public class AssemblerCodeChecker {
             assertEquals("Byte " + i, exp[i], act[i]);
         }
     }
+    
+    public static void assertCodeEquals(byte[] expected, byte[] actual) {
+        assertCodeEquals("", expected, actual);
+    }
 }

@@ -6,9 +6,7 @@ package parser.semantics;
 
 import nbm.Nbm.Opcode;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -24,14 +22,6 @@ public class PutStatParserTest {
     public PutStatParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
     @Before
     public void setUp() {
     }
@@ -41,13 +31,10 @@ public class PutStatParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class PutStatParser.
+     * Test of output an integer constant.
      */
     @Test
-    @Ignore
     public void testParsePutInt() {
-        System.out.println("testParsePutInt");
-
         byte[] expected = {
             Opcode.LIT.byteCode(), 0, 5,        // int value to be putted
             Opcode.LIT.byteCode(), 0, 0,        // column width
@@ -55,8 +42,8 @@ public class PutStatParserTest {
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutIntSetup();
-        assertTrue("Parse: ", instance.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+        assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
 

@@ -23,6 +23,8 @@ import symboltable.SymbolTable;
  */
 public class PutStatParser extends Parser {
 
+    private Operand operand;
+
     public PutStatParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
@@ -43,10 +45,40 @@ public class PutStatParser extends Parser {
     private void parsePut() {
         parseSymbol(Symbol.PUT);
         parseSymbol(Symbol.LPAR);
+        parseExpressionAndFetchOperand();
+        parseSymbol(Symbol.RPAR);
+        emitCodeForPut();
+        parseSymbol(Symbol.SEMICOLON);
+    }
+
+    private void parseExpressionAndFetchOperand() {
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
-        parseSymbol(Symbol.RPAR);
-        parseSymbol(Symbol.SEMICOLON);
+        sem(() -> operand = expressionParser.getOperand());
+        where(isOperandToPut(operand), () -> getErrorHandler().throwOperandOfKindExpected("Integer, char or String"));
+        sem(() -> operand.emitLoadVal(code));
+    }
+
+    private final Type[] OUTPUTABLE_OPERANDS = {
+        Type.SIMPLECHAR, Type.SIMPLEINT, Type.ARRAYCHAR
+    };
+
+    private boolean isOperandToPut(Operand op) {
+        for (Type operandType : OUTPUTABLE_OPERANDS) {
+            if (operandType == op.getType()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void emitCodeForPut() {
+        sem(() -> {
+            code.emitOp(Opcode.LIT);
+            code.emitHalfWord(0);
+            code.emitOp(Opcode.PUT);
+            code.emitByte((byte) 0);
+        });
     }
 
     private void parsePutln() {
@@ -185,19 +217,6 @@ public class PutStatParser extends Parser {
         code.emitByte((byte) 3);
         // endsem
         return true;
-    }
-
-    private final Type[] OUTPUTABLE_OPERANDS = {
-        Type.SIMPLECHAR, Type.SIMPLEINT, Type.ARRAYCHAR
-    };
-
-    private boolean isOperandToPut(Operand op) {
-        for (Type operand : OUTPUTABLE_OPERANDS) {
-            if (operand == op.getType()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private String[] outputableOperands() {
