@@ -5,6 +5,7 @@
 package parser.general;
 
 import nbm.CodeGenerator;
+import parser.ParserFactory;
 import parser.PutStatParser;
 
 /**
@@ -22,11 +23,11 @@ public class PutStatParserTestSetup extends ParserTestSetup {
     }
     
     public static PutStatParser getPutCharSetup() {
-        return setupTestObjects("put('a')");
+        return setupTestObjects("put('a');");
     }
     
     public static PutStatParser getPutStringSetup() {
-        return setupTestObjects("put('blabla')");
+        return setupTestObjects("put('blabla');");
     }
     
     public static PutStatParser getPutlnSetup() {
@@ -34,7 +35,7 @@ public class PutStatParserTestSetup extends ParserTestSetup {
     }
     
     private static PutStatParser setupTestObjects(String srcLine) {
-        setupInfraStructureOld(srcLine);
-        return new PutStatParser(scanner, symListManager, code, errorHandler);
+        setupInfraStructure(srcLine);
+        return ParserFactory.create(PutStatParser.class);
     }
 }

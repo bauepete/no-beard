@@ -27,6 +27,32 @@ public class PutStatParser extends Parser {
         super(s, sym, c, e);
     }
 
+    public PutStatParser() {
+
+    }
+
+    @Override
+    protected void parseSpecificPart() {
+        if (scanner.getCurrentToken().getSymbol() == Symbol.PUT) {
+            parsePut();
+        } else {
+            parsePutln();
+        }
+    }
+
+    private void parsePut() {
+        parseSymbol(Symbol.PUT);
+        parseSymbol(Symbol.LPAR);
+        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(expressionParser);
+        parseSymbol(Symbol.RPAR);
+        parseSymbol(Symbol.SEMICOLON);
+    }
+
+    private void parsePutln() {
+        parseSymbol(Symbol.PUTLN);
+    }
+
     @Override
     public boolean parseOldStyle() {
         boolean isParsedCorrectly = false;
@@ -153,10 +179,10 @@ public class PutStatParser extends Parser {
         if (!tokenIsA(Symbol.PUTLN)) {
             return false;
         }
-        
+
         // sem
         code.emitOp(Opcode.PUT);
-        code.emitByte((byte)3);
+        code.emitByte((byte) 3);
         // endsem
         return true;
     }
@@ -164,20 +190,22 @@ public class PutStatParser extends Parser {
     private final Type[] OUTPUTABLE_OPERANDS = {
         Type.SIMPLECHAR, Type.SIMPLEINT, Type.ARRAYCHAR
     };
-    
+
     private boolean isOperandToPut(Operand op) {
         for (Type operand : OUTPUTABLE_OPERANDS) {
-            if (operand == op.getType())
+            if (operand == op.getType()) {
                 return true;
+            }
         }
         return false;
     }
-    
+
     private String[] outputableOperands() {
         List<String> opList = new LinkedList();
-        
-        for (Type operand: OUTPUTABLE_OPERANDS)
+
+        for (Type operand : OUTPUTABLE_OPERANDS) {
             opList.add(operand.toString());
+        }
         return (String[]) opList.toArray();
     }
 
@@ -198,10 +226,5 @@ public class PutStatParser extends Parser {
                 code.emitByte((byte) 2);
                 break;
         }
-    }
-
-    @Override
-    protected void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

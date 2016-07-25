@@ -5,14 +5,12 @@
 package parser.syntax;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.PutStatParser;
 import parser.general.PutStatParserTestSetup;
+import scanner.Scanner.Symbol;
 
 /**
  *
@@ -23,14 +21,6 @@ public class PutStatParserTest {
     public PutStatParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
     }
@@ -40,46 +30,43 @@ public class PutStatParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class PutStatParser.
+     * Test output of an integer constant.
      */
     @Test
-    @Ignore
     public void testParsePutInt() {
-        System.out.println("testParsePutInt");
-        
         PutStatParser p = PutStatParserTestSetup.getPutIntSetup();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 
     /**
-     * Test of parseOldStyle method, of class PutStatParser.
+     * Test output of a char constant.
      */
     @Test
-    @Ignore
-    public void testParsePutChar() {
-        System.out.println("testParsePutChar");
-        
+    public void testParsePutChar() {        
         PutStatParser p = PutStatParserTestSetup.getPutCharSetup();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
+    /**
+     * Test output of a string constant.
+     */
     @Test
-    @Ignore
     public void testParsePutString() {
-        System.out.println("testParsePutString");
-        
         PutStatParser p = PutStatParserTestSetup.getPutStringSetup();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
     
     /**
-     * Test of parseOldStyle method, of class PutStatParser.
+     * Test of putln.
      */
     @Test
     public void testParsePutln() {
-        System.out.println("testParsePutln");
         PutStatParser p = PutStatParserTestSetup.getPutlnSetup();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 }
