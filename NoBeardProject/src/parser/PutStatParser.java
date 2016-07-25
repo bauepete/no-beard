@@ -46,6 +46,10 @@ public class PutStatParser extends Parser {
         parseSymbol(Symbol.PUT);
         parseSymbol(Symbol.LPAR);
         parseExpressionAndFetchOperand();
+        if (scanner.getCurrentToken().getSymbol() == Symbol.COMMA) {
+            parseSymbol(Symbol.COMMA);
+            parseExpressionAndFetchOperand();
+        }
         parseSymbol(Symbol.RPAR);
         emitCodeForPut();
         parseSymbol(Symbol.SEMICOLON);

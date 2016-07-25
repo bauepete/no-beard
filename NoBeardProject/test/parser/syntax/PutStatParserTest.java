@@ -59,6 +59,14 @@ public class PutStatParserTest {
         assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
+    /**
+     * Test output where a column width spec is given as second parameter.
+     */
+    @Test
+    public void testPutWithColumnWidthSpecification() {
+        PutStatParser p = PutStatParserTestSetup.getPutWithWidthSpecification();
+        assertTrue(p.parse());
+    }
     
     /**
      * Test of putln.

@@ -22,6 +22,11 @@ public class PutStatParserTestSetup extends ParserTestSetup {
         return setupTestObjects("put(5);");
     }
     
+    private static PutStatParser setupTestObjects(String srcLine) {
+        setupInfraStructure(srcLine);
+        return ParserFactory.create(PutStatParser.class);
+    }
+
     public static PutStatParser getPutCharSetup() {
         return setupTestObjects("put('a');");
     }
@@ -30,12 +35,11 @@ public class PutStatParserTestSetup extends ParserTestSetup {
         return setupTestObjects("put('blabla');");
     }
     
-    public static PutStatParser getPutlnSetup() {
-        return setupTestObjects("putln");
+    public static PutStatParser getPutWithWidthSpecification() {
+        return setupTestObjects("put(5, 7);");
     }
     
-    private static PutStatParser setupTestObjects(String srcLine) {
-        setupInfraStructure(srcLine);
-        return ParserFactory.create(PutStatParser.class);
+    public static PutStatParser getPutlnSetup() {
+        return setupTestObjects("putln");
     }
 }
