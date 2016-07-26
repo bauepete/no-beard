@@ -18,15 +18,16 @@
 
 % ---------------------------------------------- Definition of grammar environment -----------------------------------------------------
 \newenvironment{grammar}
-	{	\begin{tabular}{p{.25\textwidth} c p{.75\textwidth}}
+	{
+		\newcommand{\completerule}[2]{##1 & = & ##2.\\}
+		\newcommand{\startrule}[2]{##1 & = & ##2\\}
+		\newcommand{\alternativerule}[1]{ & $|$ & ##1\\}
+		\newcommand{\alternativeend}[1]{ & $|$ & ##1.\\}
+		\newcommand{\finishrule}[1]{ & & ##1.\\}
+		\begin{tabular}{p{.25\textwidth} c p{.75\textwidth}}
 	}
 	{	\end{tabular}
 	}
-\newcommand{\completerule}[2]{#1 & = & #2.\\}
-\newcommand{\startrule}[2]{#1 & = & #2\\}
-\newcommand{\alternativerule}[1]{ & $|$ & #1\\}
-\newcommand{\alternativeend}[1]{ & $|$ & #1.\\}
-\newcommand{\finishrule}[1]{ & & #1.\\}
 
 % ----------------------------------------------- Definition of attributed grammar environment
 \newenvironment{atg}[1][6cm]
@@ -105,7 +106,7 @@
 \newcommand{\fourbyteinstructiona}[3]{
 \begin{tabular}{|p{3.9em}|p{9em}|p{9em}|p{9em}|}
 \hline
-\tiny{0} & \tiny{1} & \tiny{2} & \tiny{3} \\ \hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} & \tiny{Byte 3} \\ \hline
 #1 & #2 & \multicolumn{2}{c |}{#3} \\ \hline
 \end{tabular}
 }
@@ -211,10 +212,9 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 		\completerule{NoBeard}{``unit'' identifier ``;'' Block identifier ``;''}
 %	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
 
-		\completerule{Block}{``do'' StatementSequence ``done''}
+		\completerule{Block}{``do'' \{Statement\} ``done''}
 %	Block & = &  ``do" StatSeq ``done".\\
 
-		\completerule{StatementSequence}{\{Statement\}}
 		\\
 %	StatSeq & = & Stat \{Stat\}. \\
 
@@ -222,14 +222,13 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 		\alternativerule{Put}
 		\alternativerule{If}
 		\alternativerule{Assignment}
-		\alternativeend{\emptystring}
 		\\
 		\completerule{VariableDeclaration}{Type identifier [``='' Expression]``;''}
 		\completerule{Type}{SimpleType[ArraySpecification]}
 		\completerule{SimpleType}{``int'' $|$ ``char'' $|$ ``bool''}
 		\completerule{ArraySpecification}{``['' number ``]''}
 		\\
-		\startrule{Put}{``put'' ``('' Expression \{``,'' Expression\} ``)''``;''}
+		\startrule{Put}{``put'' ``('' Expression [``,'' Expression] ``)''``;''}
 		\alternativeend{``putln'' ``;''}
 		\\
 		\completerule{If}{``if'' Expression Block [ ``else'' Block ]}
@@ -830,19 +829,30 @@ The translation of {\em and-}expressions works analogously.
 ErrorHandler.getInstance().raise(new ...));
 
 \chapter{Attributed Grammar}
-\begin{atg}[4.5cm]
-\leongage &=& & \semantics{\begin{sem} \newline EmitOp(INC); \newline Emit2(0); \newline int inc\_addr = 1; \newline \end{sem}}\\
-&&Stat ";" \{Stat ";"\}. \\
+%\begin{atg}[4.5cm]
+%\leongage &=& & \semantics{\begin{sem} \newline EmitOp(INC); \newline Emit2(0); \newline int inc\_addr = 1; \newline \end{sem}}\\
+%&&Stat ";" \{Stat ";"\}. \\
+%
+%Stat & = & ident ":=" \atgsy{Expr}{\outattr op}  \alternative \\
+%&& "PUT" \atgsy{Expr}{\outattr op}. \\
+%
+%\atgsy{Term}{\outattr op} &=& \atgsy{Fact}{\outattr op}  \\
+%&& \{("*" &\semantics{\begin{sem} opcode = mul \end{sem}}\\
+%&& \alternative "/" & \semantics{\begin{sem} opcode = div \end{sem}}\\
+%&&) & \semantics{\begin{sem}EmitOp(\inattr opcode)\end{sem}}\\
+%&&\atgsy{Fact}{\outattr op} & \semantics{\begin{sem}LoadVal(\inattr op)\end{sem}}
+%\end{atg}
 
-Stat & = & ident ":=" \atgsy{Expr}{\outattr op}  \alternative \\
-&& "PUT" \atgsy{Expr}{\outattr op}. \\
-
-\atgsy{Term}{\outattr op} &=& \atgsy{Fact}{\outattr op}  \\
-&& \{("*" &\semantics{\begin{sem} opcode = mul \end{sem}}\\
-&& \alternative "/" & \semantics{\begin{sem} opcode = div \end{sem}}\\
-&&) & \semantics{\begin{sem}EmitOp(\inattr opcode)\end{sem}}\\
-&&\atgsy{Fact}{\outattr op} & \semantics{\begin{sem}LoadVal(\inattr op)\end{sem}}
-\end{atg}
+%\begin{atg}
+%\completerule{NoBeard}{``unit'' identifier Block\in{identifier} ``;''}
+%\leftside{Reference \out{op}}
+%\rightside{identifier \out{name}}
+%\sem{
+%obj = findObject(name);
+%op = obj.createOperand();
+%}
+%\where{op.getKind() == VARIABLE}
+%\end{atg}
 
 \bibliography{my_bibliography}{}
 \bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
