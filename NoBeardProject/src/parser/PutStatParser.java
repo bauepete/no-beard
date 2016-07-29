@@ -69,7 +69,6 @@ public class PutStatParser extends Parser {
     private void fetchOperandForOutput() {
         sem(() -> operandForOutputValue = parserForOutputExpression.getOperand());
         where(isOperandToPut(operandForOutputValue), () -> getErrorHandler().throwOperandOfKindExpected("Integer, char or string"));
-        sem(() -> operandForOutputValue.emitLoadVal(code));
     }
 
     private final Type[] OUTPUTABLE_OPERANDS = {
@@ -88,33 +87,44 @@ public class PutStatParser extends Parser {
     private void fetchOperandForColumnWidth() {
         sem(() -> operandForColumnWidth = parserForOutputExpression.getOperand());
         where(operandForColumnWidth.getType() == Type.SIMPLEINT, () -> getErrorHandler().throwOperandOfKindExpected("Integer"));
-        sem(() -> operandForColumnWidth.emitLoadVal(code));
     }
 
     private void emitCodeForPut() {
         sem(() -> {
             switch (operandForOutputValue.getType()) {
                 case SIMPLEINT:
+                    operandForOutputValue.emitLoadVal(code);
                     code.emitOp(Opcode.LIT);
                     code.emitHalfWord(0);
                     code.emitOp(Opcode.PUT);
                     code.emitByte((byte) 0);
                     break;
-                    
+
                 case SIMPLECHAR:
+                    operandForOutputValue.emitLoadVal(code);
                     code.emitOp(Opcode.LIT);
                     code.emitHalfWord(0);
                     code.emitOp(Opcode.PUT);
                     code.emitByte((byte) 1);
-                    
+
                 default:        // needs to be a string
-                    
+                    operandForOutputValue.emitLoadAddr(code);
+                    code.emitOp(Opcode.LIT);
+                    code.emitHalfWord(operandForOutputValue.getSize());
+                    code.emitOp(Opcode.LIT);
+                    code.emitHalfWord(operandForOutputValue.getSize());
+                    code.emitOp(Opcode.PUT);
+                    code.emitByte((byte) 2);
             }
         });
     }
 
     private void parsePutln() {
         parseSymbol(Symbol.PUTLN);
+        sem(() -> {
+            code.emitOp(Opcode.PUT);
+            code.emitByte((byte) 3);
+        });
     }
 
     @Override
