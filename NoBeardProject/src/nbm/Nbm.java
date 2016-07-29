@@ -29,7 +29,7 @@ public class Nbm {
     /// Returned from getStackTopValue() if stack of currently running
     /// function is empty.
     public static final int STACKEMPTY = -1;
-    
+
     // --------------------- Locally used data -----------------------------
     private static final int MAX_PROG = 1024;   // Size of program memory
     private static final int MAX_DATA = 1024;    // Size of data memory
@@ -47,10 +47,9 @@ public class Nbm {
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
         new Not(), new Rel(), new Fjmp(), new Tjmp(), new Jmp(),
         new Put(), new Inc(), new Halt()};
-    
+
     // -------------------------- Instruction classes ----------------------
     /// Command
-
     interface Instruction {
 
         public void exec();
@@ -231,54 +230,54 @@ public class Nbm {
             push(x % y);
         }
     }
-    
+
     class Not implements Instruction {
 
         @Override
         public void exec() {
             int x = pop();
-            push(x == 1?0:1);
+            push(x == 1 ? 0 : 1);
         }
-        
+
     }
-    
+
     class Rel implements Instruction {
 
         @Override
         public void exec() {
             byte r = prog[pc + 1];
             pc += 2;
-            
+
             int y = pop();
             int x = pop();
-            
+
             switch (r) {
                 case 0:
-                    push(x < y? 1: 0);
+                    push(x < y ? 1 : 0);
                     break;
-                    
+
                 case 1:
-                    push(x <= y? 1: 0);
+                    push(x <= y ? 1 : 0);
                     break;
-                    
+
                 case 2:
-                    push(x == y? 1: 0);
+                    push(x == y ? 1 : 0);
                     break;
-                    
+
                 case 3:
-                    push(x != y? 1: 0);
+                    push(x != y ? 1 : 0);
                     break;
-                    
+
                 case 4:
-                    push(x >= y? 1: 0);
+                    push(x >= y ? 1 : 0);
                     break;
-                    
+
                 case 5:
-                    push(x > y? 1: 0);
+                    push(x > y ? 1 : 0);
                     break;
             }
         }
-        
+
     }
 
     class Fjmp implements Instruction {
@@ -287,30 +286,30 @@ public class Nbm {
         public void exec() {
             int b = getProgHalfWord(pc + 1);
             pc += 3;
-            
+
             int x = pop();
             if (x == 0) {
                 pc = b;
             }
         }
-        
+
     }
-    
+
     class Tjmp implements Instruction {
 
         @Override
         public void exec() {
             int b = getProgHalfWord(pc + 1);
             pc += 3;
-            
+
             int x = pop();
             if (x == 1) {
                 pc = b;
             }
         }
-        
+
     }
-    
+
     class Jmp implements Instruction {
 
         @Override
@@ -318,9 +317,9 @@ public class Nbm {
             int b = getProgHalfWord(pc + 1);
             pc = b;
         }
-        
+
     }
-    
+
     class Put implements Instruction {
 
         @Override
@@ -330,32 +329,49 @@ public class Nbm {
 
             switch (s) {
                 case 0:
-                    pop();
-                    int x = pop();
-                    //TODO: print leading blanks
-                    System.out.print(x);
+                    outputInt();
                     break;
 
                 case 1:
-                    pop();
-                    int c = pop();
-                    System.out.print((char) c);
+                    outputChar();
                     break;
 
                 case 2:
-                    int w = pop();
-                    int n = pop();
-                    int a = pop();
-                    System.out.print(new String(getDat(a, n)));
-                    for (int i = n; i < w; i++) {
-                        System.out.print(" ");
-                    }
+                    outputString();
                     break;
 
                 case 3:
                     System.out.println();
                     break;
             }
+        }
+
+        private void outputInt() {
+            int width = pop();
+            int x = pop();
+            String formatString = "%" + width + "d";
+            System.out.printf(formatString, x);
+        }
+
+        private void outputChar() {
+            int width = pop();
+            int c = pop();
+            System.out.print((char) c);
+            outputBlanks(width - 1);
+        }
+
+        private void outputBlanks(int number) {
+            for (int i = 0; i < number; i++) {
+                System.out.print(" ");
+            }
+        }
+
+        private void outputString() {
+            int width = pop();
+            int stringLength = pop();
+            int address = pop();
+            System.out.print(new String(getDat(address, stringLength)));
+            outputBlanks(width - stringLength);
         }
     }
 
