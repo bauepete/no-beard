@@ -48,21 +48,18 @@ public class PutStatParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class PutStatParser.
+     * Test output of a char constant.
      */
     @Test
-    @Ignore
     public void testParsePutChar() {
-        System.out.println("testParsePutChar");
-
         byte[] expected = {
             Opcode.LIT.byteCode(), 0, 97,       // decimal ascii value of 'a' to be putted
-            Opcode.LIT.byteCode(), 0, 1,        // column width
+            Opcode.LIT.byteCode(), 0, 0,        // column width
             Opcode.PUT.byteCode(), 1            // put simple char
         };
 
         PutStatParser instance = PutStatParserTestSetup.getPutCharSetup();
-        assertTrue("Parse: ", instance.parseOldStyle());
+        assertTrue("Parse: ", instance.parse());
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }

@@ -13,6 +13,7 @@ import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
+import symboltable.ConstantOperand;
 import symboltable.Operand;
 import symboltable.Operand.Type;
 import symboltable.SymbolTable;
@@ -23,7 +24,10 @@ import symboltable.SymbolTable;
  */
 public class PutStatParser extends Parser {
 
-    private Operand operand;
+    ExpressionParser parserForOutputExpression;
+
+    private Operand operandForOutputValue;
+    private Operand operandForColumnWidth;
 
     public PutStatParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
@@ -45,22 +49,27 @@ public class PutStatParser extends Parser {
     private void parsePut() {
         parseSymbol(Symbol.PUT);
         parseSymbol(Symbol.LPAR);
-        parseExpressionAndFetchOperand();
+        parseExpression();
+        fetchOperandForOutput();
         if (scanner.getCurrentToken().getSymbol() == Symbol.COMMA) {
             parseSymbol(Symbol.COMMA);
-            parseExpressionAndFetchOperand();
+            parseExpression();
+            fetchOperandForColumnWidth();
         }
         parseSymbol(Symbol.RPAR);
         emitCodeForPut();
         parseSymbol(Symbol.SEMICOLON);
     }
 
-    private void parseExpressionAndFetchOperand() {
-        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
-        parseSymbol(expressionParser);
-        sem(() -> operand = expressionParser.getOperand());
-        where(isOperandToPut(operand), () -> getErrorHandler().throwOperandOfKindExpected("Integer, char or String"));
-        sem(() -> operand.emitLoadVal(code));
+    private void parseExpression() {
+        parserForOutputExpression = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(parserForOutputExpression);
+    }
+
+    private void fetchOperandForOutput() {
+        sem(() -> operandForOutputValue = parserForOutputExpression.getOperand());
+        where(isOperandToPut(operandForOutputValue), () -> getErrorHandler().throwOperandOfKindExpected("Integer, char or string"));
+        sem(() -> operandForOutputValue.emitLoadVal(code));
     }
 
     private final Type[] OUTPUTABLE_OPERANDS = {
@@ -76,12 +85,31 @@ public class PutStatParser extends Parser {
         return false;
     }
 
+    private void fetchOperandForColumnWidth() {
+        sem(() -> operandForColumnWidth = parserForOutputExpression.getOperand());
+        where(operandForColumnWidth.getType() == Type.SIMPLEINT, () -> getErrorHandler().throwOperandOfKindExpected("Integer"));
+        sem(() -> operandForColumnWidth.emitLoadVal(code));
+    }
+
     private void emitCodeForPut() {
         sem(() -> {
-            code.emitOp(Opcode.LIT);
-            code.emitHalfWord(0);
-            code.emitOp(Opcode.PUT);
-            code.emitByte((byte) 0);
+            switch (operandForOutputValue.getType()) {
+                case SIMPLEINT:
+                    code.emitOp(Opcode.LIT);
+                    code.emitHalfWord(0);
+                    code.emitOp(Opcode.PUT);
+                    code.emitByte((byte) 0);
+                    break;
+                    
+                case SIMPLECHAR:
+                    code.emitOp(Opcode.LIT);
+                    code.emitHalfWord(0);
+                    code.emitOp(Opcode.PUT);
+                    code.emitByte((byte) 1);
+                    
+                default:        // needs to be a string
+                    
+            }
         });
     }
 
