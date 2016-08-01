@@ -40,6 +40,10 @@ public class PutStatParserTestSetup extends ParserTestSetup {
     }
     
     public static PutStatParser getPutlnSetup() {
-        return setupTestObjects("putln");
+        return setupTestObjects("putln;");
+    }
+
+    public static PutStatParser getPutIntWithColumnWidthSetup() {
+        return setupTestObjects("put(42, 17);");
     }
 }

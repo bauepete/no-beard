@@ -135,6 +135,7 @@ public class PutStatParser extends Parser {
     private void parsePutln() {
         parseSymbol(Symbol.PUTLN);
         sem(() -> emitPutStatement(FOR_NEW_LINE));
+        parseSymbol(Symbol.SEMICOLON);
     }
 
     @Override

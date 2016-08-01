@@ -80,6 +80,21 @@ public class PutStatParserTest {
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
+    
+    /**
+     * Test output of int specifying a column width.
+     */
+    @Test
+    public void testPutWithColumnWidth() {
+        byte[] expectedCode = {
+            Opcode.LIT.byteCode(), 0, 42,   // value
+            Opcode.LIT.byteCode(), 0, 17,   // column width
+            Opcode.PUT.byteCode(), 0        // put int
+        };
+        
+        PutStatParser instance = PutStatParserTestSetup.getPutIntWithColumnWidthSetup();
+        assertTrue(instance.parse());
+    }
 
     /**
      * Test putln.
