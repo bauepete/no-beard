@@ -17,14 +17,14 @@
 \newcommand{\emptystring}{$\varepsilon$}
 
 % ---------------------------------------------- Definition of grammar environment -----------------------------------------------------
-\newenvironment{grammar}
+\newenvironment{grammar}[2]
 	{
 		\newcommand{\completerule}[2]{##1 & = & ##2.\\}
 		\newcommand{\startrule}[2]{##1 & = & ##2\\}
 		\newcommand{\alternativerule}[1]{ & $|$ & ##1\\}
 		\newcommand{\alternativeend}[1]{ & $|$ & ##1.\\}
 		\newcommand{\finishrule}[1]{ & & ##1.\\}
-		\begin{tabular}{p{.25\textwidth} c p{.75\textwidth}}
+		\begin{tabular}{p{#1} c p{#2}}
 	}
 	{	\end{tabular}
 	}
@@ -208,7 +208,7 @@ done ComplexExpr;
 \section{Syntax}
 The following context free grammar gives the syntax of \leongage{}. The well-known EBNF notation~\cite{wirth_what_1977} is used.
 
-	\begin{grammar}
+	\begin{grammar}{.25\textwidth}{.75\textwidth}
 		\completerule{NoBeard}{``unit'' identifier ``;'' Block identifier ``;''}
 %	NoBeard & = & ``unit" ident ``;" Block ident ``;".\\
 
@@ -245,6 +245,19 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 		\completerule{AddOp}{``+'' $|$ ``-''}
 		\completerule{MulOp}{``*'' $|$ ``/'' $|$ ``\%''}	
 	\end{grammar}
+
+\section{Semantics}
+Here a non-formal description of the semantics of \leongage{} is given.
+
+\noindent \begin{tabular}{@{}p{.5\textwidth}p{.5\textwidth}}
+
+\begin{grammar}{.05\textwidth}{.35\textwidth}
+	\startrule{Put}{``put'' ``('' Expression1}
+	\finishrule {[``,'' Expression2] ``)''``;''}
+\end{grammar}
+&
+Writes the value of {\em Expression1} to the output medium. If {\em Expression2} is given it defines the column width as follows: Integers are outputted as is. If the number of digits is less then {\em Expression2} the output is padded on the left. Characters are outputted as is. If {\em Expression2} is greater than 1 the output is padded on the right. Strings are outputted in the length of {\em Expression2}, i.e., they are truncated if longer than {\em Expression2} or padded on the right if shorter.
+\end{tabular}
 
 \chapter{The \leongage{} Machine}
 \lstset{language=AsmDef}
