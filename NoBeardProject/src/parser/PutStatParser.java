@@ -92,7 +92,11 @@ public class PutStatParser extends Parser {
     }
 
     private void fixOperandForColumnWidth() {
-        operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, 0, 0);
+        if (operandForOutputValue.getType() == Type.ARRAYCHAR) {
+            operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, operandForOutputValue.getSize(), 0);
+        } else {
+            operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, 0, 0);
+        }
     }
 
     private static final int FOR_INT = 0;
@@ -104,25 +108,31 @@ public class PutStatParser extends Parser {
         sem(() -> {
             switch (operandForOutputValue.getType()) {
                 case SIMPLEINT:
-                    operandForOutputValue.emitLoadVal(code);
-                    emitColumnWidth(operandForColumnWidth.getValaddr());
-                    emitPutStatement(FOR_INT);
+                    emitCodeForPutIntOrChar(FOR_INT);
                     break;
 
                 case SIMPLECHAR:
-                    operandForOutputValue.emitLoadVal(code);
-                    emitColumnWidth(operandForColumnWidth.getValaddr());
-                    emitPutStatement(FOR_CHAR);
+                    emitCodeForPutIntOrChar(FOR_CHAR);
                     break;
 
-                default:        // operand needs to be a string
-                    operandForOutputValue.emitLoadAddr(code);
-                    emitStringLength();
-                    emitColumnWidth(operandForOutputValue.getSize());
-                    emitPutStatement(FOR_STRING);
+                default:            // operand needs to be a string
+                    emitCodeForPutString();
                     break;
             }
         });
+    }
+
+    private void emitCodeForPutIntOrChar(final int putType) {
+        operandForOutputValue.emitLoadVal(code);
+        emitColumnWidth(operandForColumnWidth.getValaddr());
+        emitPutStatement(putType);
+    }
+
+    private void emitCodeForPutString() {
+        operandForOutputValue.emitLoadAddr(code);
+        emitStringLength();
+        emitColumnWidth(operandForColumnWidth.getValaddr());
+        emitPutStatement(FOR_STRING);
     }
 
     private void emitColumnWidth(final int width) {

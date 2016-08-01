@@ -82,7 +82,7 @@ public class PutStatParserTest {
     }
     
     /**
-     * Test output of int specifying a column width.
+     * Test output of int specifying a column width (char is similar).
      */
     @Test
     public void testPutWithColumnWidth() {
@@ -93,6 +93,20 @@ public class PutStatParserTest {
         };
         
         PutStatParser instance = PutStatParserTestSetup.getPutIntWithColumnWidthSetup();
+        assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutStatParserTestSetup.getByteCode());
+    }
+    
+    @Test
+    public void testPutStringWithColumnWidth() {
+        byte[] expectedCode = {
+            Opcode.LIT.byteCode(), 0, 0,    // address of string
+            Opcode.LIT.byteCode(), 0, 6,    // length of string
+            Opcode.LIT.byteCode(), 0, 17,   // widths of column
+            Opcode.PUT.byteCode(), 2        // put string
+        };
+        
+        PutStatParser instance = PutStatParserTestSetup.getPutStringWithColumnWidthSetup();
         assertTrue(instance.parse());
         AssemblerCodeChecker.assertCodeEquals(expectedCode, PutStatParserTestSetup.getByteCode());
     }
