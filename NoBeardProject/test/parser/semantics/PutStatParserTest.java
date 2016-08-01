@@ -94,6 +94,7 @@ public class PutStatParserTest {
         
         PutStatParser instance = PutStatParserTestSetup.getPutIntWithColumnWidthSetup();
         assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutStatParserTestSetup.getByteCode());
     }
 
     /**
