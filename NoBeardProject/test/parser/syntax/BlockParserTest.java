@@ -27,7 +27,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.BlockParser;
 import parser.general.BlockParserTestSetup;
 
@@ -63,6 +62,12 @@ public class BlockParserTest {
     @Test
     public void testNonEmptyBlock() {
         BlockParser instance = BlockParserTestSetup.getNonEmptyBlockTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testGeneralBlock() {
+        BlockParser instance = BlockParserTestSetup.getGeneralBlock();
         assertTrue(instance.parse());
     }
 }

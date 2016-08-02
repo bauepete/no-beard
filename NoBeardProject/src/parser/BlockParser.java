@@ -32,7 +32,7 @@ public class BlockParser extends Parser {
     @Override
     protected void parseSpecificPart() {
         parseSymbol(Symbol.DO);
-        if (scanner.getCurrentToken().getSymbol() != Symbol.DONE)
+        while (scanner.getCurrentToken().getSymbol() != Symbol.DONE)
             parseStatement();
         parseSymbol(Symbol.DONE);
     }

@@ -42,5 +42,11 @@ public class BlockParserTestSetup extends ParserTestSetup {
         symListManager.newUnit(1);
         return ParserFactory.create(BlockParser.class);
     }
+
+    public static BlockParser getGeneralBlock() {
+        setupInfraStructure("do put('foo', 7); putln; done");
+        symListManager.newUnit(1);
+        return ParserFactory.create(BlockParser.class);
+    }
     
 }
