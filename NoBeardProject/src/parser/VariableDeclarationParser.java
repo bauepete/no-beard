@@ -28,6 +28,7 @@ import error.Error;
 import error.Error.ErrorType;
 import java.util.HashMap;
 import nbm.CodeGenerator;
+import nbm.Nbm;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
@@ -45,14 +46,14 @@ public class VariableDeclarationParser extends Parser {
     private Symbol parsedType;
     private SymbolTable.ElementType basicType;
     private int maxNumberOfElements;
-    
+
     private static final HashMap<Symbol, SymbolTable.ElementType> symbolToElementTypeMap;
-    
+
     static {
         symbolToElementTypeMap = new HashMap<>();
         symbolToElementTypeMap.put(Symbol.BOOL, ElementType.BOOL);
         symbolToElementTypeMap.put(Symbol.INT, ElementType.INT);
-        symbolToElementTypeMap.put(Symbol.CHAR, ElementType.CHAR);        
+        symbolToElementTypeMap.put(Symbol.CHAR, ElementType.CHAR);
     }
 
     VariableDeclarationParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler eh) {
@@ -61,15 +62,16 @@ public class VariableDeclarationParser extends Parser {
 
     public VariableDeclarationParser() {
     }
-    
+
     @Override
     protected void parseSpecificPart() {
         parseSimpleType();
         parseArraySpecificationIfNecessary();
         int name = parseIdentifier();
         validateAndAddIdentifierToSymbolTable(name);
-        if (getScanner().getCurrentToken().getSymbol() == Symbol.ASSIGN)
-            parseAssignment();
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.ASSIGN) {
+            parseAssignment(name);
+        }
         parseSymbol(Symbol.SEMICOLON);
     }
 
@@ -80,22 +82,28 @@ public class VariableDeclarationParser extends Parser {
     }
 
     /**
-     * Checks whether the current symbol is one of the symbols given as arguments.
+     * Checks whether the current symbol is one of the symbols given as
+     * arguments.
+     *
      * @param symbol One of the possible symbols.
      * @param furtherSymbols Further possible symbols.
      */
     protected void assertThatCurrentSymbolIsOf(Symbol symbol, Symbol... furtherSymbols) {
-        if (!parsingWasSuccessful()) return;
-        
+        if (!parsingWasSuccessful()) {
+            return;
+        }
+
         Symbol currentSymbol = scanner.getCurrentToken().getSymbol();
         boolean properSymbolFound = currentSymbol == symbol;
-        
+
         setWasSuccessful(properSymbolFound);
         for (Symbol sy : furtherSymbols) {
             properSymbolFound = properSymbolFound || currentSymbol == sy;
             setWasSuccessful(properSymbolFound);
         }
-        if (!parsingWasSuccessful()) getErrorHandler().throwStatementExpected(currentSymbol.toString());
+        if (!parsingWasSuccessful()) {
+            getErrorHandler().throwStatementExpected(currentSymbol.toString());
+        }
     }
 
     private void parseArraySpecificationIfNecessary() {
@@ -114,14 +122,35 @@ public class VariableDeclarationParser extends Parser {
     }
 
     private void validateAndAddIdentifierToSymbolTable(int name) {
-        where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().getClearName()));
+        where(!identifierIsDeclared(name), () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().getClearName()));
         sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
     }
-    
-    private void parseAssignment() {
+
+    private boolean identifierIsDeclared(int name) {
+        return sym.findObject(name).getKind() != Kind.ILLEGAL;
+    }
+
+    private void parseAssignment(int name) {
+        emitCodeForLoadingLeftHandSide(name);
         parseSymbol(Symbol.ASSIGN);
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
+        emitCodeForLoadingRightHandSideAndStoring(expressionParser);
+    }
+
+    private void emitCodeForLoadingLeftHandSide(int name) {
+        sem(() -> {
+            SymbolTableEntry declaredName = sym.findObject(name);
+            declaredName.createOperand().emitLoadAddr(code);
+        });
+    }
+
+    private void emitCodeForLoadingRightHandSideAndStoring(ExpressionParser expressionParser) {
+        sem(() -> {
+            Operand destination = expressionParser.getOperand();
+            destination.emitLoadVal(code);
+            code.emitOp(Nbm.Opcode.STO);
+        });
     }
 
     @Override

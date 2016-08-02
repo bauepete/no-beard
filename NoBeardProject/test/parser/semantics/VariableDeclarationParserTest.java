@@ -23,11 +23,14 @@
  */
 package parser.semantics;
 
+import nbm.Nbm;
+import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.VariableDeclarationParser;
+import parser.general.PutParserTestSetup;
 import parser.general.VariableDeclarationParserTestSetup;
 import symboltable.Operand;
 import symboltable.SymbolTableEntry;
@@ -90,5 +93,17 @@ public class VariableDeclarationParserTest {
     public void testNegativeArraySize() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getNegativeArraySizeSetup();
         assertFalse(instance.parse());
+    }
+    
+    @Test
+    public void testSimpleVariableDeclarationWithInitialization() {
+        byte[] expectedCode = {
+            Opcode.LA.byteCode(), 0, 0, 32,
+            Opcode.LIT.byteCode(), 0, 17,
+            Opcode.STO.byteCode()
+        };
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getDeclarationAndInitializationSetup();
+        assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutParserTestSetup.getCode().getByteCode());
     }
 }
