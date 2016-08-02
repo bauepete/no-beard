@@ -5,11 +5,10 @@
 package parser.semantics;
 
 import nbm.Nbm.Opcode;
-import parser.general.IfStatParserTestSetup;
+import parser.general.IfParserTestSetup;
 import parser.IfParser;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.ParserFactory;
 
 /**
@@ -37,14 +36,14 @@ public class IfParserTest {
             Opcode.PUT.byteCode(), 1 // put simple char
         };
 
-        IfParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
+        IfParser instance = IfParserTestSetup.getSimpleIfTestSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals(expected, IfStatParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals(expected, IfParserTestSetup.getByteCode());
     }
     
     @Test
     public void testNonBoolExpressionInIf() {
-        IfParser instance = IfStatParserTestSetup.getIfWithBadConditionTestSetup();
+        IfParser instance = IfParserTestSetup.getIfWithBadConditionTestSetup();
         assertFalse(instance.parse());
         assertEquals(error.Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
@@ -69,8 +68,8 @@ public class IfParserTest {
             Opcode.LIT.byteCode(), 0, 0, // width of column
             Opcode.PUT.byteCode(), 1, // put simple char
         };
-        IfParser instance = IfStatParserTestSetup.getIfElseTestSetup();
+        IfParser instance = IfParserTestSetup.getIfElseTestSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals(expected, IfStatParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals(expected, IfParserTestSetup.getByteCode());
     }
 }

@@ -7,7 +7,7 @@ package parser.syntax;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.IfParser;
-import parser.general.IfStatParserTestSetup;
+import parser.general.IfParserTestSetup;
 import parser.general.ParserTestSetup;
 import scanner.Scanner;
 
@@ -25,7 +25,7 @@ public class IfParserTest {
      */
     @Test
     public void testSimpleIf() {
-        IfParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
+        IfParser instance = IfParserTestSetup.getSimpleIfTestSetup();
         assertTrue(instance.parse());
         assertEquals(Scanner.Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
@@ -35,7 +35,7 @@ public class IfParserTest {
      */
     @Test
     public void testIfElse() {
-        IfParser instance = IfStatParserTestSetup.getIfElseTestSetup();
+        IfParser instance = IfParserTestSetup.getIfElseTestSetup();
         assertTrue(instance.parse());
         assertEquals(Scanner.Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }

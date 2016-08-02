@@ -12,7 +12,7 @@ import symboltable.SymbolTable;
  *
  * @author peter
  */
-public class IfStatParserTestSetup extends ParserTestSetup {
+public class IfParserTestSetup extends ParserTestSetup {
     
     public static IfParser getSimpleIfTestSetup() {
         return setupTestObjectsAndParser("if x == 0 do put('0'); done");
