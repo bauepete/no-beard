@@ -70,4 +70,10 @@ public class BlockParserTest {
         BlockParser instance = BlockParserTestSetup.getGeneralBlock();
         assertTrue(instance.parse());
     }
+    
+    @Test
+    public void testBlockWithSyntaxError() {
+        BlockParser instance = BlockParserTestSetup.getBlockWithSyntayError();
+        assertFalse(instance.parse());
+    }
 }
