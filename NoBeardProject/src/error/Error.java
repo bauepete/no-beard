@@ -19,9 +19,12 @@ public class Error {
 
         INTEGER_OVERFLOW(1, ErrorClass.LEXICAL, "Integer overflow"),
         INVALID_STRING(2, ErrorClass.LEXICAL, "Non terminated string constant"),
+        
         SYMBOL_EXPECTED(21, ErrorClass.SYNTAX, "%s0 expected but found %s1"),
         IDENTIFIER_EXPECTED(22, ErrorClass.SYNTAX, "Identifier expected"),
+        STATEMENT_EXPECTED(23, ErrorClass.SYNTAX, "%s is not a statement"),
         GENERAL_SYN_ERROR(49, ErrorClass.SYNTAX, "General syntax error: %s"),
+        
         // TODO: following message should be replaced by "Block %s1 ends with name %s2"
         BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name start differs from block name end: %s"),
         NAME_UNDEFINED(51, ErrorClass.SEMANTICAL, "%s not defined in this context."),

@@ -39,6 +39,11 @@ public class StatementParserTestSetup extends ParserTestSetup {
         return ParserFactory.create(StatementParser.class);
     }
 
+    public static StatementParser getNoStatementTestSetup() {
+        setupInfraStructure("unit foo");
+        return ParserFactory.create(StatementParser.class);
+    }
+
     public static StatementParser getCharDeclarationTestSetup() {
         setupInfraStructure("char x;");
         getSymListManager().newUnit(1);
@@ -60,6 +65,11 @@ public class StatementParserTestSetup extends ParserTestSetup {
 
     public static StatementParser getPutTestSetup() {
         setupInfraStructure("put(3 + 5, 42);");
+        return ParserFactory.create(StatementParser.class);
+    }
+
+    public static StatementParser getPutLnTestSetup() {
+        setupInfraStructure("putln;");
         return ParserFactory.create(StatementParser.class);
     }
 }

@@ -13,8 +13,9 @@ import symboltable.Operand;
  * @author peter
  */
 public class ErrorHandler {
+
     private final List<Error> errors;
-    private final int [] errorCounts = {0, 0, 0};
+    private final int[] errorCounts = {0, 0, 0};
     private Error lastError = null;
     private int totalCount;
     private final SourceCodeInfo sourceCodeInfo;
@@ -23,7 +24,7 @@ public class ErrorHandler {
         errors = new LinkedList<>();
         this.sourceCodeInfo = srcCodeInfo;
     }
-    
+
     public void reset() {
         totalCount = 0;
         errors.clear();
@@ -52,31 +53,36 @@ public class ErrorHandler {
         totalCount++;
         errors.add(e);
         lastError = e;
-        System.err.println(e.getErrorClass()+": " + e.getLineNumber() + ": " + e.getMessage());
+        System.err.println(e.getErrorClass() + ": " + e.getLineNumber() + ": " + e.getMessage());
     }
-    
+
     public List<Error> getAllErrors() {
         return errors;
     }
-    
+
     public Error getLastError() {
         return lastError;
     }
 
-     public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
+    public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
         raise(new Error(Error.ErrorType.SYMBOL_EXPECTED, expectedSymbol, actualSymbol));
     }
     
-   public void throwOperandOfKindExpected(String toString) {
+    public void throwStatementExpected(String unexpectedSymbol) {
+        raise(new Error(Error.ErrorType.STATEMENT_EXPECTED, unexpectedSymbol));
+    }
+
+    public void throwOperandOfKindExpected(String toString) {
         raise(new Error(Error.ErrorType.OPERAND_KIND_EXPECTED, toString));
     }
 
-   /**
-    * If a given operator requires a specific operand and the given operand
-    * does not match this requirement, this error is to be thrown.
-    * @param operator
-    * @param requiredOperand 
-    */
+    /**
+     * If a given operator requires a specific operand and the given operand
+     * does not match this requirement, this error is to be thrown.
+     *
+     * @param operator
+     * @param requiredOperand
+     */
     public void throwOperatorOperandTypeMismatch(String operator, String requiredOperand) {
         raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
     }

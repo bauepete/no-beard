@@ -23,8 +23,6 @@
  */
 package parser;
 
-import scanner.Scanner.Symbol;
-
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
@@ -53,9 +51,14 @@ public class StatementParser extends Parser {
                 break;
 
             case PUT:
+            case PUTLN:
                 p = ParserFactory.create(PutStatParser.class);
                 parseSymbol(p);
                 break;
+                
+            default:
+                getErrorHandler().throwStatementExpected(scanner.getCurrentToken().getSymbol().toString());
+                setWasSuccessful(false);
         }
     }
 

@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.ParserFactory;
 import parser.StatementParser;
 import parser.general.StatementParserTestSetup;
 
@@ -53,6 +54,16 @@ public class StatementParserTest {
         assertTrue(instance.parse());
     }
     
+    /**
+     * Tests proper error if no statement is parsed.
+     */
+    @Test
+    public void testNoStatement() {
+        StatementParser instance = StatementParserTestSetup.getNoStatementTestSetup();
+        assertFalse(instance.parse());
+        assertEquals(error.Error.ErrorType.STATEMENT_EXPECTED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
+    }
+    
     @Test
     public void testCharDeclaration() {
         StatementParser instance = StatementParserTestSetup.getCharDeclarationTestSetup();
@@ -74,6 +85,12 @@ public class StatementParserTest {
     @Test
     public void testPut() {
         StatementParser instance = StatementParserTestSetup.getPutTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testPutLn() {
+        StatementParser instance = StatementParserTestSetup.getPutLnTestSetup();
         assertTrue(instance.parse());
     }
 }
