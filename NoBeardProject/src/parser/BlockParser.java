@@ -32,7 +32,14 @@ public class BlockParser extends Parser {
     @Override
     protected void parseSpecificPart() {
         parseSymbol(Symbol.DO);
+        if (scanner.getCurrentToken().getSymbol() != Symbol.DONE)
+            parseStatement();
         parseSymbol(Symbol.DONE);
+    }
+
+    private void parseStatement() {
+        StatementParser statementParser = ParserFactory.create(StatementParser.class);
+        parseSymbol(statementParser);
     }
 
     @Override

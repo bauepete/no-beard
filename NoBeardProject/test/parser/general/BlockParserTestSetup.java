@@ -39,6 +39,7 @@ public class BlockParserTestSetup extends ParserTestSetup {
 
     public static BlockParser getNonEmptyBlockTestSetup() {
         setupInfraStructure("do int x; done");
+        symListManager.newUnit(1);
         return ParserFactory.create(BlockParser.class);
     }
     

@@ -23,7 +23,6 @@
  */
 package parser;
 
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 
 /**

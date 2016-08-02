@@ -49,7 +49,7 @@ public class BlockParserTest {
     }
 
     /**
-     * Test of parseSpecificPart method, of class BlockParser.
+     * Test parsing a block with no statement.
      */
     @Test
     public void testEmptyBlock() {
@@ -57,8 +57,10 @@ public class BlockParserTest {
         assertTrue(instance.parse());
     }
 
+    /**
+     * Test parsing a block with one statement.
+     */
     @Test
-    @Ignore
     public void testNonEmptyBlock() {
         BlockParser instance = BlockParserTestSetup.getNonEmptyBlockTestSetup();
         assertTrue(instance.parse());
