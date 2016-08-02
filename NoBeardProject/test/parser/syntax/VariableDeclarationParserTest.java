@@ -27,6 +27,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.ParserFactory;
 import parser.VariableDeclarationParser;
 import parser.general.VariableDeclarationParserTestSetup;
 import scanner.Scanner;
@@ -38,14 +39,6 @@ import scanner.Scanner;
 public class VariableDeclarationParserTest {
     
     public VariableDeclarationParserTest() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -76,6 +69,7 @@ public class VariableDeclarationParserTest {
     public void testInvalidDeclaration() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getInvalidDeclarationTestSetup();
         assertFalse(instance.parse());
+        assertEquals(error.Error.ErrorType.STATEMENT_EXPECTED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
     
     @Test
@@ -95,5 +89,11 @@ public class VariableDeclarationParserTest {
     public void testInvalidArray() {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getInvalidArrayTestSetup();
         assertFalse(instance.parse());
+    }
+    
+    @Test
+    public void testDeclarationWithInitialization() {
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getDeclarationAndInitializationSetup();
+        assertTrue(instance.parse());
     }
 }

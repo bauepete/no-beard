@@ -68,6 +68,8 @@ public class VariableDeclarationParser extends Parser {
         parseArraySpecificationIfNecessary();
         int name = parseIdentifier();
         validateAndAddIdentifierToSymbolTable(name);
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.ASSIGN)
+            parseAssignment();
         parseSymbol(Symbol.SEMICOLON);
     }
 
@@ -93,6 +95,7 @@ public class VariableDeclarationParser extends Parser {
             properSymbolFound = properSymbolFound || currentSymbol == sy;
             setWasSuccessful(properSymbolFound);
         }
+        if (!parsingWasSuccessful()) getErrorHandler().throwStatementExpected(currentSymbol.toString());
     }
 
     private void parseArraySpecificationIfNecessary() {
@@ -113,6 +116,12 @@ public class VariableDeclarationParser extends Parser {
     private void validateAndAddIdentifierToSymbolTable(int name) {
         where(sym.findObject(name).getKind() == Kind.ILLEGAL, () -> getErrorHandler().throwVariableAlreadyDefined(getLastParsedToken().getClearName()));
         sem(() -> sym.newVar(getLastParsedToken().getValue(), symbolToElementTypeMap.get(parsedType), maxNumberOfElements));
+    }
+    
+    private void parseAssignment() {
+        parseSymbol(Symbol.ASSIGN);
+        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(expressionParser);
     }
 
     @Override

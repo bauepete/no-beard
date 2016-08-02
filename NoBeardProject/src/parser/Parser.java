@@ -198,6 +198,11 @@ public abstract class Parser {
         return true;
     }
 
+    protected Scanner getScanner() {
+        return scanner;
+    }
+
+    
     public ErrorHandler getErrorHandler() {
         return errorHandler;
     }

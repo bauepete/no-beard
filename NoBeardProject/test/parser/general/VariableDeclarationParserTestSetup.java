@@ -75,4 +75,9 @@ public class VariableDeclarationParserTestSetup extends ParserTestSetup {
         VariableDeclarationParser p = setupTestObjectsAndParser("bool[-5] x;");
         return p;
     }
+
+    public static VariableDeclarationParser getDeclarationAndInitializationSetup() {
+        VariableDeclarationParser p = setupTestObjectsAndParser("int x = 17;");
+        return p;
+    }
 }
