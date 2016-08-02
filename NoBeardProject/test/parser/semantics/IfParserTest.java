@@ -50,29 +50,27 @@ public class IfParserTest {
     }
 
     /**
-     * Test of parseOldStyle method, of class IfParser.
+     * Test if / else statement.
      */
     @Test
-    @Ignore
     public void testIfElse() {
-        System.out.println("testIfElse");
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 0,
-            Opcode.REL.byteCode(), 2,
-            Opcode.FJMP.byteCode(), 0, 26,
-            Opcode.INC.byteCode(), 0, 0,
+            Opcode.LV.byteCode(), 0, 0, 32, // load x
+            Opcode.LIT.byteCode(), 0, 0, // load 0
+            Opcode.REL.byteCode(), 2, // check equality
+            Opcode.FJMP.byteCode(), 0, 26, // skip block if false
+            Opcode.INC.byteCode(), 0, 0, // no local variables in if block
             Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
+            Opcode.LIT.byteCode(), 0, 0, // width of column
             Opcode.PUT.byteCode(), 1, // put simple char
-            Opcode.JMP.byteCode(), 0, 37, // if is finished
-            Opcode.INC.byteCode(), 0, 0,
+            Opcode.JMP.byteCode(), 0, 37, // if is finished -> skip else
+            Opcode.INC.byteCode(), 0, 0, // again no local variables in else block
             Opcode.LIT.byteCode(), 0, 49, // ascii value of '1'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
+            Opcode.LIT.byteCode(), 0, 0, // width of column
             Opcode.PUT.byteCode(), 1, // put simple char
         };
         IfParser instance = IfStatParserTestSetup.getIfElseTestSetup();
-        assertTrue(instance.parseOldStyle());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, IfStatParserTestSetup.getByteCode());
+        assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expected, IfStatParserTestSetup.getByteCode());
     }
 }

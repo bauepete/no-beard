@@ -46,7 +46,8 @@ public class IfParser extends Parser {
         
     }
 
-    private int addressOfIfFalseJump = 0;
+    private int addressOfSkipIfJump = 0;
+    private int addressOfSkipElseJump = 0;
     
     @Override
     protected void parseSpecificPart() {
@@ -55,6 +56,8 @@ public class IfParser extends Parser {
         
         if (ParserFactory.getScanner().getCurrentToken().getSymbol() == Symbol.ELSE) {
             parseElsePart(blockParser);
+        } else {
+            setJumpDestintationToHere(addressOfSkipIfJump);
         }
     }
 
@@ -62,19 +65,42 @@ public class IfParser extends Parser {
         parseSymbol(Symbol.IF);
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
+        checkExpressionForBeingBool(expressionParser);
+        prepareJumpToSkipIfBlock();
+        parseSymbol(blockParser);
+        
+    }
+
+    private void checkExpressionForBeingBool(ExpressionParser expressionParser) {
         where(expressionParser.getOperand().getType() == Operand.Type.SIMPLEBOOL, () -> getErrorHandler().throwOperatorOperandTypeMismatch("if", "bool"));
+    }
+
+    private void prepareJumpToSkipIfBlock() {
         sem(() -> {
             code.emitOp(Opcode.FJMP);
             code.emitHalfWord(0);
-            addressOfIfFalseJump = code.getPc() - 2;
+            addressOfSkipIfJump = code.getPc() - 2;
         });
-        parseSymbol(blockParser);
-        sem(() -> code.fixup(addressOfIfFalseJump, code.getPc()));
     }
     
     private void parseElsePart(BlockParser blockParser) {
+        prepareJumpToSkipElseBlock();
+        setJumpDestintationToHere(addressOfSkipIfJump);
         parseSymbol(Symbol.ELSE);
         parseSymbol(blockParser);
+        setJumpDestintationToHere(addressOfSkipElseJump);
+    }
+
+    private void prepareJumpToSkipElseBlock() {
+        sem(() -> {
+            code.emitOp(Opcode.JMP);
+            code.emitHalfWord(0);
+            addressOfSkipElseJump = code.getPc() - 2;
+        });
+    }
+
+    private void setJumpDestintationToHere(final int addressOfJumpSource) {
+        sem(() -> code.fixup(addressOfJumpSource, code.getPc()));
     }
 
     @Override
