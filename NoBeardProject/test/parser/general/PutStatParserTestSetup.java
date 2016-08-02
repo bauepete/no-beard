@@ -50,4 +50,8 @@ public class PutStatParserTestSetup extends ParserTestSetup {
     public static PutStatParser getPutStringWithColumnWidthSetup() {
         return setupTestObjects("put('blablu', 17);");
     }
+
+    public static PutStatParser getPutWithUndefinedIdentifier() {
+        return setupTestObjects("put(x);");
+    }
 }

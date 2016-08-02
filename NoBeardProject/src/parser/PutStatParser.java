@@ -10,6 +10,7 @@ import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.ConstantOperand;
+import symboltable.IllegalOperand;
 import symboltable.Operand;
 import symboltable.Operand.Type;
 import symboltable.SymbolTable;
@@ -22,8 +23,8 @@ public class PutStatParser extends Parser {
 
     ExpressionParser parserForOutputExpression;
 
-    private Operand operandForOutputValue;
-    private Operand operandForColumnWidth;
+    private Operand operandForOutputValue = new IllegalOperand();
+    private Operand operandForColumnWidth = new IllegalOperand();
 
     public PutStatParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);

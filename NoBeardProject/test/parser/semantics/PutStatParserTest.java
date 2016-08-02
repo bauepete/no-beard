@@ -125,4 +125,10 @@ public class PutStatParserTest {
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
 
     }
+    
+    @Test
+    public void testParsePutWithUndefinedIdentifier() {
+        PutStatParser instance = PutStatParserTestSetup.getPutWithUndefinedIdentifier();
+        assertFalse(instance.parse());
+    }
 }
