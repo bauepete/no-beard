@@ -32,18 +32,13 @@ import symboltable.SymbolTableEntry;
  *
  * @author peter
  */
-public class ReferenceParser extends Parser {
+public class ReferenceParser extends OperandExportingParser {
 
     private SymbolTableEntry foundSymbolListEntry = new SymbolTableEntry(NOIDENT, Kind.ILLEGAL, Operand.Type.VOID, 0, 0, 0);
-    private Operand op;
 
     @Override
     public boolean parseOldStyle() {
         return true;
-    }
-
-    public Operand getOperand() {
-        return op;
     }
 
     @Override
@@ -53,7 +48,7 @@ public class ReferenceParser extends Parser {
         where(foundSymbolListEntry.getKind() != Operand.Kind.ILLEGAL, () -> getErrorHandler().throwNameUndefined(getLastParsedToken().getClearName()));
         where(foundSymbolListEntry.getKind() == Kind.VARIABLE, () -> getErrorHandler().throwOperandOfKindExpected("Variable or parameter"));
         
-        sem(() -> op = foundSymbolListEntry.createOperand());
+        sem(() -> exportedOperand = foundSymbolListEntry.createOperand());
         
         if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             parseSymbol(Symbol.LBRACKET);
