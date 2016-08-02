@@ -102,10 +102,6 @@ public class ParserFactory {
         return t;
     }
     
-    public static Parser createAssignmentParser() {
-        return new AssignmentParser(scanner, symbolListManager, codeGenerator, errorHandler);
-    }
-    
     public static Parser createBlockParser(SymbolTableEntry block) {
         return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
     }

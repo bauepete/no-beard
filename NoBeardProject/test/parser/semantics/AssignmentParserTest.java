@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 import parser.AssignmentParser;
 import parser.Parser;
 import parser.ParserFactory;
+import parser.general.ParserTestSetup;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.SrcReader;
@@ -59,7 +60,7 @@ public class AssignmentParserTest {
     private Parser setupTestEnvironmentAndParser(final String srcLine) {
         setupParserFactory(srcLine);
         fillSymbolList();
-        return ParserFactory.createAssignmentParser();
+        return ParserFactory.create(AssignmentParser.class);
     }
 
     private void setupParserFactory(final String srcLine) {
@@ -79,6 +80,14 @@ public class AssignmentParserTest {
     public void testSemicolonMissing() {
         Parser p = setupTestEnvironmentAndParser("x = 3");
         assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
+    }
+    
+    @Test
+    public void testNoAssignmentStatement() {
+        Parser p = setupTestEnvironmentAndParser("x == 3");
+        assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
     
     @Test
@@ -86,5 +95,6 @@ public class AssignmentParserTest {
         setupParserFactory("x = 3;");
         Parser p = ParserFactory.create(AssignmentParser.class);
         assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.NAME_UNDEFINED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
 }
