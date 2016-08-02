@@ -22,6 +22,32 @@ public class IfParser extends Parser {
     public IfParser(Scanner scanner, SymbolTable sym, CodeGenerator code, ErrorHandler e) {
         super(scanner, sym, code, e);
     }
+    
+    public IfParser() {
+        
+    }
+
+    @Override
+    protected void parseSpecificPart() {
+        BlockParser blockParser = ParserFactory.create(BlockParser.class);
+        parseIfPart(blockParser);
+        
+        if (ParserFactory.getScanner().getCurrentToken().getSymbol() == Symbol.ELSE) {
+            parseElsePart(blockParser);
+        }
+    }
+
+    private void parseIfPart(BlockParser blockParser) {
+        parseSymbol(Symbol.IF);
+        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
+        parseSymbol(expressionParser);
+        parseSymbol(blockParser);
+    }
+    
+    private void parseElsePart(BlockParser blockParser) {
+        parseSymbol(Symbol.ELSE);
+        parseSymbol(blockParser);
+    }
 
     @Override
     public boolean parseOldStyle() {
@@ -77,10 +103,5 @@ public class IfParser extends Parser {
         }
         code.fixup(jumpAddr, code.getPc());
         return true;
-    }
-
-    @Override
-    protected void parseSpecificPart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

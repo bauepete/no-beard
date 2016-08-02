@@ -4,40 +4,30 @@
  */
 package parser.syntax;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.IfParser;
 import parser.general.IfStatParserTestSetup;
+import parser.general.ParserTestSetup;
+import scanner.Scanner;
 
 /**
  *
  * @author peter
  */
-@Ignore
 public class IfParserTest {
 
     public IfParserTest() {
     }
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
-     * Test of parseOldStyle method, of class IfParser.
+     * Test a simple if statement.
      */
     @Test
     public void testSimpleIf() {
-        System.out.println("parseSimpleIf");
         IfParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
-        assertTrue(instance.parseOldStyle());
+        assertTrue(instance.parse());
+        assertEquals(Scanner.Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 
     /**
@@ -45,8 +35,8 @@ public class IfParserTest {
      */
     @Test
     public void testIfElse() {
-        System.out.println("testIfElse");
         IfParser instance = IfStatParserTestSetup.getIfElseTestSetup();
-        assertTrue(instance.parseOldStyle());
+        assertTrue(instance.parse());
+        assertEquals(Scanner.Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 }
