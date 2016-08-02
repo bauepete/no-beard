@@ -25,6 +25,8 @@ public class BlockParser extends Parser {
         this.obj = obj;
     }
 
+    private int incAddress = 0;
+
     public BlockParser() {
         this.obj = null;
     }
@@ -32,8 +34,19 @@ public class BlockParser extends Parser {
     @Override
     protected void parseSpecificPart() {
         parseSymbol(Symbol.DO);
-        while (scanner.getCurrentToken().getSymbol() != Symbol.DONE)
+        sem(() -> {
+            sym.newBlock();
+            code.emitOp(Opcode.INC);
+            code.emitHalfWord(0);
+            incAddress = code.getPc() - 2;
+        });
+        while (scanner.getCurrentToken().getSymbol() != Symbol.DONE) {
             parseStatement();
+        }
+        sem(() -> {
+            code.fixup(incAddress, sym.getCurrBlock().getSize());
+            sym.endBlock();
+        });
         parseSymbol(Symbol.DONE);
     }
 

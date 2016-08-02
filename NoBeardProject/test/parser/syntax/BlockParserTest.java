@@ -61,7 +61,7 @@ public class BlockParserTest {
      */
     @Test
     public void testNonEmptyBlock() {
-        BlockParser instance = BlockParserTestSetup.getNonEmptyBlockTestSetup();
+        BlockParser instance = BlockParserTestSetup.getBlockWithVariableDeclarationTestSetup();
         assertTrue(instance.parse());
     }
     

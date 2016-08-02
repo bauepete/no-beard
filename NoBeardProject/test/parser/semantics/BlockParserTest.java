@@ -21,32 +21,58 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser.general;
+package parser.semantics;
 
+import nbm.Nbm;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import parser.BlockParser;
 import parser.ParserFactory;
+import parser.general.BlockParserTestSetup;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class BlockParserTestSetup extends ParserTestSetup {
-
-    public static BlockParser getEmptyBlockTestSetup() {
-        setupInfraStructure("do done");
-        return ParserFactory.create(BlockParser.class);
-    }
-
-    public static BlockParser getBlockWithVariableDeclarationTestSetup() {
-        setupInfraStructure("do int x; done");
-        symListManager.newUnit(1);
-        return ParserFactory.create(BlockParser.class);
-    }
-
-    public static BlockParser getGeneralBlock() {
-        setupInfraStructure("do put('foo', 7); putln; done");
-        symListManager.newUnit(1);
-        return ParserFactory.create(BlockParser.class);
+public class BlockParserTest {
+    
+    public BlockParserTest() {
     }
     
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    /**
+     * Test generation of inc statement in empty block.
+     */
+    @Test
+    public void testEmptyBlock() {
+        byte[] expectedCode = {
+            Nbm.Opcode.INC.byteCode(), 0, 0
+        };
+        
+        BlockParser instance = BlockParserTestSetup.getEmptyBlockTestSetup();
+        int currentLevel = BlockParserTestSetup.getSymListManager().getCurrLevel();
+        instance.parse();
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, ParserFactory.getCodeGenerator().getByteCode());
+        assertEquals(currentLevel, BlockParserTestSetup.getSymListManager().getCurrLevel());
+    }
+    
+    @Test
+    public void testBlockWithVariableDeclaration() {
+        byte[] expectedCode = {
+            Nbm.Opcode.INC.byteCode(), 0, 4
+        };
+        
+        BlockParser instance = BlockParserTestSetup.getBlockWithVariableDeclarationTestSetup();
+        instance.parse();
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, ParserFactory.getCodeGenerator().getByteCode());
+    }
 }
