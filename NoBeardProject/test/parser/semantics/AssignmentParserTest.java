@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 import parser.AssignmentParser;
 import parser.Parser;
 import parser.ParserFactory;
-import parser.general.ParserTestSetup;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.SrcReader;
