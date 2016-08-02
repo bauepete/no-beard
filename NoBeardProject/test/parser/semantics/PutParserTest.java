@@ -9,16 +9,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.PutStatParser;
-import parser.general.PutStatParserTestSetup;
+import parser.PutParser;
+import parser.general.PutParserTestSetup;
 
 /**
  *
  * @author peter
  */
-public class PutStatParserTest {
+public class PutParserTest {
 
-    public PutStatParserTest() {
+    public PutParserTest() {
     }
 
     @Before
@@ -40,9 +40,9 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 0            // put int
         };
 
-        PutStatParser instance = PutStatParserTestSetup.getPutIntSetup();
+        PutParser instance = PutParserTestSetup.getPutIntSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals(expected, PutStatParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals(expected, PutParserTestSetup.getCode().getByteCode());
 
     }
 
@@ -57,9 +57,9 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 1            // put simple char
         };
 
-        PutStatParser instance = PutStatParserTestSetup.getPutCharSetup();
+        PutParser instance = PutParserTestSetup.getPutCharSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutParserTestSetup.getCode().getByteCode());
 
     }
 
@@ -75,9 +75,9 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 2        // put string
         };
 
-        PutStatParser instance = PutStatParserTestSetup.getPutStringSetup();
+        PutParser instance = PutParserTestSetup.getPutStringSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutParserTestSetup.getCode().getByteCode());
 
     }
     
@@ -92,9 +92,9 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 0        // put int
         };
         
-        PutStatParser instance = PutStatParserTestSetup.getPutIntWithColumnWidthSetup();
+        PutParser instance = PutParserTestSetup.getPutIntWithColumnWidthSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutStatParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutParserTestSetup.getByteCode());
     }
     
     @Test
@@ -106,9 +106,9 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 2        // put string
         };
         
-        PutStatParser instance = PutStatParserTestSetup.getPutStringWithColumnWidthSetup();
+        PutParser instance = PutParserTestSetup.getPutStringWithColumnWidthSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutStatParserTestSetup.getByteCode());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, PutParserTestSetup.getByteCode());
     }
 
     /**
@@ -120,15 +120,15 @@ public class PutStatParserTest {
             Opcode.PUT.byteCode(), 3
         };
 
-        PutStatParser instance = PutStatParserTestSetup.getPutlnSetup();
+        PutParser instance = PutParserTestSetup.getPutlnSetup();
         assertTrue(instance.parse());
-        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutStatParserTestSetup.getCode().getByteCode());
+        AssemblerCodeChecker.assertCodeEquals("Code ", expected, PutParserTestSetup.getCode().getByteCode());
 
     }
     
     @Test
     public void testParsePutWithUndefinedIdentifier() {
-        PutStatParser instance = PutStatParserTestSetup.getPutWithUndefinedIdentifier();
+        PutParser instance = PutParserTestSetup.getPutWithUndefinedIdentifier();
         assertFalse(instance.parse());
     }
 }

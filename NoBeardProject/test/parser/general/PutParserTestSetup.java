@@ -6,52 +6,52 @@ package parser.general;
 
 import nbm.CodeGenerator;
 import parser.ParserFactory;
-import parser.PutStatParser;
+import parser.PutParser;
 
 /**
  *
  * @author peter
  */
-public class PutStatParserTestSetup extends ParserTestSetup {
+public class PutParserTestSetup extends ParserTestSetup {
 
     public static CodeGenerator getCode() {
         return code;
     }
     
-    public static PutStatParser getPutIntSetup() {
+    public static PutParser getPutIntSetup() {
         return setupTestObjects("put(5);");
     }
     
-    private static PutStatParser setupTestObjects(String srcLine) {
+    private static PutParser setupTestObjects(String srcLine) {
         setupInfraStructure(srcLine);
-        return ParserFactory.create(PutStatParser.class);
+        return ParserFactory.create(PutParser.class);
     }
 
-    public static PutStatParser getPutCharSetup() {
+    public static PutParser getPutCharSetup() {
         return setupTestObjects("put('a');");
     }
     
-    public static PutStatParser getPutStringSetup() {
+    public static PutParser getPutStringSetup() {
         return setupTestObjects("put('blabla');");
     }
     
-    public static PutStatParser getPutWithWidthSpecification() {
+    public static PutParser getPutWithWidthSpecification() {
         return setupTestObjects("put(5, 7);");
     }
     
-    public static PutStatParser getPutlnSetup() {
+    public static PutParser getPutlnSetup() {
         return setupTestObjects("putln;");
     }
 
-    public static PutStatParser getPutIntWithColumnWidthSetup() {
+    public static PutParser getPutIntWithColumnWidthSetup() {
         return setupTestObjects("put(42, 17);");
     }
 
-    public static PutStatParser getPutStringWithColumnWidthSetup() {
+    public static PutParser getPutStringWithColumnWidthSetup() {
         return setupTestObjects("put('blablu', 17);");
     }
 
-    public static PutStatParser getPutWithUndefinedIdentifier() {
+    public static PutParser getPutWithUndefinedIdentifier() {
         return setupTestObjects("put(x);");
     }
 }

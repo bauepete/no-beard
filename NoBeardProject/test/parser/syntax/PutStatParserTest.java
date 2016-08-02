@@ -8,8 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.PutStatParser;
-import parser.general.PutStatParserTestSetup;
+import parser.PutParser;
+import parser.general.PutParserTestSetup;
 import scanner.Scanner.Symbol;
 
 /**
@@ -34,9 +34,9 @@ public class PutStatParserTest {
      */
     @Test
     public void testParsePutInt() {
-        PutStatParser p = PutStatParserTestSetup.getPutIntSetup();
+        PutParser p = PutParserTestSetup.getPutIntSetup();
         assertTrue(p.parse());
-        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
+        assertEquals(Symbol.EOFSY, PutParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 
     /**
@@ -44,9 +44,9 @@ public class PutStatParserTest {
      */
     @Test
     public void testParsePutChar() {        
-        PutStatParser p = PutStatParserTestSetup.getPutCharSetup();
+        PutParser p = PutParserTestSetup.getPutCharSetup();
         assertTrue(p.parse());
-        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
+        assertEquals(Symbol.EOFSY, PutParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
     /**
@@ -54,9 +54,9 @@ public class PutStatParserTest {
      */
     @Test
     public void testParsePutString() {
-        PutStatParser p = PutStatParserTestSetup.getPutStringSetup();
+        PutParser p = PutParserTestSetup.getPutStringSetup();
         assertTrue(p.parse());
-        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
+        assertEquals(Symbol.EOFSY, PutParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
     
     /**
@@ -64,7 +64,7 @@ public class PutStatParserTest {
      */
     @Test
     public void testPutWithColumnWidthSpecification() {
-        PutStatParser p = PutStatParserTestSetup.getPutWithWidthSpecification();
+        PutParser p = PutParserTestSetup.getPutWithWidthSpecification();
         assertTrue(p.parse());
     }
     
@@ -73,8 +73,8 @@ public class PutStatParserTest {
      */
     @Test
     public void testParsePutln() {
-        PutStatParser p = PutStatParserTestSetup.getPutlnSetup();
+        PutParser p = PutParserTestSetup.getPutlnSetup();
         assertTrue(p.parse());
-        assertEquals(Symbol.EOFSY, PutStatParserTestSetup.getScanner().getCurrentToken().getSymbol());
+        assertEquals(Symbol.EOFSY, PutParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
 }

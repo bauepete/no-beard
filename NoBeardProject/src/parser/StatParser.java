@@ -55,7 +55,7 @@ public class StatParser extends Parser {
 
             case PUT:
             case PUTLN:
-                PutStatParser putStatP = new PutStatParser(scanner, sym, code, getErrorHandler());
+                PutParser putStatP = new PutParser(scanner, sym, code, getErrorHandler());
                 if (!putStatP.parseOldStyle()) {
                     return false;
                 }

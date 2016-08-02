@@ -52,7 +52,7 @@ public class StatementParser extends Parser {
 
             case PUT:
             case PUTLN:
-                p = ParserFactory.create(PutStatParser.class);
+                p = ParserFactory.create(PutParser.class);
                 parseSymbol(p);
                 break;
                 

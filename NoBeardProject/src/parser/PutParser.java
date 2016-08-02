@@ -19,18 +19,18 @@ import symboltable.SymbolTable;
  *
  * @author peter
  */
-public class PutStatParser extends Parser {
+public class PutParser extends Parser {
 
     ExpressionParser parserForOutputExpression;
 
     private Operand operandForOutputValue = new IllegalOperand();
     private Operand operandForColumnWidth = new IllegalOperand();
 
-    public PutStatParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
+    public PutParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
     }
 
-    public PutStatParser() {
+    public PutParser() {
 
     }
 
