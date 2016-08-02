@@ -5,90 +5,60 @@
 package parser.semantics;
 
 import compiler.NbCompiler;
-import error.ErrorHandler;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import parser.NoBeardParser;
-import scanner.Scanner;
+import parser.Parser;
+import parser.ParserFactory;
+import parser.general.NoBeardParserTestSetup;
 import scanner.SrcFileReader;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
-@Ignore
 public class NoBeardParserTest {
 
     private NbCompiler comp;
     private CodeGenerator code;
-    private SymbolTable sym;
-    private Scanner scanner;
     private NoBeardParser p;
 
     public NoBeardParserTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of parseOldStyle method, of class NoBeardParser.
-     */
-    @Test
-    public void testBlockIdentMismatch() {
-        System.out.println("testBlockIdentMismatch");
-
-        setupTest(new SrcStringReader("unit foo; do put (x); done fox;"));
-
-        ErrorHandler eh = comp.getErrorHandler();
-        assertFalse("False expected", p.parseOldStyle());
-        assertEquals("Sem err count", 1, eh.getCount(error.Error.ErrorClass.SEMANTICAL));
-        assertEquals("Last error", error.Error.ErrorType.OPERAND_KIND_EXPECTED.getNumber(), eh.getLastError().getNumber());
-    }
-
     @Test
     public void testParseEmpty() {
-        System.out.println("parse");
-
         byte[] expected = {
             Opcode.INC.byteCode(), 0, 0,
             Opcode.HALT.byteCode()
         };
 
-        setupTest(new SrcStringReader("unit foo; do done foo;"));
+        Parser instance = NoBeardParserTestSetup.getEmptyProgramSetup();
+        assertTrue("True expected", instance.parse());
+        assertCodeEquals("Code ", expected, ParserFactory.getCodeGenerator().getByteCode());
+    }
 
+    /**
+     * Test that block identifiers do not match at begin and end.
+     */
+    @Test
+    public void testBlockIdentMismatch() {
+        Parser instance = NoBeardParserTestSetup.getBlockIdentifierNameMismatch();
 
-        assertTrue("True expected", p.parseOldStyle());
-        assertCodeEquals("Code ", expected, code.getByteCode());
+        assertFalse("False expected", instance.parse());
+        assertEquals(error.Error.ErrorType.BLOCK_NAME_MISSMATCH.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
 
     @Test
+    @Ignore
     public void testParse() {
         System.out.println("parse");
 
@@ -144,6 +114,7 @@ public class NoBeardParserTest {
     }
 
     @Test
+    @Ignore
     public void testParseChar() {
         System.out.println("testParseChar");
 
@@ -163,6 +134,7 @@ public class NoBeardParserTest {
     }
 
     @Test
+    @Ignore
     public void testHelloWorld() {
         System.out.println("testHelloWorld");
         
@@ -188,6 +160,7 @@ public class NoBeardParserTest {
     }
 
     @Test
+    @Ignore
     public void testVariableWorld() {
         System.out.println("testVariableWorld");
         
@@ -225,8 +198,6 @@ public class NoBeardParserTest {
 
     private void setupTest(SrcReader src) {
         comp = new NbCompiler(src);
-        scanner = comp.getScanner();
-        sym = comp.getSymListManager();
         code = comp.getCode();
         p = comp.getParser();
     }

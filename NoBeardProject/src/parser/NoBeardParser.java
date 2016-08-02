@@ -26,7 +26,6 @@ package parser;
 import error.ErrorHandler;
 import nbm.Nbm;
 import nbm.CodeGenerator;
-import scanner.NameManager;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.SymbolTableEntry;
@@ -52,60 +51,19 @@ public class NoBeardParser extends Parser {
     protected void parseSpecificPart() {
         parseSymbol(Symbol.UNIT);
         int name = parseIdentifier();
+        String clearNameAtStart = getLastParsedToken().getClearName();
         parseSymbol(Symbol.SEMICOLON);
         BlockParser blockParser = ParserFactory.create(BlockParser.class);
         parseSymbol(blockParser);
         int name1 = parseIdentifier();
+        String clearNameAtEnd = getLastParsedToken().getClearName();
+        where(name == name1, () -> getErrorHandler().throwBlockNameMismatch(clearNameAtStart, clearNameAtEnd));
         parseSymbol(Symbol.SEMICOLON);
+        sem(() -> code.emitOp(Nbm.Opcode.HALT));
     }
 
     @Override
     public boolean parseOldStyle() {
-        if (!tokenIsA(Symbol.UNIT)) {
-            return false;
-        }
-
-        int name = parseIdentifier();
-        if (name == NOIDENT) {
-            return false;
-        }
-
-        if (!tokenIsA(Symbol.SEMICOLON)) {
-            return false;
-        }
-
-        sem(() -> {
-            sym.newUnit(name);
-            unitObj = sym.findObject(name);
-        });
-
-        if (!block(unitObj)) {
-            return false;
-        }
-
-        sem(() -> code.emitOp(Nbm.Opcode.HALT));
-
-        int name1 = parseIdentifier();
-        if (name1 == NOIDENT) {
-            return false;
-        }
-        if (!tokenIsA(Symbol.SEMICOLON)) {
-            return false;
-        }
-
-        // cc
-        if (name != name1) {
-            NameManager n = scanner.getNameManager();
-            String[] pList = {n.getStringName(name), n.getStringName(name1)};
-            getErrorHandler().raise(new error.Error(error.Error.ErrorType.BLOCK_NAME_MISSMATCH, pList));
-            return false;
-        }
-        // end cc
-        return true;
-    }
-
-    private boolean block(SymbolTableEntry obj) {
-        BlockParser blockP = new BlockParser(scanner, sym, code, obj, getErrorHandler());
-        return blockP.parseOldStyle();
+        return false;
     }
 }

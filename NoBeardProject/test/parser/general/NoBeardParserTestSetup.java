@@ -38,12 +38,17 @@ public class NoBeardParserTestSetup extends ParserTestSetup {
     }
 
     public static Parser getUnitExpectedTestSetup() {
-        setupInfraStructure("unti foo; do put x; done foo;");
+        setupInfraStructure("unti foo; do putln; done foo;");
         return ParserFactory.create(NoBeardParser.class);
     }
 
     public static Parser getUnitIdentifierExpected() {
         setupInfraStructure("unit; do put x; done foo;");
+        return ParserFactory.create(NoBeardParser.class);
+    }
+
+    public static Parser getBlockIdentifierNameMismatch() {
+        setupInfraStructure("unit foo; do putln; done fox;");
         return ParserFactory.create(NoBeardParser.class);
     }
 }
