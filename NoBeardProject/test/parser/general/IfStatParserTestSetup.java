@@ -27,4 +27,8 @@ public class IfStatParserTestSetup extends ParserTestSetup {
         fillSymList(SymbolTable.ElementType.INT);
         return ParserFactory.create(IfParser.class);
     }
+
+    public static IfParser getIfWithBadConditionTestSetup() {
+        return setupTestObjectsAndParser("if x do put('nope'); done");
+    }
 }

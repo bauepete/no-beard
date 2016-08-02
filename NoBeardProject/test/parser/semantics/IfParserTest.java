@@ -10,6 +10,7 @@ import parser.IfParser;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import parser.ParserFactory;
 
 /**
  *
@@ -24,7 +25,6 @@ public class IfParserTest {
      * Test simple if statement.
      */
     @Test
-    @Ignore
     public void testSimpleIf() {
         byte[] expected = {
             Opcode.LV.byteCode(), 0, 0, 32, // load x
@@ -33,13 +33,20 @@ public class IfParserTest {
             Opcode.FJMP.byteCode(), 0, 23, // skip block if false
             Opcode.INC.byteCode(), 0, 0, // No local variables in if block
             Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
+            Opcode.LIT.byteCode(), 0, 0, // width of column
             Opcode.PUT.byteCode(), 1 // put simple char
         };
 
         IfParser instance = IfStatParserTestSetup.getSimpleIfTestSetup();
         assertTrue(instance.parse());
         AssemblerCodeChecker.assertCodeEquals(expected, IfStatParserTestSetup.getByteCode());
+    }
+    
+    @Test
+    public void testNonBoolExpressionInIf() {
+        IfParser instance = IfStatParserTestSetup.getIfWithBadConditionTestSetup();
+        assertFalse(instance.parse());
+        assertEquals(error.Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
 
     /**
