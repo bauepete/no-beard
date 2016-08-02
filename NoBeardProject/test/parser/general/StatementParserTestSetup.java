@@ -39,6 +39,18 @@ public class StatementParserTestSetup extends ParserTestSetup {
         return ParserFactory.create(StatementParser.class);
     }
 
+    public static StatementParser getCharDeclarationTestSetup() {
+        setupInfraStructure("char x;");
+        getSymListManager().newUnit(1);
+        return ParserFactory.create(StatementParser.class);
+    }
+
+    public static StatementParser getBoolDeclarationTestSetup() {
+        setupInfraStructure("bool x;");
+        getSymListManager().newUnit(1);
+        return ParserFactory.create(StatementParser.class);
+    }
+
     public static StatementParser getAssignmentTestSetup() {
         setupInfraStructure("x = 3;");
         getSymListManager().newUnit(1);

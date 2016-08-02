@@ -48,8 +48,20 @@ public class StatementParserTest {
     }
 
     @Test
-    public void testIntDeclarationStatement() {
+    public void testIntDeclaration() {
         StatementParser instance = StatementParserTestSetup.getIntDeclarationTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testCharDeclaration() {
+        StatementParser instance = StatementParserTestSetup.getCharDeclarationTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testBoolDeclaration() {
+        StatementParser instance = StatementParserTestSetup.getBoolDeclarationTestSetup();
         assertTrue(instance.parse());
     }
     
