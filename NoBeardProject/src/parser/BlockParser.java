@@ -73,7 +73,7 @@ public class BlockParser extends Parser {
         }
 
         // sem
-        sym.fixINC(incAddr, obj);
+        code.fixup(incAddr, obj.getSize());
         // endsem
 
         if (!tokenIsA(Symbol.DONE)) {

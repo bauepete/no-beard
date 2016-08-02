@@ -27,7 +27,7 @@ public class NbCompiler {
         errorHandler = new ErrorHandler(srcReader);
         scanner = new Scanner(srcReader, errorHandler);
         code = new CodeGenerator(nbm.Nbm.getMAXPROG());
-        sym = new SymbolTable(code, scanner, errorHandler);
+        sym = new SymbolTable(scanner, errorHandler);
         Operand.setSymListManager(sym);
         Operand.setStringManager(scanner.getStringManager());
         parser = new NoBeardParser(scanner, sym, code, errorHandler);

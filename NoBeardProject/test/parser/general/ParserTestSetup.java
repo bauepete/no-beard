@@ -41,7 +41,7 @@ public class ParserTestSetup {
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         code = new CodeGenerator(256);
-        symListManager = new SymbolTable(code, scanner, errorHandler);
+        symListManager = new SymbolTable(scanner, errorHandler);
 
         ParserFactory.setup(sourceReader, errorHandler, scanner, code, symListManager);
     }
@@ -54,7 +54,7 @@ public class ParserTestSetup {
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         code = new CodeGenerator(256);
-        symListManager = new SymbolTable(code, scanner, errorHandler);
+        symListManager = new SymbolTable(scanner, errorHandler);
         scanner.nextToken();
         Operand.setSymListManager(symListManager);
         Operand.setStringManager(scanner.getStringManager());

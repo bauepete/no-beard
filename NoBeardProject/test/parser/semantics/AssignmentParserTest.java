@@ -67,7 +67,7 @@ public class AssignmentParserTest {
         ErrorHandler errorHandler = new ErrorHandler(srcReader);
         CodeGenerator codeGen = new CodeGenerator(32);
         scanner = new Scanner(srcReader, errorHandler);
-        ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymbolTable(codeGen, scanner, errorHandler));
+        ParserFactory.setup(srcReader, errorHandler, scanner, codeGen, new SymbolTable(scanner, errorHandler));
     }
 
     private void fillSymbolList() {

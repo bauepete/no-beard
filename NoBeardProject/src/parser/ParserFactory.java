@@ -39,7 +39,6 @@ import symboltable.SymbolTable;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public class ParserFactory {
-    private static SrcReader sourceReader;
     private static ErrorHandler errorHandler;
     private static Scanner scanner;
     private static CodeGenerator codeGenerator;
@@ -47,13 +46,12 @@ public class ParserFactory {
     
     
     public static void setup(SrcReader sourceReader) {
-        ParserFactory.sourceReader = sourceReader;
         ParserFactory.errorHandler = new ErrorHandler(sourceReader);
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
         
         ParserFactory.codeGenerator = new CodeGenerator(Nbm.getMAXPROG());
-        ParserFactory.symbolListManager = new SymbolTable(codeGenerator, scanner, errorHandler);
+        ParserFactory.symbolListManager = new SymbolTable(scanner, errorHandler);
         
         Operand.setSymListManager(symbolListManager);
         Operand.setErrorHandler(errorHandler);
@@ -61,7 +59,6 @@ public class ParserFactory {
     }
     
     public static void setup(SrcReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymbolTable symbolListManager) {
-        ParserFactory.sourceReader = sourceReader;
         ParserFactory.errorHandler = errorHandler;
         ParserFactory.scanner = scanner;
         scanner.nextToken();

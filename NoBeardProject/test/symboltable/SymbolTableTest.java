@@ -7,11 +7,9 @@ package symboltable;
 import symboltable.Operand.Type;
 import scanner.Scanner;
 import symboltable.Operand.Kind;
-import nbm.CodeGenerator;
 import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
-import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,18 +26,16 @@ public class SymbolTableTest {
 
     private ErrorHandler errorHandler;
     private SymbolTable symbolTable;
-    private CodeGenerator codeGenerator;
 
     public SymbolTableTest() {
     }
 
     @Before
     public void setUp() {
-        codeGenerator = new CodeGenerator(256);
         SrcStringReader sr = new SrcStringReader("TestUnit; aName");
         errorHandler = new ErrorHandler(sr);
         Scanner scanner = prepareScanner(sr);
-        symbolTable = new SymbolTable(codeGenerator, scanner, errorHandler);
+        symbolTable = new SymbolTable(scanner, errorHandler);
 
         symbolTable.newUnit(0);
     }
@@ -247,20 +243,5 @@ public class SymbolTableTest {
         symbolTable.defineFuncStart(u, 2);
         assertEquals("SemErr ", 1, errorHandler.getCount(Error.ErrorClass.SEMANTICAL));
         assertEquals("Addr of var ", 32, u.getAddr());
-    }
-
-    @Test
-    public void testFixINC() {
-        System.out.println("fixINC");
-
-        symbolTable.newVar(1, SymbolTable.ElementType.CHAR);
-        symbolTable.newVar(2, SymbolTable.ElementType.INT);
-
-        codeGenerator.emitOp(Opcode.INC);
-        int incAddr = codeGenerator.getPc();
-        codeGenerator.emitHalfWord(0);
-        symbolTable.fixINC(incAddr, symbolTable.findObject(0));
-
-        assertEquals("INC size ", 5, codeGenerator.getCodeHalfWord(incAddr));
     }
 }

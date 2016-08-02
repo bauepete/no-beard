@@ -11,7 +11,6 @@ import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 import java.util.ListIterator;
 import java.util.Stack;
-import nbm.CodeGenerator;
 import scanner.NameManager;
 import scanner.Scanner;
 
@@ -33,16 +32,14 @@ public class SymbolTable {
     private SymbolTableEntry currBlock;
     private int currLevel;
     private int datAddr;
-    private final CodeGenerator code;
     private final Scanner scanner;
     private final ErrorHandler errorHandler;
 
-    public SymbolTable(CodeGenerator code, Scanner scanner, ErrorHandler errorHandler) {
+    public SymbolTable(Scanner scanner, ErrorHandler errorHandler) {
         //symList = new HashMap<Integer, SymbolTableEntry>();
         symListStack = new Stack<>();
         blockStack = new Stack<>();
         datAddrStack = new Stack();
-        this.code = code;
         this.scanner = scanner;
         this.errorHandler = errorHandler;
     }
@@ -235,17 +232,6 @@ public class SymbolTable {
             // TODO: this is not finished yet.
             // errorHandler.raise(new Error(ErrorType.GENERAL_SEM_ERROR, "STRANGE!!!"));
         }
-    }
-
-    /**
-     * Stores the size of a block object at a specific address into the program
-     * memory.
-     *
-     * @param atAddr Address where to store the size.
-     * @param blockObj Object whose size to be stored.
-     */
-    public void fixINC(int atAddr, SymbolTableEntry blockObj) {
-        code.fixup(atAddr, blockObj.getSize());
     }
 
     /**
