@@ -1,41 +1,58 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright ©2011 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
+ * 
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package parser.syntax;
 
 import compiler.NbCompiler;
 import error.ErrorHandler;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import nbm.CodeGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.NoBeardParser;
+import parser.Parser;
+import parser.ParserFactory;
+import parser.general.NoBeardParserTestSetup;
+import parser.general.ParserTestSetup;
 import scanner.Scanner;
-import scanner.SrcFileReader;
+import scanner.Scanner.Symbol;
 import scanner.SrcReader;
-import scanner.SrcStringReader;
 import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
-@Ignore
 public class NoBeardParserTest {
-    
+
     private NbCompiler compiler;
     private CodeGenerator c;
     private SymbolTable sym;
-    private Scanner s;
+    private Scanner scanner;
     private NoBeardParser parser;
     private ErrorHandler errorHandler;
-    
+
     public NoBeardParserTest() {
     }
 
@@ -43,81 +60,41 @@ public class NoBeardParserTest {
     public void setUp() {
         c = new CodeGenerator(256);
     }
-    
+
     @After
     public void tearDown() {
     }
 
-    /**
-     * Test of parseOldStyle method, of class NoBeardParser.
-     */
     @Test
-    public void testParse() {
-        System.out.println("parse");
-        
-        setupTest(new SrcStringReader("unit foo; do int x = 3; done foo;"));
-        boolean parsingSuccessful = parser.parseOldStyle();
-        assertTrue("True expected", parsingSuccessful);
-        assertEquals(parsingSuccessful, parser.parsingWasSuccessful());
-        
-        setupTest(new SrcStringReader("unit bah; do int x = 3; put (x); done bah;"));
-        assertTrue("True expected", parser.parseOldStyle());
-        
-        setupTest(new SrcStringReader("unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;"));
-        assertTrue("True expected", parser.parseOldStyle());
+    public void testParseEmptyProgram() {
+        Parser instance = NoBeardParserTestSetup.getEmptyProgramSetup();
+        assertTrue(instance.parse());
+        assertEquals(Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
     }
-    
+
     private void setupTest(SrcReader sr) {
-        compiler = new NbCompiler(sr);
-        errorHandler = compiler.getErrorHandler();
-        s = compiler.getScanner();
-        sym = compiler.getSymListManager();
+        errorHandler = new ErrorHandler(sr);
+        scanner = new Scanner(sr, errorHandler);
         c = compiler.getCode();
+        ParserFactory.setup(sr, errorHandler, scanner, c, sym);
+        sym = compiler.getSymListManager();
         parser = compiler.getParser();
     }
 
     @Test
-    public void testParseEmpty() {
-        System.out.println("parse");
-        
-        setupTest(new SrcStringReader("unit foo; do done foo;"));
-
-        assertTrue("True expected", parser.parseOldStyle());
-    }
-    
-    @Test
     public void testUnitExpected() {
-        System.out.println("testUnitExpected");
+        Parser instance = NoBeardParserTestSetup.getUnitExpectedTestSetup();
 
-        setupTest(new SrcStringReader("unti foo; do put x; done foo;"));
-
-        boolean parsingWasSuccessFul = parser.parseOldStyle();
+        boolean parsingWasSuccessFul = instance.parse();
         assertFalse("False expected", parsingWasSuccessFul);
-        assertEquals(parsingWasSuccessFul, parser.parsingWasSuccessful());
-        assertEquals("Error count expected: ", 1, errorHandler.getCount());
-        assertEquals("unit expected but found identifier", errorHandler.getAllErrors().get(0).getMessage());
+        assertEquals("unit expected but found identifier", ParserFactory.getErrorHandler().getAllErrors().get(0).getMessage());
     }
 
     @Test
     public void testUnitIdentifierExpected() {
-        System.out.println("testUnitIdentifierExpected");
+        Parser instance = NoBeardParserTestSetup.getUnitIdentifierExpected();
 
-        setupTest(new SrcStringReader("unit; do put x; done foo;"));
-        
-        assertFalse("False expected", parser.parseOldStyle());
-        assertEquals("Last error", error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
-    }
-
-    @Test
-    public void testParseSmallest() {
-        System.out.println("testParseSmallest");
-
-        try {
-            setupTest(new SrcFileReader("SamplePrograms/Smallest.nb"));
-
-            assertTrue("True expected", parser.parseOldStyle());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NoBeardParserTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        assertFalse("False expected", instance.parse());
+        assertEquals("Last error", error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
     }
 }
