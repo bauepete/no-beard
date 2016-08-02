@@ -27,6 +27,8 @@ public class IfParser extends Parser {
         
     }
 
+    private int addressOfIfFalseJump = 0;
+    
     @Override
     protected void parseSpecificPart() {
         BlockParser blockParser = ParserFactory.create(BlockParser.class);
@@ -41,7 +43,13 @@ public class IfParser extends Parser {
         parseSymbol(Symbol.IF);
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
+        sem(() -> {
+            code.emitOp(Opcode.FJMP);
+            code.emitHalfWord(0);
+            addressOfIfFalseJump = code.getPc() - 2;
+        });
         parseSymbol(blockParser);
+        sem(() -> code.fixup(addressOfIfFalseJump, code.getPc()));
     }
     
     private void parseElsePart(BlockParser blockParser) {
