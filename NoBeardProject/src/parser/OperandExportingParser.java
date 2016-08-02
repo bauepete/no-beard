@@ -32,7 +32,7 @@ import symboltable.Operand;
  */
 public abstract class OperandExportingParser extends Parser {
 
-    protected Operand exportedOperand;
+    protected Operand exportedOperand = new IllegalOperand();
 
     public final Operand getOperand() {
         if (exportedOperand != null) {
