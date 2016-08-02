@@ -23,22 +23,13 @@
  */
 package parser.syntax;
 
-import compiler.NbCompiler;
-import error.ErrorHandler;
-import nbm.CodeGenerator;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.NoBeardParser;
 import parser.Parser;
 import parser.ParserFactory;
 import parser.general.NoBeardParserTestSetup;
 import parser.general.ParserTestSetup;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import scanner.SrcReader;
-import symboltable.SymbolTable;
 
 /**
  *
@@ -46,23 +37,7 @@ import symboltable.SymbolTable;
  */
 public class NoBeardParserTest {
 
-    private NbCompiler compiler;
-    private CodeGenerator c;
-    private SymbolTable sym;
-    private Scanner scanner;
-    private NoBeardParser parser;
-    private ErrorHandler errorHandler;
-
     public NoBeardParserTest() {
-    }
-
-    @Before
-    public void setUp() {
-        c = new CodeGenerator(256);
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -70,15 +45,6 @@ public class NoBeardParserTest {
         Parser instance = NoBeardParserTestSetup.getEmptyProgramSetup();
         assertTrue(instance.parse());
         assertEquals(Symbol.EOFSY, ParserTestSetup.getScanner().getCurrentToken().getSymbol());
-    }
-
-    private void setupTest(SrcReader sr) {
-        errorHandler = new ErrorHandler(sr);
-        scanner = new Scanner(sr, errorHandler);
-        c = compiler.getCode();
-        ParserFactory.setup(sr, errorHandler, scanner, c, sym);
-        sym = compiler.getSymListManager();
-        parser = compiler.getParser();
     }
 
     @Test
