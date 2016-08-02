@@ -38,12 +38,24 @@ public class StatementParser extends Parser {
 
     @Override
     protected void parseSpecificPart() {
-        if (scanner.getCurrentToken().getSymbol() == Symbol.IDENTIFIER) {
-            Parser p = ParserFactory.create(AssignmentParser.class);
-            parseSymbol(p);
-        } else {
-            Parser p = ParserFactory.create(VariableDeclarationParser.class);
-            parseSymbol(p);
+        Parser p;
+        switch (scanner.getCurrentToken().getSymbol()) {
+            case IDENTIFIER:
+                p = ParserFactory.create(AssignmentParser.class);
+                parseSymbol(p);
+                break;
+
+            case INT:
+            case CHAR:
+            case BOOL:
+                p = ParserFactory.create(VariableDeclarationParser.class);
+                parseSymbol(p);
+                break;
+
+            case PUT:
+                p = ParserFactory.create(PutStatParser.class);
+                parseSymbol(p);
+                break;
         }
     }
 

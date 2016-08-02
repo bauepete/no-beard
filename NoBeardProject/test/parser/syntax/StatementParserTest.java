@@ -48,14 +48,20 @@ public class StatementParserTest {
     }
 
     @Test
-    public void testVariableDeclarationStatement() {
-        StatementParser instance = StatementParserTestSetup.getVariableDeclarationTestSetup();
+    public void testIntDeclarationStatement() {
+        StatementParser instance = StatementParserTestSetup.getIntDeclarationTestSetup();
         assertTrue(instance.parse());
     }
     
     @Test
     public void testAssignment() {
         StatementParser instance = StatementParserTestSetup.getAssignmentTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testPut() {
+        StatementParser instance = StatementParserTestSetup.getPutTestSetup();
         assertTrue(instance.parse());
     }
 }

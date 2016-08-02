@@ -33,7 +33,7 @@ import symboltable.SymbolTable;
  */
 public class StatementParserTestSetup extends ParserTestSetup {
 
-    public static StatementParser getVariableDeclarationTestSetup() {
+    public static StatementParser getIntDeclarationTestSetup() {
         setupInfraStructure("int x;");
         getSymListManager().newUnit(1);
         return ParserFactory.create(StatementParser.class);
@@ -45,5 +45,9 @@ public class StatementParserTestSetup extends ParserTestSetup {
         getSymListManager().newVar(0, SymbolTable.ElementType.INT, 1);
         return ParserFactory.create(StatementParser.class);
     }
-    
+
+    public static StatementParser getPutTestSetup() {
+        setupInfraStructure("put(3 + 5, 42);");
+        return ParserFactory.create(StatementParser.class);
+    }
 }
