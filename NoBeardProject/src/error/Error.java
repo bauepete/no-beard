@@ -26,7 +26,7 @@ public class Error {
         GENERAL_SYN_ERROR(49, ErrorClass.SYNTAX, "General syntax error: %s"),
         
         // TODO: following message should be replaced by "Block %s1 ends with name %s2"
-        BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name start differs from block name end: %s"),
+        BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name %s0 cannot end with name %s1"),
         NAME_UNDEFINED(51, ErrorClass.SEMANTICAL, "%s not defined in this context."),
         OPERAND_KIND_EXPECTED(52, ErrorClass.SEMANTICAL, "%s expected"),
         // TODO: following message should be replaced by "%s can't be converted to %s"

@@ -102,4 +102,8 @@ public class ErrorHandler {
     public void throwNameUndefined(String name) {
         raise(new Error(Error.ErrorType.NAME_UNDEFINED, name));
     }
+
+    public void throwBlockNameMismatch(String name, String name1) {
+        raise(new Error(Error.ErrorType.BLOCK_NAME_MISSMATCH, name, name1));
+    }
 }
