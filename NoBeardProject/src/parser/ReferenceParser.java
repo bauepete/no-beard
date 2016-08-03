@@ -37,11 +37,6 @@ public class ReferenceParser extends OperandExportingParser {
     private SymbolTableEntry foundSymbolListEntry = new SymbolTableEntry(NOIDENT, Kind.ILLEGAL, Operand.Type.VOID, 0, 0, 0);
 
     @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
-
-    @Override
     protected void parseSpecificPart() {
         parseSymbol(Symbol.IDENTIFIER);
         sem(() -> foundSymbolListEntry = sym.findObject(getLastParsedToken().getValue()));

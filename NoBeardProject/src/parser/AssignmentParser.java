@@ -50,14 +50,4 @@ public class AssignmentParser extends ParserForAssignment {
             destAddrOp = destOp.emitLoadAddr(code);
         });
     }
-
-    /**
-     * 
-     * @return 
-     * @deprecated 
-     */
-    @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
 }

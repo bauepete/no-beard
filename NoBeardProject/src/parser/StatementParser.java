@@ -30,11 +30,6 @@ package parser;
 public class StatementParser extends Parser {
 
     @Override
-    public boolean parseOldStyle() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     protected void parseSpecificPart() {
         Parser p;
         switch (scanner.getCurrentToken().getSymbol()) {

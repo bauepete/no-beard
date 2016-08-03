@@ -58,9 +58,4 @@ public class NoBeardParser extends Parser {
         parseSymbol(Symbol.SEMICOLON);
         sem(() -> code.emitOp(Nbm.Opcode.HALT));
     }
-
-    @Override
-    public boolean parseOldStyle() {
-        return false;
-    }
 }

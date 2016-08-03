@@ -91,14 +91,6 @@ public abstract class Parser {
         this.errorHandler = errorHandler;
     }
 
-    /**
-     * Does the parsing and returns whether this was successful or not
-     *
-     * @return true if parsing was successful, false otherwise.
-     * @deprecated
-     */
-    public abstract boolean parseOldStyle();
-
     protected abstract void parseSpecificPart();
 
     /**
@@ -113,7 +105,7 @@ public abstract class Parser {
 
     /**
      *
-     * @return true if parseOldStyle() was not called yet or parsing was
+     * @return true if parse() was not called yet or parsing was
      * successful, false otherwise.
      */
     public boolean parsingWasSuccessful() {
@@ -179,23 +171,6 @@ public abstract class Parser {
     protected void throwSymbolExpected(String expected, String actual) {
         errorHandler.throwSymbolExpectedError(expected, actual);
         parsingWasSuccessfulUntilNow = false;
-    }
-
-    /**
-     * Checks whether the current token is a specific symbol.
-     *
-     * @param sy The symbol to be checked for.
-     * @return true if current token is sy, false otherwise.
-     * @deprecated
-     */
-    protected boolean tokenIsA(Symbol sy) {
-        if (scanner.getCurrentToken().getSymbol() != sy) {
-            getErrorHandler().throwSymbolExpectedError(sy.toString(), scanner.getCurrentToken().getSymbol().toString());
-            parsingWasSuccessfulUntilNow = false;
-            return false;
-        }
-        scanner.nextToken();
-        return true;
     }
 
     protected Scanner getScanner() {

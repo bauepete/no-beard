@@ -126,9 +126,4 @@ public class AddExpressionParser extends ExpressionRelatedParser {
         emitCodeForLoadingValue();
         sem(() -> code.emitOp(opCode));
     }
-
-    @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
 }

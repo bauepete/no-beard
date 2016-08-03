@@ -73,49 +73,4 @@ public class BlockParser extends Parser {
         StatementParser statementParser = ParserFactory.create(StatementParser.class);
         parseSymbol(statementParser);
     }
-
-    @Override
-    public boolean parseOldStyle() {
-        if (!tokenIsA(Symbol.DO)) {
-            return false;
-        }
-
-        // sem
-        sym.defineFuncStart(obj, code.getPc());
-        int incAddr = code.getPc() + 1;
-        code.emitOp(Opcode.INC);
-        code.emitHalfWord(0);  // tmp address will be fixed later
-        // endsem
-
-        if (!statSeq()) {
-            return false;
-        }
-
-        // sem
-        code.fixup(incAddr, obj.getSize());
-        // endsem
-
-        if (!tokenIsA(Symbol.DONE)) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean statSeq() {
-        StatParser statP = new StatParser(scanner, sym, code, getErrorHandler());
-        if (!statP.parseOldStyle()) {
-            return false;
-        }
-
-        while (scanner.getCurrentToken().getSymbol() != Symbol.DONE) {
-            if (!statP.parseOldStyle()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isNamedBlock() {
-        return (obj.isNamedBlockEntry());
-    }
 }

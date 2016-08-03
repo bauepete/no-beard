@@ -59,11 +59,6 @@ public class ExpressionParser extends OperandExportingParser {
         }
     }
 
-    @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
-
     private OperandExportingParser parseLeftHandSide() {
         OperandExportingParser simExprP = ParserFactory.create(AddExpressionParser.class);
         parseSymbol(simExprP);

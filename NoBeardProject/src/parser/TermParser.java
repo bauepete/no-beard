@@ -115,9 +115,4 @@ public class TermParser extends ExpressionRelatedParser {
         code.emitOp(Opcode.LIT);
         code.emitHalfWord(0);
     }
-
-    @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
 }

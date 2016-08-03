@@ -6,12 +6,9 @@ package parser.syntax;
 
 import error.Error.ErrorType;
 import parser.FactorParser;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import parser.general.FactorParserTestSetup;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
@@ -20,14 +17,6 @@ import org.junit.Ignore;
 public class FactorParserTest {
 
     public FactorParserTest() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -55,15 +44,13 @@ public class FactorParserTest {
 
     @Test
     public void testParseString() {
-        System.out.append("testParseString");
         FactorParser p = FactorParserTestSetup.getStringTestSetup();
         assertEquals("Parse ", true, p.parse());
     }
 
     @Test
     public void testParseExpr() {
-        System.out.println("testParseExpr");
         FactorParser p = FactorParserTestSetup.getExprSetup();
-        assertEquals("Parse ", true, p.parseOldStyle());
+        assertEquals("Parse ", true, p.parse());
     }
 }

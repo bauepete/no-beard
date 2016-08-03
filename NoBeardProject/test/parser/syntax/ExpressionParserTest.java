@@ -23,11 +23,8 @@
  */
 package parser.syntax;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.ExpressionParser;
 import parser.general.ExpressionParserTestSetup;
 
@@ -40,20 +37,11 @@ public class ExpressionParserTest {
     public ExpressionParserTest() {
     }
 
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test a simple relation.
      */
     @Test
     public void testParseSimpleRel() {
-        System.out.println("parseSimpleRel");
         ExpressionParser p = ExpressionParserTestSetup.getSimpleRel();
         assertTrue(p.parse());
     }
@@ -63,7 +51,6 @@ public class ExpressionParserTest {
      */
     @Test
     public void testParseAndRel() {
-        System.out.println("parseAndRel");
         ExpressionParser p = ExpressionParserTestSetup.getAndRel();
         assertTrue(p.parse());
     }
@@ -73,7 +60,6 @@ public class ExpressionParserTest {
      */
     @Test
     public void testParseOrRel() {
-        System.out.println("parseOrRel");
         ExpressionParser p = ExpressionParserTestSetup.getOrRel();
         assertTrue(p.parse());
     }
@@ -83,8 +69,7 @@ public class ExpressionParserTest {
      */
     @Test
     public void testParseAndOrRel() {
-        System.out.println("parseAndOrRel");
         ExpressionParser p = ExpressionParserTestSetup.getAndOrRel();
-        assertTrue(p.parseOldStyle());
+        assertTrue(p.parse());
     }
 }

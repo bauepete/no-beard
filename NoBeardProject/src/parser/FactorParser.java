@@ -50,11 +50,6 @@ public class FactorParser extends OperandExportingParser {
     }
 
     @Override
-    public boolean parseOldStyle() {
-        return true;
-    }
-
-    @Override
     protected void parseSpecificPart() {
         switch (scanner.getCurrentToken().getSymbol()) {
             case IDENTIFIER:

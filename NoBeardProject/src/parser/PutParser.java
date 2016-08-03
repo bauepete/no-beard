@@ -156,11 +156,4 @@ public class PutParser extends Parser {
         sem(() -> emitPutStatement(FOR_NEW_LINE));
         parseSymbol(Symbol.SEMICOLON);
     }
-
-    @Override
-    public boolean parseOldStyle() {
-        boolean isParsedCorrectly = false;
-
-        return isParsedCorrectly;
-    }
 }
