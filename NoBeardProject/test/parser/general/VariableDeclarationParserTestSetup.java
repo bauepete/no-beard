@@ -80,4 +80,9 @@ public class VariableDeclarationParserTestSetup extends ParserTestSetup {
         VariableDeclarationParser p = setupTestObjectsAndParser("int x = 17;");
         return p;
     }
+
+    public static VariableDeclarationParser getStringDeclarationAndInitializationSetup() {
+        VariableDeclarationParser p = setupTestObjectsAndParser("char[11] x = 'Hello World';");
+        return p;
+    }
 }

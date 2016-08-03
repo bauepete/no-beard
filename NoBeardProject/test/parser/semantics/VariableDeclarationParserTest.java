@@ -23,12 +23,12 @@
  */
 package parser.semantics;
 
-import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.ParserFactory;
 import parser.VariableDeclarationParser;
 import parser.general.PutParserTestSetup;
 import parser.general.VariableDeclarationParserTestSetup;
@@ -105,5 +105,18 @@ public class VariableDeclarationParserTest {
         VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getDeclarationAndInitializationSetup();
         assertTrue(instance.parse());
         AssemblerCodeChecker.assertCodeEquals(expectedCode, PutParserTestSetup.getCode().getByteCode());
+    }
+    
+    @Test
+    public void testStringVariableDeclarationWithInitialization() {
+        byte[] expectedCode = {
+            Opcode.LA.byteCode(), 0, 0, 32, // load address of x
+            Opcode.LIT.byteCode(), 0, 0, // load address of string constant
+            Opcode.LIT.byteCode(), 0, 11, // load length of string constant
+            Opcode.ASSN.byteCode(), // bulk store characters to x
+        };
+        VariableDeclarationParser instance = VariableDeclarationParserTestSetup.getStringDeclarationAndInitializationSetup();
+        assertTrue(instance.parse());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, ParserFactory.getCodeGenerator().getByteCode());
     }
 }
