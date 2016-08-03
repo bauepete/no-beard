@@ -31,7 +31,6 @@ import nbm.Nbm;
 import scanner.Scanner;
 import scanner.SrcReader;
 import symboltable.Operand;
-import symboltable.SymbolTableEntry;
 import symboltable.SymbolTable;
 
 /**
@@ -97,9 +96,5 @@ public class ParserFactory {
         finally {
         }
         return t;
-    }
-    
-    public static Parser createBlockParser(SymbolTableEntry block) {
-        return new BlockParser(scanner, symbolListManager, codeGenerator, block, errorHandler);
     }
 }

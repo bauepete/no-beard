@@ -23,17 +23,11 @@
  */
 package parser;
 
-import error.ErrorHandler;
 import error.Error;
 import error.Error.ErrorType;
 import java.util.HashMap;
-import nbm.CodeGenerator;
-import nbm.Nbm;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symboltable.Operand;
 import symboltable.Operand.Kind;
-import symboltable.SymbolTableEntry;
 import symboltable.SymbolTable;
 import symboltable.SymbolTable.ElementType;
 
@@ -54,13 +48,6 @@ public class VariableDeclarationParser extends ParserForAssignment {
         symbolToElementTypeMap.put(Symbol.BOOL, ElementType.BOOL);
         symbolToElementTypeMap.put(Symbol.INT, ElementType.INT);
         symbolToElementTypeMap.put(Symbol.CHAR, ElementType.CHAR);
-    }
-
-    VariableDeclarationParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler eh) {
-        super();
-    }
-
-    public VariableDeclarationParser() {
     }
 
     @Override

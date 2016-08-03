@@ -23,28 +23,15 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
-import symboltable.Operand.Type;
-import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
 public class IfParser extends Parser {
-
-    public IfParser(Scanner scanner, SymbolTable sym, CodeGenerator code, ErrorHandler e) {
-        super();
-    }
-    
-    public IfParser() {
-        
-    }
 
     private int addressOfSkipIfJump = 0;
     private int addressOfSkipElseJump = 0;

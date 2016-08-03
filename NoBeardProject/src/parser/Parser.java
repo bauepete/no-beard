@@ -84,13 +84,6 @@ public abstract class Parser {
         this.errorHandler = ParserFactory.getErrorHandler();
     }
 
-    public Parser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler errorHandler) {
-        this.scanner = s;
-        this.sym = sym;
-        this.code = c;
-        this.errorHandler = errorHandler;
-    }
-
     protected abstract void parseSpecificPart();
 
     /**

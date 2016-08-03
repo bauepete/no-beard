@@ -23,14 +23,10 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.StringToken;
 import symboltable.ConstantOperand;
 import symboltable.Operand;
-import symboltable.SymbolTable;
 
 /**
  *
@@ -40,14 +36,6 @@ public class FactorParser extends OperandExportingParser {
     
     private int stringLength;
     private int stringAddress;
-
-    public FactorParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
-        super();
-    }
-
-    FactorParser() {
-
-    }
 
     @Override
     protected void parseSpecificPart() {

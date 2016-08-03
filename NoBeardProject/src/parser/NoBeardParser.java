@@ -23,12 +23,8 @@
  */
 package parser;
 
-import error.ErrorHandler;
 import nbm.Nbm;
-import nbm.CodeGenerator;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symboltable.SymbolTable;
 
 /**
  *
@@ -36,14 +32,6 @@ import symboltable.SymbolTable;
  */
 public class NoBeardParser extends Parser {
     
-    public NoBeardParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
-        super(s, sym, c, e);
-    }
-    
-    public NoBeardParser() {
-        
-    }
-
     @Override
     protected void parseSpecificPart() {
         parseSymbol(Symbol.UNIT);

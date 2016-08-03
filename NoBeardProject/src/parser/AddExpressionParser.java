@@ -23,28 +23,17 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
 import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Type;
-import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
 public class AddExpressionParser extends ExpressionRelatedParser {
-
-    public AddExpressionParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler eh) {
-        super();
-    }
-
-    public AddExpressionParser() {
-
-    }
 
     @Override
     protected OperandExportingParser createSubExpressionParser() {

@@ -23,24 +23,16 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
 public class TermParser extends ExpressionRelatedParser {
-
-    public TermParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
-        super();
-    }
 
     public TermParser() {
         this.exportedOperand = new Operand(Operand.Kind.ILLEGAL, Type.VOID, 0, 0, 0);

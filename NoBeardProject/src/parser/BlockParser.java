@@ -23,13 +23,9 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.SymbolTableEntry;
-import symboltable.SymbolTable;
 
 /**
  *
@@ -38,11 +34,6 @@ import symboltable.SymbolTable;
 public class BlockParser extends Parser {
 
     private final SymbolTableEntry obj;
-
-    public BlockParser(Scanner scanner, SymbolTable sym, CodeGenerator code, SymbolTableEntry obj, ErrorHandler e) {
-        super(scanner, sym, code, e);
-        this.obj = obj;
-    }
 
     private int incAddress = 0;
 

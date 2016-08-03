@@ -4,16 +4,12 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.ConstantOperand;
 import symboltable.IllegalOperand;
 import symboltable.Operand;
 import symboltable.Operand.Type;
-import symboltable.SymbolTable;
 
 /**
  *
@@ -25,14 +21,6 @@ public class PutParser extends Parser {
 
     private Operand operandForOutputValue = new IllegalOperand();
     private Operand operandForColumnWidth = new IllegalOperand();
-
-    public PutParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
-        super(s, sym, c, e);
-    }
-
-    public PutParser() {
-
-    }
 
     @Override
     protected void parseSpecificPart() {

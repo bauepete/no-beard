@@ -47,6 +47,6 @@ public class TermParserTestSetup extends ParserTestSetup {
     private static TermParser setupBoolTestObjects(String srcLine) {
         setupInfraStructure(srcLine);
         fillSymList(SymbolTable.ElementType.BOOL);
-        return new TermParser(scanner, symListManager, code, errorHandler);
+        return ParserFactory.create(TermParser.class);
     }
 }

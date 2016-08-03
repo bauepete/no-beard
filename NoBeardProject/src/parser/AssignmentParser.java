@@ -4,29 +4,14 @@
  */
 package parser;
 
-import error.ErrorHandler;
-import nbm.CodeGenerator;
-import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.IllegalOperand;
-import symboltable.SymbolTable;
 
 /**
  *
  * @author peter
  */
 public class AssignmentParser extends ParserForAssignment {
-    /**
-     * 
-     * @param s
-     * @param sym
-     * @param c
-     * @param e 
-     * @deprecated 
-     */
-    public AssignmentParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
-        super();
-    }
 
     public AssignmentParser() {
         destOp = new IllegalOperand();
