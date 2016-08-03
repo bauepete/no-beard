@@ -23,8 +23,6 @@
  */
 package parser;
 
-import error.Error;
-import error.Error.ErrorType;
 import java.util.HashMap;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Kind;
@@ -38,7 +36,6 @@ import symboltable.SymbolTable.ElementType;
 public class VariableDeclarationParser extends ParserForAssignment {
 
     private Symbol parsedType;
-    private SymbolTable.ElementType basicType;
     private int maxNumberOfElements;
 
     private static final HashMap<Symbol, SymbolTable.ElementType> symbolToElementTypeMap;
@@ -64,7 +61,7 @@ public class VariableDeclarationParser extends ParserForAssignment {
 
     private void parseSimpleType() {
         assertThatCurrentSymbolIsOf(Symbol.INT, Symbol.CHAR, Symbol.BOOL);
-        parsedType = scanner.getCurrentToken().getSymbol();
+        parsedType = getScanner().getCurrentToken().getSymbol();
         parseSymbol(parsedType);
     }
 
@@ -80,7 +77,7 @@ public class VariableDeclarationParser extends ParserForAssignment {
             return;
         }
 
-        Symbol currentSymbol = scanner.getCurrentToken().getSymbol();
+        Symbol currentSymbol = getScanner().getCurrentToken().getSymbol();
         boolean properSymbolFound = currentSymbol == symbol;
 
         setWasSuccessful(properSymbolFound);
@@ -94,7 +91,7 @@ public class VariableDeclarationParser extends ParserForAssignment {
     }
 
     private void parseArraySpecificationIfNecessary() {
-        if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             parseArraySpecification();
         } else {
             sem(() -> maxNumberOfElements = 1);
@@ -128,39 +125,5 @@ public class VariableDeclarationParser extends ParserForAssignment {
             destOp = sym.findObject(name).createOperand();
             destAddrOp = destOp.emitLoadAddr(code);
         });
-    }
-
-    private boolean type() {
-        if (!typeSpec()) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean typeSpec() {
-        return simpleType();
-    }
-
-    private boolean simpleType() {
-        switch (scanner.getCurrentToken().getSymbol()) {
-            case INT:
-                basicType = ElementType.INT;
-                break;
-
-            case CHAR:
-                basicType = ElementType.CHAR;
-                break;
-
-            case BOOL:
-                basicType = ElementType.BOOL;
-                break;
-
-            default:
-                String[] sList = {Symbol.INT.toString(), Symbol.CHAR.toString(), Symbol.BOOL.toString()};
-                getErrorHandler().raise(new Error(ErrorType.SYMBOL_EXPECTED, sList));
-                return false;
-        }
-        scanner.nextToken();
-        return true;
     }
 }

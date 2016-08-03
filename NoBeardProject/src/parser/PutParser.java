@@ -24,7 +24,7 @@ public class PutParser extends Parser {
 
     @Override
     protected void parseSpecificPart() {
-        if (scanner.getCurrentToken().getSymbol() == Symbol.PUT) {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.PUT) {
             parsePut();
         } else {
             parsePutln();
@@ -36,7 +36,7 @@ public class PutParser extends Parser {
         parseSymbol(Symbol.LPAR);
         parseExpression();
         fetchOperandForOutput();
-        if (scanner.getCurrentToken().getSymbol() == Symbol.COMMA) {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.COMMA) {
             parseColumnWidth();
         } else {
             fixOperandForColumnWidth();

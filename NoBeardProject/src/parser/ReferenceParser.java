@@ -45,7 +45,7 @@ public class ReferenceParser extends OperandExportingParser {
         
         sem(() -> exportedOperand = foundSymbolListEntry.createOperand());
         
-        if (scanner.getCurrentToken().getSymbol() == Symbol.LBRACKET) {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.LBRACKET) {
             parseSymbol(Symbol.LBRACKET);
             ExpressionParser p = ParserFactory.create(ExpressionParser.class);
             parseSymbol(p);

@@ -46,7 +46,7 @@ public abstract class Parser {
         public void doSemanticAction();
     }
 
-    public void sem(SemanticAction semanticAction) {
+    protected void sem(SemanticAction semanticAction) {
         if (parsingWasSuccessfulUntilNow) {
             semanticAction.doSemanticAction();
         }
@@ -58,7 +58,7 @@ public abstract class Parser {
         public void handleErrorCase();
     }
 
-    public void where(boolean conditionIsTrue, ContextualConditionFailHandler h) {
+    protected void where(boolean conditionIsTrue, ContextualConditionFailHandler h) {
         if (parsingWasSuccessfulUntilNow) {
             if (!conditionIsTrue) {
                 h.handleErrorCase();
@@ -71,7 +71,7 @@ public abstract class Parser {
     private Token lastParsedToken;
     protected final int NOIDENT = -1;
     protected final int NONUMBER = -1;
-    protected Scanner scanner;
+    private final Scanner scanner;
     protected SymbolTable sym;
     protected CodeGenerator code;
     private final ErrorHandler errorHandler;

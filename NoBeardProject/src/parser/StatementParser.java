@@ -32,7 +32,7 @@ public class StatementParser extends Parser {
     @Override
     protected void parseSpecificPart() {
         Parser p;
-        switch (scanner.getCurrentToken().getSymbol()) {
+        switch (getScanner().getCurrentToken().getSymbol()) {
             case IDENTIFIER:
                 p = ParserFactory.create(AssignmentParser.class);
                 parseSymbol(p);
@@ -52,7 +52,7 @@ public class StatementParser extends Parser {
                 break;
                 
             default:
-                getErrorHandler().throwStatementExpected(scanner.getCurrentToken().getSymbol().toString());
+                getErrorHandler().throwStatementExpected(getScanner().getCurrentToken().getSymbol().toString());
                 setWasSuccessful(false);
         }
     }

@@ -55,7 +55,7 @@ public class ExpressionParser extends OperandExportingParser {
         return simExprP;
     }
     private boolean currentTokenIsARelationalOperator() {
-        Scanner.Symbol currentSymbol = scanner.getCurrentToken().getSymbol();
+        Scanner.Symbol currentSymbol = getScanner().getCurrentToken().getSymbol();
         return (currentSymbol == Symbol.LTH
                 || currentSymbol == Symbol.GTH
                 || currentSymbol == Symbol.LEQ
@@ -77,7 +77,7 @@ public class ExpressionParser extends OperandExportingParser {
     }
     
     protected void parseOperator() {
-        Scanner.Symbol currentMulOp = scanner.getCurrentToken().getSymbol();
+        Scanner.Symbol currentMulOp = getScanner().getCurrentToken().getSymbol();
         parseSymbol(currentMulOp);
         opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
         ror = OperatorToOpCodeMap.getOperand(currentMulOp);

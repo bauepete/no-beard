@@ -50,7 +50,7 @@ public class BlockParser extends Parser {
             code.emitHalfWord(0);
             incAddress = code.getPc() - 2;
         });
-        while (parsingWasSuccessful() && scanner.getCurrentToken().getSymbol() != Symbol.DONE) {
+        while (parsingWasSuccessful() && getScanner().getCurrentToken().getSymbol() != Symbol.DONE) {
             parseStatement();
         }
         sem(() -> {
