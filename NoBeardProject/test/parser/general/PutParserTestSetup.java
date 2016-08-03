@@ -7,6 +7,7 @@ package parser.general;
 import nbm.CodeGenerator;
 import parser.ParserFactory;
 import parser.PutParser;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -53,5 +54,11 @@ public class PutParserTestSetup extends ParserTestSetup {
 
     public static PutParser getPutWithUndefinedIdentifier() {
         return setupTestObjects("put(x);");
+    }
+
+    public static PutParser getPutWithNonPuttableIdentifier() {
+        PutParser p = setupTestObjects("put(x);");
+        fillSymList(SymbolTable.ElementType.BOOL);
+        return p;
     }
 }

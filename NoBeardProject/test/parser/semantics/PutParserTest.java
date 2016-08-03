@@ -5,8 +5,6 @@
 package parser.semantics;
 
 import nbm.Nbm.Opcode;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.PutParser;
@@ -19,14 +17,6 @@ import parser.general.PutParserTestSetup;
 public class PutParserTest {
 
     public PutParserTest() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -129,6 +119,12 @@ public class PutParserTest {
     @Test
     public void testParsePutWithUndefinedIdentifier() {
         PutParser instance = PutParserTestSetup.getPutWithUndefinedIdentifier();
+        assertFalse(instance.parse());
+    }
+    
+    @Test
+    public void testPutWithNonPuttableIdentifier() {
+        PutParser instance = PutParserTestSetup.getPutWithNonPuttableIdentifier();
         assertFalse(instance.parse());
     }
 }
