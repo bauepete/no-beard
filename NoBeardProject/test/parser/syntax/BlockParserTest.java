@@ -23,8 +23,6 @@
  */
 package parser.syntax;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.BlockParser;
@@ -39,14 +37,6 @@ public class BlockParserTest {
     public BlockParserTest() {
     }
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test parsing a block with no statement.
      */
@@ -54,6 +44,12 @@ public class BlockParserTest {
     public void testEmptyBlock() {
         BlockParser instance = BlockParserTestSetup.getEmptyBlockTestSetup();
         assertTrue(instance.parse());
+    }
+    
+    @Test
+    public void testUnfinishedBlock() {
+        BlockParser instance = BlockParserTestSetup.getUnfinishedBlockTestSetup();
+        assertFalse(instance.parse());
     }
 
     /**

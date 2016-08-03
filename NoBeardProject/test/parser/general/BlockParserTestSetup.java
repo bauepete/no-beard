@@ -53,5 +53,10 @@ public class BlockParserTestSetup extends ParserTestSetup {
         setupInfraStructure("do putln; putln done");
         return ParserFactory.create(BlockParser.class);
     }
+
+    public static BlockParser getUnfinishedBlockTestSetup() {
+        setupInfraStructure("do putln;");
+        return ParserFactory.create(BlockParser.class);
+    }
     
 }
