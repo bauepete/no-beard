@@ -10,7 +10,6 @@ import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.SrcReader;
 import scanner.SrcStringReader;
-import symboltable.Operand;
 import symboltable.SymbolTable;
 
 /**
@@ -44,20 +43,6 @@ public class ParserTestSetup {
         symListManager = new SymbolTable(scanner, errorHandler);
 
         ParserFactory.setup(sourceReader, errorHandler, scanner, code, symListManager);
-    }
-
-    /**
-     * @deprecated @param srcLine
-     */
-    protected static void setupInfraStructureOld(String srcLine) {
-        SrcReader sourceReader = new SrcStringReader(srcLine);
-        errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler);
-        code = new CodeGenerator(256);
-        symListManager = new SymbolTable(scanner, errorHandler);
-        scanner.nextToken();
-        Operand.setSymListManager(symListManager);
-        Operand.setStringManager(scanner.getStringManager());
     }
 
     protected static void fillSymList(SymbolTable.ElementType type) {
