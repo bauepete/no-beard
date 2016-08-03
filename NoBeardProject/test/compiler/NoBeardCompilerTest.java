@@ -87,7 +87,6 @@ public class NoBeardCompilerTest {
      * PAR06
      */
     @Test
-    @Ignore
     public void testAssignmentToStringsAndPutThem() {
         String source = "SamplePrograms/VariableWorld.nb";
         byte[] expected = {
