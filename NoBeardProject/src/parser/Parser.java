@@ -23,15 +23,11 @@
  */
 package parser;
 
-import error.Error;
-import error.Error.ErrorType;
 import error.ErrorHandler;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.Token;
-import symboltable.Operand;
-import symboltable.Operand.Type;
 import symboltable.SymbolTable;
 
 /**
@@ -177,14 +173,5 @@ public abstract class Parser {
 
     protected Token getLastParsedToken() {
         return lastParsedToken;
-    }
-
-    protected boolean operandIsA(Operand op, Type opType) {
-        if (op.getType() != opType) {
-            getErrorHandler().raise(new Error(ErrorType.TYPES_EXPECTED, opType.toString()));
-            //ErrorHandler.getInstance().raise(new SemErr().new TypeExpected(opType.toString()));
-            return false;
-        }
-        return true;
     }
 }
