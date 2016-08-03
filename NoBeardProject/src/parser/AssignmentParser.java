@@ -44,11 +44,20 @@ public class AssignmentParser extends Parser {
     public void parseSpecificPart() {
         ReferenceParser referenceParser = ParserFactory.create(ReferenceParser.class);
         parseSymbol(referenceParser);
+        prepareLeftHandSide(referenceParser);
+        parseSymbol(Symbol.ASSIGN);
+        parseRightHandSide();
+        parseSymbol(Symbol.SEMICOLON);
+    }
+
+    private void prepareLeftHandSide(ReferenceParser referenceParser) {
         sem(() -> {
             destOp = referenceParser.getOperand();
             destAddrOp = destOp.emitLoadAddr(code);
         });
-        parseSymbol(Symbol.ASSIGN);
+    }
+
+    private void parseRightHandSide() {
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
         
@@ -56,8 +65,6 @@ public class AssignmentParser extends Parser {
         where(srcOp.getType() == destOp.getType() && srcOp.getSize() == destOp.getSize(),
                 () -> getErrorHandler().throwOperandsAreIncompatible(srcOp.getSize(), srcOp.getType(), destOp.getSize(), destOp.getType()));
         sem(() -> srcOp.emitAssign(code, destAddrOp));
-        
-        parseSymbol(Symbol.SEMICOLON);
     }
 
     /**
