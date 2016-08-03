@@ -23,7 +23,6 @@
  */
 package parser;
 
-import nbm.Nbm;
 import nbm.Nbm.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -37,7 +36,6 @@ import symboltable.ValueOnStackOperand;
 public class ExpressionParser extends OperandExportingParser {
 
     private byte ror;
-    private Nbm.Opcode opCode;
     Operand op2;
 
     @Override
@@ -79,7 +77,6 @@ public class ExpressionParser extends OperandExportingParser {
     protected void parseOperator() {
         Scanner.Symbol currentMulOp = getScanner().getCurrentToken().getSymbol();
         parseSymbol(currentMulOp);
-        opCode = OperatorToOpCodeMap.getOpCode(currentMulOp);
         ror = OperatorToOpCodeMap.getOperand(currentMulOp);
     }
 
