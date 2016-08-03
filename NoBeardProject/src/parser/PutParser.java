@@ -96,7 +96,7 @@ public class PutParser extends Parser {
         if (operandForOutputValue.getType() == Type.ARRAYCHAR) {
             operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, operandForOutputValue.getSize(), 0);
         } else {
-            operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, 0, 0);
+            operandForColumnWidth = new ConstantOperand(Type.SIMPLEINT, 4, 1, 0);
         }
     }
 

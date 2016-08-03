@@ -348,7 +348,6 @@ public class Nbm {
 
         private void outputInt() {
             int width = pop();
-            if (width == 0) width = 1;
             int x = pop();
             String formatString = "%" + width + "d";
             System.out.printf(formatString, x);

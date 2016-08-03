@@ -121,7 +121,7 @@ public class NoBeardCompilerTest {
             Opcode.LIT.byteCode(), 0, 3,
             Opcode.STO.byteCode(),
             Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 1,
             Opcode.PUT.byteCode(), 0,
             Opcode.HALT.byteCode()
         };
@@ -142,7 +142,7 @@ public class NoBeardCompilerTest {
             Opcode.LV.byteCode(), 0, 0, 32,
             Opcode.LV.byteCode(), 0, 0, 36,
             Opcode.ADD.byteCode(),
-            Opcode.LIT.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 1,
             Opcode.PUT.byteCode(), 0,
             Opcode.HALT.byteCode()
         };
@@ -158,7 +158,7 @@ public class NoBeardCompilerTest {
             Opcode.LIT.byteCode(), 0, 120, // ascii code of 'x'
             Opcode.STC.byteCode(),
             Opcode.LC.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 0,
+            Opcode.LIT.byteCode(), 0, 1,
             Opcode.PUT.byteCode(), 1,
             Opcode.HALT.byteCode()
         };

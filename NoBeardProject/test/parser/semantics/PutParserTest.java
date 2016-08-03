@@ -36,7 +36,7 @@ public class PutParserTest {
     public void testParsePutInt() {
         byte[] expected = {
             Opcode.LIT.byteCode(), 0, 5,        // int value to be putted
-            Opcode.LIT.byteCode(), 0, 0,        // column width
+            Opcode.LIT.byteCode(), 0, 1,        // column width
             Opcode.PUT.byteCode(), 0            // put int
         };
 
@@ -53,7 +53,7 @@ public class PutParserTest {
     public void testParsePutChar() {
         byte[] expected = {
             Opcode.LIT.byteCode(), 0, 97,       // decimal ascii value of 'a' to be putted
-            Opcode.LIT.byteCode(), 0, 0,        // column width
+            Opcode.LIT.byteCode(), 0, 1,        // column width
             Opcode.PUT.byteCode(), 1            // put simple char
         };
 

@@ -32,7 +32,7 @@ public class IfParserTest {
             Opcode.FJMP.byteCode(), 0, 23, // skip block if false
             Opcode.INC.byteCode(), 0, 0, // No local variables in if block
             Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 0, // width of column
+            Opcode.LIT.byteCode(), 0, 1, // width of column
             Opcode.PUT.byteCode(), 1 // put simple char
         };
 
@@ -60,12 +60,12 @@ public class IfParserTest {
             Opcode.FJMP.byteCode(), 0, 26, // skip block if false
             Opcode.INC.byteCode(), 0, 0, // no local variables in if block
             Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 0, // width of column
+            Opcode.LIT.byteCode(), 0, 1, // width of column
             Opcode.PUT.byteCode(), 1, // put simple char
             Opcode.JMP.byteCode(), 0, 37, // if is finished -> skip else
             Opcode.INC.byteCode(), 0, 0, // again no local variables in else block
             Opcode.LIT.byteCode(), 0, 49, // ascii value of '1'
-            Opcode.LIT.byteCode(), 0, 0, // width of column
+            Opcode.LIT.byteCode(), 0, 1, // width of column
             Opcode.PUT.byteCode(), 1, // put simple char
         };
         IfParser instance = IfParserTestSetup.getIfElseTestSetup();
