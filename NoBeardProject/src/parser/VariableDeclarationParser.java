@@ -41,7 +41,7 @@ import symboltable.SymbolTable.ElementType;
  *
  * @author peter
  */
-public class VariableDeclarationParser extends Parser {
+public class VariableDeclarationParser extends ParserForAssignment {
 
     private Symbol parsedType;
     private SymbolTable.ElementType basicType;
@@ -133,23 +133,13 @@ public class VariableDeclarationParser extends Parser {
     private void parseAssignment(int name) {
         emitCodeForLoadingLeftHandSide(name);
         parseSymbol(Symbol.ASSIGN);
-        ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
-        parseSymbol(expressionParser);
-        emitCodeForLoadingRightHandSideAndStoring(expressionParser);
+        parseRightHandSide();
     }
 
     private void emitCodeForLoadingLeftHandSide(int name) {
         sem(() -> {
-            SymbolTableEntry declaredName = sym.findObject(name);
-            declaredName.createOperand().emitLoadAddr(code);
-        });
-    }
-
-    private void emitCodeForLoadingRightHandSideAndStoring(ExpressionParser expressionParser) {
-        sem(() -> {
-            Operand destination = expressionParser.getOperand();
-            destination.emitLoadVal(code);
-            code.emitOp(Nbm.Opcode.STO);
+            destOp = sym.findObject(name).createOperand();
+            destAddrOp = destOp.emitLoadAddr(code);
         });
     }
 
