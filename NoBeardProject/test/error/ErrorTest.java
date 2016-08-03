@@ -4,8 +4,6 @@
  */
 package error;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,21 +13,10 @@ import static org.junit.Assert.*;
  */
 public class ErrorTest {
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testErrorsWithoutFormatString() {
         Error error = new Error(Error.ErrorType.INTEGER_OVERFLOW);
         checkErrorObject(error, 1, Error.ErrorClass.LEXICAL, "Integer overflow");
-
-        error = new Error(Error.ErrorType.IDENTIFIER_EXPECTED);
-        checkErrorObject(error, 22, Error.ErrorClass.SYNTAX, "Identifier expected");
 
         error = new Error(Error.ErrorType.INVALID_STRING);
         checkErrorObject(error, 2, Error.ErrorClass.LEXICAL, "Non terminated string constant");

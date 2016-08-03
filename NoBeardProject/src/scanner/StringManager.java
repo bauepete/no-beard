@@ -58,7 +58,7 @@ public class StringManager {
         }
         
         if (srcReader.getCurrentChar() == -1 || srcReader.getCurrentChar() == '\n') {
-            errorHandler.raise(new Error(error.Error.ErrorType.INVALID_STRING));
+            errorHandler.throwInvalidString();
             stringAddress = 0;
             stringLength = 0;
         }

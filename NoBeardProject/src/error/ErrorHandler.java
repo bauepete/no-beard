@@ -4,7 +4,7 @@
  */
 package error;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import symboltable.Operand;
 
@@ -16,43 +16,25 @@ public class ErrorHandler {
 
     private final List<Error> errors;
     private final int[] errorCounts = {0, 0, 0};
-    private Error lastError = null;
-    private int totalCount;
     private final SourceCodeInfo sourceCodeInfo;
 
     public ErrorHandler(SourceCodeInfo srcCodeInfo) {
-        errors = new LinkedList<>();
+        errors = new ArrayList<>();
         this.sourceCodeInfo = srcCodeInfo;
     }
 
-    public void reset() {
-        totalCount = 0;
-        errors.clear();
-    }
-
     public int getCount() {
-        return totalCount;
+        return errors.size();
     }
 
     public int getCount(Error.ErrorClass errorClass) {
         return this.errorCounts[errorClass.ordinal()];
     }
 
-    public void printSummary() {
-
-//        for (Map.Entry<String, Integer> entry : errors.entrySet()) {
-//            System.err.print(entry.getKey().toString());
-//            System.err.println(entry.getValue().toString());
-//        }
-        System.err.println();
-    }
-
-    public void raise(Error e) {
+    void raise(Error e) {
         e.setLineNumber(sourceCodeInfo.getCurrentLine());
         errorCounts[e.getErrorClass().ordinal()]++;
-        totalCount++;
         errors.add(e);
-        lastError = e;
         System.err.println(e.getErrorClass() + ": " + e.getLineNumber() + ": " + e.getMessage());
     }
 
@@ -61,7 +43,19 @@ public class ErrorHandler {
     }
 
     public Error getLastError() {
-        return lastError;
+        return errors.get(errors.size() - 1);
+    }
+
+    public void throwIntegerOverflow() {
+        raise(new Error(Error.ErrorType.INTEGER_OVERFLOW));
+    }
+
+    public void throwInvalidString() {
+        raise(new Error(error.Error.ErrorType.INVALID_STRING));
+    }
+
+    public void throwFileNotFound(String sourceFilePath) {
+        raise(new Error(Error.ErrorType.FILE_NOT_FOUND, sourceFilePath));
     }
 
     public void throwSymbolExpectedError(String expectedSymbol, String actualSymbol) {
@@ -72,8 +66,36 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.STATEMENT_EXPECTED, unexpectedSymbol));
     }
 
+    public void throwBlockNameMismatch(String name, String name1) {
+        raise(new Error(Error.ErrorType.BLOCK_NAME_MISSMATCH, name, name1));
+    }
+
+    public void throwNameUndefined(String name) {
+        raise(new Error(Error.ErrorType.NAME_UNDEFINED, name));
+    }
+
     public void throwOperandOfKindExpected(String toString) {
         raise(new Error(Error.ErrorType.OPERAND_KIND_EXPECTED, toString));
+    }
+
+    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.Type typeOfOp1, Integer sizeOfOp2, Operand.Type typeOfOp2) {
+        raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
+    }
+
+    public void throwNameAlreadyDefined(String variableName) {
+        raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, variableName));
+    }
+
+    public void throwTypesExpected(String[] requestedTypes) {
+        raise(new error.Error(Error.ErrorType.TYPES_EXPECTED, requestedTypes));
+    }
+
+    public void throwPositiveArraySizeExpected() {
+        raise(new Error(Error.ErrorType.POSITIVE_ARRAY_SIZE_EXPECTED));
+    }
+
+    public void throwNoNestedModules() {
+        raise(new Error(Error.ErrorType.NO_NESTED_MODULES));
     }
 
     /**
@@ -87,27 +109,7 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.OPERATOR_OPERAND_TYPE_MISMATCH, operator, requiredOperand));
     }
 
-    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.Type typeOfOp1, Integer sizeOfOp2, Operand.Type typeOfOp2) {
-        raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
-    }
-
-    public void throwVariableAlreadyDefined(String variableName) {
-        raise(new Error(Error.ErrorType.NAME_ALREADY_DEFINED, variableName));
-    }
-
-    public void throwPositiveArraySizeExpected() {
-        raise(new Error(Error.ErrorType.POSITIVE_ARRAY_SIZE_EXPECTED));
-    }
-
-    public void throwNameUndefined(String name) {
-        raise(new Error(Error.ErrorType.NAME_UNDEFINED, name));
-    }
-
-    public void throwBlockNameMismatch(String name, String name1) {
-        raise(new Error(Error.ErrorType.BLOCK_NAME_MISSMATCH, name, name1));
-    }
-
-    public void throwFileNotFound(String sourceFilePath) {
-        raise(new Error(Error.ErrorType.FILE_NOT_FOUND, sourceFilePath));
+    public void throwGeneralSemanticError(String message) {
+        raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, message));
     }
 }

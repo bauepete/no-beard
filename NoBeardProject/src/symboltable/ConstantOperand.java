@@ -74,7 +74,7 @@ public class ConstantOperand extends Operand {
             default:
                 String[] tList = {Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(),
                     Type.SIMPLEINT.toString(), Type.ARRAYCHAR.toString()};
-                errorHandler().raise(new error.Error(ErrorType.TYPES_EXPECTED, tList));
+                errorHandler().throwTypesExpected(tList);
                 return false;
         }
         return true;
@@ -94,7 +94,7 @@ public class ConstantOperand extends Operand {
             returnedOp = new AddrOnStackOperand(this);
         } else {
             String[] tList = {Type.SIMPLECHAR.toString(), Type.ARRAYCHAR.toString()};
-            errorHandler().raise(new error.Error(ErrorType.TYPES_EXPECTED, tList));
+            errorHandler().throwTypesExpected(tList);
             returnedOp = new IllegalOperand();
         }
         return returnedOp;

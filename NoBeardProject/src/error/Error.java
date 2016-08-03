@@ -22,15 +22,12 @@ public class Error {
         FILE_NOT_FOUND(3, ErrorClass.LEXICAL, "Source file %s not found."),
         
         SYMBOL_EXPECTED(21, ErrorClass.SYNTAX, "%s0 expected but found %s1"),
-        IDENTIFIER_EXPECTED(22, ErrorClass.SYNTAX, "Identifier expected"),
         STATEMENT_EXPECTED(23, ErrorClass.SYNTAX, "%s is not a statement"),
         GENERAL_SYN_ERROR(49, ErrorClass.SYNTAX, "General syntax error: %s"),
         
-        // TODO: following message should be replaced by "Block %s1 ends with name %s2"
         BLOCK_NAME_MISSMATCH(50, ErrorClass.SEMANTICAL, "Block name %s0 cannot end with name %s1"),
         NAME_UNDEFINED(51, ErrorClass.SEMANTICAL, "%s not defined in this context."),
         OPERAND_KIND_EXPECTED(52, ErrorClass.SEMANTICAL, "%s expected"),
-        // TODO: following message should be replaced by "%s can't be converted to %s"
         INCOMPATIBLE_TYPES(53, ErrorClass.SEMANTICAL, "Incompatible types or size: %s0 cannot be converted to %s1 or operand of size %s2 cannot get an assignment of an operand of size %s3"),
         NAME_ALREADY_DEFINED(54, ErrorClass.SEMANTICAL, "Identifier %s is already defined"),
         TYPES_EXPECTED(55, ErrorClass.SEMANTICAL, "Types %l expected"),
@@ -73,7 +70,7 @@ public class Error {
      * format string.
      * @param errorType Type of error to be instantiated.
      */
-    public Error(ErrorType errorType) {
+    Error(ErrorType errorType) {
         this.errorType = errorType;
     }
 
@@ -84,7 +81,7 @@ public class Error {
      * @param errorType Type of error to be instantiated.
      * @param parameter Additional info parameter.
      */
-    public Error(ErrorType errorType, String parameter) {
+    Error(ErrorType errorType, String parameter) {
         this.errorType = errorType;
         this.parameters = new String[]{parameter};
     }
@@ -95,7 +92,7 @@ public class Error {
      * @param errorType Type of error to be instantiated.
      * @param parameters List of additional info parameters
      */
-    public Error(ErrorType errorType, String[] parameters) {
+    Error(ErrorType errorType, String[] parameters) {
         this.errorType = errorType;
         this.parameters = parameters;
     }
@@ -108,7 +105,7 @@ public class Error {
      * @param param1 First additional info parameter.
      * @param params Further info parameters.
      */
-    public Error(ErrorType errorType, String param1, String... params) {
+    Error(ErrorType errorType, String param1, String... params) {
         this.errorType = errorType;
         this.parameters = new String[1 + params.length];
         parameters[0] = param1;

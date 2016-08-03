@@ -122,13 +122,13 @@ public class Operand {
     public Operand emitLoadVal(CodeGenerator toCode) {
         if (getKind() == Kind.ANONYMOUSBLOCK || getKind() == Kind.FUNCTION
                 || getKind() == Kind.ILLEGAL || getKind() == Kind.UNIT) {
-            errorHandler().raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Operand can't be loaded on stack"));
+            errorHandler().throwGeneralSemanticError("Operand can't be loaded on stack");
             return null;
         }
 
         if (getType() != Type.SIMPLEBOOL && getType() != Type.SIMPLECHAR && getType() != Type.SIMPLEINT) {
             String[] tList = {Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(), Type.SIMPLEINT.toString()};
-            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
+            errorHandler().throwTypesExpected(tList);
             return null;
         }
         return this;
@@ -148,25 +148,24 @@ public class Operand {
 
     public boolean emitAssign(CodeGenerator toCode, Operand destOp) {
         if (destOp.getKind() != Kind.ADDRONSTACK) {
-            errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: destination operand is not on stack"));
+            errorHandler.throwGeneralSemanticError("Error in code generator: destination operand is not on stack");
             return false;
         }
 
         if (!typesOk(destOp)) {
             String[] tList = {Type.SIMPLEINT.toString(), Type.SIMPLEBOOL.toString(), Type.SIMPLECHAR.toString(),
                 Type.ARRAYINT.toString(), Type.ARRAYBOOL.toString(), Type.ARRAYCHAR.toString()};
-            errorHandler().raise(new error.Error(error.Error.ErrorType.TYPES_EXPECTED, tList));
+            errorHandler().throwTypesExpected(tList);
             return false;
         }
 
         if (!srcKindOk()) {
-            errorHandler.raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, "Error in code generator: illegal source operand"));
+            errorHandler.throwGeneralSemanticError("Error in code generator: illegal source operand");
             return false;
         }
 
         if (getType() != destOp.getType()) {
-            String[] tList = {getType().toString(), destOp.getType().toString()};
-            errorHandler.raise(new error.Error(error.Error.ErrorType.INCOMPATIBLE_TYPES, tList));
+            errorHandler.throwOperandsAreIncompatible(getSize(), getType(), destOp.getSize(), destOp.type);
             return false;
         }
         return true;

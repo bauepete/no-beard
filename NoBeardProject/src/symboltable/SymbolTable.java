@@ -101,7 +101,7 @@ public class SymbolTable {
         }
 
         if (getCurrLevel() > 0) {
-            errorHandler.raise(new Error(ErrorType.NO_NESTED_MODULES));
+            errorHandler.throwNoNestedModules();
             return false;
         }
 
@@ -268,6 +268,6 @@ public class SymbolTable {
     }
 
     private void raiseNameAlreadyDefined(int name) {
-        errorHandler.raise(new Error(ErrorType.NAME_ALREADY_DEFINED, nameManager().getStringName(name)));
+        errorHandler.throwNameAlreadyDefined(nameManager().getStringName(name));
     }
 }
