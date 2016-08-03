@@ -7,8 +7,6 @@ package parser.semantics;
 import error.ErrorHandler;
 import nbm.CodeGenerator;
 import nbm.Nbm.Opcode;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.AssignmentParser;
@@ -31,19 +29,11 @@ public class AssignmentParserTest {
     public AssignmentParserTest() {
     }
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
-     * Test of parseOldStyle method, of class AssignmentParser.
+     * Test assignment to simple int variable.
      */
     @Test
-    public void testParse() {
+    public void testAssignmentToSimpleInt() {
         byte[] expResult = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 3,
@@ -95,5 +85,21 @@ public class AssignmentParserTest {
         Parser p = ParserFactory.create(AssignmentParser.class);
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.NAME_UNDEFINED.getNumber(), ParserFactory.getErrorHandler().getLastError().getNumber());
+    }
+    
+    @Test
+    public void testAssignmentToArray() {
+        byte[] expectedCode = {
+            Opcode.LA.byteCode(), 0, 0, 32, // load address of x
+            Opcode.LIT.byteCode(), 0, 0, // load address of string constant
+            Opcode.LIT.byteCode(), 0, 5, // length of string constant
+            Opcode.ASSN.byteCode()
+        };
+        setupParserFactory("x = 'fubar';");
+        ParserFactory.getSymbolListManager().newUnit(1);
+        ParserFactory.getSymbolListManager().newVar(0, SymbolTable.ElementType.CHAR, 5);
+        Parser p = ParserFactory.create(AssignmentParser.class);
+        assertTrue(p.parse());
+        AssemblerCodeChecker.assertCodeEquals(expectedCode, ParserFactory.getCodeGenerator().getByteCode());
     }
 }
