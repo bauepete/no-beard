@@ -28,7 +28,6 @@ import nbm.Nbm;
 import nbm.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import symboltable.SymbolTableEntry;
 import symboltable.SymbolTable;
 
 /**
@@ -36,8 +35,6 @@ import symboltable.SymbolTable;
  * @author peter
  */
 public class NoBeardParser extends Parser {
-
-    private SymbolTableEntry unitObj;
     
     public NoBeardParser(Scanner s, SymbolTable sym, CodeGenerator c, ErrorHandler e) {
         super(s, sym, c, e);
