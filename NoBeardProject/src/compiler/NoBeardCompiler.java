@@ -46,22 +46,26 @@ public class NoBeardCompiler {
     private static Parser parserl;
     private static boolean sourceIsAvailable;
 
-    static void setSourceString(String source) {
+    public static void setSourceString(String source) {
         NoBeardCompiler.sourceReader = new SrcStringReader(source);
         sourceIsAvailable = true;
         ParserFactory.setup(sourceReader);
         parserl = ParserFactory.create(NoBeardParser.class);
     }
 
-    static boolean compile() {
+    public static boolean compile() {
         return sourceIsAvailable && parserl.parse();
     }
 
-    static byte[] getByteCode() {
+    public static byte[] getByteCode() {
         return ParserFactory.getCodeGenerator().getByteCode();
     }
+    
+    public static byte[] getStringStore() {
+        return ParserFactory.getScanner().getStringManager().getStringStorage();
+    }
 
-    static void setSourceFile(String sourceFilePath) {
+    public static void setSourceFile(String sourceFilePath) {
         try {
             NoBeardCompiler.sourceReader = new SrcFileReader(sourceFilePath);
             sourceIsAvailable = true;

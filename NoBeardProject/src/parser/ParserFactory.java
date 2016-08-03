@@ -71,7 +71,7 @@ public class ParserFactory {
         Operand.setStringManager(scanner.getStringManager());
     }
     
-    static Scanner getScanner() {
+    public static Scanner getScanner() {
         return scanner;
     }
     

@@ -1,20 +1,32 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright ©2011 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
+ * 
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package nbm;
 
-import parser.NoBeardParser;
 import compiler.NoBeardCompiler;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import scanner.SrcFileReader;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
+import org.junit.Before;
 
 /**
  *
@@ -26,14 +38,10 @@ public class NbmTest {
 
     public NbmTest() {
     }
-
+    
     @Before
     public void setUp() {
         m = new Nbm();
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -75,129 +83,36 @@ public class NbmTest {
         assertEquals(Nbm.STACKEMPTY, m.getStackTopValue());
         assertTrue("Expected machine state STOP", m.getState() == Nbm.MachineState.STOP);
     }
-    
+
     @Test
-    @Ignore
     public void testAddInt() {
-        try {
-            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/AddInt.nb"));
-            NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parseOldStyle();
-            
-            if (parseOk) {
-                CodeGenerator c = comp.getCode();
-                m.loadProg(0, c.getByteCode());
-                m.loadDat(0, comp.getStringStorage());
-                m.runProg(0);
-                assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
-            }
-            else {
-                comp.getErrorHandler().printSummary();
-                System.err.println("Compilation not successfull. Can't run program.");
-                fail("Program must compile successfully.");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
+        NoBeardCompiler.setSourceFile("SamplePrograms/AddInt.nb");
+        boolean parseOk = NoBeardCompiler.compile();
+
+        if (parseOk) {
+            m.loadProg(0, NoBeardCompiler.getByteCode());
+            m.loadDat(0, NoBeardCompiler.getStringStore());
+            m.runProg(0);
+            assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
+        } else {
+            System.err.println("Compilation not successfull. Can't run program.");
+            fail("Program must compile successfully.");
         }
     }
 
     @Test
-    @Ignore
     public void testComplexExpr() {
-        try {
-            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/ComplexExpr.nb"));
-            NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parseOldStyle();
-            
-            if (parseOk) {
-                CodeGenerator c = comp.getCode();
-                m.loadProg(0, c.getByteCode());
-                m.loadDat(0, comp.getStringStorage());
-                m.runProg(0);
-                assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
-            }
-            else {
-                comp.getErrorHandler().printSummary();
-                System.err.println("Compilation not successfull. Can't run program.");
-                fail("Program must compile successfully.");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Test
-    @Ignore
-    public void testPutChar() {
-        try {
-            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
-            NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parseOldStyle();
-            
-            if (parseOk) {
-                CodeGenerator c = comp.getCode();
-                m.loadProg(0, c.getByteCode());
-                m.runProg(0);
-                assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
-            }
-            else {
-                comp.getErrorHandler().printSummary();
-                System.err.println("Compilation not successfull. Can't run program.");
-                fail("Program must compile successfully.");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Test
-    @Ignore
-    public void testHelloWorld() {
-        try {
-            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
-            NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parseOldStyle();
-            
-            if (parseOk) {
-                CodeGenerator c = comp.getCode();
-                m.loadProg(0, c.getByteCode());
-                m.loadDat(0, comp.getStringStorage());
-                m.runProg(0);
-                assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
-            }
-            else {
-                comp.getErrorHandler().printSummary();
-                System.err.println("Compilation not successfull. Can't run program.");
-                fail("Program must compile successfully.");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @Test
-    @Ignore
-    public void testVariableWorld() {
-        System.out.println("testVariableWorld");
-        try {
-            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
-            NoBeardParser p = comp.getParser();
-            boolean parseOk = p.parseOldStyle();
-            
-            if (parseOk) {
-                CodeGenerator c = comp.getCode();
-                m.loadProg(0, c.getByteCode());
-                m.loadDat(0, comp.getStringStorage());
-                m.runProg(0);
-                assertEquals("Stack top", Nbm.STACKEMPTY, m.getStackTopValue());
-            }
-            else {
-                comp.getErrorHandler().printSummary();
-                System.err.print("Compilation not successfull. Can't run program.");
-                fail("Program must compile successfully.");
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(NbmTest.class.getName()).log(Level.SEVERE, null, ex);
+        NoBeardCompiler.setSourceFile("SamplePrograms/ComplexExpr.nb");
+        boolean parseOk = NoBeardCompiler.compile();
+        if (parseOk) {
+            m.loadProg(0, NoBeardCompiler.getByteCode());
+            m.loadDat(0, NoBeardCompiler.getStringStore());
+
+            m.runProg(0);
+            assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
+        } else {
+            System.err.println("Compilation not successfull. Can't run program.");
+            fail("Program must compile successfully.");
         }
     }
 }
