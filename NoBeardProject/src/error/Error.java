@@ -19,6 +19,7 @@ public class Error {
 
         INTEGER_OVERFLOW(1, ErrorClass.LEXICAL, "Integer overflow"),
         INVALID_STRING(2, ErrorClass.LEXICAL, "Non terminated string constant"),
+        FILE_NOT_FOUND(3, ErrorClass.LEXICAL, "Source file %s not found."),
         
         SYMBOL_EXPECTED(21, ErrorClass.SYNTAX, "%s0 expected but found %s1"),
         IDENTIFIER_EXPECTED(22, ErrorClass.SYNTAX, "Identifier expected"),

@@ -5,7 +5,7 @@
 package nbm;
 
 import parser.NoBeardParser;
-import compiler.NbCompiler;
+import compiler.NoBeardCompiler;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +80,7 @@ public class NbmTest {
     @Ignore
     public void testAddInt() {
         try {
-            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/AddInt.nb"));
+            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/AddInt.nb"));
             NoBeardParser p = comp.getParser();
             boolean parseOk = p.parseOldStyle();
             
@@ -105,7 +105,7 @@ public class NbmTest {
     @Ignore
     public void testComplexExpr() {
         try {
-            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/ComplexExpr.nb"));
+            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/ComplexExpr.nb"));
             NoBeardParser p = comp.getParser();
             boolean parseOk = p.parseOldStyle();
             
@@ -130,7 +130,7 @@ public class NbmTest {
     @Ignore
     public void testPutChar() {
         try {
-            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
+            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/PutChar.nb"));
             NoBeardParser p = comp.getParser();
             boolean parseOk = p.parseOldStyle();
             
@@ -154,7 +154,7 @@ public class NbmTest {
     @Ignore
     public void testHelloWorld() {
         try {
-            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
+            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/HelloWorld.nb"));
             NoBeardParser p = comp.getParser();
             boolean parseOk = p.parseOldStyle();
             
@@ -180,7 +180,7 @@ public class NbmTest {
     public void testVariableWorld() {
         System.out.println("testVariableWorld");
         try {
-            NbCompiler comp = new NbCompiler(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
+            NoBeardCompiler comp = new NoBeardCompiler(new SrcFileReader("SamplePrograms/VariableWorld.nb"));
             NoBeardParser p = comp.getParser();
             boolean parseOk = p.parseOldStyle();
             

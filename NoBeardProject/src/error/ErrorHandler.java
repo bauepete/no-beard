@@ -106,4 +106,8 @@ public class ErrorHandler {
     public void throwBlockNameMismatch(String name, String name1) {
         raise(new Error(Error.ErrorType.BLOCK_NAME_MISSMATCH, name, name1));
     }
+
+    public void throwFileNotFound(String sourceFilePath) {
+        raise(new Error(Error.ErrorType.FILE_NOT_FOUND, sourceFilePath));
+    }
 }
