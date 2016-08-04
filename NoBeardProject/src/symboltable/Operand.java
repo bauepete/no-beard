@@ -165,7 +165,7 @@ public class Operand {
         }
 
         if (getType() != destOp.getType()) {
-            errorHandler.throwOperandsAreIncompatible(getSize(), getType(), destOp.getSize(), destOp.type);
+            errorHandler.throwOperandsAreIncompatible(getSize(), getType().toString(), destOp.getSize(), destOp.getType().toString());
             return false;
         }
         return true;

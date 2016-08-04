@@ -104,7 +104,7 @@ public class ExpressionParser extends OperandExportingParser {
         boolean sizesAreCompatible = exportedOperand.getSize() == op2.getSize();
 
         where(!operandsSizeIsUndefined && typesAreCompatible && sizesAreCompatible,
-                () -> getErrorHandler().throwOperandsAreIncompatible(exportedOperand.getSize(), exportedOperand.getType(), op2.getSize(), op2.getType()));
+                () -> getErrorHandler().throwOperandsAreIncompatible(exportedOperand.getSize(), exportedOperand.getType().toString(), op2.getSize(), op2.getType().toString()));
     }
 
     private void emitCodeForComparing() {

@@ -6,7 +6,6 @@ package error;
 
 import java.util.ArrayList;
 import java.util.List;
-import symboltable.Operand;
 
 /**
  *
@@ -78,8 +77,8 @@ public class ErrorHandler {
         raise(new Error(Error.ErrorType.OPERAND_KIND_EXPECTED, toString));
     }
 
-    public void throwOperandsAreIncompatible(Integer sizeOfOp1, Operand.Type typeOfOp1, Integer sizeOfOp2, Operand.Type typeOfOp2) {
-        raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1.toString(), sizeOfOp2.toString(), typeOfOp2.toString()));
+    public void throwOperandsAreIncompatible(Integer sizeOfOp1, String typeOfOp1, Integer sizeOfOp2, String typeOfOp2) {
+        raise(new Error(Error.ErrorType.INCOMPATIBLE_TYPES, sizeOfOp1.toString(), typeOfOp1, sizeOfOp2.toString(), typeOfOp2));
     }
 
     public void throwNameAlreadyDefined(String variableName) {

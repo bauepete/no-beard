@@ -38,7 +38,7 @@ public abstract class ParserForAssignment extends Parser {
         ExpressionParser expressionParser = ParserFactory.create(ExpressionParser.class);
         parseSymbol(expressionParser);
         sem(() -> srcOp = expressionParser.getOperand());
-        where(srcOp.getType() == destOp.getType() && srcOp.getSize() == destOp.getSize(), () -> getErrorHandler().throwOperandsAreIncompatible(srcOp.getSize(), srcOp.getType(), destOp.getSize(), destOp.getType()));
+        where(srcOp.getType() == destOp.getType() && srcOp.getSize() == destOp.getSize(), () -> getErrorHandler().throwOperandsAreIncompatible(srcOp.getSize(), srcOp.getType().toString(), destOp.getSize(), destOp.getType().toString()));
         sem(() -> srcOp.emitAssign(code, destAddrOp));
     }
     
