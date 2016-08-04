@@ -78,8 +78,8 @@ public class TermParser extends ExpressionRelatedParser {
 
     private void maintainBooleanOperatorChain() {
         sem(() -> {
-            code.emitOp(Opcode.FJMP);
-            code.emitHalfWord(positionOfLastBooleanOperatorJump);
+            code.emit(Opcode.FJMP);
+            code.emit(positionOfLastBooleanOperatorJump);
             positionOfLastBooleanOperatorJump = code.getPc() - 2;
         });
     }
@@ -92,19 +92,19 @@ public class TermParser extends ExpressionRelatedParser {
         fetchOperand(factorParser);
         checkOperandForBeing(op2, Type.SIMPLEINT, usedOperator);
         emitCodeForLoadingValue();
-        sem(() -> code.emitOp(opCode));
+        sem(() -> code.emit(opCode));
     }
 
     @Override
     protected void fixBooleanOperatorChain() {
-        code.emitOp(Opcode.JMP);
-        code.emitHalfWord(code.getPc() + 5);
+        code.emit(Opcode.JMP);
+        code.emit(code.getPc() + 5);
         while (positionOfLastBooleanOperatorJump != 0) {
             int next = code.getCodeHalfWord(positionOfLastBooleanOperatorJump);
             code.fixup(positionOfLastBooleanOperatorJump, code.getPc());
             positionOfLastBooleanOperatorJump = next;
         }
-        code.emitOp(Opcode.LIT);
-        code.emitHalfWord(0);
+        code.emit(Opcode.LIT);
+        code.emit(0);
     }
 }

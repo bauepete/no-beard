@@ -114,8 +114,8 @@ public class ExpressionParser extends OperandExportingParser {
                 case SIMPLECHAR:
                 case SIMPLEINT:
                     op2.emitLoadVal(code);
-                    code.emitOp(Opcode.REL);
-                    code.emitByte(ror);
+                    code.emit(Opcode.REL);
+                    code.emit(ror);
                     break;
 
                 default:

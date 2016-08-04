@@ -46,8 +46,8 @@ public class BlockParser extends Parser {
         parseSymbol(Symbol.DO);
         sem(() -> {
             sym.newBlock();
-            code.emitOp(Opcode.INC);
-            code.emitHalfWord(0);
+            code.emit(Opcode.INC);
+            code.emit(0);
             incAddress = code.getPc() - 2;
         });
         while (parsingWasSuccessful() && getScanner().getCurrentToken().getSymbol() != Symbol.DONE) {

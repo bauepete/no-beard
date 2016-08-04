@@ -31,39 +31,39 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test of emitOp method, of class CodeGenerator.
+     * Test of emit method, of class CodeGenerator.
      */
     @Test
     public void testEmitOp() {
-        instance.emitOp(NoBeardMachine.Opcode.ADD);
+        instance.emit(NoBeardMachine.Opcode.ADD);
 
         assertEquals(1, instance.getPc());
         assertEquals(NoBeardMachine.Opcode.ADD.byteCode(), instance.getCodeByte(0));
     }
 
     /**
-     * Test of emitByte method, of class CodeGenerator.
+     * Test of emit method, of class CodeGenerator.
      */
     @Test
     public void testEmitByte() {
         byte b = 1;
 
-        instance.emitOp(Opcode.PUT);
-        instance.emitByte(b);
+        instance.emit(Opcode.PUT);
+        instance.emit(b);
 
         assertEquals(2, instance.getPc());
         assertEquals(1, instance.getCodeByte(1));
     }
 
     /**
-     * Test of emitHalfWord method, of class CodeGenerator.
+     * Test of emit method, of class CodeGenerator.
      */
     @Test
     public void testEmitHalfWord() {
         int halfWord = 42;
 
-        instance.emitOp(Opcode.LIT);
-        instance.emitHalfWord(halfWord);
+        instance.emit(Opcode.LIT);
+        instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
         assertEquals("1st byte", 0, instance.getCodeByte(1));
@@ -71,14 +71,14 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test emitHalfWord by emitting max value of one byte.
+     * Test emit by emitting max value of one byte.
      */
     @Test
     public void testEmitHalfWord255() {
         int halfWord = 255;
 
-        instance.emitOp(Opcode.LIT);
-        instance.emitHalfWord(halfWord);
+        instance.emit(Opcode.LIT);
+        instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
         assertEquals("1st byte", 0, instance.getCodeByte(1));
@@ -86,14 +86,14 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test emitHalfWord by emitting min value of two bytes.
+     * Test emit by emitting min value of two bytes.
      */
     @Test
     public void testEmitHalfWord256() {
         int halfWord = 256;
 
-        instance.emitOp(Opcode.LIT);
-        instance.emitHalfWord(halfWord);
+        instance.emit(Opcode.LIT);
+        instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
         assertEquals("1st byte", 1, instance.getCodeByte(1));
@@ -101,14 +101,14 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test emitHalfWord by emitting max value of two bytes.
+     * Test emit by emitting max value of two bytes.
      */
     @Test
     public void testEmitHalfWord65535() {
         int halfWord = 65535;
 
-        instance.emitOp(Opcode.LIT);
-        instance.emitHalfWord(halfWord);
+        instance.emit(Opcode.LIT);
+        instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
         assertEquals("1st byte", 255, instance.getCodeByte(1) & 0xff);
@@ -120,12 +120,12 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testFixup() {
-        instance.emitOp(Opcode.INC);
+        instance.emit(Opcode.INC);
         int fixupAddr = instance.getPc();
-        instance.emitHalfWord(0); // temp value
-        instance.emitOp(Opcode.LA);
-        instance.emitByte((byte) 0);
-        instance.emitHalfWord(2);
+        instance.emit(0); // temp value
+        instance.emit(Opcode.LA);
+        instance.emit((byte) 0);
+        instance.emit(2);
         instance.fixup(fixupAddr, 8);
 
         assertEquals("PC", 7, instance.getPc());
@@ -143,14 +143,14 @@ public class CodeGeneratorTest {
             Opcode.ADD.byteCode()
         };
 
-        instance.emitOp(Opcode.LA);
-        instance.emitByte((byte) 0);
-        instance.emitHalfWord(32);
+        instance.emit(Opcode.LA);
+        instance.emit((byte) 0);
+        instance.emit(32);
 
-        instance.emitOp(Opcode.LIT);
-        instance.emitHalfWord(42);
+        instance.emit(Opcode.LIT);
+        instance.emit(42);
 
-        instance.emitOp(Opcode.ADD);
+        instance.emit(Opcode.ADD);
 
         assertCodeEquals("Prog ", expected, instance.getByteCode());
     }
@@ -161,22 +161,22 @@ public class CodeGeneratorTest {
     @Test
     public void testProgramStorageOverflow() {
         CodeGenerator g = new CodeGenerator(7, errorHandler);
-        g.emitOp(Opcode.LA);
-        g.emitByte((byte)0);
-        g.emitHalfWord(0);
+        g.emit(Opcode.LA);
+        g.emit((byte)0);
+        g.emit(0);
         
-        g.emitOp(Opcode.LIT);
-        g.emitHalfWord(17);
+        g.emit(Opcode.LIT);
+        g.emit(17);
         
         assertEquals(0, errorHandler.getCount());
         
-        g.emitOp(Opcode.STO);
+        g.emit(Opcode.STO);
         assertEquals(1, errorHandler.getCount());
         assertEquals(error.Error.ErrorType.PROGRAM_MEMORY_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**
-     * Test of overflow when call emitHalfWord(65536).
+     * Test of overflow when call emit(65536).
      */
     @Ignore
     @Test

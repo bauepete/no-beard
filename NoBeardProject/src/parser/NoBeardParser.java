@@ -44,6 +44,6 @@ public class NoBeardParser extends Parser {
         String clearNameAtEnd = getLastParsedToken().getClearName();
         where(name == name1, () -> getErrorHandler().throwBlockNameMismatch(clearNameAtStart, clearNameAtEnd));
         parseSymbol(Symbol.SEMICOLON);
-        sem(() -> code.emitOp(NoBeardMachine.Opcode.HALT));
+        sem(() -> code.emit(NoBeardMachine.Opcode.HALT));
     }
 }

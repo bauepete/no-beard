@@ -32,13 +32,13 @@ public class ConstantOperand extends Operand {
         switch(type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(valaddr);
+                toCode.emit(Opcode.LIT);
+                toCode.emit(valaddr);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(getStringStorage(valaddr));
+                toCode.emit(Opcode.LIT);
+                toCode.emit(getStringStorage(valaddr));
                 break;
         }
     return (new ValueOnStackOperand(this));
@@ -52,23 +52,23 @@ public class ConstantOperand extends Operand {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(valaddr);
-                toCode.emitOp(Opcode.STO);
+                toCode.emit(Opcode.LIT);
+                toCode.emit(valaddr);
+                toCode.emit(Opcode.STO);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(getStringStorage(valaddr));
-                toCode.emitOp(Opcode.STC);
+                toCode.emit(Opcode.LIT);
+                toCode.emit(getStringStorage(valaddr));
+                toCode.emit(Opcode.STC);
                 break;
                 
             case ARRAYCHAR:
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(valaddr);
-                toCode.emitOp(Opcode.LIT);
-                toCode.emitHalfWord(destOp.getSize());
-                toCode.emitOp(Opcode.ASSN);
+                toCode.emit(Opcode.LIT);
+                toCode.emit(valaddr);
+                toCode.emit(Opcode.LIT);
+                toCode.emit(destOp.getSize());
+                toCode.emit(Opcode.ASSN);
                 break;
                 
             default:
@@ -89,8 +89,8 @@ public class ConstantOperand extends Operand {
         Operand returnedOp;
         
         if (getType() == Type.SIMPLECHAR || getType() == Type.ARRAYCHAR) {
-            toCode.emitOp(Opcode.LIT);
-            toCode.emitHalfWord(valaddr);
+            toCode.emit(Opcode.LIT);
+            toCode.emit(valaddr);
             returnedOp = new AddrOnStackOperand(this);
         } else {
             String[] tList = {Type.SIMPLECHAR.toString(), Type.ARRAYCHAR.toString()};

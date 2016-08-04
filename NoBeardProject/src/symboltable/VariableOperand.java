@@ -28,15 +28,15 @@ public class VariableOperand extends Operand {
         switch (type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emitOp(Opcode.LV);
-                toCode.emitByte((byte) (getCurrLevel() - getLevel()));
-                toCode.emitHalfWord(valaddr);
+                toCode.emit(Opcode.LV);
+                toCode.emit((byte) (getCurrLevel() - getLevel()));
+                toCode.emit(valaddr);
                 break;
 
             case SIMPLECHAR:
-                toCode.emitOp(Opcode.LC);
-                toCode.emitByte((byte) (getCurrLevel() - getLevel()));
-                toCode.emitHalfWord(valaddr);
+                toCode.emit(Opcode.LC);
+                toCode.emit((byte) (getCurrLevel() - getLevel()));
+                toCode.emit(valaddr);
                 break;
         }
         return (new ValueOnStackOperand(this));
@@ -47,14 +47,14 @@ public class VariableOperand extends Operand {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emitOp(Opcode.LV);
-                toCode.emitByte((byte) (getCurrLevel() - getLevel()));
-                toCode.emitHalfWord(valaddr);
-                toCode.emitOp(Opcode.STO);
+                toCode.emit(Opcode.LV);
+                toCode.emit((byte) (getCurrLevel() - getLevel()));
+                toCode.emit(valaddr);
+                toCode.emit(Opcode.STO);
                 break;
 
             case SIMPLECHAR:
-                //toCode.emitOp(Opcode.LC);
+                //toCode.emit(Opcode.LC);
                 // TODO: Implement assign for char
                 break;
         }
@@ -63,9 +63,9 @@ public class VariableOperand extends Operand {
 
     @Override
     public Operand emitLoadAddr(CodeGenerator toCode) {
-        toCode.emitOp(Opcode.LA);
-        toCode.emitByte((byte) (getCurrLevel() - getLevel()));
-        toCode.emitHalfWord(valaddr);
+        toCode.emit(Opcode.LA);
+        toCode.emit((byte) (getCurrLevel() - getLevel()));
+        toCode.emit(valaddr);
 
         return (new AddrOnStackOperand(this));
     }

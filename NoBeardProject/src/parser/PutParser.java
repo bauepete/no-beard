@@ -125,18 +125,18 @@ public class PutParser extends Parser {
     }
 
     private void emitColumnWidth(final int width) {
-        code.emitOp(Opcode.LIT);
-        code.emitHalfWord(width);
+        code.emit(Opcode.LIT);
+        code.emit(width);
     }
 
     private void emitPutStatement(final int putStyle) {
-        code.emitOp(Opcode.PUT);
-        code.emitByte((byte) putStyle);
+        code.emit(Opcode.PUT);
+        code.emit((byte) putStyle);
     }
 
     private void emitStringLength() {
-        code.emitOp(Opcode.LIT);
-        code.emitHalfWord(operandForOutputValue.getSize());
+        code.emit(Opcode.LIT);
+        code.emit(operandForOutputValue.getSize());
     }
 
     private void parsePutln() {

@@ -36,11 +36,11 @@ public class ValueOnStackOperand extends Operand {
         switch(destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emitOp(Opcode.STO);
+                toCode.emit(Opcode.STO);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emitOp(Opcode.STC);
+                toCode.emit(Opcode.STC);
                 break;
                 
             default:

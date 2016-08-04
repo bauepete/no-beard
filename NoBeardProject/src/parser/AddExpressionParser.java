@@ -54,7 +54,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
         sem(() -> {
             if (opCode == NoBeardMachine.Opcode.SUB) {
                 emitCodeForLoadingValue();
-                code.emitOp(Opcode.NEG);
+                code.emit(Opcode.NEG);
             } else {
                 exportedOperand = op2;
             }
@@ -87,23 +87,23 @@ public class AddExpressionParser extends ExpressionRelatedParser {
     private void maintainBooleanOperatorChain() {
         sem(() -> {
             exportedOperand.emitLoadVal(code);
-            code.emitOp(Opcode.TJMP);
-            code.emitHalfWord(positionOfLastBooleanOperatorJump);
+            code.emit(Opcode.TJMP);
+            code.emit(positionOfLastBooleanOperatorJump);
             positionOfLastBooleanOperatorJump = code.getPc() - 2;
         });
     }
 
     @Override
     protected void fixBooleanOperatorChain() {
-        code.emitOp(Opcode.JMP);
-        code.emitHalfWord(code.getPc() + 5);
+        code.emit(Opcode.JMP);
+        code.emit(code.getPc() + 5);
         while (positionOfLastBooleanOperatorJump != 0) {
             int next = code.getCodeHalfWord(positionOfLastBooleanOperatorJump);
             code.fixup(positionOfLastBooleanOperatorJump, code.getPc());
             positionOfLastBooleanOperatorJump = next;
         }
-        code.emitOp(Opcode.LIT);
-        code.emitHalfWord(1);
+        code.emit(Opcode.LIT);
+        code.emit(1);
     }
 
     @Override
@@ -113,6 +113,6 @@ public class AddExpressionParser extends ExpressionRelatedParser {
         parseSymbol(termParser);
         fetchOperand(termParser);
         emitCodeForLoadingValue();
-        sem(() -> code.emitOp(opCode));
+        sem(() -> code.emit(opCode));
     }
 }

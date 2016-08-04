@@ -1,6 +1,25 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright ©2011 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
+ * 
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package nbm;
 
@@ -25,37 +44,72 @@ public class CodeGenerator {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * 
+     * @return The next free byte in program memory.
+     */
     public int getPc() {
         return pc;
     }
 
-    public byte getCodeByte(int atAddr) {
+    byte getCodeByte(int atAddr) {
         return prog[atAddr];
     }
 
+    /**
+     * Returns two bytes from program memory as an integer value starting
+     * from atAddr.
+     * @param atAddr The address where to start.
+     * @return Two bytes as integer value.
+     */
     public int getCodeHalfWord(int atAddr) {
         return prog[atAddr] * 256 + prog[atAddr + 1];
     }
 
-    public void emitOp(NoBeardMachine.Opcode op) {
-        if (getPc() < prog.length - 1) {
-            prog[pc] = op.byteCode();
-            pc++;
+    /**
+     * Emits an opcode to the program memory
+     * @param op The opcode.
+     */
+    public void emit(NoBeardMachine.Opcode op) {
+        appendToProgramMemory(getByteCode(op));
+    }
+
+    private byte[] getByteCode(NoBeardMachine.Opcode op) {
+        return new byte[]{op.byteCode()};
+    }
+
+    private void appendToProgramMemory(byte[] instruction) {
+        if (getPc() + instruction.length <= prog.length) {
+            System.arraycopy(instruction, 0, prog, pc, instruction.length);
+            pc += instruction.length;
         } else {
             errorHandler.throwProgramMemoryOverflow();
         }
     }
 
-    public void emitByte(byte b) {
-        prog[pc] = b;
-        pc++;
-
+    /**
+     * Emits one byte to the program memory.
+     * @param b The byte.
+     */
+    public void emit(byte b) {
+        appendToProgramMemory(getByteCode(b));
     }
 
-    public void emitHalfWord(int halfWord) {
-        prog[pc] = (byte) (halfWord / 256);
-        prog[pc + 1] = (byte) (halfWord % 256);
-        pc += 2;
+    private byte[] getByteCode(byte b) {
+        return new byte[]{b};
+    }
+
+    /**
+     * Emits two bytes to the program memory. The two bytes are encoded
+     * as an integer value.
+     * @param halfWord 
+     */
+    public void emit(int halfWord) {
+        appendToProgramMemory(getByteCode(halfWord));
+    }
+    
+    private byte[] getByteCode(int halfWord) {
+        return new byte[] {(byte)(halfWord/256), (byte)(halfWord%256)};
     }
 
     /**
@@ -69,6 +123,10 @@ public class CodeGenerator {
         prog[atAddr + 1] = (byte) (halfWord % 256);
     }
 
+    /**
+     * Returns the byte code generated via the emit(...) commands.
+     * @return The complete byte code.
+     */
     public byte[] getByteCode() {
         return prog;
     }
