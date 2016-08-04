@@ -51,9 +51,6 @@ public class ErrorHandlerTest {
 
     @Test
     public void testRaiseMoreErrorsOfSameClass() {
-        //TODO: move to setup
-        int lineNumber0 = 17;
-        int lineNumber1 = 42;
         eh.raise(new Error(ErrorType.INTEGER_OVERFLOW));
         eh.raise(new Error(ErrorType.INVALID_STRING));
         assertEquals(2, eh.getCount());

@@ -21,13 +21,15 @@ public class CodeGeneratorTest {
     private CodeGenerator instance;
     private ErrorHandler errorHandler;
     
+    private final int MEMORY_SIZE = 256;
+
     public CodeGeneratorTest() {
     }
-    
+
     @Before
     public void setup() {
         errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
-        instance = new CodeGenerator(256, errorHandler);
+        instance = new CodeGenerator(MEMORY_SIZE, errorHandler);
     }
 
     /**
@@ -53,6 +55,18 @@ public class CodeGeneratorTest {
 
         assertEquals(2, instance.getPc());
         assertEquals(1, instance.getCodeByte(1));
+    }
+    
+    @Test
+    public void testEmitByte255() {
+        instance.emit((byte)255);
+        assertEquals(255, Byte.toUnsignedInt(instance.getCodeByte(0)));
+    }
+    
+    @Test
+    public void testEmitByte256() {
+        instance.emit((byte) 256);
+        assertEquals(0, instance.getCodeByte(0));
     }
 
     /**
@@ -116,6 +130,15 @@ public class CodeGeneratorTest {
     }
 
     /**
+     * Test of overflow when call emit(65536).
+     */
+    @Test
+    public void testHalfwordOverflow() {
+        instance.emit(65536);
+        assertEquals(0, instance.getCodeByte(0));
+    }
+
+    /**
      * Test of fixup method, of class CodeGenerator.
      */
     @Test
@@ -162,37 +185,17 @@ public class CodeGeneratorTest {
     public void testProgramStorageOverflow() {
         CodeGenerator g = new CodeGenerator(7, errorHandler);
         g.emit(Opcode.LA);
-        g.emit((byte)0);
+        g.emit((byte) 0);
         g.emit(0);
-        
+
         g.emit(Opcode.LIT);
         g.emit(17);
-        
+
         assertEquals(0, errorHandler.getCount());
-        
+
         g.emit(Opcode.STO);
         assertEquals(1, errorHandler.getCount());
         assertEquals(error.Error.ErrorType.PROGRAM_MEMORY_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
-    }
-
-    /**
-     * Test of overflow when call emit(65536).
-     */
-    @Ignore
-    @Test
-    public void testHalfwordOverflow() {
-        // TODO implement testHalfwordOverflow.
-        fail("Not implemented yet");
-    }
-
-    /**
-     * Test of illegal address when fixup.
-     */
-    @Ignore
-    @Test
-    public void testIllegalAddressFixup() {
-        // TODO implement testIllegalAddressFixup.
-        fail("Not implemented yet");
     }
 
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
@@ -202,6 +205,7 @@ public class CodeGeneratorTest {
     }
 
     private static class FakeSourceCodeInfo implements SourceCodeInfo {
+
         @Override
         public int getCurrentCol() {
             return 0;

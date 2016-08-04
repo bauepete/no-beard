@@ -92,7 +92,7 @@ public class CodeGenerator {
      * @param b The byte.
      */
     public void emit(byte b) {
-        appendToProgramMemory(getByteCode(b));
+            appendToProgramMemory(getByteCode(b));
     }
 
     private byte[] getByteCode(byte b) {
