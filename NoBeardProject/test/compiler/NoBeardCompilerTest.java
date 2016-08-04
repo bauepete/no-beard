@@ -23,7 +23,7 @@
  */
 package compiler;
 
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;

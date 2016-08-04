@@ -6,7 +6,7 @@ package symboltable;
 
 import error.Error;
 import nbm.CodeGenerator;
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 
 /**
  *

@@ -29,7 +29,7 @@ public class CodeGenerator {
         return prog[atAddr] * 256 + prog[atAddr + 1];
     }
     
-    public void emitOp(Nbm.Opcode op) {
+    public void emitOp(NoBeardMachine.Opcode op) {
         prog[pc] = op.byteCode();
         pc++;
     }

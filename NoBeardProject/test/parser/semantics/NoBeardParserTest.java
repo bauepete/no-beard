@@ -6,7 +6,7 @@ package parser.semantics;
 
 import compiler.NoBeardCompiler;
 import nbm.CodeGenerator;
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.NoBeardParser;

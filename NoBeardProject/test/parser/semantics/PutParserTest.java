@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.PutParser;

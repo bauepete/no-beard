@@ -13,7 +13,7 @@ import symboltable.Operand.Kind;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

@@ -23,8 +23,8 @@
  */
 package parser;
 
-import nbm.Nbm;
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine;
+import nbm.NoBeardMachine.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Type;
@@ -52,7 +52,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
         where(opCode == null || op2.getType() == Type.SIMPLEINT,
                 () -> getErrorHandler().throwOperatorOperandTypeMismatch("+ or -", "int"));
         sem(() -> {
-            if (opCode == Nbm.Opcode.SUB) {
+            if (opCode == NoBeardMachine.Opcode.SUB) {
                 emitCodeForLoadingValue();
                 code.emitOp(Opcode.NEG);
             } else {

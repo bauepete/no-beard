@@ -32,32 +32,32 @@ import org.junit.Before;
  *
  * @author peter
  */
-public class NbmTest {
+public class NoBeardMachineTest {
 
-    private Nbm m;
+    private NoBeardMachine m;
 
-    public NbmTest() {
+    public NoBeardMachineTest() {
     }
     
     @Before
     public void setUp() {
-        m = new Nbm();
+        m = new NoBeardMachine();
     }
 
     @Test
     public void testInitialization() {
         System.out.println("testInitialization");
-        assertTrue("State", m.getState() == Nbm.MachineState.RUN);
+        assertTrue("State", m.getState() == NoBeardMachine.State.RUN);
     }
 
     @Test
     public void testLoadDat() {
         System.out.println("testLoadDat");
         assertTrue("Expected to store 4 bytes", m.loadDat(0, new byte[4]));
-        assertTrue("Expected to store MAXDAT bytes", m.loadDat(0, new byte[Nbm.getMAXDAT()]));
-        assertFalse("Expected to fail to store more than MAXDAT bytes", m.loadDat(0, new byte[Nbm.getMAXDAT() + 1]));
-        assertTrue("Expected to store last byte", m.loadDat(Nbm.getMAXDAT() - 1, new byte[1]));
-        assertFalse("Expected to fail over MAXDAT", m.loadDat(Nbm.getMAXDAT() - 1, new byte[2]));
+        assertTrue("Expected to store MAXDAT bytes", m.loadDat(0, new byte[NoBeardMachine.getMAXDAT()]));
+        assertFalse("Expected to fail to store more than MAXDAT bytes", m.loadDat(0, new byte[NoBeardMachine.getMAXDAT() + 1]));
+        assertTrue("Expected to store last byte", m.loadDat(NoBeardMachine.getMAXDAT() - 1, new byte[1]));
+        assertFalse("Expected to fail over MAXDAT", m.loadDat(NoBeardMachine.getMAXDAT() - 1, new byte[2]));
     }
 
     @Test
@@ -65,23 +65,23 @@ public class NbmTest {
         System.out.println("testExecCycle");
 
         byte[] p = {
-            Nbm.Opcode.LIT.byteCode(), 0, 2,
-            Nbm.Opcode.PUT.byteCode(), 0,
-            Nbm.Opcode.HALT.byteCode()
+            NoBeardMachine.Opcode.LIT.byteCode(), 0, 2,
+            NoBeardMachine.Opcode.PUT.byteCode(), 0,
+            NoBeardMachine.Opcode.HALT.byteCode()
         };
         m.loadProg(0, p);
 
         m.execCycle();
         assertEquals(2, m.getStackTopValue());
-        assertTrue("Expected machine state RUN", m.getState() == Nbm.MachineState.RUN);
+        assertTrue("Expected machine state RUN", m.getState() == NoBeardMachine.State.RUN);
 
         m.execCycle();
-        assertEquals(Nbm.STACKEMPTY, m.getStackTopValue());
-        assertTrue("Expected machine state RUN", m.getState() == Nbm.MachineState.RUN);
+        assertEquals(NoBeardMachine.STACKEMPTY, m.getStackTopValue());
+        assertTrue("Expected machine state RUN", m.getState() == NoBeardMachine.State.RUN);
 
         m.execCycle();
-        assertEquals(Nbm.STACKEMPTY, m.getStackTopValue());
-        assertTrue("Expected machine state STOP", m.getState() == Nbm.MachineState.STOP);
+        assertEquals(NoBeardMachine.STACKEMPTY, m.getStackTopValue());
+        assertTrue("Expected machine state STOP", m.getState() == NoBeardMachine.State.STOP);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class NbmTest {
             m.loadProg(0, NoBeardCompiler.getByteCode());
             m.loadDat(0, NoBeardCompiler.getStringStore());
             m.runProg(0);
-            assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
+            assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());
         } else {
             System.err.println("Compilation not successfull. Can't run program.");
             fail("Program must compile successfully.");
@@ -109,7 +109,7 @@ public class NbmTest {
             m.loadDat(0, NoBeardCompiler.getStringStore());
 
             m.runProg(0);
-            assertEquals("Stack top ", Nbm.STACKEMPTY, m.getStackTopValue());
+            assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());
         } else {
             System.err.println("Compilation not successfull. Can't run program.");
             fail("Program must compile successfully.");

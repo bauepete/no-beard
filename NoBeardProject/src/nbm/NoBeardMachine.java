@@ -1,6 +1,25 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright ©2011 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
+ * 
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package nbm;
 
@@ -10,9 +29,9 @@ import java.util.Arrays;
  *
  * @author peter
  */
-public class Nbm {
+public class NoBeardMachine {
 
-    public enum MachineState {
+    public enum State {
 
         RUN, STOP, ERROR
     }
@@ -38,10 +57,10 @@ public class Nbm {
     private final byte[] prog;
     private final byte[] dat;
     private int pc;             // Program counter
-    private int db;             // Pointer to first byte of frame stack of currently running function
-    private int db_end;         // Pointer to the last byte of frame stack (db + LINKAREA + sizeof(local variables))
+    private int db;             // Pointer to first byte of stack frame of currently running function
+    private int db_end;         // Pointer to the last byte of stack frame (db + LINKAREA + sizeof(local variables))
     private int top;            // Pointer to the last used byte in frame stack
-    private MachineState ms;
+    private State ms;
     private final Instruction[] instructionMap = {
         new NoInstr(), new Lit(), new La(), new Lv(), new Lc(), new Sto(), new Stc(), new Assn(),
         new Neg(), new Add(), new Sub(), new Mul(), new Div(), new Mod(),
@@ -59,7 +78,7 @@ public class Nbm {
 
         @Override
         public void exec() {
-            ms = MachineState.ERROR;
+            ms = State.ERROR;
         }
     }
 
@@ -392,15 +411,15 @@ public class Nbm {
         @Override
         public void exec() {
             pc++;
-            ms = MachineState.STOP;
+            ms = State.STOP;
         }
     }
 
     /// Constructor
-    public Nbm() {
+    public NoBeardMachine() {
         prog = new byte[MAX_PROG];
         dat = new byte[MAX_DATA];
-        ms = MachineState.RUN;
+        ms = State.RUN;
         db = 0;
         top = db + LINKAREA;
         db_end = top;
@@ -415,7 +434,7 @@ public class Nbm {
         return MAX_PROG;
     }
 
-    public MachineState getState() {
+    public State getState() {
         return ms;
     }
 
@@ -459,11 +478,11 @@ public class Nbm {
     public void runProg(int startPc) {
         top = db + 28;
         pc = startPc;
-        ms = MachineState.RUN;
+        ms = State.RUN;
 
         System.out.println("Starting programm at pc " + startPc);
 
-        while (ms == MachineState.RUN) {
+        while (ms == State.RUN) {
             execCycle();
         }
     }
@@ -515,7 +534,7 @@ public class Nbm {
         if (0 <= opcode && opcode < instructionMap.length) {
             return instructionMap[opcode];
         } else {
-            ms = MachineState.ERROR;
+            ms = State.ERROR;
             return new NoInstr();
         }
     }

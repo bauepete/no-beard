@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.Nbm;
+import nbm.NoBeardMachine;
 import scanner.Scanner;
 import symboltable.Operand;
 
@@ -33,7 +33,7 @@ import symboltable.Operand;
  */
 public abstract class ExpressionRelatedParser extends OperandExportingParser {
 
-    protected Nbm.Opcode opCode;
+    protected NoBeardMachine.Opcode opCode;
     protected int positionOfLastBooleanOperatorJump;
 
     protected Operand op2;

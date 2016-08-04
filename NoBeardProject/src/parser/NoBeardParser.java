@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.Nbm;
+import nbm.NoBeardMachine;
 import scanner.Scanner.Symbol;
 
 /**
@@ -44,6 +44,6 @@ public class NoBeardParser extends Parser {
         String clearNameAtEnd = getLastParsedToken().getClearName();
         where(name == name1, () -> getErrorHandler().throwBlockNameMismatch(clearNameAtStart, clearNameAtEnd));
         parseSymbol(Symbol.SEMICOLON);
-        sem(() -> code.emitOp(Nbm.Opcode.HALT));
+        sem(() -> code.emitOp(NoBeardMachine.Opcode.HALT));
     }
 }

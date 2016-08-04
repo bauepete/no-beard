@@ -5,7 +5,7 @@
 package nbm;
 
 import org.junit.Ignore;
-import nbm.Nbm.Opcode;
+import nbm.NoBeardMachine.Opcode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,10 +36,10 @@ public class CodeGeneratorTest {
         System.out.println("testEmitOp");
         CodeGenerator instance = new CodeGenerator(256);
 
-        instance.emitOp(Nbm.Opcode.ADD);
+        instance.emitOp(NoBeardMachine.Opcode.ADD);
 
         assertEquals(1, instance.getPc());
-        assertEquals(Nbm.Opcode.ADD.byteCode(), instance.getCodeByte(0));
+        assertEquals(NoBeardMachine.Opcode.ADD.byteCode(), instance.getCodeByte(0));
     }
 
     /**

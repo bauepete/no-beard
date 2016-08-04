@@ -27,7 +27,7 @@ import error.ErrorHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nbm.CodeGenerator;
-import nbm.Nbm;
+import nbm.NoBeardMachine;
 import scanner.Scanner;
 import scanner.SrcReader;
 import symboltable.Operand;
@@ -49,7 +49,7 @@ public class ParserFactory {
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
         
-        ParserFactory.codeGenerator = new CodeGenerator(Nbm.getMAXPROG());
+        ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.getMAXPROG());
         ParserFactory.symbolListManager = new SymbolTable(scanner, errorHandler);
         
         Operand.setSymListManager(symbolListManager);

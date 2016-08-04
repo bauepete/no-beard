@@ -23,7 +23,7 @@
  */
 package parser.semantics;
 
-import nbm.Nbm;
+import nbm.NoBeardMachine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class BlockParserTest {
     @Test
     public void testEmptyBlock() {
         byte[] expectedCode = {
-            Nbm.Opcode.INC.byteCode(), 0, 0
+            NoBeardMachine.Opcode.INC.byteCode(), 0, 0
         };
         
         BlockParser instance = BlockParserTestSetup.getEmptyBlockTestSetup();
@@ -68,7 +68,7 @@ public class BlockParserTest {
     @Test
     public void testBlockWithVariableDeclaration() {
         byte[] expectedCode = {
-            Nbm.Opcode.INC.byteCode(), 0, 4
+            NoBeardMachine.Opcode.INC.byteCode(), 0, 4
         };
         
         BlockParser instance = BlockParserTestSetup.getBlockWithVariableDeclarationTestSetup();
