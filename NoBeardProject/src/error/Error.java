@@ -34,6 +34,7 @@ public class Error {
         POSITIVE_ARRAY_SIZE_EXPECTED(56, ErrorClass.SEMANTICAL, "Array size must be a positive integer"),
         NO_NESTED_MODULES(57, ErrorClass.SEMANTICAL, "Nested modules are not allowed"),
         OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s0 requires a %s1 operand"),
+        PROGRAM_MEMORY_OVERFLOW(59, ErrorClass.SEMANTICAL, "Program memory overflow"),
         GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s");
 
         private final int errorNumber;

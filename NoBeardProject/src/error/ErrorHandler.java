@@ -111,4 +111,8 @@ public class ErrorHandler {
     public void throwGeneralSemanticError(String message) {
         raise(new error.Error(error.Error.ErrorType.GENERAL_SEM_ERROR, message));
     }
+
+    public void throwProgramMemoryOverflow() {
+        raise(new error.Error(Error.ErrorType.PROGRAM_MEMORY_OVERFLOW));
+    }
 }

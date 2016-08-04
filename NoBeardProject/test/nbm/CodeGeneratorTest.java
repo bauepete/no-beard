@@ -4,12 +4,13 @@
  */
 package nbm;
 
+import error.ErrorHandler;
+import error.SourceCodeInfo;
 import org.junit.Ignore;
 import nbm.NoBeardMachine.Opcode;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
@@ -17,15 +18,16 @@ import static org.junit.Assert.*;
  */
 public class CodeGeneratorTest {
 
+    private CodeGenerator instance;
+    private ErrorHandler errorHandler;
+    
     public CodeGeneratorTest() {
     }
-
+    
     @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+    public void setup() {
+        errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
+        instance = new CodeGenerator(256, errorHandler);
     }
 
     /**
@@ -33,9 +35,6 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testEmitOp() {
-        System.out.println("testEmitOp");
-        CodeGenerator instance = new CodeGenerator(256);
-
         instance.emitOp(NoBeardMachine.Opcode.ADD);
 
         assertEquals(1, instance.getPc());
@@ -47,9 +46,7 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testEmitByte() {
-        System.out.println("emitByte");
         byte b = 1;
-        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.PUT);
         instance.emitByte(b);
@@ -63,9 +60,7 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testEmitHalfWord() {
-        System.out.println("emitHalfWord");
         int halfWord = 42;
-        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -76,13 +71,11 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class CodeGenerator.
+     * Test emitHalfWord by emitting max value of one byte.
      */
     @Test
     public void testEmitHalfWord255() {
-        System.out.println("emitHalfWord255");
         int halfWord = 255;
-        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -93,13 +86,11 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class CodeGenerator.
+     * Test emitHalfWord by emitting min value of two bytes.
      */
     @Test
     public void testEmitHalfWord256() {
-        System.out.println("emitHalfWord256");
         int halfWord = 256;
-        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -110,13 +101,11 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test of emitHalfWord method, of class CodeGenerator.
+     * Test emitHalfWord by emitting max value of two bytes.
      */
     @Test
     public void testEmitHalfWord65535() {
-        System.out.println("emitHalfWord65535");
         int halfWord = 65535;
-        CodeGenerator instance = new CodeGenerator(256);
 
         instance.emitOp(Opcode.LIT);
         instance.emitHalfWord(halfWord);
@@ -131,11 +120,6 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testFixup() {
-        System.out.println("fixup");
-        int atAddr = 0;
-        int halfWord = 0;
-        CodeGenerator instance = new CodeGenerator(256);
-
         instance.emitOp(Opcode.INC);
         int fixupAddr = instance.getPc();
         instance.emitHalfWord(0); // temp value
@@ -149,13 +133,10 @@ public class CodeGeneratorTest {
     }
 
     /**
-     * Test of overflow of program storage.
+     * Test getByteCode.
      */
     @Test
     public void testGetByteCode() {
-        System.out.println("getByteCode");
-
-        CodeGenerator instance = new CodeGenerator(256);
         byte[] expected = {
             Opcode.LA.byteCode(), 0, 0, 32,
             Opcode.LIT.byteCode(), 0, 42,
@@ -177,11 +158,21 @@ public class CodeGeneratorTest {
     /**
      * Test of overflow of program storage.
      */
-    @Ignore
     @Test
     public void testProgramStorageOverflow() {
-        // TODO implement case where program storage would be exceeded.
-        fail("Not implemented yet");
+        CodeGenerator g = new CodeGenerator(7, errorHandler);
+        g.emitOp(Opcode.LA);
+        g.emitByte((byte)0);
+        g.emitHalfWord(0);
+        
+        g.emitOp(Opcode.LIT);
+        g.emitHalfWord(17);
+        
+        assertEquals(0, errorHandler.getCount());
+        
+        g.emitOp(Opcode.STO);
+        assertEquals(1, errorHandler.getCount());
+        assertEquals(error.Error.ErrorType.PROGRAM_MEMORY_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
     }
 
     /**
@@ -207,6 +198,18 @@ public class CodeGeneratorTest {
     private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
         for (int i = 0; i < Math.min(exp.length, act.length); i++) {
             assertEquals("Byte " + i, exp[i], act[i]);
+        }
+    }
+
+    private static class FakeSourceCodeInfo implements SourceCodeInfo {
+        @Override
+        public int getCurrentCol() {
+            return 0;
+        }
+
+        @Override
+        public int getCurrentLine() {
+            return 1;
         }
     }
 }
