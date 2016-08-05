@@ -24,7 +24,7 @@
 package parser;
 
 import java.util.HashMap;
-import nbm.NoBeardMachine;
+import nbm.InstructionSet.Opcode;
 import scanner.Scanner;
 
 /**
@@ -32,31 +32,31 @@ import scanner.Scanner;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public class OperatorToOpCodeMap {
-    private final static HashMap<Scanner.Symbol, NoBeardMachine.Opcode> mulOpSymbolToOpCodeMap;
+    private final static HashMap<Scanner.Symbol, Opcode> mulOpSymbolToOpCodeMap;
     static {
         mulOpSymbolToOpCodeMap = new HashMap<>();
         // Relational operators
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LTH, NoBeardMachine.Opcode.REL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LEQ, NoBeardMachine.Opcode.REL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.EQUALS, NoBeardMachine.Opcode.REL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.NEQ, NoBeardMachine.Opcode.REL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GEQ, NoBeardMachine.Opcode.REL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GTH, NoBeardMachine.Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LTH, Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.LEQ, Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.EQUALS, Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.NEQ, Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GEQ, Opcode.REL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.GTH, Opcode.REL);
         // And operators
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.PLUS, NoBeardMachine.Opcode.ADD);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MINUS, NoBeardMachine.Opcode.SUB);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.PLUS, Opcode.ADD);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MINUS, Opcode.SUB);
         
         // Multiplication operators
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.TIMES, NoBeardMachine.Opcode.MUL);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.DIV, NoBeardMachine.Opcode.DIV);
-        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MOD, NoBeardMachine.Opcode.MOD);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.TIMES, Opcode.MUL);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.DIV, Opcode.DIV);
+        mulOpSymbolToOpCodeMap.put(Scanner.Symbol.MOD, Opcode.MOD);
     }
     
-    public static NoBeardMachine.Opcode getOpCode(Scanner.Symbol symbol) {
+    public static Opcode getOpCode(Scanner.Symbol symbol) {
         if (mulOpSymbolToOpCodeMap.containsKey(symbol))
             return mulOpSymbolToOpCodeMap.get(symbol);
         else
-            return NoBeardMachine.Opcode.NOP;
+            return Opcode.NOP;
     }
 
     public static byte getOperand(Scanner.Symbol symbol) {

@@ -23,11 +23,9 @@
  */
 package compiler;
 
-import nbm.NoBeardMachine.Opcode;
-import org.junit.After;
+import nbm.InstructionSet.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.semantics.AssemblerCodeChecker;
 
 /**

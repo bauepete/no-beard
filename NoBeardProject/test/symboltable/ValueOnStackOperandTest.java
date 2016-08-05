@@ -4,16 +4,11 @@
  */
 package symboltable;
 
-import symboltable.AddrOnStackOperand;
-import symboltable.Operand;
-import symboltable.ConstantOperand;
-import symboltable.VariableOperand;
-import symboltable.ValueOnStackOperand;
 import symboltable.Operand.Kind;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

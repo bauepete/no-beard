@@ -24,6 +24,7 @@
 package nbm;
 
 import compiler.NoBeardCompiler;
+import nbm.InstructionSet.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -65,9 +66,9 @@ public class NoBeardMachineTest {
         System.out.println("testExecCycle");
 
         byte[] p = {
-            NoBeardMachine.Opcode.LIT.byteCode(), 0, 2,
-            NoBeardMachine.Opcode.PUT.byteCode(), 0,
-            NoBeardMachine.Opcode.HALT.byteCode()
+            Opcode.LIT.byteCode(), 0, 2,
+            Opcode.PUT.byteCode(), 0,
+            Opcode.HALT.byteCode()
         };
         m.loadProg(0, p);
 

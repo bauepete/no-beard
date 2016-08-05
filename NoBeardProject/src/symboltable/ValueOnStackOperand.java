@@ -4,9 +4,8 @@
  */
 package symboltable;
 
-import error.Error;
 import nbm.CodeGenerator;
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 
 /**
  *

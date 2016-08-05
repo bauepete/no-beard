@@ -4,14 +4,10 @@
  */
 package symboltable;
 
-import symboltable.AddrOnStackOperand;
-import symboltable.Operand;
-import symboltable.ConstantOperand;
-import symboltable.VariableOperand;
 import symboltable.Operand.Kind;
 import scanner.Scanner;
 import parser.semantics.AssemblerCodeChecker;
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 import error.ErrorHandler;
 import error.Error.ErrorType;
 import symboltable.Operand.Type;

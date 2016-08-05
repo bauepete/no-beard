@@ -70,11 +70,11 @@ public class CodeGenerator {
      * Emits an opcode to the program memory
      * @param op The opcode.
      */
-    public void emit(NoBeardMachine.Opcode op) {
+    public void emit(InstructionSet.Opcode op) {
         appendToProgramMemory(getByteCode(op));
     }
 
-    private byte[] getByteCode(NoBeardMachine.Opcode op) {
+    private byte[] getByteCode(InstructionSet.Opcode op) {
         return new byte[]{op.byteCode()};
     }
 

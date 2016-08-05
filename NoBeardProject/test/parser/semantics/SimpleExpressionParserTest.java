@@ -4,12 +4,11 @@
  */
 package parser.semantics;
 
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.ParserFactory;
 import parser.AddExpressionParser;
 import parser.general.SimpleExpressionParserTestSetup;

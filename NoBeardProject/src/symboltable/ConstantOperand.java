@@ -4,9 +4,8 @@
  */
 package symboltable;
 
-import error.Error.ErrorType;
 import nbm.CodeGenerator;
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 

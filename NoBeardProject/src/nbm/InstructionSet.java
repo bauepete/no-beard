@@ -1,6 +1,6 @@
 /*
- * Copyright ©2011 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
- * Department of Informatics and Media Technique, HTBLA Leonding,
+ * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding, 
  * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
  * to use, copy, modify, and distribute this software and its documentation
  * for educational, research, and not-for-profit purposes, without fee and
@@ -21,47 +21,20 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser;
-
-import nbm.InstructionSet.Opcode;
-import scanner.Scanner.Symbol;
-import symboltable.SymbolTableEntry;
+package nbm;
 
 /**
  *
- * @author peter
+ * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class BlockParser extends Parser {
+public class InstructionSet {
+    public enum Opcode {
 
-    private final SymbolTableEntry obj;
+        NOP, LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
+        NOT, REL, FJMP, TJMP, JMP, PUT, INC, HALT;
 
-    private int incAddress = 0;
-
-    public BlockParser() {
-        this.obj = null;
-    }
-
-    @Override
-    protected void parseSpecificPart() {
-        parseSymbol(Symbol.DO);
-        sem(() -> {
-            sym.newBlock();
-            code.emit(Opcode.INC);
-            code.emit(0);
-            incAddress = code.getPc() - 2;
-        });
-        while (parsingWasSuccessful() && getScanner().getCurrentToken().getSymbol() != Symbol.DONE) {
-            parseStatement();
+        public byte byteCode() {
+            return (byte) this.ordinal();
         }
-        sem(() -> {
-            code.fixup(incAddress, sym.getCurrBlock().getSize());
-            sym.endBlock();
-        });
-        parseSymbol(Symbol.DONE);
-    }
-
-    private void parseStatement() {
-        StatementParser statementParser = ParserFactory.create(StatementParser.class);
-        parseSymbol(statementParser);
     }
 }

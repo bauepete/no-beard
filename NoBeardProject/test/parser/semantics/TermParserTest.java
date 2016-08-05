@@ -4,9 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.NoBeardMachine.Opcode;
-import org.junit.After;
-import org.junit.Before;
+import nbm.InstructionSet.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ParserFactory;
@@ -20,14 +18,6 @@ import parser.general.TermParserTestSetup;
 public class TermParserTest {
 
     public TermParserTest() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**

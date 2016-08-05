@@ -36,15 +36,6 @@ public class NoBeardMachine {
         RUN, STOP, ERROR
     }
 
-    public enum Opcode {
-
-        NOP, LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
-        NOT, REL, FJMP, TJMP, JMP, PUT, INC, HALT;
-
-        public byte byteCode() {
-            return (byte) this.ordinal();
-        }
-    }
     /// Returned from getStackTopValue() if stack of currently running
     /// function is empty.
     public static final int STACKEMPTY = -1;
@@ -457,24 +448,6 @@ public class NoBeardMachine {
         return (i == data.length);
     }
 
-    public void execCycle() {
-        byte opcode = fetch();
-        Instruction instr = decode(opcode);
-        instr.exec();
-    }
-
-    public int getStackTopValue() {
-        int rv;
-
-        if (top > db_end) {
-            rv = getDatWord(top);
-        } else {
-            rv = STACKEMPTY;
-        }
-        return rv;
-
-    }
-
     public void runProg(int startPc) {
         top = db + 28;
         pc = startPc;
@@ -487,7 +460,25 @@ public class NoBeardMachine {
         }
     }
 
-    // -------------------------- private methods ---------------------------
+    public void execCycle() {
+        byte opcode = fetch();
+        Instruction instr = decode(opcode);
+        instr.exec();
+    }
+
+    private byte fetch() {
+        return prog[pc];
+    }
+
+    private Instruction decode(byte opcode) {
+        if (0 <= opcode && opcode < instructionMap.length) {
+            return instructionMap[opcode];
+        } else {
+            ms = State.ERROR;
+            return new NoInstr();
+        }
+    }
+
     private int getDatWord(int atAddr) {
         int rv = 0;
         for (int i = 3; i >= 0; i--) {
@@ -522,20 +513,19 @@ public class NoBeardMachine {
         return word;
     }
 
-    private byte fetch() {
-        return prog[pc];
+    public int getStackTopValue() {
+        int rv;
+
+        if (top > db_end) {
+            rv = getDatWord(top);
+        } else {
+            rv = STACKEMPTY;
+        }
+        return rv;
+
     }
 
     private int getProgHalfWord(int atAddr) {
         return ((prog[atAddr] & 0xff) * 256 + (prog[atAddr + 1] & 0xff));
-    }
-
-    private Instruction decode(byte opcode) {
-        if (0 <= opcode && opcode < instructionMap.length) {
-            return instructionMap[opcode];
-        } else {
-            ms = State.ERROR;
-            return new NoInstr();
-        }
     }
 }

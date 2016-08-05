@@ -23,9 +23,7 @@
  */
 package parser.semantics;
 
-import nbm.NoBeardMachine.Opcode;
-import org.junit.After;
-import org.junit.Before;
+import nbm.InstructionSet.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.OperatorToOpCodeMap;
@@ -41,14 +39,6 @@ public class OperatorToOpCodeMapTest {
     public OperatorToOpCodeMapTest() {
     }
     
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getOpCode method, of class OperatorToOpCodeMap.
      */

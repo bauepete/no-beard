@@ -6,8 +6,7 @@ package nbm;
 
 import error.ErrorHandler;
 import error.SourceCodeInfo;
-import org.junit.Ignore;
-import nbm.NoBeardMachine.Opcode;
+import nbm.InstructionSet.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -37,10 +36,10 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testEmitOp() {
-        instance.emit(NoBeardMachine.Opcode.ADD);
+        instance.emit(Opcode.ADD);
 
         assertEquals(1, instance.getPc());
-        assertEquals(NoBeardMachine.Opcode.ADD.byteCode(), instance.getCodeByte(0));
+        assertEquals(Opcode.ADD.byteCode(), instance.getCodeByte(0));
     }
 
     /**
