@@ -130,10 +130,32 @@ public class DataMemoryTest {
     }
     
     @Test
-    public void testStoreStringConstantsDataAddessError() {
+    public void testStoreStringConstantsDataAddressError() {
         DataMemory memory = new DataMemory(7, errorHandler);
         byte[] stringConstants = {(byte)'f', (byte) 'o', (byte) 'o', (byte) 'b', (byte) 'a', (byte) 'r', (byte) '!', (byte) 'C'};
         assertEquals(-1, memory.storeStringConstants(stringConstants));
+        assertDataAddressError();
+    }
+    
+    @Test
+    public void testCopyBlock() {
+        byte[] stringConstants = {(byte)'f', (byte) 'o', (byte) 'o', (byte) 'b', (byte) 'a', (byte) 'r', (byte) '!', (byte) 'C'};
+        mem.storeStringConstants(stringConstants);
+        int fromAddress = 0;
+        int length = stringConstants.length;
+        int toAddress = 1024 - 8;
+        mem.copyBlock(fromAddress, toAddress, length);
+        assertArrayEquals(stringConstants, mem.load(toAddress, stringConstants.length));
+    }
+    
+    @Test
+    public void testCopyBlockDataAddressError() {
+        byte[] stringConstants = {(byte)'f', (byte) 'o', (byte) 'o', (byte) 'b', (byte) 'a', (byte) 'r', (byte) '!', (byte) 'C'};
+        mem.storeStringConstants(stringConstants);
+        int fromAddress = 0;
+        int length = stringConstants.length;
+        int toAddress = 1024 - 7;
+        mem.copyBlock(fromAddress, toAddress, length);
         assertDataAddressError();
     }
 }

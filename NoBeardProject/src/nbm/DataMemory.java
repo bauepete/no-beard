@@ -98,4 +98,11 @@ public class DataMemory {
             return -1;
         }
     }
+
+    void copyBlock(int fromAddress, int toAddress, int length) {
+        if (toAddress + length <= memory.length )
+            System.arraycopy(memory, fromAddress, memory, toAddress, length);
+        else
+            errorHandler.throwDataAddressError(Integer.toHexString(toAddress));
+    }
 }
