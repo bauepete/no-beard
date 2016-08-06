@@ -59,7 +59,7 @@ public class DataMemoryTest {
     @Test
     public void testStoreWordAtUpperLimitOfMemory() {
         int atAddress = 1020;
-        int value = 2_000_000_000;
+        int value = Integer.MAX_VALUE;
         assertTrue(mem.storeWord(atAddress, value));
         assertEquals(value, mem.loadWord(atAddress));
     }
@@ -69,6 +69,12 @@ public class DataMemoryTest {
         int atAddress = 1023;
         int value = Integer.MAX_VALUE;
         assertFalse(mem.storeWord(atAddress, value));
+    }
+    
+    @Test
+    public void testLoadWordDataAddressError() {
+        int atAddress = 1021;
+        assertEquals(-1, mem.loadWord(atAddress));
     }
     
     @Test
@@ -92,6 +98,11 @@ public class DataMemoryTest {
         byte[] memoryBlock = {17, 42, 127, 91, 79, 53};
         int atAddress = 1024 - memoryBlock.length + 1;
         assertFalse(mem.store(atAddress, memoryBlock));
+    }
+    
+    @Test
+    public void testLoadDataAddressError() {
+        assertNull(mem.load(1023, 2));
     }
     
     @Test

@@ -48,12 +48,16 @@ public class DataMemory {
     }
 
     int loadWord(int atAddress) {
-        int rv = 0;
-        for (int i = 3; i >= 0; i--) {
-            rv *= 256;
-            rv += (memory[atAddress + i] & 0xff);
+        if (atAddress < 1021) {
+            int rv = 0;
+            for (int i = 3; i >= 0; i--) {
+                rv *= 256;
+                rv += (memory[atAddress + i] & 0xff);
+            }
+            return rv;
+        } else {
+            return -1;
         }
-        return rv;
     }
 
     boolean store(int atAddress, byte[] memoryBlock) {
@@ -66,9 +70,13 @@ public class DataMemory {
     }
 
     byte[] load(int atAddress, int length) {
-        byte[] rv = new byte[length];
-        System.arraycopy(memory, atAddress, rv, 0, length);
-        return rv;
+        if (atAddress + length <= memory.length) {
+            byte[] rv = new byte[length];
+            System.arraycopy(memory, atAddress, rv, 0, length);
+            return rv;
+        } else {
+            return null;
+        }
     }
 
     /**
