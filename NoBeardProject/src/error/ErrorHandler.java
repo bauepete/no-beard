@@ -14,7 +14,7 @@ import java.util.List;
 public class ErrorHandler {
 
     private final List<Error> errors;
-    private final int[] errorCounts = {0, 0, 0};
+    private final int[] errorCounts = {0, 0, 0, 0};
     private final SourceCodeInfo sourceCodeInfo;
 
     public ErrorHandler(SourceCodeInfo srcCodeInfo) {
@@ -114,5 +114,14 @@ public class ErrorHandler {
 
     public void throwProgramMemoryOverflow() {
         raise(new error.Error(Error.ErrorType.PROGRAM_MEMORY_OVERFLOW));
+    }
+
+    /**
+     * Throws an error indicating that the address is invalid for the given
+     * request on the data memory.
+     * @param atAddress 
+     */
+    public void throwDataAddressError(String atAddress) {
+        raise(new error.Error(Error.ErrorType.DATA_ADDRESS_ERROR, atAddress));
     }
 }

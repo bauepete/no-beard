@@ -23,6 +23,7 @@
  */
 package nbm;
 
+import error.ErrorHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,13 +36,15 @@ import static org.junit.Assert.*;
 public class DataMemoryTest {
 
     private DataMemory mem;
+    private ErrorHandler errorHandler;
 
     public DataMemoryTest() {
     }
 
     @Before
     public void setUp() {
-        mem = new DataMemory(1024);
+        errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
+        mem = new DataMemory(1024, errorHandler);
     }
 
     @After
@@ -52,7 +55,7 @@ public class DataMemoryTest {
     public void testStoreWord() {
         int atAddress = 0;
         int value = 42;
-        assertTrue(mem.storeWord(atAddress, value));
+        mem.storeWord(atAddress, value);
         assertEquals(value, mem.loadWord(atAddress));
     }
         
@@ -60,7 +63,7 @@ public class DataMemoryTest {
     public void testStoreWordAtUpperLimitOfMemory() {
         int atAddress = 1020;
         int value = Integer.MAX_VALUE;
-        assertTrue(mem.storeWord(atAddress, value));
+        mem.storeWord(atAddress, value);
         assertEquals(value, mem.loadWord(atAddress));
     }
     
@@ -68,7 +71,12 @@ public class DataMemoryTest {
     public void testStoreWordDataAddressError() {
         int atAddress = 1023;
         int value = Integer.MAX_VALUE;
-        assertFalse(mem.storeWord(atAddress, value));
+        mem.storeWord(atAddress, value);
+        assertDataAddressError();
+    }
+
+    private void assertDataAddressError() {
+        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
     
     @Test
@@ -81,7 +89,7 @@ public class DataMemoryTest {
     public void testStore() {
         int atAddress = 0;
         byte[] memoryBlock = {17, 42, 127, 91, 79, 53};
-        assertTrue(mem.store(atAddress, memoryBlock));
+        mem.store(atAddress, memoryBlock);
         assertArrayEquals(memoryBlock, mem.load(atAddress, memoryBlock.length));
     }
     
@@ -89,7 +97,7 @@ public class DataMemoryTest {
     public void testStoreAtUpperLimitOfMemory() {
         byte[] memoryBlock = {17, 42, 127, 91, 79, 53};
         int atAddress = 1024 - memoryBlock.length;
-        assertTrue(mem.store(atAddress, memoryBlock));
+        mem.store(atAddress, memoryBlock);
         assertArrayEquals(memoryBlock, mem.load(atAddress, memoryBlock.length));
     }
     
@@ -97,12 +105,14 @@ public class DataMemoryTest {
     public void testStoreDataAddressError() {
         byte[] memoryBlock = {17, 42, 127, 91, 79, 53};
         int atAddress = 1024 - memoryBlock.length + 1;
-        assertFalse(mem.store(atAddress, memoryBlock));
+        mem.store(atAddress, memoryBlock);
+        assertDataAddressError();
     }
     
     @Test
     public void testLoadDataAddressError() {
         assertNull(mem.load(1023, 2));
+        assertDataAddressError();
     }
     
     @Test
@@ -121,8 +131,9 @@ public class DataMemoryTest {
     
     @Test
     public void testStoreStringConstantsDataAddessError() {
-        DataMemory memory = new DataMemory(7);
+        DataMemory memory = new DataMemory(7, errorHandler);
         byte[] stringConstants = {(byte)'f', (byte) 'o', (byte) 'o', (byte) 'b', (byte) 'a', (byte) 'r', (byte) '!', (byte) 'C'};
         assertEquals(-1, memory.storeStringConstants(stringConstants));
+        assertDataAddressError();
     }
 }

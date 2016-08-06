@@ -12,7 +12,7 @@ public class Error {
 
     public enum ErrorClass {
 
-        LEXICAL, SYNTAX, SEMANTICAL
+        LEXICAL, SYNTAX, SEMANTICAL, RUNTIME
     }
 
     public enum ErrorType {
@@ -35,7 +35,8 @@ public class Error {
         NO_NESTED_MODULES(57, ErrorClass.SEMANTICAL, "Nested modules are not allowed"),
         OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s0 requires a %s1 operand"),
         PROGRAM_MEMORY_OVERFLOW(59, ErrorClass.SEMANTICAL, "Program memory overflow"),
-        GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s");
+        GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s"),
+        DATA_ADDRESS_ERROR(100, ErrorClass.RUNTIME, "Address %s cannot be accessed in data memory");
 
         private final int errorNumber;
         private final ErrorClass errorClass;

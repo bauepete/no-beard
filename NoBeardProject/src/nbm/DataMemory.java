@@ -23,6 +23,8 @@
  */
 package nbm;
 
+import error.ErrorHandler;
+
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
@@ -30,20 +32,21 @@ package nbm;
 public class DataMemory {
 
     private final byte[] memory;
+    private final ErrorHandler errorHandler;
 
-    DataMemory(int memorySize) {
+    DataMemory(int memorySize, ErrorHandler errorHandler) {
         memory = new byte[memorySize];
+        this.errorHandler = errorHandler;
     }
 
-    boolean storeWord(int atAddress, int value) {
+    void storeWord(int atAddress, int value) {
         if (atAddress + 4 <= memory.length) {
             for (int i = 0; i < 4; i++) {
                 memory[atAddress + i] = (byte) (value % 256);
                 value /= 256;
             }
-            return true;
         } else {
-            return false;
+            errorHandler.throwDataAddressError(Integer.toHexString(atAddress));
         }
     }
 
@@ -60,12 +63,11 @@ public class DataMemory {
         }
     }
 
-    boolean store(int atAddress, byte[] memoryBlock) {
+    void store(int atAddress, byte[] memoryBlock) {
         if (atAddress + memoryBlock.length <= memory.length) {
             System.arraycopy(memoryBlock, 0, memory, atAddress, memoryBlock.length);
-            return true;
         } else {
-            return false;
+            errorHandler.throwDataAddressError(Integer.toHexString(atAddress));
         }
     }
 
@@ -75,6 +77,7 @@ public class DataMemory {
             System.arraycopy(memory, atAddress, rv, 0, length);
             return rv;
         } else {
+            errorHandler.throwDataAddressError(Integer.toHexString(atAddress));
             return null;
         }
     }
@@ -87,16 +90,12 @@ public class DataMemory {
      * successful, otherwise -1.
      */
     int storeStringConstants(byte[] stringConstants) {
-        if (store(0, stringConstants)) {
+        store(0, stringConstants);
+        if (errorHandler.getCount() == 0) {
             final int startAddressOfNextWord = (((stringConstants.length - 1) / 4 + 1) * 4);
             return startAddressOfNextWord;
         } else {
             return -1;
         }
     }
-
-    int getFirstFreeWord() {
-        return 4;
-    }
-
 }
