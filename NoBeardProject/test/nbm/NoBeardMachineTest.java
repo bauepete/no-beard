@@ -52,13 +52,23 @@ public class NoBeardMachineTest {
     }
 
     @Test
-    public void testLoadDat() {
-        System.out.println("testLoadDat");
-        assertTrue("Expected to store 4 bytes", m.loadDat(0, new byte[4]));
-        assertTrue("Expected to store MAXDAT bytes", m.loadDat(0, new byte[NoBeardMachine.getMAXDAT()]));
-        assertFalse("Expected to fail to store more than MAXDAT bytes", m.loadDat(0, new byte[NoBeardMachine.getMAXDAT() + 1]));
-        assertTrue("Expected to store last byte", m.loadDat(NoBeardMachine.getMAXDAT() - 1, new byte[1]));
-        assertFalse("Expected to fail over MAXDAT", m.loadDat(NoBeardMachine.getMAXDAT() - 1, new byte[2]));
+    public void testLoadStringConstants() {
+        m.loadStringConstants(new byte[4]);
+        assertEquals(NoBeardMachine.State.RUN, m.getState());
+        assertEquals(4, m.getAddressOfFirstFrame());
+    }
+    
+    @Test
+    public void testLoadMaxNumberOfStrings() {
+        m.loadStringConstants(new byte[NoBeardMachine.getMAXDAT()]);
+        assertEquals(NoBeardMachine.State.RUN, m.getState());
+    }
+    
+    @Test
+    public void testStoreStringsOverflow() {
+        m.loadStringConstants(new byte[NoBeardMachine.getMAXDAT() + 1]);
+        assertEquals(NoBeardMachine.State.ERROR, m.getState());
+        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), m.getError().getNumber());
     }
 
     @Test
@@ -92,7 +102,7 @@ public class NoBeardMachineTest {
 
         if (parseOk) {
             m.loadProg(0, NoBeardCompiler.getByteCode());
-            m.loadDat(0, NoBeardCompiler.getStringStore());
+            m.loadStringConstants(NoBeardCompiler.getStringStore());
             m.runProg(0);
             assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());
         } else {
@@ -107,7 +117,7 @@ public class NoBeardMachineTest {
         boolean parseOk = NoBeardCompiler.compile();
         if (parseOk) {
             m.loadProg(0, NoBeardCompiler.getByteCode());
-            m.loadDat(0, NoBeardCompiler.getStringStore());
+            m.loadStringConstants(NoBeardCompiler.getStringStore());
 
             m.runProg(0);
             assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());

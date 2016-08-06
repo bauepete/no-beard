@@ -23,13 +23,29 @@
  */
 package nbm;
 
+import error.ErrorHandler;
+import error.SourceCodeInfo;
 import java.util.Arrays;
 
 /**
  *
  * @author peter
  */
-public class NoBeardMachine {
+public class NoBeardMachine implements SourceCodeInfo {
+
+    @Override
+    public int getCurrentCol() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentLine() {
+        return pc;
+    }
+
+    error.Error getError() {
+        return errorHandler.getLastError();
+    }
 
     public enum State {
 
@@ -47,6 +63,9 @@ public class NoBeardMachine {
     private static final int WORDSIZE = 4;     // Size of one word in bytes
     private final byte[] prog;
     private final byte[] dat;
+    private final error.ErrorHandler errorHandler;
+    private final DataMemory dataMemory;
+    private final CallStack callStack;
     private int pc;             // Program counter
     private int db;             // Pointer to first byte of stack frame of currently running function
     private int db_end;         // Pointer to the last byte of stack frame (db + LINKAREA + sizeof(local variables))
@@ -410,6 +429,9 @@ public class NoBeardMachine {
     public NoBeardMachine() {
         prog = new byte[MAX_PROG];
         dat = new byte[MAX_DATA];
+        errorHandler = new ErrorHandler(this);
+        dataMemory = new DataMemory(MAX_DATA, errorHandler);
+        callStack = new CallStack(dataMemory, 0, LINKAREA);
         ms = State.RUN;
         db = 0;
         top = db + LINKAREA;
@@ -428,15 +450,18 @@ public class NoBeardMachine {
     public State getState() {
         return ms;
     }
+    
+    public int getAddressOfFirstFrame() {
+        return callStack.getFramePointer();
+    }
 
-    public boolean loadDat(int atAddr, byte[] data) {
-        int i = 0;
-        while ((atAddr + i) < MAX_DATA && i < data.length) {
-            dat[atAddr + i] = data[i];
-            i++;
+    public void loadStringConstants(byte[] data) {
+        dataMemory.storeStringConstants(data);
+        if (errorHandler.getCount() == 0) {
+            callStack.setCurrentFramePointer(data.length);
+        } else {
+            ms = State.ERROR;
         }
-        db = atAddr + i;
-        return (i == data.length);
     }
 
     public boolean loadProg(int atAddr, byte[] data) {
