@@ -24,7 +24,7 @@
 package parser;
 
 import java.util.HashMap;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import scanner.Scanner;
 
 /**

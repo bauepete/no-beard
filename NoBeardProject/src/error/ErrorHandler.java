@@ -124,4 +124,8 @@ public class ErrorHandler {
     public void throwDataAddressError(String atAddress) {
         raise(new error.Error(Error.ErrorType.DATA_ADDRESS_ERROR, atAddress));
     }
+
+    public void throwProgramAddressError(String atAddress) {
+        raise(new error.Error(Error.ErrorType.PROGRAM_ADDRESS_ERROR, atAddress));
+    }
 }

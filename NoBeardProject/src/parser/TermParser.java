@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;

@@ -24,7 +24,7 @@
 package parser;
 
 import nbm.NoBeardMachine;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Type;

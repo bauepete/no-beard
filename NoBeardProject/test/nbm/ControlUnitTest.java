@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015, 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
  * Department of Informatics and Media Technique, HTBLA Leonding, 
  * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
  * to use, copy, modify, and distribute this software and its documentation
@@ -21,54 +21,66 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser.semantics;
+package nbm;
 
-import nbm.ControlUnit.Opcode;
+import error.ErrorHandler;
+import nbm.InstructionSet.Instruction;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import parser.OperatorToOpCodeMap;
-import scanner.Scanner;
-import scanner.Scanner.Symbol;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class OperatorToOpCodeMapTest {
+public class ControlUnitTest {
     
-    public OperatorToOpCodeMapTest() {
+    private ErrorHandler errorHandler;
+    private DataMemory dataMemory;
+    private CallStack callStack;
+    private ProgramMemory programMemory;
+    private ControlUnit controlUnit;
+    
+    public ControlUnitTest() {
     }
     
-    /**
-     * Test of getOpCode method, of class OperatorToOpCodeMap.
-     */
-    @Test
-    public void testGetOpCode() {
-        System.out.println("getOpCode");
-        Scanner.Symbol symbol = Symbol.MINUS;
-        Opcode expResult = Opcode.SUB;
-        Opcode result = OperatorToOpCodeMap.getOpCode(symbol);
-        assertEquals(expResult, result);
+    @Before
+    public void setUp() {
+        errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
+        dataMemory = new DataMemory(32, errorHandler);
+        callStack = new CallStack(dataMemory, 0, 28);
+        programMemory = new ProgramMemory(1024, errorHandler);
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack);
     }
     
-    @Test
-    public void testIllegalOpCode() {
-        Scanner.Symbol symbol = Symbol.CHAR;
-        assertEquals(Opcode.NOP, OperatorToOpCodeMap.getOpCode(symbol));
+    @After
+    public void tearDown() {
     }
-    
+
     @Test
-    public void testGetOperand() {
-        assertEquals(0, OperatorToOpCodeMap.getOperand(Symbol.LTH));
-        assertEquals(1, OperatorToOpCodeMap.getOperand(Symbol.LEQ));
-        assertEquals(2, OperatorToOpCodeMap.getOperand(Symbol.EQUALS));
-        assertEquals(3, OperatorToOpCodeMap.getOperand(Symbol.NEQ));
-        assertEquals(4, OperatorToOpCodeMap.getOperand(Symbol.GEQ));
-        assertEquals(5, OperatorToOpCodeMap.getOperand(Symbol.GTH));
+    public void testConstruction() {
+        assertEquals(0, controlUnit.getPc());
     }
     
     @Test
-    public void testGetIllegalOperand() {
-        assertEquals(-1, OperatorToOpCodeMap.getOperand(Symbol.NOSY));
+    public void testGetLiteral() {
+        byte[] program = {
+            Instruction.LIT.getId(), (byte) 1, (byte) 255
+        };
+        programMemory.store(0, program);
+        controlUnit.fetchInstruction();
+        assertEquals(511, controlUnit.getLiteral());
+    }
+    
+    @Test
+    public void testGetDisplacementAndGetAddress() {
+        byte[] program = {
+            Instruction.LA.getId(), (byte) 1, (byte) 1, (byte) 0
+        };
+        programMemory.store(0, program);
+        controlUnit.fetchInstruction();
+        assertEquals(1, controlUnit.getDisplacement());
+        assertEquals(256, controlUnit.getAddress());
     }
 }

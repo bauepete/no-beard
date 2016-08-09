@@ -5,7 +5,7 @@
 package symboltable;
 
 import nbm.CodeGenerator;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 
 /**
  *

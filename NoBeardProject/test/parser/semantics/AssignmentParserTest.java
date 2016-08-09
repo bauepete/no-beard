@@ -6,7 +6,7 @@ package parser.semantics;
 
 import error.ErrorHandler;
 import nbm.CodeGenerator;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.AssignmentParser;

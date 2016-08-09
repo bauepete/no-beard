@@ -6,7 +6,7 @@ package nbm;
 
 import error.ErrorHandler;
 import error.SourceCodeInfo;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

@@ -24,6 +24,7 @@
 package nbm;
 
 import error.ErrorHandler;
+import java.nio.ByteOrder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +51,43 @@ public class DataMemoryTest {
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void testStoreByte() {
+        int atAddress = 0;
+        byte value = 17;
+        mem.storeByte(atAddress, value);
+        byte retrievedValue = mem.loadByte(atAddress);
+        assertEquals(value, retrievedValue);
+    }
+    
+    @Test
+    public void testStoreByteAtUpperLimitOfMemory() {
+        int atAddress = 1023;
+        byte value = (byte) 255;
+        mem.storeByte(atAddress, value);
+        byte retrievedValue = mem.loadByte(atAddress);
+        assertEquals(value, retrievedValue);
+    }
+    
+    @Test
+    public void testStoreByteDataAddressError() {
+        int atAddress = 1024;
+        byte value = (byte) 255;
+        mem.storeByte(atAddress, value);
+        assertDataAddressError();
+    }
+    
+    private void assertDataAddressError() {
+        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+    
+    @Test
+    public void testLoadByteDataAddressError() {
+        int atAddress = 1024;
+        byte retrievedValue = mem.loadByte(atAddress);
+        assertDataAddressError();
+    }
 
     @Test
     public void testStoreWord() {
@@ -58,7 +96,21 @@ public class DataMemoryTest {
         mem.storeWord(atAddress, value);
         assertEquals(value, mem.loadWord(atAddress));
     }
-        
+    
+    @Test
+    public void testStoreNegativeWord() {
+        int atAddress = 0;
+        int value = -17;
+        mem.storeWord(atAddress, value);
+        assertEquals(value, mem.loadWord(atAddress));
+    }
+    
+    @Test
+    public void testStoreWordWithMSBSetInTheMiddle() {
+        mem.storeWord(0, 128);
+        assertEquals(128, mem.loadWord(0));
+    }
+    
     @Test
     public void testStoreWordAtUpperLimitOfMemory() {
         int atAddress = 1020;
@@ -75,14 +127,11 @@ public class DataMemoryTest {
         assertDataAddressError();
     }
 
-    private void assertDataAddressError() {
-        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
-    }
-    
     @Test
     public void testLoadWordDataAddressError() {
         int atAddress = 1021;
-        assertEquals(-1, mem.loadWord(atAddress));
+        int retrievedValue = mem.loadWord(atAddress);
+        assertDataAddressError();
     }
     
     @Test

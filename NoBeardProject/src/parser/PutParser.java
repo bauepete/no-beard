@@ -4,7 +4,7 @@
  */
 package parser;
 
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import scanner.Scanner.Symbol;
 import symboltable.ConstantOperand;
 import symboltable.IllegalOperand;

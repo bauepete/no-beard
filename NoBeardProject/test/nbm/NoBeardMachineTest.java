@@ -24,7 +24,7 @@
 package nbm;
 
 import compiler.NoBeardCompiler;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

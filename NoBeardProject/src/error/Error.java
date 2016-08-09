@@ -36,7 +36,9 @@ public class Error {
         OPERATOR_OPERAND_TYPE_MISMATCH(58, ErrorClass.SEMANTICAL, "Operator %s0 requires a %s1 operand"),
         PROGRAM_MEMORY_OVERFLOW(59, ErrorClass.SEMANTICAL, "Program memory overflow"),
         GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s"),
-        DATA_ADDRESS_ERROR(100, ErrorClass.RUNTIME, "Address %s cannot be accessed in data memory");
+        
+        DATA_ADDRESS_ERROR(100, ErrorClass.RUNTIME, "Address %s cannot be accessed in data memory"),
+        PROGRAM_ADDRESS_ERROR(101, ErrorClass.RUNTIME, "Address %s cannot be accessed in program memory");
 
         private final int errorNumber;
         private final ErrorClass errorClass;

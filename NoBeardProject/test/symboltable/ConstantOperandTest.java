@@ -7,7 +7,7 @@ package symboltable;
 import symboltable.Operand.Kind;
 import scanner.Scanner;
 import parser.semantics.AssemblerCodeChecker;
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import error.ErrorHandler;
 import error.Error.ErrorType;
 import symboltable.Operand.Type;

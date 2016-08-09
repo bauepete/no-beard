@@ -64,6 +64,10 @@ public class CallStack {
         return currentStackPointer;
     }
 
+    public void setStackPointer(int currentStackPointer) {
+        this.currentStackPointer = currentStackPointer;
+    }
+
     void push(int value) {
         currentStackPointer += 4;
         memory.storeWord(currentStackPointer, value);

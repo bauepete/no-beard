@@ -24,6 +24,8 @@
 package nbm;
 
 import error.ErrorHandler;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 /**
  *
@@ -39,25 +41,48 @@ public class DataMemory {
         this.errorHandler = errorHandler;
     }
 
-    void storeWord(int atAddress, int value) {
-        if (atAddress + 4 <= memory.length) {
-            for (int i = 0; i < 4; i++) {
-                memory[atAddress + i] = (byte) (value % 256);
-                value /= 256;
-            }
+    void storeByte(int atAddress, byte value) {
+        if (atAddress < memory.length) {
+            memory[atAddress] = value;
         } else {
-            errorHandler.throwDataAddressError(Integer.toHexString(atAddress));
+            errorHandler.throwDataAddressError("0x" + Integer.toHexString(atAddress));
         }
     }
 
+    byte loadByte(int atAddress) {
+        if (atAddress < memory.length) {
+            return memory[atAddress];
+        } else {
+            errorHandler.throwDataAddressError("0x" + Integer.toHexString(atAddress));
+            return -1;
+        }
+    }
+
+    void storeWord(int atAddress, int value) {
+//        for (int i = 0; i < 4; i++) {
+//            storeByte(atAddress + i, (byte) (value % 256));
+//            value /= 256;
+//        }
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        byteBuffer.putInt(value);
+        store(atAddress, byteBuffer.array());
+    }
+
     int loadWord(int atAddress) {
-        if (atAddress < 1021) {
-            int rv = 0;
-            for (int i = 3; i >= 0; i--) {
-                rv *= 256;
-                rv += (memory[atAddress + i] & 0xff);
-            }
-            return rv;
+//        int rv = 0;
+//        for (int i = 3; i >= 0; i--) {
+//            rv *= 256;
+//            if (i == 3) {
+//                rv += loadByte(atAddress + i);
+//            } else {
+//                rv += loadByte(atAddress + i) & 0xff;
+//            }
+//        }
+//        return rv;
+        byte[] byteArray = load(atAddress, 4);
+        if (errorHandler.getCount() == 0) {
+            return ByteBuffer.wrap(byteArray).order(ByteOrder.LITTLE_ENDIAN).getInt();
         } else {
             return -1;
         }
@@ -100,9 +125,10 @@ public class DataMemory {
     }
 
     void copyBlock(int fromAddress, int toAddress, int length) {
-        if (toAddress + length <= memory.length )
+        if (toAddress + length <= memory.length) {
             System.arraycopy(memory, fromAddress, memory, toAddress, length);
-        else
+        } else {
             errorHandler.throwDataAddressError(Integer.toHexString(toAddress));
+        }
     }
 }

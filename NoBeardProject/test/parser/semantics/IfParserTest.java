@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import parser.general.IfParserTestSetup;
 import parser.IfParser;
 import org.junit.Test;

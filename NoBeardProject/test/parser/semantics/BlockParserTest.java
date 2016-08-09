@@ -23,7 +23,7 @@
  */
 package parser.semantics;
 
-import nbm.InstructionSet.Opcode;
+import nbm.ControlUnit.Opcode;
 import nbm.NoBeardMachine;
 import org.junit.After;
 import org.junit.Before;
