@@ -1,4 +1,4 @@
-\begin{thebibliography}{Kha08}
+\begin{thebibliography}{Wik16}
 
 \bibitem[Kha08]{khason_computer_2008}
 Tamir Khason.
@@ -11,6 +11,13 @@ Pat Terry.
 \newblock {\em Compiling {With} {C}\# {And} {Java}}.
 \newblock Addison-Wesley Educational Publishers Inc, Harlow, England ; New
   York, 2004.
+
+\bibitem[Wik16]{wikipedia_twos_2016}
+Wikipedia.
+\newblock Two's complement, July 2016.
+\newblock Page Version ID: 730322017.
+\newblock URL:
+  \url{https://en.wikipedia.org/w/index.php?title=Two%27s_complement&oldid=730322017}.
 
 \bibitem[Wir77]{wirth_what_1977}
 Niklaus Wirth.

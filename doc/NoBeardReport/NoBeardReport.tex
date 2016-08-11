@@ -70,7 +70,7 @@
 	frame=single,
 	sensitive=true,
 	tabsize=3,
-	morekeywords = {push, pop, printf, dat, prog, top, db, pc, ms},
+	morekeywords = {push, pop, printf, dat, prog, top, fp, pc, ms},
 	morecomment=[l][\color{srcgreen}]{//},
 	morestring=[b][\color{srcred}]{"},
 	keywordstyle=\color{srcpurple},
@@ -130,6 +130,7 @@ Austria
 \begin{tabular}{|l|l|p{.5\textwidth}|}
 \hline
 \cellcolor{Gray}\textcolor{White}{Date} & \cellcolor{Gray}\textcolor{White}{Author} & \cellcolor{Gray}\textcolor{White}{Change} \\ \hline
+August 9, 2016 & P. Bauer & Explained call stack and control unit of the machine.  \\ \hline
 June 25, 2016 & P. Bauer & Added more detailed description of the machine and added all assembler instructions used so far.  \\ \hline
 June 12, 2016 & P. Bauer & Changed environment for grammar and formatting of source code. \\ \hline
 June 5, 2014 & P. Bauer & {\bf Released v. 1.1}  \\ \hline
@@ -262,32 +263,27 @@ Writes the value of {\em Expression1} to the output medium. If {\em Expression2}
 \chapter{The \leongage{} Machine}
 \lstset{language=AsmDef}
 \section{Overview}
-The virtual machine being target for \leongage{} programs is a stack machine with instructions of variable length and has the following components. The word width of the \leongage{} machine is 4 bytes.
+The virtual machine being target for \leongage{} programs is a stack machine with instructions of variable length and has the following components. The word width of the \leongage{} machine is four bytes.
 
-\begin{tabular}{p{.2\textwidth}p{.71\textwidth}}
-	\lstinline$prog[MAX_PROG]$ & The {\em program memory} which is byte addressed. \\
-	
-	\lstinline$dat[MAX_DATA]$] & The {\em data memory} is byte addressed and is separated into two parts:
+\subsection{Program Memory}
+The program memory is further denoted as \lstinline$prog[MAX_PROG]$. It is byte addressed with a maximum size of \lstinline$MAX_PROG$. Attempts to access addresses outside the range of 0 to \lstinline$MAX_PROG - 1$ result in a \lstinline$ProgramAddressError$.
+
+\subsection{Data Memory}
+The {\em data memory} is byte addressed and storage is done in the following way:
+
+\begin{itemize}
+\item Characters are one-byte values and are stored byte-wise into the data memory.
+\item Integers are four-byte values and are stored in {\em little endian order} i.e., the lowest significant byte is stored first. Negative integer values are stored as {\em Two's Complement}~\cite{wikipedia_twos_2016}.
+\item Booleans are four-byte values and are stored as the integer 0 for false and the integer 1 for true.
+\end{itemize}
+ The data memory is separated into two parts:
 	\begin{itemize}
 		\item String constants
 		\item Stack frames of the currently running functions
 	\end{itemize}
-	Figure~\ref{fig:datamemory} shows this. Before a program is started the string constants are stored in constant memory. On top of this the stack frames are maintained as follows: Every time a function is called a frame is added. It holds data for the function arguments, local variables, some auxiliary data and its expression stack (shortly called stack in the sequel). As soon as the function ends, its frame is removed. A more detailed description of stack frames is given in section~\ref{sec:stackframes}.
-	
-	The expression stack is used to store data needed for each statement. It grows and shrinks as needed and is empty at the end of each statement. The stack is addressed word-wise only. The functions \lstinline$push()$ and \lstinline$pop()$ are used to add and remove values to and from the stack, respectively. \\
-	
-	\lstinline$top$ & Address of the start of the last used word on the stack. \\
-	\lstinline$db$ & {\em Data Base}: Address of the first byte of the currently running function's stack frame. \\
-	\lstinline$pc$ & {\em Program Counter}: Start address of the next instruction in \lstinline$prog$ to be executed.\\
-	\lstinline$ms$ & {\em Machine State}: The \leongage{} machine may have three different states:
-	\begin{itemize}
-		\item \lstinline$run$: The machine runs
-		\item \lstinline$stop$: The machine stops. Usually when the end of program is reached.
-		\item \lstinline$error$: Error state
-	\end{itemize}
-\end{tabular}
+	Figure~\ref{fig:datamemory} shows this. Before a program is started the string constants are stored in the constant memory. On top of this the stack frames are maintained as follows: Every time a function is called a frame is added. It holds data for the function arguments, local variables, some auxiliary data and its expression stack (shortly called stack in the sequel). As soon as the function ends, its frame is removed. A more detailed description of stack frames is given in section~\ref{sec:stackframes}.
 
-\begin{figure}\label{fig:datamemory}
+\begin{figure}
 \begin{center}
 \begin{tabular}{p{8em}|p{8em}|}
 \cline{2-2}
@@ -298,8 +294,30 @@ The virtual machine being target for \leongage{} programs is a stack machine wit
 \parbox[b][4em][b]{8em}{\hfill MAX\_DATA} & free \\ \cline{2-2}
 \end{tabular}
 \end{center}
-\caption{Data Memory of the \leongage{} Machine}
+\caption{Data Memory of the \leongage{} Machine}\label{fig:datamemory}
 \end{figure}
+
+\subsection{Call Stack}
+Since most of the data in the data memory is organized as a stack the {\em call stack} as an abstraction to the data memory is defined. It provides functions to add and remove frames from the stack and to maintain the expression stack.
+The expression stack is used to store data needed for each statement. It grows and shrinks as needed and is empty at the end of each statement. The stack is addressed word-wise only. The functions \lstinline$push()$ and \lstinline$pop()$ are used to add and remove values to and from the stack, respectively. It has the following components:
+
+\begin{tabular}{p{.2\textwidth}p{.71\textwidth}}		
+	\lstinline$top$ & Address of the start of the last used word on the stack. \\
+	\lstinline$fp$ & {\em Frame Pointer}: Address of the first byte of the currently running function's stack frame. \\
+\end{tabular}
+
+\subsection{Control Unit}
+The control unit is responsible for the proper execution of programs. It executes one machine cycle, i.e., it fetches, decodes and executes the current instruction. In order to do this it uses the following components:
+
+\begin{tabular}{p{.2\textwidth}p{.71\textwidth}}		
+	\lstinline$pc$ & {\em Program Counter}: Start address of the next instruction in \lstinline$prog$ to be executed.\\
+	\lstinline$ms$ & {\em Machine State}: The \leongage{} machine may have three different states:
+	\begin{itemize}
+		\item \lstinline$run$: The machine runs
+		\item \lstinline$stop$: The machine stops. Usually when the end of program is reached.
+		\item \lstinline$error$: Error state
+	\end{itemize}
+\end{tabular}
 
 \section{Stack Frames}\label{sec:stackframes}
 
@@ -314,8 +332,8 @@ The very first instruction is fetched from {\tt prog[startPc]} where {\tt startP
 
 \begin{lstlisting}
 runProg(startPc) {
-	db = start byte of first free word in dat;
-	top = db + 28;
+	fp = start byte of first free word in dat;
+	top = fp + 28;
 	pc = startPc;
 	ms = run;
 	
@@ -328,7 +346,7 @@ runProg(startPc) {
 \end{lstlisting}
 
 \section{Instructions}
-\leongage{} instructions have a variable length. Every instruction has one opcode and either zero, or one, or two operands. When describing the instructions we use the following conventions:
+\leongage{} instructions have a variable length. Every instruction has an opcode and either zero, or one, or two operands. When describing the instructions we use the following conventions:
 
 Each instruction is described in one of the following subsections. The title of the subsection is the mnemonic by which the instruction is identified on assembler level. Then a table follows which shows the size of the instruction and which bytes carry which information. For all instructions the first byte is dedicated to the op code, which is the id by which the instruction is identified on machine language level.
 
@@ -378,7 +396,7 @@ Loads an address on the stack.
 
 	\begin{lstlisting}
 	LA Displacement DataAddress
-	base = db;
+	base = fp;
 	for (i= 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
 	}
@@ -395,7 +413,7 @@ Loads a value on the stack.
 
 	\begin{lstlisting}
 	LV Displacement DataAddress
-	base = db;
+	base = fp;
 	for (i = 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
 	}
@@ -413,7 +431,7 @@ Loads a character on the stack.
 
 	\begin{lstlisting}
 	LC Displacement DataAddress
-	base = db;
+	base = fp;
 	for (i = 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
 	}
@@ -537,7 +555,10 @@ Divides the top two values of the stack.
 	DIV
 	y = pop();
 	x = pop();
-	push(x / y);
+	if (y != 0)
+		push(x / y);
+	else
+		throwDivByZero();
 	\end{lstlisting}
 
 % ----------------------------- MOD ----------------------------
