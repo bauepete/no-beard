@@ -103,6 +103,53 @@ public class InstructionSet {
             else {
                 cu.stopDueToDivisionByZero();
             }
+        }),
+        MOD((byte) 0x10, (byte) 1, (cu) -> {
+            int y = cu.getCallStack().pop();
+            int x = cu.getCallStack().pop();
+            if (y != 0)
+                cu.getCallStack().push(x % y);
+            else {
+                cu.stopDueToDivisionByZero();
+            }
+        }),
+        NOT((byte) 0x11, (byte) 1, (cu) -> {
+            int x = cu.getCallStack().pop();
+            if (x == 0)
+                cu.getCallStack().push(1);
+            else
+                cu.getCallStack().push(0);
+        }),
+        REL((byte) 0x12, (byte) 2, (cu) -> {
+            int y = cu.getCallStack().pop();
+            int x = cu.getCallStack().pop();
+            byte relOp = cu.getRelOp();
+            int valueToPush;
+            
+            switch (relOp) {
+                case 0: if (x < y) valueToPush = 1; else valueToPush = 0; break;
+                case 1: if (x <= y) valueToPush = 1; else valueToPush = 0; break;
+                case 2: if (x == y) valueToPush = 1; else valueToPush = 0; break;
+                case 3: if (x != y) valueToPush = 1; else valueToPush = 0; break;
+                case 4: if (x >= y) valueToPush = 1; else valueToPush = 0; break;
+                case 5: if (x > y) valueToPush = 1; else valueToPush = 0; break;
+                default: cu.stopDueToOperandRangeError(); valueToPush = 0;
+            }
+            cu.getCallStack().push(valueToPush);
+        }),
+        FJMP((byte) 0x16, (byte) 3, (cu) -> {
+            int newPc = cu.getAddress();
+            int x = cu.getCallStack().pop();
+            if (x == 0) cu.setPc(newPc);
+        }),
+        TJMP((byte) 0x17, (byte) 3, (cu) -> {
+            int newPc = cu.getAddress();
+            int x = cu.getCallStack().pop();
+            if (x == 1) cu.setPc(newPc);
+        }),
+        JMP((byte) 0x18, (byte) 3, (cu) -> {
+            int newPc = cu.getAddress();
+            cu.setPc(newPc);
         });
 
         private final byte id;
@@ -137,7 +184,7 @@ public class InstructionSet {
         }
     }
 
-    public Instruction getInstructionById(int id) {
+    public static Instruction getInstructionById(int id) {
         return idToInstructionMap.get((byte) id);
     }
 }

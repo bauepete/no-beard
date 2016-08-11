@@ -97,6 +97,12 @@ public class ControlUnit {
         return a;
     }
 
+    byte getRelOp() {
+        byte r = programMemory.loadByte(currentAddressInProgramMemory);
+        currentAddressInProgramMemory++;
+        return r;
+    }
+
     void fetchInstruction() {
         currentAddressInProgramMemory = getPc() + 1;
     }
@@ -108,6 +114,10 @@ public class ControlUnit {
     void stopDueToDivisionByZero() {
         errorHandler.throwDivisionByZero();
         machineState = MachineState.ERROR;
+    }
+
+    void stopDueToOperandRangeError() {
+        errorHandler.throwOperandRangeError();
     }
 
     public enum Opcode {

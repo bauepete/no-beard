@@ -132,4 +132,8 @@ public class ErrorHandler {
     public void throwDivisionByZero() {
         raise(new error.Error(Error.ErrorType.DIVISION_BY_ZERO));
     }
+
+    public void throwOperandRangeError() {
+        raise(new error.Error(Error.ErrorType.OPERAND_RANGE_ERROR));
+    }
 }

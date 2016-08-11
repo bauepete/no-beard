@@ -39,7 +39,8 @@ public class Error {
         
         DATA_ADDRESS_ERROR(100, ErrorClass.RUNTIME, "Address %s cannot be accessed in data memory"),
         PROGRAM_ADDRESS_ERROR(101, ErrorClass.RUNTIME, "Address %s cannot be accessed in program memory"),
-        DIVISION_BY_ZERO(102, ErrorClass.RUNTIME, "Division by zero");
+        DIVISION_BY_ZERO(102, ErrorClass.RUNTIME, "Division by zero"),
+        OPERAND_RANGE_ERROR(103, ErrorClass.RUNTIME, "Operand is out of range");
 
         private final int errorNumber;
         private final ErrorClass errorClass;

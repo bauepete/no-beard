@@ -39,7 +39,6 @@ public class InstructionSetTest {
     public InstructionSetTest() {
     }
 
-    private InstructionSet instructionSet;
     private ControlUnit controlUnit;
     private ProgramMemory programMemory;
     private DataMemory dataMemory;
@@ -52,7 +51,6 @@ public class InstructionSetTest {
         dataMemory = new DataMemory(1024, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
-        instructionSet = new InstructionSet();
     }
 
     @After
@@ -61,7 +59,7 @@ public class InstructionSetTest {
 
     @Test
     public void testGetInstructionById() {
-        Instruction i = instructionSet.getInstructionById(0x00);
+        Instruction i = InstructionSet.getInstructionById(0x00);
         assertEquals(InstructionSet.Instruction.NOP, i);
         assertEquals(0x00, i.getId());
         assertEquals(1, i.getSize());
@@ -78,7 +76,7 @@ public class InstructionSetTest {
 
     private void checkInstruction(byte[] program, final int instructionId, final Instruction opCode, final int size) {
         programMemory.store(0, program);
-        Instruction i = instructionSet.getInstructionById(instructionId);
+        Instruction i = InstructionSet.getInstructionById(instructionId);
         controlUnit.fetchInstruction();
         assertEquals(opCode, i);
         assertEquals(instructionId, i.getId());
@@ -237,7 +235,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x0B, Instruction.NEG, 1);
         assertEquals(-42, callStack.peek());
     }
-    
+
     @Test
     public void testAdd() {
         byte[] program = {
@@ -248,7 +246,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x0C, Instruction.ADD, 1);
         assertEquals(25, callStack.peek());
     }
-    
+
     @Test
     public void testAddSub() {
         byte[] program = {
@@ -259,7 +257,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x0D, Instruction.SUB, 1);
         assertEquals(59, callStack.peek());
     }
-    
+
     @Test
     public void testMul() {
         byte[] program = {
@@ -270,7 +268,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x0E, Instruction.MUL, 1);
         assertEquals(42 * -17, callStack.peek());
     }
-    
+
     @Test
     public void testDiv() {
         byte[] program = {
@@ -281,7 +279,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x0F, Instruction.DIV, 1);
         assertEquals(42 / -17, callStack.peek());
     }
-    
+
     @Test
     public void testDivByZero() {
         byte[] program = {
@@ -290,10 +288,80 @@ public class InstructionSetTest {
         callStack.push(42);
         callStack.push(0);
         programMemory.store(0, program);
-        Instruction i = instructionSet.getInstructionById(program[0]);
+        Instruction i = InstructionSet.getInstructionById(program[0]);
         controlUnit.fetchInstruction();
         i.execute(controlUnit);
         assertEquals(ControlUnit.MachineState.ERROR, controlUnit.getMachineState());
         assertEquals(error.Error.ErrorType.DIVISION_BY_ZERO.getNumber(), errorHandler.getLastError().getNumber());
+    }
+
+    @Test
+    public void testMod() {
+        byte[] program = {
+            Instruction.MOD.getId()
+        };
+        callStack.push(42);
+        callStack.push(-17);
+        checkInstruction(program, 0x10, Instruction.MOD, 1);
+        assertEquals(42 % -17, callStack.peek());
+    }
+
+    @Test
+    public void testModByZero() {
+        byte[] program = {
+            Instruction.MOD.getId()
+        };
+        callStack.push(42);
+        callStack.push(0);
+        programMemory.store(0, program);
+        Instruction i = InstructionSet.getInstructionById(program[0]);
+        controlUnit.fetchInstruction();
+        i.execute(controlUnit);
+        assertEquals(ControlUnit.MachineState.ERROR, controlUnit.getMachineState());
+        assertEquals(error.Error.ErrorType.DIVISION_BY_ZERO.getNumber(), errorHandler.getLastError().getNumber());
+    }
+
+    @Test
+    public void testNot() {
+        byte[] program = {
+            Instruction.NOT.getId()
+        };
+        callStack.push(0);
+        checkInstruction(program, 0x11, Instruction.NOT, 1);
+        assertEquals(1, callStack.peek());
+        InstructionSet.getInstructionById(0x11).execute(controlUnit);
+        assertEquals(0, callStack.peek());
+    }
+
+    @Test
+    public void testRelSmaller() {
+        byte[] program = {
+            Instruction.REL.getId(), 0
+        };
+        callStack.push(17);
+        callStack.push(42);
+        checkInstruction(program, 0x12, Instruction.REL, 2);
+        assertEquals(1, callStack.pop());        
+    }
+    
+    @Test
+    public void testRelError() {
+        byte[] program = {
+            Instruction.REL.getId(), 6
+        };
+        callStack.push(-1);
+        callStack.push(5);
+        checkInstruction(program, 0x12, Instruction.REL, 2);
+        assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+    
+    @Test
+    public void testFJmp() {
+        byte[] program = {
+            Instruction.FJMP.getId(), (byte) 128, (byte) 128
+        };
+        callStack.push(0);
+        checkInstruction(program, 0x16, Instruction.FJMP, 3);
+        assertEquals(128 * 256 + 128, controlUnit.getPc());
     }
 }
