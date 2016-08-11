@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import parser.general.IfParserTestSetup;
 import parser.IfParser;
 import org.junit.Test;
@@ -26,14 +26,14 @@ public class IfParserTest {
     @Test
     public void testSimpleIf() {
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32, // load x
-            Opcode.LIT.byteCode(), 0, 0, // load 0
-            Opcode.REL.byteCode(), 2, // check equality
-            Opcode.FJMP.byteCode(), 0, 23, // skip block if false
-            Opcode.INC.byteCode(), 0, 0, // No local variables in if block
-            Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
-            Opcode.PUT.byteCode(), 1 // put simple char
+            Instruction.LV.getId(), 0, 0, 32, // load x
+            Instruction.LIT.getId(), 0, 0, // load 0
+            Instruction.REL.getId(), 2, // check equality
+            Instruction.FJMP.getId(), 0, 23, // skip block if false
+            Instruction.INC.getId(), 0, 0, // No local variables in if block
+            Instruction.LIT.getId(), 0, 48, // ascii value of '0'
+            Instruction.LIT.getId(), 0, 1, // width of column
+            Instruction.PUT.getId(), 1 // put simple char
         };
 
         IfParser instance = IfParserTestSetup.getSimpleIfTestSetup();
@@ -54,19 +54,19 @@ public class IfParserTest {
     @Test
     public void testIfElse() {
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32, // load x
-            Opcode.LIT.byteCode(), 0, 0, // load 0
-            Opcode.REL.byteCode(), 2, // check equality
-            Opcode.FJMP.byteCode(), 0, 26, // skip block if false
-            Opcode.INC.byteCode(), 0, 0, // no local variables in if block
-            Opcode.LIT.byteCode(), 0, 48, // ascii value of '0'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
-            Opcode.PUT.byteCode(), 1, // put simple char
-            Opcode.JMP.byteCode(), 0, 37, // if is finished -> skip else
-            Opcode.INC.byteCode(), 0, 0, // again no local variables in else block
-            Opcode.LIT.byteCode(), 0, 49, // ascii value of '1'
-            Opcode.LIT.byteCode(), 0, 1, // width of column
-            Opcode.PUT.byteCode(), 1, // put simple char
+            Instruction.LV.getId(), 0, 0, 32, // load x
+            Instruction.LIT.getId(), 0, 0, // load 0
+            Instruction.REL.getId(), 2, // check equality
+            Instruction.FJMP.getId(), 0, 26, // skip block if false
+            Instruction.INC.getId(), 0, 0, // no local variables in if block
+            Instruction.LIT.getId(), 0, 48, // ascii value of '0'
+            Instruction.LIT.getId(), 0, 1, // width of column
+            Instruction.PUT.getId(), 1, // put simple char
+            Instruction.JMP.getId(), 0, 37, // if is finished -> skip else
+            Instruction.INC.getId(), 0, 0, // again no local variables in else block
+            Instruction.LIT.getId(), 0, 49, // ascii value of '1'
+            Instruction.LIT.getId(), 0, 1, // width of column
+            Instruction.PUT.getId(), 1, // put simple char
         };
         IfParser instance = IfParserTestSetup.getIfElseTestSetup();
         assertTrue(instance.parse());

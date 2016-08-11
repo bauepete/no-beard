@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.PutParser;
@@ -25,9 +25,9 @@ public class PutParserTest {
     @Test
     public void testParsePutInt() {
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 5,        // int value to be putted
-            Opcode.LIT.byteCode(), 0, 1,        // column width
-            Opcode.PUT.byteCode(), 0            // put int
+            Instruction.LIT.getId(), 0, 5,        // int value to be putted
+            Instruction.LIT.getId(), 0, 1,        // column width
+            Instruction.PUT.getId(), 0            // put int
         };
 
         PutParser instance = PutParserTestSetup.getPutIntSetup();
@@ -42,9 +42,9 @@ public class PutParserTest {
     @Test
     public void testParsePutChar() {
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 97,       // decimal ascii value of 'a' to be putted
-            Opcode.LIT.byteCode(), 0, 1,        // column width
-            Opcode.PUT.byteCode(), 1            // put simple char
+            Instruction.LIT.getId(), 0, 97,       // decimal ascii value of 'a' to be putted
+            Instruction.LIT.getId(), 0, 1,        // column width
+            Instruction.PUT.getId(), 1            // put simple char
         };
 
         PutParser instance = PutParserTestSetup.getPutCharSetup();
@@ -59,10 +59,10 @@ public class PutParserTest {
     @Test
     public void testParsePutString() {
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 0,    // address of string
-            Opcode.LIT.byteCode(), 0, 6,    // length of string
-            Opcode.LIT.byteCode(), 0, 6,    // width of column
-            Opcode.PUT.byteCode(), 2        // put string
+            Instruction.LIT.getId(), 0, 0,    // address of string
+            Instruction.LIT.getId(), 0, 6,    // length of string
+            Instruction.LIT.getId(), 0, 6,    // width of column
+            Instruction.PUT.getId(), 2        // put string
         };
 
         PutParser instance = PutParserTestSetup.getPutStringSetup();
@@ -77,9 +77,9 @@ public class PutParserTest {
     @Test
     public void testPutWithColumnWidth() {
         byte[] expectedCode = {
-            Opcode.LIT.byteCode(), 0, 42,   // value
-            Opcode.LIT.byteCode(), 0, 17,   // column width
-            Opcode.PUT.byteCode(), 0        // put int
+            Instruction.LIT.getId(), 0, 42,   // value
+            Instruction.LIT.getId(), 0, 17,   // column width
+            Instruction.PUT.getId(), 0        // put int
         };
         
         PutParser instance = PutParserTestSetup.getPutIntWithColumnWidthSetup();
@@ -90,10 +90,10 @@ public class PutParserTest {
     @Test
     public void testPutStringWithColumnWidth() {
         byte[] expectedCode = {
-            Opcode.LIT.byteCode(), 0, 0,    // address of string
-            Opcode.LIT.byteCode(), 0, 6,    // length of string
-            Opcode.LIT.byteCode(), 0, 17,   // widths of column
-            Opcode.PUT.byteCode(), 2        // put string
+            Instruction.LIT.getId(), 0, 0,    // address of string
+            Instruction.LIT.getId(), 0, 6,    // length of string
+            Instruction.LIT.getId(), 0, 17,   // widths of column
+            Instruction.PUT.getId(), 2        // put string
         };
         
         PutParser instance = PutParserTestSetup.getPutStringWithColumnWidthSetup();
@@ -107,7 +107,7 @@ public class PutParserTest {
     @Test
     public void testParsePutln() {
         byte[] expected = {
-            Opcode.PUT.byteCode(), 3
+            Instruction.PUT.getId(), 3
         };
 
         PutParser instance = PutParserTestSetup.getPutlnSetup();

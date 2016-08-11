@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 
@@ -64,7 +64,7 @@ public class IfParser extends Parser {
 
     private void prepareJumpToSkipIfBlock() {
         sem(() -> {
-            code.emit(Opcode.FJMP);
+            code.emit(Instruction.FJMP);
             code.emit(0);
             addressOfSkipIfJump = code.getPc() - 2;
         });
@@ -80,7 +80,7 @@ public class IfParser extends Parser {
 
     private void prepareJumpToSkipElseBlock() {
         sem(() -> {
-            code.emit(Opcode.JMP);
+            code.emit(Instruction.JMP);
             code.emit(0);
             addressOfSkipElseJump = code.getPc() - 2;
         });

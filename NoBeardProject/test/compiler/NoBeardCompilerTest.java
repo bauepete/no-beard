@@ -23,7 +23,7 @@
  */
 package compiler;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.semantics.AssemblerCodeChecker;
@@ -45,8 +45,8 @@ public class NoBeardCompilerTest {
     public void testEmptyProgram() {
         String source = "unit empty; do done empty;";
         byte[] expectedCode = {
-            Opcode.INC.byteCode(), 0, 0,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 0,
+            Instruction.HALT.getId()
         };
 
         testCompilationWithSourceString(source, expectedCode);
@@ -72,11 +72,11 @@ public class NoBeardCompilerTest {
     public void testVariableDeclarationWithAssignment() {
         String source = "unit foo; do int x = 3; done foo;";
         byte[] expectedCode = {
-            Opcode.INC.byteCode(), 0, 4,
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 3,
-            Opcode.STO.byteCode(),
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 4,
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 3,
+            Instruction.STO.getId(),
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expectedCode);
     }
@@ -88,20 +88,20 @@ public class NoBeardCompilerTest {
     public void testAssignmentToStringsAndPutThem() {
         String source = "SamplePrograms/VariableWorld.nb";
         byte[] expected = {
-            Opcode.INC.byteCode(), 0, 29, // stack pointer plus size of vars
-            Opcode.LA.byteCode(), 0, 0, 32, // address of string x
-            Opcode.LIT.byteCode(), 0, 0, // address of source string
-            Opcode.LIT.byteCode(), 0, 12, // length of string
-            Opcode.ASSN.byteCode(), // Array assignment
-            Opcode.LA.byteCode(), 0, 0, 32, // Load address of var to print
-            Opcode.LIT.byteCode(), 0, 12, // Length of string
-            Opcode.LIT.byteCode(), 0, 12, // Width parameter of print instr.
-            Opcode.PUT.byteCode(), 2, // Output of a string
-            Opcode.LA.byteCode(), 0, 0, 44, // address of string y
-            Opcode.LIT.byteCode(), 0, 12, // address of source string
-            Opcode.LIT.byteCode(), 0, 17, // length of second string
-            Opcode.ASSN.byteCode(), // Array assignment
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 29, // stack pointer plus size of vars
+            Instruction.LA.getId(), 0, 0, 32, // address of string x
+            Instruction.LIT.getId(), 0, 0, // address of source string
+            Instruction.LIT.getId(), 0, 12, // length of string
+            Instruction.ASSN.getId(), // Array assignment
+            Instruction.LA.getId(), 0, 0, 32, // Load address of var to print
+            Instruction.LIT.getId(), 0, 12, // Length of string
+            Instruction.LIT.getId(), 0, 12, // Width parameter of print instr.
+            Instruction.PUT.getId(), 2, // Output of a string
+            Instruction.LA.getId(), 0, 0, 44, // address of string y
+            Instruction.LIT.getId(), 0, 12, // address of source string
+            Instruction.LIT.getId(), 0, 17, // length of second string
+            Instruction.ASSN.getId(), // Array assignment
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceFile(source, expected);
     }
@@ -113,14 +113,14 @@ public class NoBeardCompilerTest {
     public void testOutputOfSimpleInt() {
         String source = "unit bah; do int x = 3; put (x); done bah;";
         byte[] expectedCode = {
-            Opcode.INC.byteCode(), 0, 4,
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 3,
-            Opcode.STO.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 1,
-            Opcode.PUT.byteCode(), 0,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 4,
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 3,
+            Instruction.STO.getId(),
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 0,
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expectedCode);
     }
@@ -129,19 +129,19 @@ public class NoBeardCompilerTest {
     public void testOutputOfIntExpression() {
         String source = "unit rsch; do int x = 3; int y = 1; put (x + y); done rsch;";
         byte[] expectedCode = {
-            Opcode.INC.byteCode(), 0, 8,
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 3,
-            Opcode.STO.byteCode(),
-            Opcode.LA.byteCode(), 0, 0, 36,
-            Opcode.LIT.byteCode(), 0, 1,
-            Opcode.STO.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.ADD.byteCode(),
-            Opcode.LIT.byteCode(), 0, 1,
-            Opcode.PUT.byteCode(), 0,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 8,
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 3,
+            Instruction.STO.getId(),
+            Instruction.LA.getId(), 0, 0, 36,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.STO.getId(),
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.ADD.getId(),
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 0,
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expectedCode);
     }
@@ -150,14 +150,14 @@ public class NoBeardCompilerTest {
     public void testOutputOfSimpleChar() {
         String source = "unit foo; do char x = \"x\"; put(x); done foo;";
         byte[] expected = {
-            Opcode.INC.byteCode(), 0, 1,
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 120, // ascii code of 'x'
-            Opcode.STC.byteCode(),
-            Opcode.LC.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 1,
-            Opcode.PUT.byteCode(), 1,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 1,
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 120, // ascii code of 'x'
+            Instruction.STC.getId(),
+            Instruction.LC.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 1,
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expected);
     }
@@ -166,13 +166,13 @@ public class NoBeardCompilerTest {
     public void testOutputOfString() {
         String sourceFilePath = "SamplePrograms/HelloWorld.nb";
         byte[] expected = {
-            Opcode.INC.byteCode(), 0, 0,
-            Opcode.LIT.byteCode(), 0, 0, // address of string
-            Opcode.LIT.byteCode(), 0, 11, // length of string
-            Opcode.LIT.byteCode(), 0, 11, // width parameter of print instr.
-            Opcode.PUT.byteCode(), 2,
-            Opcode.PUT.byteCode(), 3,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 0,
+            Instruction.LIT.getId(), 0, 0, // address of string
+            Instruction.LIT.getId(), 0, 11, // length of string
+            Instruction.LIT.getId(), 0, 11, // width parameter of print instr.
+            Instruction.PUT.getId(), 2,
+            Instruction.PUT.getId(), 3,
+            Instruction.HALT.getId()
         };
         testCompilationWithSourceFile(sourceFilePath, expected);
     }

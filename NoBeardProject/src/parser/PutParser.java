@@ -4,7 +4,7 @@
  */
 package parser;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner.Symbol;
 import symboltable.ConstantOperand;
 import symboltable.IllegalOperand;
@@ -125,17 +125,17 @@ public class PutParser extends Parser {
     }
 
     private void emitColumnWidth(final int width) {
-        code.emit(Opcode.LIT);
+        code.emit(Instruction.LIT);
         code.emit(width);
     }
 
     private void emitPutStatement(final int putStyle) {
-        code.emit(Opcode.PUT);
+        code.emit(Instruction.PUT);
         code.emit((byte) putStyle);
     }
 
     private void emitStringLength() {
-        code.emit(Opcode.LIT);
+        code.emit(Instruction.LIT);
         code.emit(operandForOutputValue.getSize());
     }
 

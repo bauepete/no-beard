@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +37,9 @@ public class SimpleExpressionParserTest {
     public void testAdd() {
 
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.ADD.byteCode()
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.ADD.getId()
         };
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getAddTestSetup();
@@ -56,9 +56,9 @@ public class SimpleExpressionParserTest {
         System.out.println("testSub");
 
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.SUB.byteCode()
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.SUB.getId()
         };
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getSubTestSetup();
@@ -75,10 +75,10 @@ public class SimpleExpressionParserTest {
         System.out.println("testNegAdd");
 
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.NEG.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.ADD.byteCode()
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.NEG.getId(),
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.ADD.getId()
         };
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getNegAddTestSetup();
@@ -95,8 +95,8 @@ public class SimpleExpressionParserTest {
         System.out.println("testNeg");
 
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.NEG.byteCode(),};
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.NEG.getId(),};
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getNegTestSetup();
 
@@ -112,11 +112,11 @@ public class SimpleExpressionParserTest {
         System.out.println("testParseAddMul");
 
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.LIT.byteCode(), 0, 3,
-            Opcode.MUL.byteCode(),
-            Opcode.SUB.byteCode()
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.LIT.getId(), 0, 3,
+            Instruction.MUL.getId(),
+            Instruction.SUB.getId()
         };
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getAddMulTestSetup();
@@ -133,14 +133,14 @@ public class SimpleExpressionParserTest {
         System.out.println("testComplexExpr");
         // "-5 * (a + b)/17"
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 5,
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.ADD.byteCode(),
-            Opcode.MUL.byteCode(),
-            Opcode.LIT.byteCode(), 0, 17,
-            Opcode.DIV.byteCode(),
-            Opcode.NEG.byteCode(),};
+            Instruction.LIT.getId(), 0, 5,
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.ADD.getId(),
+            Instruction.MUL.getId(),
+            Instruction.LIT.getId(), 0, 17,
+            Instruction.DIV.getId(),
+            Instruction.NEG.getId(),};
 
         AddExpressionParser p = SimpleExpressionParserTestSetup.getComplexExprTestSetup();
 
@@ -157,13 +157,13 @@ public class SimpleExpressionParserTest {
         // a || b || c
         
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.TJMP.byteCode(), 0, 21,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.TJMP.byteCode(), 0, 21,
-            Opcode.LV.byteCode(), 0, 0, 40,
-            Opcode.JMP.byteCode(), 0, 24,
-            Opcode.LIT.byteCode(), 0, 1
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.TJMP.getId(), 0, 21,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.TJMP.getId(), 0, 21,
+            Instruction.LV.getId(), 0, 0, 40,
+            Instruction.JMP.getId(), 0, 24,
+            Instruction.LIT.getId(), 0, 1
         };
         
         AddExpressionParser p = SimpleExpressionParserTestSetup.getOrExprTestSetup();

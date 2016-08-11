@@ -7,7 +7,7 @@ package symboltable;
 import symboltable.Operand.Kind;
 import scanner.Scanner;
 import parser.semantics.AssemblerCodeChecker;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import error.ErrorHandler;
 import error.Error.ErrorType;
 import symboltable.Operand.Type;
@@ -66,14 +66,14 @@ public class ConstantOperandTest {
         System.out.println("emitLoadVal");
         
         byte[] expInt = {
-            Opcode.LIT.byteCode(), 0, 42
+            Instruction.LIT.getId(), 0, 42
         };
         Operand rOp = intOp.emitLoadVal(c);
         assertEquals(Kind.VALUEONSTACK, rOp.getKind());
         AssemblerCodeChecker.assertCodeEquals("Code ", expInt, c.getByteCode());
         
         byte[] expChar = {
-            Opcode.LIT.byteCode(), 0, 42
+            Instruction.LIT.getId(), 0, 42
         };
         rOp = charOp.emitLoadVal(c);
         assertEquals(Kind.VALUEONSTACK, rOp.getKind());
@@ -91,8 +91,8 @@ public class ConstantOperandTest {
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
-            Opcode.LIT.byteCode(), 0, 42,
-            Opcode.STO.byteCode()
+            Instruction.LIT.getId(), 0, 42,
+            Instruction.STO.getId()
         };
         
         intOp.emitAssign(c, destAos);
@@ -110,8 +110,8 @@ public class ConstantOperandTest {
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
-            Opcode.LIT.byteCode(), 0, 0,
-            Opcode.STC.byteCode()
+            Instruction.LIT.getId(), 0, 0,
+            Instruction.STC.getId()
         };
         charOp.emitAssign(c, destAos);
         AssemblerCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
@@ -128,9 +128,9 @@ public class ConstantOperandTest {
         Operand destAos = new AddrOnStackOperand(destV);
         
         byte[] exp = {
-            Opcode.LIT.byteCode(), 0, 0,
-            Opcode.LIT.byteCode(), 0, 10,
-            Opcode.ASSN.byteCode()
+            Instruction.LIT.getId(), 0, 0,
+            Instruction.LIT.getId(), 0, 10,
+            Instruction.ASSN.getId()
         };
         strOp.emitAssign(c, destAos);
         AssemblerCodeChecker.assertCodeEquals("Code ", exp, c.getByteCode());
@@ -159,7 +159,7 @@ public class ConstantOperandTest {
     public void testEmitLoadAddr() {
         System.out.println("emitLoadAddr");
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 0
+            Instruction.LIT.getId(), 0, 0
         };
         
         Operand rv = charOp.emitLoadAddr(c);

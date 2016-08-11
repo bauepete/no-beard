@@ -8,7 +8,7 @@ import symboltable.Operand.Kind;
 import error.ErrorHandler;
 import error.Error;
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -86,7 +86,7 @@ public class ValueOnStackOperandTest {
         System.out.println("testEmitAssignToInt");
         assertTrue(intVosSrcOp.emitAssign(toCode, intAosDestOp));
         byte[] expected = {
-            Opcode.STO.byteCode()
+            Instruction.STO.getId()
         };
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
     }
@@ -99,7 +99,7 @@ public class ValueOnStackOperandTest {
         System.out.println("testEmitAssignToChar");
         assertTrue(charVosSrcOp.emitAssign(toCode, charAosDestOp));
         byte[] expected = {
-            Opcode.STC.byteCode()
+            Instruction.STC.getId()
         };
         AssemblerCodeChecker.assertCodeEquals("Code ", expected, toCode.getByteCode());
     }

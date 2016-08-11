@@ -180,7 +180,7 @@ public class InstructionSet {
             this.implementation = implementation;
         }
 
-        byte getId() {
+        public byte getId() {
             return id;
         }
 

@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.ControlUnit;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner;
 import symboltable.Operand;
 
@@ -33,7 +33,7 @@ import symboltable.Operand;
  */
 public abstract class ExpressionRelatedParser extends OperandExportingParser {
 
-    protected ControlUnit.Opcode opCode;
+    protected Instruction opCode;
     protected int positionOfLastBooleanOperatorJump;
 
     protected Operand op2;

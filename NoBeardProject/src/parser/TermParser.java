@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
 import symboltable.Operand.Type;
@@ -78,7 +78,7 @@ public class TermParser extends ExpressionRelatedParser {
 
     private void maintainBooleanOperatorChain() {
         sem(() -> {
-            code.emit(Opcode.FJMP);
+            code.emit(Instruction.FJMP);
             code.emit(positionOfLastBooleanOperatorJump);
             positionOfLastBooleanOperatorJump = code.getPc() - 2;
         });
@@ -97,14 +97,14 @@ public class TermParser extends ExpressionRelatedParser {
 
     @Override
     protected void fixBooleanOperatorChain() {
-        code.emit(Opcode.JMP);
+        code.emit(Instruction.JMP);
         code.emit(code.getPc() + 5);
         while (positionOfLastBooleanOperatorJump != 0) {
             int next = code.getCodeHalfWord(positionOfLastBooleanOperatorJump);
             code.fixup(positionOfLastBooleanOperatorJump, code.getPc());
             positionOfLastBooleanOperatorJump = next;
         }
-        code.emit(Opcode.LIT);
+        code.emit(Instruction.LIT);
         code.emit(0);
     }
 }

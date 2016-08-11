@@ -23,8 +23,7 @@
  */
 package parser;
 
-import nbm.NoBeardMachine;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand.Type;
@@ -52,9 +51,9 @@ public class AddExpressionParser extends ExpressionRelatedParser {
         where(opCode == null || op2.getType() == Type.SIMPLEINT,
                 () -> getErrorHandler().throwOperatorOperandTypeMismatch("+ or -", "int"));
         sem(() -> {
-            if (opCode == Opcode.SUB) {
+            if (opCode == Instruction.SUB) {
                 emitCodeForLoadingValue();
-                code.emit(Opcode.NEG);
+                code.emit(Instruction.NEG);
             } else {
                 exportedOperand = op2;
             }
@@ -87,7 +86,7 @@ public class AddExpressionParser extends ExpressionRelatedParser {
     private void maintainBooleanOperatorChain() {
         sem(() -> {
             exportedOperand.emitLoadVal(code);
-            code.emit(Opcode.TJMP);
+            code.emit(Instruction.TJMP);
             code.emit(positionOfLastBooleanOperatorJump);
             positionOfLastBooleanOperatorJump = code.getPc() - 2;
         });
@@ -95,14 +94,14 @@ public class AddExpressionParser extends ExpressionRelatedParser {
 
     @Override
     protected void fixBooleanOperatorChain() {
-        code.emit(Opcode.JMP);
+        code.emit(Instruction.JMP);
         code.emit(code.getPc() + 5);
         while (positionOfLastBooleanOperatorJump != 0) {
             int next = code.getCodeHalfWord(positionOfLastBooleanOperatorJump);
             code.fixup(positionOfLastBooleanOperatorJump, code.getPc());
             positionOfLastBooleanOperatorJump = next;
         }
-        code.emit(Opcode.LIT);
+        code.emit(Instruction.LIT);
         code.emit(1);
     }
 

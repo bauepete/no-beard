@@ -4,7 +4,7 @@
  */
 package parser.semantics;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ParserFactory;
@@ -27,11 +27,11 @@ public class TermParserTest {
     public void testParseMul() {
         System.out.println("testParseMul");
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.MUL.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 40,
-            Opcode.MUL.byteCode()
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.MUL.getId(),
+            Instruction.LV.getId(), 0, 0, 40,
+            Instruction.MUL.getId()
         };
 
         TermParser p = TermParserTestSetup.getMulTermSetup();
@@ -47,11 +47,11 @@ public class TermParserTest {
         System.out.println("testParseDiv");
 
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 1,
-            Opcode.LIT.byteCode(), 0, 2,
-            Opcode.DIV.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.DIV.byteCode()
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.LIT.getId(), 0, 2,
+            Instruction.DIV.getId(),
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.DIV.getId()
         };
 
         TermParser p = TermParserTestSetup.getDivTermSetup();
@@ -67,11 +67,11 @@ public class TermParserTest {
         System.out.println("testParseMod");
 
         byte[] expected = {
-            Opcode.LIT.byteCode(), 0, 10,
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.MOD.byteCode(),
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.MOD.byteCode()
+            Instruction.LIT.getId(), 0, 10,
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.MOD.getId(),
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.MOD.getId()
         };
 
         TermParser p = TermParserTestSetup.getModTermSetup();
@@ -88,13 +88,13 @@ public class TermParserTest {
         System.out.println("testParseAnd");
         
         byte[] expected = {
-            Opcode.LV.byteCode(), 0, 0, 32,
-            Opcode.FJMP.byteCode(), 0, 21,
-            Opcode.LV.byteCode(), 0, 0, 36,
-            Opcode.FJMP.byteCode(), 0, 21,
-            Opcode.LV.byteCode(), 0, 0, 40,
-            Opcode.JMP.byteCode(), 0, 24,
-            Opcode.LIT.byteCode(), 0, 0
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.FJMP.getId(), 0, 21,
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.FJMP.getId(), 0, 21,
+            Instruction.LV.getId(), 0, 0, 40,
+            Instruction.JMP.getId(), 0, 24,
+            Instruction.LIT.getId(), 0, 0
         };
         
         TermParser p = TermParserTestSetup.getAndTermSetup();

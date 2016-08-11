@@ -6,7 +6,7 @@ package nbm;
 
 import error.ErrorHandler;
 import error.SourceCodeInfo;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -36,10 +36,10 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testEmitOp() {
-        instance.emit(Opcode.ADD);
+        instance.emit(Instruction.ADD);
 
         assertEquals(1, instance.getPc());
-        assertEquals(Opcode.ADD.byteCode(), instance.getCodeByte(0));
+        assertEquals(Instruction.ADD.getId(), instance.getCodeByte(0));
     }
 
     /**
@@ -49,7 +49,7 @@ public class CodeGeneratorTest {
     public void testEmitByte() {
         byte b = 1;
 
-        instance.emit(Opcode.PUT);
+        instance.emit(Instruction.PUT);
         instance.emit(b);
 
         assertEquals(2, instance.getPc());
@@ -75,7 +75,7 @@ public class CodeGeneratorTest {
     public void testEmitHalfWord() {
         int halfWord = 42;
 
-        instance.emit(Opcode.LIT);
+        instance.emit(Instruction.LIT);
         instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
@@ -90,7 +90,7 @@ public class CodeGeneratorTest {
     public void testEmitHalfWord255() {
         int halfWord = 255;
 
-        instance.emit(Opcode.LIT);
+        instance.emit(Instruction.LIT);
         instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
@@ -105,7 +105,7 @@ public class CodeGeneratorTest {
     public void testEmitHalfWord256() {
         int halfWord = 256;
 
-        instance.emit(Opcode.LIT);
+        instance.emit(Instruction.LIT);
         instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
@@ -120,7 +120,7 @@ public class CodeGeneratorTest {
     public void testEmitHalfWord65535() {
         int halfWord = 65535;
 
-        instance.emit(Opcode.LIT);
+        instance.emit(Instruction.LIT);
         instance.emit(halfWord);
 
         assertEquals("PC", 3, instance.getPc());
@@ -142,10 +142,10 @@ public class CodeGeneratorTest {
      */
     @Test
     public void testFixup() {
-        instance.emit(Opcode.INC);
+        instance.emit(Instruction.INC);
         int fixupAddr = instance.getPc();
         instance.emit(0); // temp value
-        instance.emit(Opcode.LA);
+        instance.emit(Instruction.LA);
         instance.emit((byte) 0);
         instance.emit(2);
         instance.fixup(fixupAddr, 8);
@@ -160,19 +160,19 @@ public class CodeGeneratorTest {
     @Test
     public void testGetByteCode() {
         byte[] expected = {
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 42,
-            Opcode.ADD.byteCode()
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 42,
+            Instruction.ADD.getId()
         };
 
-        instance.emit(Opcode.LA);
+        instance.emit(Instruction.LA);
         instance.emit((byte) 0);
         instance.emit(32);
 
-        instance.emit(Opcode.LIT);
+        instance.emit(Instruction.LIT);
         instance.emit(42);
 
-        instance.emit(Opcode.ADD);
+        instance.emit(Instruction.ADD);
 
         assertCodeEquals("Prog ", expected, instance.getByteCode());
     }
@@ -183,16 +183,16 @@ public class CodeGeneratorTest {
     @Test
     public void testProgramStorageOverflow() {
         CodeGenerator g = new CodeGenerator(7, errorHandler);
-        g.emit(Opcode.LA);
+        g.emit(Instruction.LA);
         g.emit((byte) 0);
         g.emit(0);
 
-        g.emit(Opcode.LIT);
+        g.emit(Instruction.LIT);
         g.emit(17);
 
         assertEquals(0, errorHandler.getCount());
 
-        g.emit(Opcode.STO);
+        g.emit(Instruction.STO);
         assertEquals(1, errorHandler.getCount());
         assertEquals(error.Error.ErrorType.PROGRAM_MEMORY_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
     }

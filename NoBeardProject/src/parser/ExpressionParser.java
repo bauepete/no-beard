@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.Operand;
@@ -114,7 +114,7 @@ public class ExpressionParser extends OperandExportingParser {
                 case SIMPLECHAR:
                 case SIMPLEINT:
                     op2.emitLoadVal(code);
-                    code.emit(Opcode.REL);
+                    code.emit(Instruction.REL);
                     code.emit(ror);
                     break;
 

@@ -5,7 +5,7 @@
 package symboltable;
 
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 
@@ -28,13 +28,13 @@ public class VariableOperand extends Operand {
         switch (type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emit(Opcode.LV);
+                toCode.emit(Instruction.LV);
                 toCode.emit((byte) (getCurrLevel() - getLevel()));
                 toCode.emit(valaddr);
                 break;
 
             case SIMPLECHAR:
-                toCode.emit(Opcode.LC);
+                toCode.emit(Instruction.LC);
                 toCode.emit((byte) (getCurrLevel() - getLevel()));
                 toCode.emit(valaddr);
                 break;
@@ -47,10 +47,10 @@ public class VariableOperand extends Operand {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emit(Opcode.LV);
+                toCode.emit(Instruction.LV);
                 toCode.emit((byte) (getCurrLevel() - getLevel()));
                 toCode.emit(valaddr);
-                toCode.emit(Opcode.STO);
+                toCode.emit(Instruction.STO);
                 break;
 
             case SIMPLECHAR:
@@ -63,7 +63,7 @@ public class VariableOperand extends Operand {
 
     @Override
     public Operand emitLoadAddr(CodeGenerator toCode) {
-        toCode.emit(Opcode.LA);
+        toCode.emit(Instruction.LA);
         toCode.emit((byte) (getCurrLevel() - getLevel()));
         toCode.emit(valaddr);
 

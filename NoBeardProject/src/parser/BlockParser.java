@@ -23,7 +23,7 @@
  */
 package parser;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import scanner.Scanner.Symbol;
 import symboltable.SymbolTableEntry;
 
@@ -46,7 +46,7 @@ public class BlockParser extends Parser {
         parseSymbol(Symbol.DO);
         sem(() -> {
             sym.newBlock();
-            code.emit(Opcode.INC);
+            code.emit(Instruction.INC);
             code.emit(0);
             incAddress = code.getPc() - 2;
         });

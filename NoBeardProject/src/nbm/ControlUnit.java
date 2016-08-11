@@ -176,14 +176,4 @@ public class ControlUnit {
         System.out.print(new String(dataMemory.load(address, stringLength)));
         outputBlanks(width - stringLength);
     }
-
-    public enum Opcode {
-
-        NOP, LIT, LA, LV, LC, STO, STC, ASSN, NEG, ADD, SUB, MUL, DIV, MOD,
-        NOT, REL, FJMP, TJMP, JMP, PUT, INC, HALT;
-
-        public byte byteCode() {
-            return (byte) this.ordinal();
-        }
-    }
 }

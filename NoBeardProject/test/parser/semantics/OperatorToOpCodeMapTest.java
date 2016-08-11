@@ -23,7 +23,7 @@
  */
 package parser.semantics;
 
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.OperatorToOpCodeMap;
@@ -46,15 +46,15 @@ public class OperatorToOpCodeMapTest {
     public void testGetOpCode() {
         System.out.println("getOpCode");
         Scanner.Symbol symbol = Symbol.MINUS;
-        Opcode expResult = Opcode.SUB;
-        Opcode result = OperatorToOpCodeMap.getOpCode(symbol);
+        Instruction expResult = Instruction.SUB;
+        Instruction result = OperatorToOpCodeMap.getOpCode(symbol);
         assertEquals(expResult, result);
     }
     
     @Test
     public void testIllegalOpCode() {
         Scanner.Symbol symbol = Symbol.CHAR;
-        assertEquals(Opcode.NOP, OperatorToOpCodeMap.getOpCode(symbol));
+        assertEquals(Instruction.NOP, OperatorToOpCodeMap.getOpCode(symbol));
     }
     
     @Test

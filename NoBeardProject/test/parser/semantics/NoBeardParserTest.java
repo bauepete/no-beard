@@ -6,7 +6,7 @@ package parser.semantics;
 
 import compiler.NoBeardCompiler;
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.NoBeardParser;
@@ -30,8 +30,8 @@ public class NoBeardParserTest {
     @Test
     public void testParseEmpty() {
         byte[] expected = {
-            Opcode.INC.byteCode(), 0, 0,
-            Opcode.HALT.byteCode()
+            Instruction.INC.getId(), 0, 0,
+            Instruction.HALT.getId()
         };
 
         Parser instance = NoBeardParserTestSetup.getEmptyProgramSetup();

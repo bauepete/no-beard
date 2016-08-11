@@ -5,7 +5,7 @@
 package symboltable;
 
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 
@@ -31,12 +31,12 @@ public class ConstantOperand extends Operand {
         switch(type) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(valaddr);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(getStringStorage(valaddr));
                 break;
         }
@@ -51,23 +51,23 @@ public class ConstantOperand extends Operand {
         switch (destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(valaddr);
-                toCode.emit(Opcode.STO);
+                toCode.emit(Instruction.STO);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(getStringStorage(valaddr));
-                toCode.emit(Opcode.STC);
+                toCode.emit(Instruction.STC);
                 break;
                 
             case ARRAYCHAR:
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(valaddr);
-                toCode.emit(Opcode.LIT);
+                toCode.emit(Instruction.LIT);
                 toCode.emit(destOp.getSize());
-                toCode.emit(Opcode.ASSN);
+                toCode.emit(Instruction.ASSN);
                 break;
                 
             default:
@@ -88,7 +88,7 @@ public class ConstantOperand extends Operand {
         Operand returnedOp;
         
         if (getType() == Type.SIMPLECHAR || getType() == Type.ARRAYCHAR) {
-            toCode.emit(Opcode.LIT);
+            toCode.emit(Instruction.LIT);
             toCode.emit(valaddr);
             returnedOp = new AddrOnStackOperand(this);
         } else {

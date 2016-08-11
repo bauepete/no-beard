@@ -6,7 +6,7 @@ package parser.semantics;
 
 import error.ErrorHandler;
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.AssignmentParser;
@@ -35,9 +35,9 @@ public class AssignmentParserTest {
     @Test
     public void testAssignmentToSimpleInt() {
         byte[] expResult = {
-            Opcode.LA.byteCode(), 0, 0, 32,
-            Opcode.LIT.byteCode(), 0, 3,
-            Opcode.STO.byteCode()
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 3,
+            Instruction.STO.getId()
         };
         Parser p = setupTestEnvironmentAndParser("x = 3;");
 
@@ -90,10 +90,10 @@ public class AssignmentParserTest {
     @Test
     public void testAssignmentToArray() {
         byte[] expectedCode = {
-            Opcode.LA.byteCode(), 0, 0, 32, // load address of x
-            Opcode.LIT.byteCode(), 0, 0, // load address of string constant
-            Opcode.LIT.byteCode(), 0, 5, // length of string constant
-            Opcode.ASSN.byteCode()
+            Instruction.LA.getId(), 0, 0, 32, // load address of x
+            Instruction.LIT.getId(), 0, 0, // load address of string constant
+            Instruction.LIT.getId(), 0, 5, // length of string constant
+            Instruction.ASSN.getId()
         };
         setupParserFactory("x = 'fubar';");
         ParserFactory.getSymbolListManager().newUnit(1);

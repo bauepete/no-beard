@@ -5,7 +5,7 @@
 package symboltable;
 
 import nbm.CodeGenerator;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 
 /**
  *
@@ -35,11 +35,11 @@ public class ValueOnStackOperand extends Operand {
         switch(destOp.getType()) {
             case SIMPLEINT:
             case SIMPLEBOOL:
-                toCode.emit(Opcode.STO);
+                toCode.emit(Instruction.STO);
                 break;
                 
             case SIMPLECHAR:
-                toCode.emit(Opcode.STC);
+                toCode.emit(Instruction.STC);
                 break;
                 
             default:
