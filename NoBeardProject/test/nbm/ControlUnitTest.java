@@ -51,7 +51,7 @@ public class ControlUnitTest {
         dataMemory = new DataMemory(32, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
         programMemory = new ProgramMemory(1024, errorHandler);
-        controlUnit = new ControlUnit(programMemory, dataMemory, callStack);
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
     }
     
     @After

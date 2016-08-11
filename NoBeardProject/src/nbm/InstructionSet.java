@@ -83,6 +83,26 @@ public class InstructionSet {
         NEG((byte) 0x0B, (byte) 1, (cu) -> {
             int x = cu.getCallStack().pop();
             cu.getCallStack().push(-x);
+        }),
+        ADD((byte) 0x0C, (byte) 1, (cu) -> {
+            cu.getCallStack().push(cu.getCallStack().pop() + cu.getCallStack().pop());
+        }),
+        SUB((byte) 0x0D, (byte) 1, (cu) -> {
+            int y = cu.getCallStack().pop();
+            int x = cu.getCallStack().pop();
+            cu.getCallStack().push(x - y);
+        }),
+        MUL((byte) 0x0E, (byte) 1, (cu) -> {
+            cu.getCallStack().push(cu.getCallStack().pop() * cu.getCallStack().pop());
+        }),
+        DIV((byte) 0x0F, (byte) 1, (cu) -> {
+            int y = cu.getCallStack().pop();
+            int x = cu.getCallStack().pop();
+            if (y != 0)
+                cu.getCallStack().push(x / y);
+            else {
+                cu.stopDueToDivisionByZero();
+            }
         });
 
         private final byte id;

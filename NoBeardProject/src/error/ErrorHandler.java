@@ -128,4 +128,8 @@ public class ErrorHandler {
     public void throwProgramAddressError(String atAddress) {
         raise(new error.Error(Error.ErrorType.PROGRAM_ADDRESS_ERROR, atAddress));
     }
+
+    public void throwDivisionByZero() {
+        raise(new error.Error(Error.ErrorType.DIVISION_BY_ZERO));
+    }
 }

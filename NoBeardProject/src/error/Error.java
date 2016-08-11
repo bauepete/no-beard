@@ -38,7 +38,8 @@ public class Error {
         GENERAL_SEM_ERROR(99, ErrorClass.SEMANTICAL, "General sem error: %s"),
         
         DATA_ADDRESS_ERROR(100, ErrorClass.RUNTIME, "Address %s cannot be accessed in data memory"),
-        PROGRAM_ADDRESS_ERROR(101, ErrorClass.RUNTIME, "Address %s cannot be accessed in program memory");
+        PROGRAM_ADDRESS_ERROR(101, ErrorClass.RUNTIME, "Address %s cannot be accessed in program memory"),
+        DIVISION_BY_ZERO(102, ErrorClass.RUNTIME, "Division by zero");
 
         private final int errorNumber;
         private final ErrorClass errorClass;

@@ -51,7 +51,7 @@ public class InstructionSetTest {
         programMemory = new ProgramMemory(1024, errorHandler);
         dataMemory = new DataMemory(1024, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
-        controlUnit = new ControlUnit(programMemory, dataMemory, callStack);
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
         instructionSet = new InstructionSet();
     }
 
@@ -236,5 +236,64 @@ public class InstructionSetTest {
         callStack.push(42);
         checkInstruction(program, 0x0B, Instruction.NEG, 1);
         assertEquals(-42, callStack.peek());
+    }
+    
+    @Test
+    public void testAdd() {
+        byte[] program = {
+            Instruction.ADD.getId()
+        };
+        callStack.push(42);
+        callStack.push(-17);
+        checkInstruction(program, 0x0C, Instruction.ADD, 1);
+        assertEquals(25, callStack.peek());
+    }
+    
+    @Test
+    public void testAddSub() {
+        byte[] program = {
+            Instruction.SUB.getId()
+        };
+        callStack.push(42);
+        callStack.push(-17);
+        checkInstruction(program, 0x0D, Instruction.SUB, 1);
+        assertEquals(59, callStack.peek());
+    }
+    
+    @Test
+    public void testMul() {
+        byte[] program = {
+            Instruction.MUL.getId()
+        };
+        callStack.push(42);
+        callStack.push(-17);
+        checkInstruction(program, 0x0E, Instruction.MUL, 1);
+        assertEquals(42 * -17, callStack.peek());
+    }
+    
+    @Test
+    public void testDiv() {
+        byte[] program = {
+            Instruction.DIV.getId()
+        };
+        callStack.push(42);
+        callStack.push(-17);
+        checkInstruction(program, 0x0F, Instruction.DIV, 1);
+        assertEquals(42 / -17, callStack.peek());
+    }
+    
+    @Test
+    public void testDivByZero() {
+        byte[] program = {
+            Instruction.DIV.getId()
+        };
+        callStack.push(42);
+        callStack.push(0);
+        programMemory.store(0, program);
+        Instruction i = instructionSet.getInstructionById(program[0]);
+        controlUnit.fetchInstruction();
+        i.execute(controlUnit);
+        assertEquals(ControlUnit.MachineState.ERROR, controlUnit.getMachineState());
+        assertEquals(error.Error.ErrorType.DIVISION_BY_ZERO.getNumber(), errorHandler.getLastError().getNumber());
     }
 }

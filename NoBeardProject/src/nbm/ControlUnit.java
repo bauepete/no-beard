@@ -23,22 +23,32 @@
  */
 package nbm;
 
+import error.ErrorHandler;
+
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public class ControlUnit {
 
+    public enum MachineState {
+
+        STOPPED, RUNNING, ERROR
+    }
+
     private final ProgramMemory programMemory;
     private final DataMemory dataMemory;
     private final CallStack callStack;
+    private final ErrorHandler errorHandler;
     private int pc;
     private int currentAddressInProgramMemory;
+    private MachineState machineState;
 
-    ControlUnit(ProgramMemory programMemory, DataMemory dataMemory, CallStack callStack) {
+    ControlUnit(ProgramMemory programMemory, DataMemory dataMemory, CallStack callStack, ErrorHandler errorHandler) {
         this.programMemory = programMemory;
         this.dataMemory = dataMemory;
         this.callStack = callStack;
+        this.errorHandler = errorHandler;
     }
 
     public ProgramMemory getProgramMemory() {
@@ -89,6 +99,15 @@ public class ControlUnit {
 
     void fetchInstruction() {
         currentAddressInProgramMemory = getPc() + 1;
+    }
+
+    MachineState getMachineState() {
+        return machineState;
+    }
+    
+    void stopDueToDivisionByZero() {
+        errorHandler.throwDivisionByZero();
+        machineState = MachineState.ERROR;
     }
 
     public enum Opcode {
