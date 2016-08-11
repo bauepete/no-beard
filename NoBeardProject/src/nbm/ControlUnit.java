@@ -97,7 +97,7 @@ public class ControlUnit {
         return a;
     }
 
-    byte getRelOp() {
+    byte getType() {
         byte r = programMemory.loadByte(currentAddressInProgramMemory);
         currentAddressInProgramMemory++;
         return r;
@@ -110,7 +110,11 @@ public class ControlUnit {
     MachineState getMachineState() {
         return machineState;
     }
-    
+
+    void stopMachine() {
+        machineState = MachineState.STOPPED;
+    }
+
     void stopDueToDivisionByZero() {
         errorHandler.throwDivisionByZero();
         machineState = MachineState.ERROR;
@@ -118,6 +122,34 @@ public class ControlUnit {
 
     void stopDueToOperandRangeError() {
         errorHandler.throwOperandRangeError();
+    }
+
+    void outputInt() {
+        int width = callStack.pop();
+        int x = callStack.pop();
+        String formatString = "%" + width + "d";
+        System.out.printf(formatString, x);
+    }
+
+    void outputChar() {
+        int width = callStack.pop();
+        int c = callStack.pop();
+        System.out.print((char) c);
+        outputBlanks(width - 1);
+    }
+
+    private void outputBlanks(int number) {
+        for (int i = 0; i < number; i++) {
+            System.out.print(" ");
+        }
+    }
+
+    void outputString() {
+            int width = callStack.pop();
+            int stringLength = callStack.pop();
+            int address = callStack.pop();
+            System.out.print(new String(dataMemory.load(address, stringLength)));
+            outputBlanks(width - stringLength);
     }
 
     public enum Opcode {

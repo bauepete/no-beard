@@ -364,4 +364,23 @@ public class InstructionSetTest {
         checkInstruction(program, 0x16, Instruction.FJMP, 3);
         assertEquals(128 * 256 + 128, controlUnit.getPc());
     }
+    
+    @Test
+    public void testInc() {
+        byte[] program = {
+            Instruction.INC.getId(), 0, 42
+        };
+        int top = callStack.getStackPointer();
+        checkInstruction(program, 0x1D, Instruction.INC, 3);
+        assertEquals(top + 42, callStack.getStackPointer());
+    }
+    
+    @Test
+    public void testHalt() {
+        byte[] program = {
+            Instruction.HALT.getId()
+        };
+        checkInstruction(program, 0x1F, Instruction.HALT, 1);
+        assertEquals(ControlUnit.MachineState.STOPPED, controlUnit.getMachineState());
+    }
 }

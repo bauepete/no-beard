@@ -123,7 +123,7 @@ public class InstructionSet {
         REL((byte) 0x12, (byte) 2, (cu) -> {
             int y = cu.getCallStack().pop();
             int x = cu.getCallStack().pop();
-            byte relOp = cu.getRelOp();
+            byte relOp = cu.getType();
             int valueToPush;
             
             switch (relOp) {
@@ -150,6 +150,23 @@ public class InstructionSet {
         JMP((byte) 0x18, (byte) 3, (cu) -> {
             int newPc = cu.getAddress();
             cu.setPc(newPc);
+        }),
+        PUT((byte) 0x1A, (byte) 2, (cu) -> {
+            byte type = cu.getType();
+            switch (type) {
+                case 0: cu.outputInt(); break;
+                case 1: cu.outputChar(); break;
+                case 2: cu.outputString(); break;
+                case 3: cu.stopDueToOperandRangeError();
+            }
+        }),
+        INC((byte) 0x1D, (byte) 3, (cu) -> {
+            int size = cu.getLiteral();
+            int sp = cu.getCallStack().getStackPointer();
+            cu.getCallStack().setStackPointer(sp + size);
+        }),
+        HALT((byte) 0x1F, (byte) 1, (cu) -> {
+            cu.stopMachine();
         });
 
         private final byte id;
