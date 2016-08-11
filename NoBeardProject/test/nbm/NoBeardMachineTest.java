@@ -23,8 +23,7 @@
  */
 package nbm;
 
-import compiler.NoBeardCompiler;
-import nbm.ControlUnit.Opcode;
+import nbm.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -35,95 +34,103 @@ import org.junit.Before;
  */
 public class NoBeardMachineTest {
 
-    private NoBeardMachine m;
+    private NoBeardMachine machine;
 
     public NoBeardMachineTest() {
     }
     
     @Before
     public void setUp() {
-        m = new NoBeardMachine();
+        machine = new NoBeardMachine();
     }
 
     @Test
     public void testInitialization() {
-        System.out.println("testInitialization");
-        assertTrue("State", m.getState() == NoBeardMachine.State.RUN);
+        assertTrue("State", machine.getState() == ControlUnit.MachineState.STOPPED);
     }
 
     @Test
     public void testLoadStringConstants() {
-        m.loadStringConstants(new byte[4]);
-        assertEquals(NoBeardMachine.State.RUN, m.getState());
-        assertEquals(4, m.getAddressOfFirstFrame());
+        machine.loadStringConstants(new byte[4]);
+        assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
     
     @Test
     public void testLoadMaxNumberOfStrings() {
-        m.loadStringConstants(new byte[NoBeardMachine.getMAXDAT()]);
-        assertEquals(NoBeardMachine.State.RUN, m.getState());
+        machine.loadStringConstants(new byte[NoBeardMachine.MAX_DATA]);
+        assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
     
     @Test
     public void testStoreStringsOverflow() {
-        m.loadStringConstants(new byte[NoBeardMachine.getMAXDAT() + 1]);
-        assertEquals(NoBeardMachine.State.ERROR, m.getState());
-        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), m.getError().getNumber());
+        machine.loadStringConstants(new byte[NoBeardMachine.MAX_DATA + 1]);
+        assertEquals(ControlUnit.MachineState.ERROR, machine.getState());
+        assertEquals(error.Error.ErrorType.DATA_ADDRESS_ERROR.getNumber(), machine.getError().getNumber());
     }
 
     @Test
-    public void testExecCycle() {
-        System.out.println("testExecCycle");
-
+    public void testStep() {
         byte[] p = {
-            Opcode.LIT.byteCode(), 0, 2,
-            Opcode.PUT.byteCode(), 0,
-            Opcode.HALT.byteCode()
+            Instruction.LIT.getId(), 0, 2, // value
+            Instruction.LIT.getId(), 0, 1, // column width
+            Instruction.PUT.getId(), 0,
+            Instruction.HALT.getId()
         };
-        m.loadProg(0, p);
+        machine.loadProgram(0, p);
 
-        m.execCycle();
-        assertEquals(2, m.getStackTopValue());
-        assertTrue("Expected machine state RUN", m.getState() == NoBeardMachine.State.RUN);
-
-        m.execCycle();
-        assertEquals(NoBeardMachine.STACKEMPTY, m.getStackTopValue());
-        assertTrue("Expected machine state RUN", m.getState() == NoBeardMachine.State.RUN);
-
-        m.execCycle();
-        assertEquals(NoBeardMachine.STACKEMPTY, m.getStackTopValue());
-        assertTrue("Expected machine state STOP", m.getState() == NoBeardMachine.State.STOP);
+        machine.step();
+        assertEquals(2, machine.peek());
+        machine.step();
+        assertEquals(1, machine.peek());
+        machine.step();
+        assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
-
+    
     @Test
-    public void testAddInt() {
-        NoBeardCompiler.setSourceFile("SamplePrograms/AddInt.nb");
-        boolean parseOk = NoBeardCompiler.compile();
-
-        if (parseOk) {
-            m.loadProg(0, NoBeardCompiler.getByteCode());
-            m.loadStringConstants(NoBeardCompiler.getStringStore());
-            m.runProg(0);
-            assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());
-        } else {
-            System.err.println("Compilation not successfull. Can't run program.");
-            fail("Program must compile successfully.");
-        }
-    }
-
-    @Test
-    public void testComplexExpr() {
-        NoBeardCompiler.setSourceFile("SamplePrograms/ComplexExpr.nb");
-        boolean parseOk = NoBeardCompiler.compile();
-        if (parseOk) {
-            m.loadProg(0, NoBeardCompiler.getByteCode());
-            m.loadStringConstants(NoBeardCompiler.getStringStore());
-
-            m.runProg(0);
-            assertEquals("Stack top ", NoBeardMachine.STACKEMPTY, m.getStackTopValue());
-        } else {
-            System.err.println("Compilation not successfull. Can't run program.");
-            fail("Program must compile successfully.");
-        }
+    public void runProgram() {
+        String output = "Calculating+=";
+        byte[] stringMemory = output.getBytes();
+        byte[] program = {
+            Instruction.INC.getId(), 0, 12, // reserve space for 3 variables
+            Instruction.LA.getId(), 0, 0, 32, // load first variable
+            Instruction.LIT.getId(), 0, 17, // load 17
+            Instruction.STO.getId(), // store 17
+            Instruction.LA.getId(), 0, 0, 36, // load second variable
+            Instruction.LIT.getId(), 0, 42, // load 42
+            Instruction.STO.getId(), // store -42
+            Instruction.LA.getId(), 0, 0, 40, // load third variable
+            Instruction.LV.getId(), 0, 0, 32, // load value of first var
+            Instruction.LV.getId(), 0, 0, 36, // load value of second var
+            Instruction.ADD.getId(), // add 17 and 42
+            Instruction.STO.getId(), // store to address 40
+            Instruction.LIT.getId(), 0, 0, // address of "Calculating"
+            Instruction.LIT.getId(), 0, 11, // length of "Calculating"
+            Instruction.LIT.getId(), 0, 12, // width of column
+            Instruction.PUT.getId(), 2, // output string "Calculating"
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 0, // output of first variable
+            Instruction.LIT.getId(), 0, 11, // address of "+"
+            Instruction.LIT.getId(), 0, 1, // length of "+"
+            Instruction.LIT.getId(), 0, 1, // width of column
+            Instruction.PUT.getId(), 2, // output string "+"
+            Instruction.LV.getId(), 0, 0, 36,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 0, // output of second variable
+            Instruction.LIT.getId(), 0, 12, // address of "="
+            Instruction.LIT.getId(), 0, 1, // length of "="
+            Instruction.LIT.getId(), 0, 1, // width of column
+            Instruction.PUT.getId(), 2, // output string "="
+            Instruction.LV.getId(), 0, 0, 40,
+            Instruction.LIT.getId(), 0, 1,
+            Instruction.PUT.getId(), 0, // output of second variable
+            Instruction.PUT.getId(), 3,
+            Instruction.HALT.getId()
+        };
+        
+        machine.loadStringConstants(stringMemory);
+        machine.loadProgram(0, program);
+        machine.runProgram(0);
+        assertEquals(17 + 42, machine.getDataMemory().loadWord(56));
     }
 }

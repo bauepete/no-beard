@@ -48,7 +48,7 @@ public class ControlUnitTest {
     @Before
     public void setUp() {
         errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
-        dataMemory = new DataMemory(32, errorHandler);
+        dataMemory = new DataMemory(1024, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
         programMemory = new ProgramMemory(1024, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
@@ -61,6 +61,7 @@ public class ControlUnitTest {
     @Test
     public void testConstruction() {
         assertEquals(0, controlUnit.getPc());
+        assertEquals(ControlUnit.MachineState.STOPPED, controlUnit.getMachineState());
     }
     
     @Test
@@ -82,5 +83,50 @@ public class ControlUnitTest {
         controlUnit.fetchInstruction();
         assertEquals(1, controlUnit.getDisplacement());
         assertEquals(256, controlUnit.getAddress());
+    }
+
+    @Test
+    public void testGetType() {
+        byte[] program = {
+            Instruction.REL.getId(), 3
+        };
+        programMemory.store(0, program);
+        controlUnit.fetchInstruction();
+        assertEquals(3, controlUnit.getType());
+    }
+
+    @Test
+    public void testFetchInstruction() {
+        byte[] program = {
+            Instruction.LA.getId(), 0, 0, 32,
+        };
+        programMemory.store(0, program);
+        controlUnit.fetchInstruction();
+        assertEquals(0, controlUnit.getDisplacement());
+        assertEquals(32, controlUnit.getAddress());
+    }
+    
+    @Test
+    public void testOneInstructionCycle() {
+        byte[] program = {
+            Instruction.LA.getId(), 0, 0, 32,
+        };
+        programMemory.store(0, program);
+        controlUnit.fetchInstruction();
+        controlUnit.executeInstruction();
+        assertEquals(32, callStack.peek());
+    }
+    
+    @Test
+    public void testExecCycle() {
+        byte[] program = {
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 17,
+            Instruction.STO.getId()
+        };
+        programMemory.store(0, program);
+        controlUnit.executeCycle();
+        assertEquals(4, controlUnit.getPc());
+        assertEquals(ControlUnit.MachineState.STOPPED, controlUnit.getMachineState());
     }
 }

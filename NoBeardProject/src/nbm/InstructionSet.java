@@ -157,7 +157,8 @@ public class InstructionSet {
                 case 0: cu.outputInt(); break;
                 case 1: cu.outputChar(); break;
                 case 2: cu.outputString(); break;
-                case 3: cu.stopDueToOperandRangeError();
+                case 3: System.out.println(); break;
+                default: cu.stopDueToOperandRangeError();
             }
         }),
         INC((byte) 0x1D, (byte) 3, (cu) -> {

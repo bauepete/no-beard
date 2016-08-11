@@ -49,7 +49,7 @@ public class ParserFactory {
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
         
-        ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.getMAXPROG());
+        ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);
         ParserFactory.symbolListManager = new SymbolTable(scanner, errorHandler);
         
         Operand.setSymListManager(symbolListManager);

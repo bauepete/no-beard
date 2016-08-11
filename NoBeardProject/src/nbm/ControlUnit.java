@@ -42,6 +42,7 @@ public class ControlUnit {
     private final ErrorHandler errorHandler;
     private int pc;
     private int currentAddressInProgramMemory;
+    private InstructionSet.Instruction instructionRegister;
     private MachineState machineState;
 
     ControlUnit(ProgramMemory programMemory, DataMemory dataMemory, CallStack callStack, ErrorHandler errorHandler) {
@@ -49,6 +50,7 @@ public class ControlUnit {
         this.dataMemory = dataMemory;
         this.callStack = callStack;
         this.errorHandler = errorHandler;
+        this.machineState = MachineState.STOPPED;
     }
 
     public ProgramMemory getProgramMemory() {
@@ -103,8 +105,23 @@ public class ControlUnit {
         return r;
     }
 
+    void executeCycle() {
+        fetchInstruction();
+        executeInstruction();
+        setPc(getPc() + instructionRegister.getSize());
+    }
+    
+    public void startMachine() {
+        machineState = MachineState.RUNNING;
+    }
+
     void fetchInstruction() {
+        instructionRegister = InstructionSet.getInstructionById(programMemory.loadByte(getPc()));
         currentAddressInProgramMemory = getPc() + 1;
+    }
+
+    void executeInstruction() {
+        instructionRegister.execute(this);
     }
 
     MachineState getMachineState() {
@@ -117,11 +134,19 @@ public class ControlUnit {
 
     void stopDueToDivisionByZero() {
         errorHandler.throwDivisionByZero();
-        machineState = MachineState.ERROR;
+        stopDueToError();
     }
 
     void stopDueToOperandRangeError() {
         errorHandler.throwOperandRangeError();
+        stopDueToError();
+    }
+
+    /**
+     * Sets the machine state to error because of any other reason.
+     */
+    void stopDueToError() {
+        machineState = MachineState.ERROR;
     }
 
     void outputInt() {
@@ -145,11 +170,11 @@ public class ControlUnit {
     }
 
     void outputString() {
-            int width = callStack.pop();
-            int stringLength = callStack.pop();
-            int address = callStack.pop();
-            System.out.print(new String(dataMemory.load(address, stringLength)));
-            outputBlanks(width - stringLength);
+        int width = callStack.pop();
+        int stringLength = callStack.pop();
+        int address = callStack.pop();
+        System.out.print(new String(dataMemory.load(address, stringLength)));
+        outputBlanks(width - stringLength);
     }
 
     public enum Opcode {
