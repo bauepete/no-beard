@@ -21,39 +21,29 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package asm;
+package parser;
 
+import java.util.HashMap;
+import nbm.InstructionSet;
 import nbm.InstructionSet.Instruction;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class OpcodeToInstructionMapTest {
-    
-    public OpcodeToInstructionMapTest() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+public class OpcodeToInstructionMap {
 
-    @Test
-    public void testAdd() {
-        Instruction i = OpcodeToInstructionMap.getInstruction("add");
-        assertEquals(Instruction.ADD, i);
+    private static final HashMap<String, Instruction> opcodeToInstructionMap;
+    
+    static {
+        opcodeToInstructionMap = new HashMap<>();
+        for (Instruction i : Instruction.values()) {
+            opcodeToInstructionMap.put(i.toString(), i);
+        }
     }
     
-    @Test
-    public void testSub() {
-        assertEquals(Instruction.SUB, OpcodeToInstructionMap.getInstruction("sub"));
+    public static InstructionSet.Instruction getInstruction(String instruction) {
+        return opcodeToInstructionMap.get(instruction);
     }
+    
 }

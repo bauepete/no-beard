@@ -21,8 +21,9 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package asm;
+package parser.general;
 
+import parser.AssemblerParser;
 import error.ErrorHandler;
 import io.SourceReader;
 import io.SourceStringReader;
@@ -33,6 +34,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import parser.ParserFactory;
+import scanner.Scanner;
+import symboltable.SymbolTable;
 
 /**
  *
@@ -67,8 +71,11 @@ public class AssemblerParserTest {
     private void setupTest(final String assemblerInstruction, final byte[] machineCode) {
         SourceReader sr = new SourceStringReader(assemblerInstruction);
         errorHandler = new ErrorHandler(sr);
+        Scanner scanner = new Scanner(sr, errorHandler);
+        SymbolTable symbolTable = new SymbolTable(scanner, errorHandler);
         CodeGenerator codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);
-        p = new AssemblerParser(sr, codeGenerator, errorHandler);
+        ParserFactory.setup(sr, errorHandler, scanner, codeGenerator, symbolTable);
+        p = ParserFactory.create(AssemblerParser.class);
 
         expectedProgramMemory = new byte[1024];
         System.arraycopy(machineCode, 0, expectedProgramMemory, 0, machineCode.length);

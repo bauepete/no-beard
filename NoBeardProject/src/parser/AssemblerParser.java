@@ -21,57 +21,41 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package asm;
+package parser;
 
 import error.ErrorHandler;
-import io.SourceReader;
 import nbm.CodeGenerator;
 import nbm.InstructionSet.Instruction;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import scanner.Token;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class AssemblerParser {
+public class AssemblerParser extends Parser {
 
     private final ErrorHandler errorHandler;
     private final Scanner scanner;
     private final CodeGenerator codeGenerator;
+    
+    private Instruction parsedInstruction;
 
-    AssemblerParser(SourceReader sr, CodeGenerator codeGenerator, ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
-        scanner = new Scanner(sr, errorHandler);
-        this.codeGenerator = codeGenerator;
+    AssemblerParser() {
+        this.errorHandler = ParserFactory.getErrorHandler();
+        scanner = ParserFactory.getScanner();
+        this.codeGenerator = ParserFactory.getCodeGenerator();
     }
 
-    boolean parse() {
-        scanner.nextToken();
-        if (parseOpcode()) {
-            return true;
-        }
-        return false;
+    @Override
+    protected void parseSpecificPart() {
+        parseSymbol(Symbol.IDENTIFIER);
+        sem( () -> parsedInstruction = OpcodeToInstructionMap.getInstruction(getLastParsedToken().getClearName()));
+        where(parsedInstruction != null, () -> errorHandler.throwSymbolExpectedError("Opcode", getLastParsedToken().getClearName()));
+        sem(() -> codeGenerator.emit(parsedInstruction));
     }
 
-    private boolean parseOpcode() {
-        Token t = scanner.getCurrentToken();
-        if (t.getSymbol() != Symbol.IDENTIFIER) {
-            errorHandler.throwSymbolExpectedError("Opcode", t.getClearName());
-            return false;
-        }
-        Instruction parsedInstruction = OpcodeToInstructionMap.getInstruction(t.getClearName());
-        if (parsedInstruction == null) {
-            errorHandler.throwSymbolExpectedError("Opcode", t.getClearName());
-            return false;
-        }
-        codeGenerator.emit(parsedInstruction);
-        return true;
-    }
-
-    byte[] getByteCode() {
+    public byte[] getByteCode() {
         return codeGenerator.getByteCode();
     }
-
 }
