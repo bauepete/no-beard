@@ -24,7 +24,10 @@
 package nbm;
 
 import error.ErrorHandler;
+import java.util.Arrays;
+import java.util.List;
 import nbm.InstructionSet.Instruction;
+import nbm.InstructionSet.OperandType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,22 +77,25 @@ public class InstructionSetTest {
         assertEquals(256, callStack.peek());
     }
 
-    private void checkInstruction(byte[] program, final int instructionId, final Instruction opCode, final int size) {
+    private void checkInstruction(byte[] program, final int instructionId, final Instruction opCode, final int size, InstructionSet.OperandType... operands) {
         programMemory.store(0, program);
         Instruction i = InstructionSet.getInstructionById(instructionId);
         controlUnit.fetchInstruction();
         assertEquals(opCode, i);
         assertEquals(instructionId, i.getId());
         assertEquals(size, i.getSize());
+        List<OperandType> l1 = Arrays.asList(operands);
+        List<OperandType> l2 = i.getOperandTypes();
+        assertTrue(i.getOperandTypes().equals(Arrays.asList(operands)));
         i.execute(controlUnit);
     }
-
+    
     @Test
     public void testLa() {
         byte[] program = {
             Instruction.LA.getId(), 0, 0, 32
         };
-        checkInstruction(program, 0x02, Instruction.LA, 4);
+        checkInstruction(program, 0x02, Instruction.LA, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals(32, callStack.peek());
     }
 
@@ -99,7 +105,7 @@ public class InstructionSetTest {
             Instruction.LA.getId(), 0, 0, 32
         };
         setupThreeFrames();
-        checkInstruction(program, 0x02, Instruction.LA, 4);
+        checkInstruction(program, 0x02, Instruction.LA, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals(108, callStack.peek());
     }
 
@@ -134,7 +140,7 @@ public class InstructionSetTest {
         };
 
         setupThreeFrames();
-        checkInstruction(program, 0x02, Instruction.LA, 4);
+        checkInstruction(program, 0x02, Instruction.LA, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals(68, callStack.peek());
     }
 
@@ -145,7 +151,7 @@ public class InstructionSetTest {
         };
 
         setupThreeFrames();
-        checkInstruction(program, 0x02, Instruction.LA, 4);
+        checkInstruction(program, 0x02, Instruction.LA, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals(32, callStack.peek());
     }
 

@@ -23,7 +23,10 @@
  */
 package nbm;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -33,9 +36,14 @@ public class InstructionSet {
 
     @FunctionalInterface
     interface InstructionImplementation {
-        
+
         void execute(ControlUnit controlUnit);
     }
+
+    public enum OperandType {
+
+        BYTE, HALFWORD
+    };
 
     public enum Instruction {
 
@@ -45,7 +53,7 @@ public class InstructionSet {
             int n = cu.getLiteral();
             cu.getCallStack().push(n);
         }),
-        LA((byte) 0x02, (byte) 4, (cu) -> {
+        LA((byte) 0x02, (byte) 4, OperandType.BYTE, OperandType.HALFWORD, (cu) -> {
             byte d = cu.getDisplacement();
             int a = cu.getAddress();
             int base = cu.getBaseFromDisplacement(d);
@@ -98,54 +106,97 @@ public class InstructionSet {
         DIV((byte) 0x0F, (byte) 1, (cu) -> {
             int y = cu.getCallStack().pop();
             int x = cu.getCallStack().pop();
-            if (y != 0)
+            if (y != 0) {
                 cu.getCallStack().push(x / y);
-            else {
+            } else {
                 cu.stopDueToDivisionByZero();
             }
         }),
         MOD((byte) 0x10, (byte) 1, (cu) -> {
             int y = cu.getCallStack().pop();
             int x = cu.getCallStack().pop();
-            if (y != 0)
+            if (y != 0) {
                 cu.getCallStack().push(x % y);
-            else {
+            } else {
                 cu.stopDueToDivisionByZero();
             }
         }),
         NOT((byte) 0x11, (byte) 1, (cu) -> {
             int x = cu.getCallStack().pop();
-            if (x == 0)
+            if (x == 0) {
                 cu.getCallStack().push(1);
-            else
+            } else {
                 cu.getCallStack().push(0);
+            }
         }),
         REL((byte) 0x12, (byte) 2, (cu) -> {
             int y = cu.getCallStack().pop();
             int x = cu.getCallStack().pop();
             byte relOp = cu.getType();
             int valueToPush;
-            
+
             switch (relOp) {
-                case 0: if (x < y) valueToPush = 1; else valueToPush = 0; break;
-                case 1: if (x <= y) valueToPush = 1; else valueToPush = 0; break;
-                case 2: if (x == y) valueToPush = 1; else valueToPush = 0; break;
-                case 3: if (x != y) valueToPush = 1; else valueToPush = 0; break;
-                case 4: if (x >= y) valueToPush = 1; else valueToPush = 0; break;
-                case 5: if (x > y) valueToPush = 1; else valueToPush = 0; break;
-                default: cu.stopDueToOperandRangeError(); valueToPush = 0;
+                case 0:
+                    if (x < y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                case 1:
+                    if (x <= y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                case 2:
+                    if (x == y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                case 3:
+                    if (x != y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                case 4:
+                    if (x >= y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                case 5:
+                    if (x > y) {
+                        valueToPush = 1;
+                    } else {
+                        valueToPush = 0;
+                    }
+                    break;
+                default:
+                    cu.stopDueToOperandRangeError();
+                    valueToPush = 0;
             }
             cu.getCallStack().push(valueToPush);
         }),
         FJMP((byte) 0x16, (byte) 3, (cu) -> {
             int newPc = cu.getAddress();
             int x = cu.getCallStack().pop();
-            if (x == 0) cu.setPc(newPc);
+            if (x == 0) {
+                cu.setPc(newPc);
+            }
         }),
         TJMP((byte) 0x17, (byte) 3, (cu) -> {
             int newPc = cu.getAddress();
             int x = cu.getCallStack().pop();
-            if (x == 1) cu.setPc(newPc);
+            if (x == 1) {
+                cu.setPc(newPc);
+            }
         }),
         JMP((byte) 0x18, (byte) 3, (cu) -> {
             int newPc = cu.getAddress();
@@ -154,11 +205,20 @@ public class InstructionSet {
         PUT((byte) 0x1A, (byte) 2, (cu) -> {
             byte type = cu.getType();
             switch (type) {
-                case 0: cu.outputInt(); break;
-                case 1: cu.outputChar(); break;
-                case 2: cu.outputString(); break;
-                case 3: System.out.println(); break;
-                default: cu.stopDueToOperandRangeError();
+                case 0:
+                    cu.outputInt();
+                    break;
+                case 1:
+                    cu.outputChar();
+                    break;
+                case 2:
+                    cu.outputString();
+                    break;
+                case 3:
+                    System.out.println();
+                    break;
+                default:
+                    cu.stopDueToOperandRangeError();
             }
         }),
         INC((byte) 0x1D, (byte) 3, (cu) -> {
@@ -172,12 +232,28 @@ public class InstructionSet {
 
         private final byte id;
         private final byte size;
+        private final List<OperandType> operandTypes;
         private final InstructionImplementation implementation;
 
         Instruction(byte id, byte size, InstructionImplementation implementation) {
             this.id = id;
             this.size = size;
             this.implementation = implementation;
+            this.operandTypes = new ArrayList<>();
+        }
+        
+        Instruction(byte id, byte size, OperandType operandType, InstructionImplementation implementation) {
+            this.id = id;
+            this.size = size;
+            this.implementation = implementation;
+            this.operandTypes = Arrays.asList(operandType);
+        }
+
+        Instruction(byte id, byte size, OperandType operandType, OperandType operandType2, InstructionImplementation implementation) {
+            this.id = id;
+            this.size = size;
+            this.implementation = implementation;
+            this.operandTypes = Arrays.asList(operandType, operandType2);
         }
 
         public byte getId() {
@@ -186,6 +262,10 @@ public class InstructionSet {
 
         byte getSize() {
             return size;
+        }
+        
+        List<OperandType> getOperandTypes() {
+            return operandTypes;
         }
 
         void execute(ControlUnit controlUnit) {
