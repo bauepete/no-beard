@@ -65,7 +65,9 @@ public class InstructionSetTest {
         Instruction i = InstructionSet.getInstructionById(0x00);
         assertEquals(InstructionSet.Instruction.NOP, i);
         assertEquals(0x00, i.getId());
+        assertEquals("nop", i.toString());
         assertEquals(1, i.getSize());
+        assertFalse(i.hasOperands());
     }
 
     @Test

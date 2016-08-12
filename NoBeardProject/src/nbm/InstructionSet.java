@@ -264,12 +264,22 @@ public class InstructionSet {
             return size;
         }
         
-        List<OperandType> getOperandTypes() {
+        public boolean hasOperands() {
+            return getOperandTypes().size() > 0;
+        }
+        
+        public List<OperandType> getOperandTypes() {
             return operandTypes;
         }
 
         void execute(ControlUnit controlUnit) {
             implementation.execute(controlUnit);
+        }
+        
+        @Override
+        public String toString() {
+            String s = super.toString();
+            return s.toLowerCase();
         }
     }
 

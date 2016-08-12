@@ -46,15 +46,15 @@ public class NameManager {
 
     /**
      * Reads a name. readName() is called if and only if
- SourceReader.getCurrentChar() contains a letter. readName() scans the
- identifier starting with this letter, checks whether it is a keyword and
- returns the appropriate token. If the name read is a keyword, Token.sy is
- set to the corresponding Symbol. If the name read is an identifier,
- Token.sy is set to IDENTIFIER and Token.value is set to a unique
- identifier (spix).
-
- After a call of readName SourceReader.getCurrentChar() returns the first
- character of the source code that is not part of the identifier.
+     * SourceReader.getCurrentChar() contains a letter. readName() scans the
+     * identifier starting with this letter, checks whether it is a keyword and
+     * returns the appropriate token. If the name read is a keyword, Token.sy is
+     * set to the corresponding Symbol. If the name read is an identifier,
+     * Token.sy is set to IDENTIFIER and Token.value is set to a unique
+     * identifier (spix).
+     *
+     * After a call of readName SourceReader.getCurrentChar() returns the first
+     * character of the source code that is not part of the identifier.
      *
      * @param t Token which corresponds to the name read.
      * @see Token
@@ -64,10 +64,10 @@ public class NameManager {
         String s = readString();
         Symbol readSymbol = getTokenType(s);
         t.setSymbol(readSymbol);
+        t.setClearName(s);
         if (readSymbol == Symbol.IDENTIFIER) {
             int spix = addName(s);
             t.setValue(spix);
-            t.setClearName(s);
         }
     }
 
