@@ -17,6 +17,8 @@
  */
 package scanner;
 
+import io.SourceStringReader;
+import io.SourceReader;
 import error.ErrorHandler;
 import error.Error.ErrorType;
 import org.junit.After;
@@ -30,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class NumberAnalyzerTest {
     
-    private SrcReader sourceReader;
+    private SourceReader sourceReader;
     private ErrorHandler errorHandler;
     
     public NumberAnalyzerTest() {
@@ -58,7 +60,7 @@ public class NumberAnalyzerTest {
     }
     
     private void prepareTestSetup(String source) {
-        sourceReader = new SrcStringReader(source);
+        sourceReader = new SourceStringReader(source);
         errorHandler = new ErrorHandler(sourceReader);
         sourceReader.nextChar();
     }

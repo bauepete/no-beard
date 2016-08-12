@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package scanner;
+package io;
 
+import io.SourceReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,14 +15,14 @@ import java.util.logging.Logger;
  *
  * @author peter
  */
-public class SrcFileReader implements SrcReader {
+public class SourceFileReader implements SourceReader {
 
     private FileReader fd;
     private int currentChar;
     private int currentCol;
     private int currentLine;
 
-    public SrcFileReader(String filePath) throws FileNotFoundException {
+    public SourceFileReader(String filePath) throws FileNotFoundException {
         fd = new FileReader(filePath);
     }
 
@@ -30,7 +31,7 @@ public class SrcFileReader implements SrcReader {
         try {
             currentChar = fd.read();
         } catch (IOException ex) {
-            Logger.getLogger(SrcFileReader.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SourceFileReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         currentCol++;
         if (currentChar == '\n') {

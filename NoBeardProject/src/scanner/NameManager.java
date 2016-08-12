@@ -1,21 +1,29 @@
 /*
- * Copyright (C) 2012  Peter Bauer
+ * Copyright ©2012 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Department of Informatics and Media Technique, HTBLA Leonding, 
+ * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
+ * to use, copy, modify, and distribute this software and its documentation
+ * for educational, research, and not-for-profit purposes, without fee and
+ * without a signed licensing agreement, is hereby granted, provided that the
+ * above copyright notice, this paragraph and the following two paragraphs
+ * appear in all copies, modifications, and distributions. Contact the Head of
+ * Informatics and Media Technique, HTBLA Leonding, Limesstr. 12 - 14,
+ * 4060 Leonding, Austria, for commercial licensing opportunities.
  * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * IN NO EVENT SHALL HTBLA LEONDING BE LIABLE TO ANY PARTY FOR DIRECT,
+ * INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+ * PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF HTBLA LEONDING HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * HTBLA LEONDING SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE. THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+ * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 package scanner;
 
+import io.SourceReader;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import scanner.Scanner.Symbol;
@@ -28,25 +36,25 @@ import scanner.Scanner.Symbol;
  */
 public class NameManager {
 
-    private final SrcReader sr;
+    private final SourceReader sr;
     private final HashMap<String, Integer> names;
 
-    public NameManager(SrcReader sr) {
+    public NameManager(SourceReader sr) {
         this.sr = sr;
         names = new HashMap<>();
     }
 
     /**
      * Reads a name. readName() is called if and only if
-     * SrcReader.getCurrentChar() contains a letter. readName() scans the
-     * identifier starting with this letter, checks whether it is a keyword and
-     * returns the appropriate token. If the name read is a keyword, Token.sy is
-     * set to the corresponding Symbol. If the name read is an identifier,
-     * Token.sy is set to IDENTIFIER and Token.value is set to a unique
-     * identifier (spix).
-     *
-     * After a call of readName SrcReader.getCurrentChar() returns the first
-     * character of the source code that is not part of the identifier.
+ SourceReader.getCurrentChar() contains a letter. readName() scans the
+ identifier starting with this letter, checks whether it is a keyword and
+ returns the appropriate token. If the name read is a keyword, Token.sy is
+ set to the corresponding Symbol. If the name read is an identifier,
+ Token.sy is set to IDENTIFIER and Token.value is set to a unique
+ identifier (spix).
+
+ After a call of readName SourceReader.getCurrentChar() returns the first
+ character of the source code that is not part of the identifier.
      *
      * @param t Token which corresponds to the name read.
      * @see Token

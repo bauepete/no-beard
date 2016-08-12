@@ -17,9 +17,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import scanner.SrcStringReader;
+import io.SourceStringReader;
 import static org.junit.Assert.*;
-import scanner.SrcReader;
+import io.SourceReader;
 
 /**
  *
@@ -46,7 +46,7 @@ public class ConstantOperandTest {
     
     @Before
     public void setUp() {
-        SrcReader sourceReader = new SrcStringReader("unit A; do done A;");
+        SourceReader sourceReader = new SourceStringReader("unit A; do done A;");
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         c = new CodeGenerator(256);

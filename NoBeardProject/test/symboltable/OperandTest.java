@@ -22,9 +22,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import scanner.SrcFileReader;
+import io.SourceFileReader;
 import static org.junit.Assert.*;
-import scanner.SrcReader;
+import io.SourceReader;
 
 /**
  *
@@ -55,9 +55,9 @@ public class OperandTest {
     @Before
     public void setUp() {
         c = new CodeGenerator(256);
-        SrcReader sourceReader = null;
+        SourceReader sourceReader = null;
         try {
-            sourceReader = new SrcFileReader("SamplePrograms/Smallest.nb");
+            sourceReader = new SourceFileReader("SamplePrograms/Smallest.nb");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OperandTest.class.getName()).log(Level.SEVERE, null, ex);
         }

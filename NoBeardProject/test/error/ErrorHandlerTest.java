@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import scanner.Scanner.Symbol;
 import static org.junit.Assert.*;
-import scanner.SrcStringReader;
+import io.SourceStringReader;
 
 /**
  *
@@ -26,7 +26,7 @@ public class ErrorHandlerTest {
 
     @Before
     public void setUp() {
-        eh = new ErrorHandler(new SrcStringReader(""));
+        eh = new ErrorHandler(new SourceStringReader(""));
     }
 
     @After

@@ -4,6 +4,7 @@
  */
 package scanner;
 
+import io.SourceReader;
 import error.ErrorHandler;
 
 /**
@@ -15,18 +16,18 @@ public class NumberAnalyzer {
     public static final int MAX_INTEGER = 65535;
 
     /**
-     * readNumber is called if and only if SrcReader.getCurrentChar() returns a
-     * digit. readNumber scans the number beginning with this digit and converts
-     * it to a cardinal number which is returned.
-     *
-     * After a call of readNumber SrcReader.getCurrentChar() returns the first
-     * character of the source code that is not part of the number.
+     * readNumber is called if and only if SourceReader.getCurrentChar() returns a
+ digit. readNumber scans the number beginning with this digit and converts
+ it to a cardinal number which is returned.
+
+ After a call of readNumber SourceReader.getCurrentChar() returns the first
+ character of the source code that is not part of the number.
      *
      * @param sr Source reader
      * @param eh Error handler
      * @return The number scanned
      */
-    public static int readNumber(SrcReader sr, ErrorHandler eh) {
+    public static int readNumber(SourceReader sr, ErrorHandler eh) {
 
         int val = 0;
 

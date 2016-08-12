@@ -13,10 +13,10 @@ import error.Error.ErrorType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import scanner.SrcStringReader;
+import io.SourceStringReader;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import scanner.SrcReader;
+import io.SourceReader;
 
 /**
  *
@@ -32,7 +32,7 @@ public class SymbolTableTest {
 
     @Before
     public void setUp() {
-        SrcStringReader sr = new SrcStringReader("TestUnit; aName");
+        SourceStringReader sr = new SourceStringReader("TestUnit; aName");
         errorHandler = new ErrorHandler(sr);
         Scanner scanner = prepareScanner(sr);
         symbolTable = new SymbolTable(scanner, errorHandler);
@@ -40,7 +40,7 @@ public class SymbolTableTest {
         symbolTable.newUnit(0);
     }
     
-    private Scanner prepareScanner(SrcReader sr) {
+    private Scanner prepareScanner(SourceReader sr) {
         Scanner s = new Scanner(sr, errorHandler);
         s.nextToken();
         s.nextToken();

@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import parser.semantics.AssemblerCodeChecker;
-import scanner.SrcStringReader;
+import io.SourceStringReader;
 import static org.junit.Assert.*;
 
 /**
@@ -50,7 +50,7 @@ public class ValueOnStackOperandTest {
     @Before
     public void setUp() {
         toCode = new CodeGenerator(256);
-        errorHandler = new ErrorHandler(new SrcStringReader(""));
+        errorHandler = new ErrorHandler(new SourceStringReader(""));
         
         intSrcOp = new ConstantOperand(Operand.Type.SIMPLEINT, 4, 17, 0);
         intDestOp = new VariableOperand(Operand.Type.SIMPLEINT, 4, 32, 0);

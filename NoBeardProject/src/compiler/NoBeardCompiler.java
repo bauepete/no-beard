@@ -27,9 +27,9 @@ import java.io.FileNotFoundException;
 import parser.NoBeardParser;
 import parser.Parser;
 import parser.ParserFactory;
-import scanner.SrcFileReader;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
+import io.SourceFileReader;
+import io.SourceReader;
+import io.SourceStringReader;
 
 /**
  *
@@ -37,12 +37,12 @@ import scanner.SrcStringReader;
  */
 public class NoBeardCompiler {
 
-    private static SrcReader sourceReader;
+    private static SourceReader sourceReader;
     private static Parser parserl;
     private static boolean sourceIsAvailable;
 
     public static void setSourceString(String source) {
-        NoBeardCompiler.sourceReader = new SrcStringReader(source);
+        NoBeardCompiler.sourceReader = new SourceStringReader(source);
         sourceIsAvailable = true;
         ParserFactory.setup(sourceReader);
         parserl = ParserFactory.create(NoBeardParser.class);
@@ -62,10 +62,10 @@ public class NoBeardCompiler {
 
     public static void setSourceFile(String sourceFilePath) {
         try {
-            NoBeardCompiler.sourceReader = new SrcFileReader(sourceFilePath);
+            NoBeardCompiler.sourceReader = new SourceFileReader(sourceFilePath);
             sourceIsAvailable = true;
         } catch (FileNotFoundException ex) {
-            NoBeardCompiler.sourceReader = new SrcStringReader("");
+            NoBeardCompiler.sourceReader = new SourceStringReader("");
             sourceIsAvailable = false;
         } finally {
             ParserFactory.setup(sourceReader);

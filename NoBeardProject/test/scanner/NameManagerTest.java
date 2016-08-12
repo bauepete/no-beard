@@ -4,6 +4,8 @@
  */
 package scanner;
 
+import io.SourceStringReader;
+import io.SourceReader;
 import scanner.Scanner.Symbol;
 import org.junit.After;
 import org.junit.Before;
@@ -16,9 +18,9 @@ import static org.junit.Assert.*;
  */
 public class NameManagerTest {
 
-    private SrcReader sr;
-    private SrcReader srMany;
-    private SrcReader srKeywords;
+    private SourceReader sr;
+    private SourceReader srMany;
+    private SourceReader srKeywords;
     private Token token;
     private NameManager nameManager;
     private NameManager nameManagerMany;
@@ -29,9 +31,9 @@ public class NameManagerTest {
 
     @Before
     public void setUp() {
-        sr = new SrcStringReader("var1; var2;");
-        srMany = new SrcStringReader("var1; var2; bla; blu; var2; blu;");
-        srKeywords = new SrcStringReader("put, putln, unit, do, done, if, else, int, bool, char, true, false,");
+        sr = new SourceStringReader("var1; var2;");
+        srMany = new SourceStringReader("var1; var2; bla; blu; var2; blu;");
+        srKeywords = new SourceStringReader("put, putln, unit, do, done, if, else, int, bool, char, true, false,");
         token = new Token();
         nameManager = new NameManager(sr);
         nameManagerMany = new NameManager(srMany);

@@ -4,6 +4,8 @@
  */
 package scanner;
 
+import io.SourceStringReader;
+import io.SourceReader;
 import error.ErrorHandler;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class StringManagerTest {
 
-    SrcReader sourceReader;
+    SourceReader sourceReader;
     ErrorHandler errorHandler;
     StringManager stringManager;
 
@@ -66,7 +68,7 @@ public class StringManagerTest {
     }
 
     private void setupComponents(String srcString) {
-        sourceReader = new SrcStringReader(srcString);
+        sourceReader = new SourceStringReader(srcString);
         errorHandler = new ErrorHandler(sourceReader);
         stringManager = new StringManager(sourceReader, errorHandler);
     }

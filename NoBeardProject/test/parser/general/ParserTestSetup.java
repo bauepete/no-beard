@@ -8,8 +8,8 @@ import error.ErrorHandler;
 import nbm.CodeGenerator;
 import parser.ParserFactory;
 import scanner.Scanner;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
+import io.SourceReader;
+import io.SourceStringReader;
 import symboltable.SymbolTable;
 
 /**
@@ -36,7 +36,7 @@ public class ParserTestSetup {
     }
 
     protected static void setupInfraStructure(String sourceLine) {
-        SrcReader sourceReader = new SrcStringReader(sourceLine);
+        SourceReader sourceReader = new SourceStringReader(sourceLine);
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
         code = new CodeGenerator(256);

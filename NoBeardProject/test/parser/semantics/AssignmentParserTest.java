@@ -14,8 +14,8 @@ import parser.Parser;
 import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
-import scanner.SrcReader;
-import scanner.SrcStringReader;
+import io.SourceReader;
+import io.SourceStringReader;
 import symboltable.SymbolTable;
 
 /**
@@ -53,7 +53,7 @@ public class AssignmentParserTest {
     }
 
     private void setupParserFactory(final String srcLine) {
-        SrcReader srcReader = new SrcStringReader(srcLine);
+        SourceReader srcReader = new SourceStringReader(srcLine);
         ErrorHandler errorHandler = new ErrorHandler(srcReader);
         CodeGenerator codeGen = new CodeGenerator(32);
         scanner = new Scanner(srcReader, errorHandler);

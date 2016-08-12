@@ -2,20 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package scanner;
+package io;
 
+import io.SourceReader;
 import error.SourceCodeInfo;
 
 /**
  *
  * @author peter
  */
-public class SrcStringReader implements SrcReader, SourceCodeInfo {
+public class SourceStringReader implements SourceReader, SourceCodeInfo {
 
     String srcString;
     int currentIndex;
 
-    public SrcStringReader(String srcString) {
+    public SourceStringReader(String srcString) {
         this.srcString = srcString;
         currentIndex = -1;
     }

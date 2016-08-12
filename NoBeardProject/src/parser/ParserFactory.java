@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 import nbm.CodeGenerator;
 import nbm.NoBeardMachine;
 import scanner.Scanner;
-import scanner.SrcReader;
+import io.SourceReader;
 import symboltable.Operand;
 import symboltable.SymbolTable;
 
@@ -44,7 +44,7 @@ public class ParserFactory {
     private static SymbolTable symbolListManager;
     
     
-    public static void setup(SrcReader sourceReader) {
+    public static void setup(SourceReader sourceReader) {
         ParserFactory.errorHandler = new ErrorHandler(sourceReader);
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
@@ -57,7 +57,7 @@ public class ParserFactory {
         Operand.setStringManager(scanner.getStringManager());
     }
     
-    public static void setup(SrcReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymbolTable symbolListManager) {
+    public static void setup(SourceReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymbolTable symbolListManager) {
         ParserFactory.errorHandler = errorHandler;
         ParserFactory.scanner = scanner;
         scanner.nextToken();

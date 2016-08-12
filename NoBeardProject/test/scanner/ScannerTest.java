@@ -4,6 +4,8 @@
  */
 package scanner;
 
+import io.SourceStringReader;
+import io.SourceReader;
 import error.ErrorHandler;
 import scanner.Scanner.Symbol;
 import org.junit.After;
@@ -16,7 +18,7 @@ import static org.junit.Assert.*;
  * @author peter
  */
 public class ScannerTest {
-    private SrcReader sourceReader;
+    private SourceReader sourceReader;
     private ErrorHandler errorHandler;
     private Scanner scanner;
 
@@ -43,7 +45,7 @@ public class ScannerTest {
     }
     
     private void setupReaderAndErrorHandler(String srcLine) {
-        sourceReader = new SrcStringReader(srcLine);
+        sourceReader = new SourceStringReader(srcLine);
         errorHandler = new ErrorHandler(sourceReader);
         scanner = new Scanner(sourceReader, errorHandler);
     }

@@ -4,6 +4,7 @@
  */
 package scanner;
 
+import io.SourceReader;
 import error.ErrorHandler;
 import error.Error;
 
@@ -21,10 +22,10 @@ public class StringManager {
     private int stringAddress;
     private int stringLength;
     
-    private final SrcReader srcReader;
+    private final SourceReader srcReader;
     private final ErrorHandler errorHandler;
     
-    public StringManager(SrcReader srcReader, ErrorHandler errorHandler) {
+    public StringManager(SourceReader srcReader, ErrorHandler errorHandler) {
         stringStorage = new char[MAXSTRING];
         this.srcReader = srcReader;
         this.errorHandler = errorHandler;
@@ -35,15 +36,15 @@ public class StringManager {
     }
     
     /**
-     * readString is called if and only if the SrcReader.getCurrentChar()
-     * returns an apostrophe (') or a quote ("). readString() scans the string
-     * beginning with this character, stores it into the string storage.
-     * If the string is invalid (e.g., it doesn't end on the same line as it
-     * begins) or if a string storage overflow is encountered, a lexical error
-     * is reported.
-     * After a call of readString() SrcReader.getCurrentChar() returns the
-     * first character in the source code that follows the string's closing
-     * apostrophe or quote.
+     * readString is called if and only if the SourceReader.getCurrentChar()
+ returns an apostrophe (') or a quote ("). readString() scans the string
+ beginning with this character, stores it into the string storage.
+ If the string is invalid (e.g., it doesn't end on the same line as it
+ begins) or if a string storage overflow is encountered, a lexical error
+ is reported.
+ After a call of readString() SourceReader.getCurrentChar() returns the
+ first character in the source code that follows the string's closing
+ apostrophe or quote.
      */
     void readString() {
         int stringStart = srcReader.getCurrentChar();
