@@ -38,7 +38,7 @@ public class AssemblerParser extends Parser {
 
     private final ErrorHandler errorHandler;
     private final CodeGenerator codeGenerator;
-    
+
     private Instruction parsedInstruction;
     private OperandType requestedOperandType;
 
@@ -57,28 +57,38 @@ public class AssemblerParser extends Parser {
 
     private void parseOpcode() {
         parseSymbol(Symbol.IDENTIFIER);
-        sem( () -> parsedInstruction = OpcodeToInstructionMap.getInstruction(getLastParsedToken().getClearName()));
+        sem(() -> parsedInstruction = OpcodeToInstructionMap.getInstruction(getLastParsedToken().getClearName()));
         where(parsedInstruction != null, () -> errorHandler.throwSymbolExpectedError("Opcode", getLastParsedToken().getClearName()));
         sem(() -> codeGenerator.emit(parsedInstruction));
     }
 
     private void parseOperands() {
-        parseSymbol(Symbol.NUMBER);
-        sem(() -> requestedOperandType = parsedInstruction.getOperandTypes().get(0));
-        where(operandFits(), errorHandler::throwOperandRangeError);
-        sem(() -> {
-            if (parsedInstruction.getOperandTypes().get(0) == InstructionSet.OperandType.BYTE)
-                codeGenerator.emit((byte) getLastParsedToken().getValue());
-            else
-                codeGenerator.emit(getLastParsedToken().getValue());
+        parsedInstruction.getOperandTypes().stream().map((operandType) -> {
+            parseSymbol(Symbol.NUMBER);
+            return operandType;
+        }).map((operandType) -> {
+            sem(() -> requestedOperandType = operandType);
+            return operandType;
+        }).map((operandType) -> {
+            where(operandFits(), errorHandler::throwOperandRangeError);
+            return operandType;
+        }).forEach((operandType) -> {
+            sem(() -> {
+                if (operandType == InstructionSet.OperandType.BYTE) {
+                    codeGenerator.emit((byte) getLastParsedToken().getValue());
+                } else {
+                    codeGenerator.emit(getLastParsedToken().getValue());
+                }
+            });
         });
     }
-    
+
     private boolean operandFits() {
-        if (requestedOperandType == OperandType.BYTE)
+        if (requestedOperandType == OperandType.BYTE) {
             return getLastParsedToken().getValue() < 256;
-        else
+        } else {
             return getLastParsedToken().getValue() < 65536;
+        }
     }
 
     public byte[] getByteCode() {

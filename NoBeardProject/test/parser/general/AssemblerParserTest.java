@@ -134,4 +134,12 @@ public class AssemblerParserTest {
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
+    
+    @Test
+    public void testAssembleInstructionWithOneByteAndTwoByteOperand() {
+        setupTest("la 0 32", new byte[] {Instruction.LA.getId(), 0, 0, 32});
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
 }
