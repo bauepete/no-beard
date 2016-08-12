@@ -49,7 +49,7 @@ public class InstructionSet {
 
         NOP((byte) 0x00, (byte) 1, (cu) -> {
         }),
-        LIT((byte) 0x01, (byte) 3, (cu) -> {
+        LIT((byte) 0x01, (byte) 3, OperandType.HALFWORD, (cu) -> {
             int n = cu.getLiteral();
             cu.getCallStack().push(n);
         }),
@@ -59,13 +59,13 @@ public class InstructionSet {
             int base = cu.getBaseFromDisplacement(d);
             cu.getCallStack().push(base + a);
         }),
-        LV((byte) 0x03, (byte) 4, (cu) -> {
+        LV((byte) 0x03, (byte) 4, OperandType.BYTE, OperandType.HALFWORD, (cu) -> {
             byte d = cu.getDisplacement();
             int a = cu.getAddress();
             int base = cu.getBaseFromDisplacement(d);
             cu.getCallStack().push(cu.getDataMemory().loadWord(base + a));
         }),
-        LC((byte) 0x04, (byte) 4, (cu) -> {
+        LC((byte) 0x04, (byte) 4, OperandType.BYTE, OperandType.HALFWORD, (cu) -> {
             byte d = cu.getDisplacement();
             int a = cu.getAddress();
             int base = cu.getBaseFromDisplacement(d);
@@ -129,7 +129,7 @@ public class InstructionSet {
                 cu.getCallStack().push(0);
             }
         }),
-        REL((byte) 0x12, (byte) 2, (cu) -> {
+        REL((byte) 0x12, (byte) 2, OperandType.BYTE, (cu) -> {
             int y = cu.getCallStack().pop();
             int x = cu.getCallStack().pop();
             byte relOp = cu.getType();
@@ -184,25 +184,25 @@ public class InstructionSet {
             }
             cu.getCallStack().push(valueToPush);
         }),
-        FJMP((byte) 0x16, (byte) 3, (cu) -> {
+        FJMP((byte) 0x16, (byte) 3, OperandType.HALFWORD, (cu) -> {
             int newPc = cu.getAddress();
             int x = cu.getCallStack().pop();
             if (x == 0) {
                 cu.setPc(newPc);
             }
         }),
-        TJMP((byte) 0x17, (byte) 3, (cu) -> {
+        TJMP((byte) 0x17, (byte) 3, OperandType.HALFWORD, (cu) -> {
             int newPc = cu.getAddress();
             int x = cu.getCallStack().pop();
             if (x == 1) {
                 cu.setPc(newPc);
             }
         }),
-        JMP((byte) 0x18, (byte) 3, (cu) -> {
+        JMP((byte) 0x18, (byte) 3, OperandType.HALFWORD, (cu) -> {
             int newPc = cu.getAddress();
             cu.setPc(newPc);
         }),
-        PUT((byte) 0x1A, (byte) 2, (cu) -> {
+        OUT((byte) 0x1A, (byte) 2, OperandType.BYTE, (cu) -> {
             byte type = cu.getType();
             switch (type) {
                 case 0:
@@ -221,7 +221,7 @@ public class InstructionSet {
                     cu.stopDueToOperandRangeError();
             }
         }),
-        INC((byte) 0x1D, (byte) 3, (cu) -> {
+        INC((byte) 0x1D, (byte) 3, OperandType.HALFWORD, (cu) -> {
             int size = cu.getLiteral();
             int sp = cu.getCallStack().getStackPointer();
             cu.getCallStack().setStackPointer(sp + size);

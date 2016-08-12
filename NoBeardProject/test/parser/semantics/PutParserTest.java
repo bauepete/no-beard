@@ -27,7 +27,7 @@ public class PutParserTest {
         byte[] expected = {
             Instruction.LIT.getId(), 0, 5,        // int value to be putted
             Instruction.LIT.getId(), 0, 1,        // column width
-            Instruction.PUT.getId(), 0            // put int
+            Instruction.OUT.getId(), 0            // put int
         };
 
         PutParser instance = PutParserTestSetup.getPutIntSetup();
@@ -44,7 +44,7 @@ public class PutParserTest {
         byte[] expected = {
             Instruction.LIT.getId(), 0, 97,       // decimal ascii value of 'a' to be putted
             Instruction.LIT.getId(), 0, 1,        // column width
-            Instruction.PUT.getId(), 1            // put simple char
+            Instruction.OUT.getId(), 1            // put simple char
         };
 
         PutParser instance = PutParserTestSetup.getPutCharSetup();
@@ -62,7 +62,7 @@ public class PutParserTest {
             Instruction.LIT.getId(), 0, 0,    // address of string
             Instruction.LIT.getId(), 0, 6,    // length of string
             Instruction.LIT.getId(), 0, 6,    // width of column
-            Instruction.PUT.getId(), 2        // put string
+            Instruction.OUT.getId(), 2        // put string
         };
 
         PutParser instance = PutParserTestSetup.getPutStringSetup();
@@ -79,7 +79,7 @@ public class PutParserTest {
         byte[] expectedCode = {
             Instruction.LIT.getId(), 0, 42,   // value
             Instruction.LIT.getId(), 0, 17,   // column width
-            Instruction.PUT.getId(), 0        // put int
+            Instruction.OUT.getId(), 0        // put int
         };
         
         PutParser instance = PutParserTestSetup.getPutIntWithColumnWidthSetup();
@@ -93,7 +93,7 @@ public class PutParserTest {
             Instruction.LIT.getId(), 0, 0,    // address of string
             Instruction.LIT.getId(), 0, 6,    // length of string
             Instruction.LIT.getId(), 0, 17,   // widths of column
-            Instruction.PUT.getId(), 2        // put string
+            Instruction.OUT.getId(), 2        // put string
         };
         
         PutParser instance = PutParserTestSetup.getPutStringWithColumnWidthSetup();
@@ -107,7 +107,7 @@ public class PutParserTest {
     @Test
     public void testParsePutln() {
         byte[] expected = {
-            Instruction.PUT.getId(), 3
+            Instruction.OUT.getId(), 3
         };
 
         PutParser instance = PutParserTestSetup.getPutlnSetup();

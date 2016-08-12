@@ -73,7 +73,7 @@ public class NoBeardMachineTest {
         byte[] p = {
             Instruction.LIT.getId(), 0, 2, // value
             Instruction.LIT.getId(), 0, 1, // column width
-            Instruction.PUT.getId(), 0,
+            Instruction.OUT.getId(), 0,
             Instruction.HALT.getId()
         };
         machine.loadProgram(0, p);
@@ -106,25 +106,25 @@ public class NoBeardMachineTest {
             Instruction.LIT.getId(), 0, 0, // address of "Calculating"
             Instruction.LIT.getId(), 0, 11, // length of "Calculating"
             Instruction.LIT.getId(), 0, 12, // width of column
-            Instruction.PUT.getId(), 2, // output string "Calculating"
+            Instruction.OUT.getId(), 2, // output string "Calculating"
             Instruction.LV.getId(), 0, 0, 32,
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 0, // output of first variable
+            Instruction.OUT.getId(), 0, // output of first variable
             Instruction.LIT.getId(), 0, 11, // address of "+"
             Instruction.LIT.getId(), 0, 1, // length of "+"
             Instruction.LIT.getId(), 0, 1, // width of column
-            Instruction.PUT.getId(), 2, // output string "+"
+            Instruction.OUT.getId(), 2, // output string "+"
             Instruction.LV.getId(), 0, 0, 36,
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 0, // output of second variable
+            Instruction.OUT.getId(), 0, // output of second variable
             Instruction.LIT.getId(), 0, 12, // address of "="
             Instruction.LIT.getId(), 0, 1, // length of "="
             Instruction.LIT.getId(), 0, 1, // width of column
-            Instruction.PUT.getId(), 2, // output string "="
+            Instruction.OUT.getId(), 2, // output string "="
             Instruction.LV.getId(), 0, 0, 40,
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 0, // output of second variable
-            Instruction.PUT.getId(), 3,
+            Instruction.OUT.getId(), 0, // output of second variable
+            Instruction.OUT.getId(), 3,
             Instruction.HALT.getId()
         };
         

@@ -130,7 +130,7 @@ public class PutParser extends Parser {
     }
 
     private void emitPutStatement(final int putStyle) {
-        code.emit(Instruction.PUT);
+        code.emit(Instruction.OUT);
         code.emit((byte) putStyle);
     }
 

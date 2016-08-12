@@ -25,8 +25,9 @@ package parser;
 
 import error.ErrorHandler;
 import nbm.CodeGenerator;
+import nbm.InstructionSet;
 import nbm.InstructionSet.Instruction;
-import scanner.Scanner;
+import nbm.InstructionSet.OperandType;
 import scanner.Scanner.Symbol;
 
 /**
@@ -36,23 +37,48 @@ import scanner.Scanner.Symbol;
 public class AssemblerParser extends Parser {
 
     private final ErrorHandler errorHandler;
-    private final Scanner scanner;
     private final CodeGenerator codeGenerator;
     
     private Instruction parsedInstruction;
+    private OperandType requestedOperandType;
 
     AssemblerParser() {
         this.errorHandler = ParserFactory.getErrorHandler();
-        scanner = ParserFactory.getScanner();
         this.codeGenerator = ParserFactory.getCodeGenerator();
     }
 
     @Override
     protected void parseSpecificPart() {
+        parseOpcode();
+        if (parsedInstruction != null && parsedInstruction.hasOperands()) {
+            parseOperands();
+        }
+    }
+
+    private void parseOpcode() {
         parseSymbol(Symbol.IDENTIFIER);
         sem( () -> parsedInstruction = OpcodeToInstructionMap.getInstruction(getLastParsedToken().getClearName()));
         where(parsedInstruction != null, () -> errorHandler.throwSymbolExpectedError("Opcode", getLastParsedToken().getClearName()));
         sem(() -> codeGenerator.emit(parsedInstruction));
+    }
+
+    private void parseOperands() {
+        parseSymbol(Symbol.NUMBER);
+        sem(() -> requestedOperandType = parsedInstruction.getOperandTypes().get(0));
+        where(operandFits(), errorHandler::throwOperandRangeError);
+        sem(() -> {
+            if (parsedInstruction.getOperandTypes().get(0) == InstructionSet.OperandType.BYTE)
+                codeGenerator.emit((byte) getLastParsedToken().getValue());
+            else
+                codeGenerator.emit(getLastParsedToken().getValue());
+        });
+    }
+    
+    private boolean operandFits() {
+        if (requestedOperandType == OperandType.BYTE)
+            return getLastParsedToken().getValue() < 256;
+        else
+            return getLastParsedToken().getValue() < 65536;
     }
 
     public byte[] getByteCode() {

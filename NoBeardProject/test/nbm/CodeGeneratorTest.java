@@ -49,7 +49,7 @@ public class CodeGeneratorTest {
     public void testEmitByte() {
         byte b = 1;
 
-        instance.emit(Instruction.PUT);
+        instance.emit(Instruction.OUT);
         instance.emit(b);
 
         assertEquals(2, instance.getPc());

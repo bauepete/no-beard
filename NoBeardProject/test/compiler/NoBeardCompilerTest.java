@@ -96,7 +96,7 @@ public class NoBeardCompilerTest {
             Instruction.LA.getId(), 0, 0, 32, // Load address of var to print
             Instruction.LIT.getId(), 0, 12, // Length of string
             Instruction.LIT.getId(), 0, 12, // Width parameter of print instr.
-            Instruction.PUT.getId(), 2, // Output of a string
+            Instruction.OUT.getId(), 2, // Output of a string
             Instruction.LA.getId(), 0, 0, 44, // address of string y
             Instruction.LIT.getId(), 0, 12, // address of source string
             Instruction.LIT.getId(), 0, 17, // length of second string
@@ -119,7 +119,7 @@ public class NoBeardCompilerTest {
             Instruction.STO.getId(),
             Instruction.LV.getId(), 0, 0, 32,
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 0,
+            Instruction.OUT.getId(), 0,
             Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expectedCode);
@@ -140,7 +140,7 @@ public class NoBeardCompilerTest {
             Instruction.LV.getId(), 0, 0, 36,
             Instruction.ADD.getId(),
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 0,
+            Instruction.OUT.getId(), 0,
             Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expectedCode);
@@ -156,7 +156,7 @@ public class NoBeardCompilerTest {
             Instruction.STC.getId(),
             Instruction.LC.getId(), 0, 0, 32,
             Instruction.LIT.getId(), 0, 1,
-            Instruction.PUT.getId(), 1,
+            Instruction.OUT.getId(), 1,
             Instruction.HALT.getId()
         };
         testCompilationWithSourceString(source, expected);
@@ -170,8 +170,8 @@ public class NoBeardCompilerTest {
             Instruction.LIT.getId(), 0, 0, // address of string
             Instruction.LIT.getId(), 0, 11, // length of string
             Instruction.LIT.getId(), 0, 11, // width parameter of print instr.
-            Instruction.PUT.getId(), 2,
-            Instruction.PUT.getId(), 3,
+            Instruction.OUT.getId(), 2,
+            Instruction.OUT.getId(), 3,
             Instruction.HALT.getId()
         };
         testCompilationWithSourceFile(sourceFilePath, expected);

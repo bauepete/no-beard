@@ -75,7 +75,7 @@ public class InstructionSetTest {
         byte[] program = {
             Instruction.LIT.getId(), 1, 0
         };
-        checkInstruction(program, 1, InstructionSet.Instruction.LIT, 3);
+        checkInstruction(program, 1, InstructionSet.Instruction.LIT, 3, OperandType.HALFWORD);
         assertEquals(256, callStack.peek());
     }
 
@@ -163,7 +163,7 @@ public class InstructionSetTest {
             Instruction.LV.getId(), 1, 0, 36
         };
         setupThreeFrames();
-        checkInstruction(program, 0x03, Instruction.LV, 4);
+        checkInstruction(program, 0x03, Instruction.LV, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals(42, callStack.peek());
     }
 
@@ -173,7 +173,7 @@ public class InstructionSetTest {
             Instruction.LC.getId(), 0, 0, 32
         };
         setupThreeFrames();
-        checkInstruction(program, 0x04, Instruction.LC, 4);
+        checkInstruction(program, 0x04, Instruction.LC, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals('5', (char) callStack.peek());
     }
 
@@ -348,7 +348,7 @@ public class InstructionSetTest {
         };
         callStack.push(17);
         callStack.push(42);
-        checkInstruction(program, 0x12, Instruction.REL, 2);
+        checkInstruction(program, 0x12, Instruction.REL, 2, OperandType.BYTE);
         assertEquals(1, callStack.pop());        
     }
     
@@ -359,7 +359,7 @@ public class InstructionSetTest {
         };
         callStack.push(-1);
         callStack.push(5);
-        checkInstruction(program, 0x12, Instruction.REL, 2);
+        checkInstruction(program, 0x12, Instruction.REL, 2, OperandType.BYTE);
         assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
     
@@ -369,7 +369,7 @@ public class InstructionSetTest {
             Instruction.FJMP.getId(), (byte) 128, (byte) 128
         };
         callStack.push(0);
-        checkInstruction(program, 0x16, Instruction.FJMP, 3);
+        checkInstruction(program, 0x16, Instruction.FJMP, 3, OperandType.HALFWORD);
         assertEquals(128 * 256 + 128, controlUnit.getPc());
     }
     
@@ -379,7 +379,7 @@ public class InstructionSetTest {
             Instruction.INC.getId(), 0, 42
         };
         int top = callStack.getStackPointer();
-        checkInstruction(program, 0x1D, Instruction.INC, 3);
+        checkInstruction(program, 0x1D, Instruction.INC, 3, OperandType.HALFWORD);
         assertEquals(top + 42, callStack.getStackPointer());
     }
     

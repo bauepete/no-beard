@@ -36,6 +36,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ParserFactory;
 import scanner.Scanner;
+import scanner.Scanner.Symbol;
 import symboltable.SymbolTable;
 
 /**
@@ -103,5 +104,34 @@ public class AssemblerParserTest {
         setupTest("foo", new byte[]{});
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
+    }
+    
+    @Test
+    public void testAssembleInstructionWithAOneByteOperand() {
+        setupTest("out 1", new byte[] {Instruction.OUT.getId(), 1});
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+    
+    @Test
+    public void testAssembleInstructionWithOneByteOperandTooLarge() {
+        setupTest("out 256", new byte[] {});
+        assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+    
+    @Test
+    public void testAssembleInstructionWithAHalfWordOperand() {
+        setupTest("lit 65535", new byte[] {Instruction.LIT.getId(), (byte) 255, (byte) 255});
+        assertTrue(p.parse());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+    
+    @Test
+    public void testAssembleInstructionWithAHalfWordOperandTooLarge() {
+        setupTest("lit 65536", new byte[] {Instruction.LIT.getId(), (byte) 255, (byte) 255});
+        assertFalse(p.parse());
+        assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
 }
