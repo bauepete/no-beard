@@ -362,7 +362,7 @@ DataAddress & 0 ... 65535 & 2 Bytes & Data address relative to the start of its 
 Each of these subsections ends with a description of its operation: First a description in human language is given which is then followed by a formal definition.
 
 % ----------------------------- NOP ----------------------------
-\subsection{NOP}
+\subsection{nop}
 \subsubsection{Instruction}
 \onebyteinstruction{0x00}
 
@@ -370,11 +370,11 @@ Each of these subsections ends with a description of its operation: First a desc
 Empty instruction. Does nothing
 
 \begin{lstlisting}
-NOP
+nop
 \end{lstlisting}
 
 % ----------------------------- LIT ----------------------------
-\subsection{LIT}
+\subsection{lit}
 \subsubsection{Instruction}
 \threebyteinstruction{0x01}{Literal}
 
@@ -382,12 +382,12 @@ NOP
 Pushes a value on the expression stack.
 
 \begin{lstlisting}
-LIT Literal
+lit Literal
 push(Literal);
 \end{lstlisting}
 
 % ----------------------------- LA ----------------------------
-\subsection{LA}
+\subsection{la}
 \subsubsection{Instruction}
 \fourbyteinstructiona{0x02}{Displacement}{DataAddress}
 
@@ -395,7 +395,7 @@ push(Literal);
 Loads an address on the stack.
 
 	\begin{lstlisting}
-	LA Displacement DataAddress
+	la Displacement DataAddress
 	base = fp;
 	for (i= 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
@@ -404,7 +404,7 @@ Loads an address on the stack.
 	\end{lstlisting}
 
 % ----------------------------- LV ----------------------------
-\subsection{LV}
+\subsection{lv}
 \subsubsection{Instruction}
 \fourbyteinstructiona{0x03}{Displacement}{DataAddress}
 
@@ -412,7 +412,7 @@ Loads an address on the stack.
 Loads a value on the stack.
 
 	\begin{lstlisting}
-	LV Displacement DataAddress
+	lv Displacement DataAddress
 	base = fp;
 	for (i = 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
@@ -422,7 +422,7 @@ Loads a value on the stack.
 	\end{lstlisting}
 
 % ----------------------------- LC ----------------------------
-\subsection{LC}
+\subsection{lc}
 \subsubsection{Instruction}
 \fourbyteinstructiona{0x04}{Displacement}{DataAddress}
 
@@ -430,7 +430,7 @@ Loads a value on the stack.
 Loads a character on the stack.
 
 	\begin{lstlisting}
-	LC Displacement DataAddress
+	lc Displacement DataAddress
 	base = fp;
 	for (i = 0; i < Displacement; i++) {
 		base = dat[base ... base + 3];
@@ -441,7 +441,7 @@ Loads a character on the stack.
 	\end{lstlisting}
 
 % ----------------------------- STO ----------------------------
-\subsection{STO}
+\subsection{sto}
 \subsubsection{Instruction}
 \onebyteinstruction{0x07}
 
@@ -449,14 +449,14 @@ Loads a character on the stack.
 Stores a value on an address.
 
 	\begin{lstlisting}
-	STO
+	sto
 	x = pop();
 	a = pop();
 	dat[a ... a + 3] = x;
 	\end{lstlisting}
 
 % ----------------------------- STC ----------------------------
-\subsection{STC}
+\subsection{stc}
 \subsubsection{Instruction}
 \onebyteinstruction{0x08}
 
@@ -464,7 +464,7 @@ Stores a value on an address.
 Stores a character on an address.
 
 	\begin{lstlisting}
-	STC
+	stc
 	x = pop();
 	a = pop();
 	// Only take the rightmost byte
@@ -472,7 +472,7 @@ Stores a character on an address.
 	\end{lstlisting}
 
 % ----------------------------- ASSN ----------------------------
-\subsection{ASSN}
+\subsection{assn}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0A}
 
@@ -480,7 +480,7 @@ Stores a character on an address.
 Array assignment.
 
 	\begin{lstlisting}
-	ASSN
+	assn
 	n = pop();
 	src = pop();
 	dest = pop();
@@ -489,7 +489,7 @@ Array assignment.
 	\end{lstlisting}
 
 % ----------------------------- NEG ----------------------------
-\subsection{NEG}
+\subsection{neg}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0B}
 
@@ -497,13 +497,13 @@ Array assignment.
 Negates the top of the stack.
 
 	\begin{lstlisting}
-	NEG
+	neg
 	x = pop();
 	push(-x);
 	\end{lstlisting}
 
 % ----------------------------- ADD ----------------------------
-\subsection{ADD}
+\subsection{add}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0C}
 
@@ -511,12 +511,12 @@ Negates the top of the stack.
 Adds the top two values of the stack.
 
 	\begin{lstlisting}
-	ADD
+	add
 	push(pop() + pop());
 	\end{lstlisting}
 
 % ----------------------------- SUB ----------------------------
-\subsection{SUB}
+\subsection{sub}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0D}
 
@@ -524,14 +524,14 @@ Adds the top two values of the stack.
 Subtracts the top two values of the stack.
 
 	\begin{lstlisting}
-	SUB
+	sub
 	y = pop();
 	x = pop();
 	push(x - y);
 	\end{lstlisting}
 
 % ----------------------------- MUL ----------------------------
-\subsection{MUL}
+\subsection{mul}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0E}
 
@@ -539,12 +539,12 @@ Subtracts the top two values of the stack.
 Multiplies the top two values of the stack.
 
 	\begin{lstlisting}
-	MUL
+	mul
 	push(pop() * pop());
 	\end{lstlisting}
 
 % ----------------------------- DIV ----------------------------
-\subsection{DIV}
+\subsection{div}
 \subsubsection{Instruction}
 \onebyteinstruction{0x0F}
 
@@ -552,7 +552,7 @@ Multiplies the top two values of the stack.
 Divides the top two values of the stack.
 
 	\begin{lstlisting}
-	DIV
+	div
 	y = pop();
 	x = pop();
 	if (y != 0)
@@ -562,7 +562,7 @@ Divides the top two values of the stack.
 	\end{lstlisting}
 
 % ----------------------------- MOD ----------------------------
-\subsection{MOD}
+\subsection{mod}
 \subsubsection{Instruction}
 \onebyteinstruction{0x10}
 
@@ -570,14 +570,14 @@ Divides the top two values of the stack.
 Calculates the remainder of the division of the top values of the stack.
 
 	\begin{lstlisting}
-	MOD
+	mod
 	y = pop();
 	x = pop();
 	push(x % y);
 	\end{lstlisting}
 
 % ----------------------------- NOT ----------------------------
-\subsection{NOT}
+\subsection{not}
 \subsubsection{Instruction}
 \onebyteinstruction{0x11}
 
@@ -585,7 +585,7 @@ Calculates the remainder of the division of the top values of the stack.
 Calculates the remainder of the division of the top values of the stack.
 
 	\begin{lstlisting}
-	NOT
+	not
 	x = pop();
 	if (x == 0)
 	   push(1);
@@ -594,7 +594,7 @@ Calculates the remainder of the division of the top values of the stack.
 	\end{lstlisting}
 
 % ----------------------------- REL ----------------------------
-\subsection{REL}
+\subsection{rel}
 \subsubsection{Instruction}
 \twobyteinstruction{0x12}{RelOp}
 
@@ -606,10 +606,10 @@ Compares two values of the stack and pushes the result back on the stack. The op
 	\item 2 for encoding == (equals)
 	\item 3 for encoding != (not equals)
 	\item 4 for encoding $>=$ (greater or equal than)
-	\item 0 for encoding $>$ (greater than)
+	\item 5 for encoding $>$ (greater than)
 \end{itemize}
 	\begin{lstlisting}
-	REL RelOp
+	rel RelOp
 	y = pop();
 	x = pop();
 	switch(RelOp) {
@@ -635,7 +635,7 @@ Compares two values of the stack and pushes the result back on the stack. The op
 	\end{lstlisting}
 
 % ----------------------------- FJMP ----------------------------
-\subsection{FJMP}
+\subsection{fjmp}
 \subsubsection{Instruction}
 \threebyteinstruction{0x16}{NewPc}
 
@@ -643,14 +643,14 @@ Compares two values of the stack and pushes the result back on the stack. The op
 Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is false.
 
 	\begin{lstlisting}
-	FJMP newPc
+	fjmp newPc
 	x = pop();
 	if (x == 0)
 	   pc = NewPc;
 	\end{lstlisting}
 
 % ----------------------------- TJMP ----------------------------
-\subsection{TJMP}
+\subsection{tjmp}
 \subsubsection{Instruction}
 \threebyteinstruction{0x17}{NewPc}
 
@@ -658,14 +658,14 @@ Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is false.
 Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is true.
 
 	\begin{lstlisting}
-	TJMP newPc
+	tjmp newPc
 	x = pop();
 	if (x == 1)
 	   pc = NewPc;
 	\end{lstlisting}
 
 % ----------------------------- JMP ----------------------------
-\subsection{JMP}
+\subsection{jmp}
 \subsubsection{Instruction}
 \threebyteinstruction{0x18}{NewPc}
 
@@ -673,12 +673,12 @@ Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is true.
 Unconditional jump: Sets \lstinline$pc$ to \lstinline$newPc$.
 
 	\begin{lstlisting}
-	JMP newPc
+	jmp newPc
 	pc = NewPc;
 	\end{lstlisting}
 
-% ----------------------------- PUT ----------------------------
-\subsection{PUT}
+% ----------------------------- OUT ----------------------------
+\subsection{out}
 \subsubsection{Instruction}
 \twobyteinstruction{0x1A}{Type}
 
@@ -693,7 +693,7 @@ Writes data to the terminal. Depending on \lstinline$Type$ different data types 
 \end{itemize}
 
 	\begin{lstlisting}
-	PUT Type
+	put Type
 	switch(Type) {
 		case 0:
 			width = pop();
@@ -724,7 +724,7 @@ Writes data to the terminal. Depending on \lstinline$Type$ different data types 
 	\end{lstlisting}
 
 % ----------------------------- INC ----------------------------
-\subsection{INC}
+\subsection{inc}
 \subsubsection{Instruction}
 \threebyteinstruction{0x1D}{Size}
 
@@ -732,12 +732,12 @@ Writes data to the terminal. Depending on \lstinline$Type$ different data types 
 Increases the size of the stack frame by \lstinline$Size$.
 
 	\begin{lstlisting}
-	INC Size
+	inc Size
 	top += Size;
 	\end{lstlisting}
 
 % ----------------------------- HALT ----------------------------
-\subsection{HALT}
+\subsection{halt}
 \subsubsection{Instruction}
 \onebyteinstruction{0x1F}
 
@@ -745,7 +745,7 @@ Increases the size of the stack frame by \lstinline$Size$.
 Halts the machine.
 
 	\begin{lstlisting}
-	HALT
+	halt
 	ms = stop;
 	\end{lstlisting}
 
