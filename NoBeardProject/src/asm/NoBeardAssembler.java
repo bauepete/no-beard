@@ -23,12 +23,40 @@
  */
 package asm;
 
+import io.SourceReader;
+import io.SourceStringReader;
+import parser.AssemblerParser;
+import parser.Parser;
+import parser.ParserFactory;
+
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public class NoBeardAssembler {
-    public static boolean assemble(String assemblerFilePath) {
-        return true;
+    private static boolean wasSuccessFull = false;
+    
+    public static boolean assemble() {
+        Parser p = ParserFactory.create(AssemblerParser.class);
+        wasSuccessFull = p.parse();
+        return wasSuccessFull;
+    }
+
+    static void setSourceString(String sourceString) {
+        SourceReader sourceReader = new SourceStringReader(sourceString);
+        ParserFactory.setup(sourceReader);
+        wasSuccessFull = false;
+    }
+
+    static boolean wasSuccessfull() {
+        return wasSuccessFull;
+    }
+    
+    static byte[] getByteCode() {
+        return ParserFactory.getCodeGenerator().getByteCode();
+    }
+    
+    static byte[] getStringStorage() {
+        return ParserFactory.getScanner().getStringManager().getStringStorage();
     }
 }

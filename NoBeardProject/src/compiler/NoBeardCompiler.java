@@ -56,7 +56,7 @@ public class NoBeardCompiler {
         return ParserFactory.getCodeGenerator().getByteCode();
     }
     
-    public static byte[] getStringStore() {
+    public static byte[] getStringStorage() {
         return ParserFactory.getScanner().getStringManager().getStringStorage();
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright ©2015, 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
  * Department of Informatics and Media Technique, HTBLA Leonding,
  * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
  * to use, copy, modify, and distribute this software and its documentation
@@ -38,63 +38,96 @@ import symboltable.SymbolTable;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public class ParserFactory {
+
+    private static boolean isReady = false;
+
     private static ErrorHandler errorHandler;
     private static Scanner scanner;
     private static CodeGenerator codeGenerator;
     private static SymbolTable symbolListManager;
-    
-    
+
     public static void setup(SourceReader sourceReader) {
         ParserFactory.errorHandler = new ErrorHandler(sourceReader);
         ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
         scanner.nextToken();
-        
+
         ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);
         ParserFactory.symbolListManager = new SymbolTable(scanner, errorHandler);
-        
+
         Operand.setSymListManager(symbolListManager);
         Operand.setErrorHandler(errorHandler);
         Operand.setStringManager(scanner.getStringManager());
+
+        isReady = true;
     }
-    
+
     public static void setup(SourceReader sourceReader, ErrorHandler errorHandler, Scanner scanner, CodeGenerator codeGenerator, SymbolTable symbolListManager) {
         ParserFactory.errorHandler = errorHandler;
         ParserFactory.scanner = scanner;
         scanner.nextToken();
-        
+
         ParserFactory.codeGenerator = codeGenerator;
         ParserFactory.symbolListManager = symbolListManager;
-        
+
         Operand.setSymListManager(symbolListManager);
         Operand.setErrorHandler(errorHandler);
         Operand.setStringManager(scanner.getStringManager());
+
+        isReady = true;
     }
-    
+
+    public static void shutDown() {
+        isReady = false;
+    }
+
+    public static boolean isReady() {
+        return isReady;
+    }
+
     public static Scanner getScanner() {
-        return scanner;
+        if (isReady()) {
+            return scanner;
+        } else {
+            return null;
+        }
     }
-    
+
     public static SymbolTable getSymbolListManager() {
-        return symbolListManager;
+        if (isReady()) {
+            return symbolListManager;
+        } else {
+            return null;
+        }
     }
 
     public static CodeGenerator getCodeGenerator() {
-        return codeGenerator;
+        if (isReady()) {
+            return codeGenerator;
+        } else {
+            return null;
+        }
     }
 
     public static ErrorHandler getErrorHandler() {
-        return errorHandler;
+        if (isReady()) {
+            return errorHandler;
+        } else {
+            return null;
+        }
     }
-    
+
     public static <T extends Parser> T create(Class c) {
-        T t = null;
-        try {
-            t = (T) c.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ParserFactory.class.getName()).log(Level.SEVERE, "ParserFactory: Was not able to instantiate parser", ex);
+        if (isReady()) {
+            T t = null;
+            try {
+                t = (T) c.newInstance();
+            } catch (InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(ParserFactory.class.getName()).log(Level.SEVERE, "ParserFactory: Was not able to instantiate parser", ex);
+            } finally {
+            }
+            return t;
+        } else {
+            return null;
         }
-        finally {
-        }
-        return t;
     }
 }
