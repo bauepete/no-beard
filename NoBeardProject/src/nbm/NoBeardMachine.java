@@ -46,14 +46,10 @@ public class NoBeardMachine implements SourceCodeInfo {
         return errorHandler.getLastError();
     }
 
-    /// Returned from getStackTopValue() if stack of currently running
-    /// function is empty.
-    public static final int STACKEMPTY = -1;
-
-    // --------------------- Locally used data -----------------------------
     public static final int MAX_PROG = 1024;   // Size of program memory
     public static final int MAX_DATA = 1024;    // Size of data memory
     public static final int SIZE_OF_AUXILIARY_CELLS = 28;    // Space to store house keeping data for stack frames
+
     private final error.ErrorHandler errorHandler;
     private final DataMemory dataMemory;
     private final CallStack callStack;
@@ -88,14 +84,14 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
         controlUnit.startMachine();
-        while (getState() == ControlUnit.MachineState.RUNNING)
+        while (getState() == ControlUnit.MachineState.RUNNING) {
             step();
+        }
     }
 
     public void step() {
         controlUnit.executeCycle();
     }
-
 
     Object peek() {
         return callStack.peek();

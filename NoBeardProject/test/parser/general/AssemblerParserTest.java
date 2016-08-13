@@ -34,6 +34,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -60,6 +61,12 @@ public class AssemblerParserTest {
     public void tearDown() {
     }
 
+    @Test
+    public void testAssembleEmptyProgram() {
+        setupTest("", new byte[] {});
+        assertTrue(p.parse());
+    }
+    
     @Test
     public void testAssembleOneInstruction() {
         setupTest("halt", new byte[]{
@@ -138,6 +145,24 @@ public class AssemblerParserTest {
     @Test
     public void testAssembleInstructionWithOneByteAndTwoByteOperand() {
         setupTest("la 0 32", new byte[] {Instruction.LA.getId(), 0, 0, 32});
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+    
+    @Test
+    public void testAssembleMoreInstructions() {
+        byte[] expectedCode = {
+            Instruction.INC.getId(), 0, 8,
+            Instruction.LA.getId(), 0, 0, 32,
+            Instruction.LIT.getId(), 0, 17,
+            Instruction.STO.getId(),
+            Instruction.LA.getId(), 0, 0, 36,
+            Instruction.LV.getId(), 0, 0, 32,
+            Instruction.STO.getId(),
+            Instruction.HALT.getId()
+        };
+        setupTest("inc 8 la 0 32 lit 17 sto la 0 36 lv 0 32 sto halt", expectedCode);
         assertTrue(p.parse());
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());

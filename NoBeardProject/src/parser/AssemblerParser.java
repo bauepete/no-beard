@@ -36,6 +36,9 @@ import scanner.Scanner.Symbol;
  */
 public class AssemblerParser extends Parser {
 
+    private static final int MAX_HALF_WORD = 65535;
+    private static final int MAX_BYTE = 255;
+
     private final ErrorHandler errorHandler;
     private final CodeGenerator codeGenerator;
 
@@ -49,9 +52,11 @@ public class AssemblerParser extends Parser {
 
     @Override
     protected void parseSpecificPart() {
-        parseOpcode();
-        if (parsedInstruction != null && parsedInstruction.hasOperands()) {
-            parseOperands();
+        while (ParserFactory.getScanner().getCurrentToken().getSymbol() != Symbol.EOFSY) {
+            parseOpcode();
+            if (parsedInstruction != null && parsedInstruction.hasOperands()) {
+                parseOperands();
+            }
         }
     }
 
@@ -85,9 +90,9 @@ public class AssemblerParser extends Parser {
 
     private boolean operandFits() {
         if (requestedOperandType == OperandType.BYTE) {
-            return getLastParsedToken().getValue() < 256;
+            return getLastParsedToken().getValue() < MAX_BYTE + 1;
         } else {
-            return getLastParsedToken().getValue() < 65536;
+            return getLastParsedToken().getValue() < MAX_HALF_WORD + 1;
         }
     }
 
