@@ -30,11 +30,8 @@ import io.SourceStringReader;
 import nbm.CodeGenerator;
 import nbm.InstructionSet.Instruction;
 import nbm.NoBeardMachine;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import parser.ParserFactory;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
@@ -50,30 +47,10 @@ public class AssemblerParserTest {
     private AssemblerParser p;
     private byte[] expectedProgramMemory;
 
-    public AssemblerParserTest() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testAssembleEmptyProgram() {
-        setupTest("", new byte[] {});
+        setupTest("", new byte[]{});
         assertTrue(p.parse());
-    }
-    
-    @Test
-    public void testAssembleOneInstruction() {
-        setupTest("halt", new byte[]{
-            Instruction.HALT.getId()
-        });
-        assertTrue(p.parse());
-        assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
 
     private void setupTest(final String assemblerInstruction, final byte[] machineCode) {
@@ -90,6 +67,15 @@ public class AssemblerParserTest {
     }
 
     @Test
+    public void testAssembleOneInstruction() {
+        setupTest("halt", new byte[]{
+            Instruction.HALT.getId()
+        });
+        assertTrue(p.parse());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+
+    @Test
     public void testAdd() {
         byte[] expectedCode = {
             Instruction.ADD.getId()
@@ -98,58 +84,58 @@ public class AssemblerParserTest {
         assertTrue(p.parse());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
-    
+
     @Test
     public void testInvalidOpcode() {
         setupTest("if", new byte[]{});
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
-    
+
     @Test
     public void testInvalidOpcode2() {
         setupTest("foo", new byte[]{});
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.SYMBOL_EXPECTED.getNumber(), errorHandler.getLastError().getNumber());
     }
-    
+
     @Test
     public void testAssembleInstructionWithAOneByteOperand() {
-        setupTest("out 1", new byte[] {Instruction.OUT.getId(), 1});
+        setupTest("out 1", new byte[]{Instruction.OUT.getId(), 1});
         assertTrue(p.parse());
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
-    
+
     @Test
     public void testAssembleInstructionWithOneByteOperandTooLarge() {
-        setupTest("out 256", new byte[] {});
+        setupTest("out 256", new byte[]{});
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
-    
+
     @Test
     public void testAssembleInstructionWithAHalfWordOperand() {
-        setupTest("lit 65535", new byte[] {Instruction.LIT.getId(), (byte) 255, (byte) 255});
+        setupTest("lit 65535", new byte[]{Instruction.LIT.getId(), (byte) 255, (byte) 255});
         assertTrue(p.parse());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
-    
+
     @Test
     public void testAssembleInstructionWithAHalfWordOperandTooLarge() {
-        setupTest("lit 65536", new byte[] {Instruction.LIT.getId(), (byte) 255, (byte) 255});
+        setupTest("lit 65536", new byte[]{Instruction.LIT.getId(), (byte) 255, (byte) 255});
         assertFalse(p.parse());
         assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
-    
+
     @Test
     public void testAssembleInstructionWithOneByteAndTwoByteOperand() {
-        setupTest("la 0 32", new byte[] {Instruction.LA.getId(), 0, 0, 32});
+        setupTest("la 0 32", new byte[]{Instruction.LA.getId(), 0, 0, 32});
         assertTrue(p.parse());
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
-    
+
     @Test
     public void testAssembleMoreInstructions() {
         byte[] expectedCode = {
@@ -166,5 +152,29 @@ public class AssemblerParserTest {
         assertTrue(p.parse());
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+
+    @Test
+    public void testIncludeStringConstants() {
+        byte[] expectedCode = {
+            Instruction.LIT.getId(), 0, 0,
+            Instruction.LIT.getId(), 0, 5,
+            Instruction.LIT.getId(), 0, 6,
+            Instruction.OUT.getId(), 2,
+            Instruction.LIT.getId(), 0, 5,
+            Instruction.LIT.getId(), 0, 5,
+            Instruction.LIT.getId(), 0, 5,
+            Instruction.OUT.getId(), 2,
+            Instruction.OUT.getId(), 3,
+            Instruction.HALT.getId()
+        };
+        byte[] expectedStringConstants = {
+            (byte) 'H', (byte) 'e', (byte) 'l', (byte) 'l', (byte) 'o',
+            (byte) 'w', (byte) 'o', (byte) 'r', (byte) 'l', (byte) 'd'
+        };
+        setupTest("\"Helloworld\"lit 0 lit 5 lit 6 out 2 lit 5 lit 5 lit 5 out 2 out 3 halt", expectedCode);
+        assertTrue(p.parse());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+        assertArrayEquals(expectedStringConstants, ParserFactory.getScanner().getStringManager().getStringStorage());
     }
 }

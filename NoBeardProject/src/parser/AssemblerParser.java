@@ -52,6 +52,9 @@ public class AssemblerParser extends Parser {
 
     @Override
     protected void parseSpecificPart() {
+        if (ParserFactory.getScanner().getCurrentToken().getSymbol() == Symbol.STRING) {
+            parseSymbol(Symbol.STRING);
+        }
         while (ParserFactory.getScanner().getCurrentToken().getSymbol() != Symbol.EOFSY) {
             parseOpcode();
             if (parsedInstruction != null && parsedInstruction.hasOperands()) {
