@@ -76,7 +76,9 @@
 	keywordstyle=\color{srcpurple},
 	showspaces=false,
 	showstringspaces=false,
-	escapechar=|
+	escapechar=|,
+	captionpos=b,
+	numberstyle=\small
 }
 
 % --------------------------------- Definition of lstlisting for AsmDef the language to define assembler commands -----------------------
@@ -126,6 +128,7 @@
 \end{tabular}
 }
 
+
 % ---------------------------------------------------------------------- Start of document -----------------------------------------------------------------
 \begin{document}
 \begin{titlepage}
@@ -156,14 +159,20 @@ June 5, 2012 & P. Bauer & {\bf Released v. 1.0}  \\ \hline
 
 \tableofcontents
 \chapter{Introduction}
-According to a web article (see \cite{khason_computer_2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is/are are bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
+\section{The \leongage{} Project}
+This project aims to provide students who want to dig into the fields of assembler programming, system programming and compiler construction a playground where they can experiment in a pretty small and clean environment. The components developed here do not have the quirks and compromises real machines, assemblers, and compilers have to make in order to keep up with their real life requirements. In particular the following parts are provided:
+
+\begin{itemize}
+	\item The {\em \leongage{} Machine}. A virtual machine with an instruction set of less than 30 instructions which is pretty easy to grasp compared to the instruction set sizes of real life machines. The machine is purely stack based such that the structure of each instruction is again easy to understand and to follow.
+	\item The {\em \leongage{} Assembler}. To write programs for the \leongage{} Machine an assembler is provided. In the published version of the project no support of labels, symbolic variables, etc. is given. Here the focus is to direct the students to the very basics of how machine programs for the \leongage{} Machine look like and how they work. Extensions as the ones mentioned above can be done by the interested student as an exercise.
+	\item The {\em \leongage{} Compiler}. To facilitate programming for the \leongage{} Machine and to give insights into the basic techniques of compiler construction a dedicated language is defined and the corresponding compiler is implemented. We did not go for the automated construction of compilers with compiler generators since we wanted to emphasize the direct relationship of formal grammars to parsers using the recursive descending method. For students interested in this the great book of Pat Terry~\cite{terry_compiling_2004} is recommended.
+\end{itemize}
+
+The \leongage{} tools are used to support the courses {\em Technical Informatics} and {\em Programming and Software Engineering} (in particular the part {\em Theoretical Informatics}) held for the third grade students of the Department of Informatics at the HTBLA Leonding. Therefore the students of these grades are forced to go through this material in more detail. In case of typos, misleading wording or other problems, please feel free to contact the author. Thanks for your help.
+
+\section{About the Name}
+According to a web article (see \cite{khason_computer_2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is a / are  bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
 moreover it should give the reader a clear insight how the main principles of compiler construction are.
-
-This report aims to give a formal description of the programming language \leongage. Please note that only the parts
-necessary for your work can be trusted. In the next versions, more and more information relevant for your assignments
-will be available.
-
-In case of typos, misleading wording or other problems, please feel free to contact me. Thanks for your help. Some more text to read~\cite{terry_compiling_2004}. 
 
 \include{NoBeardMachine}
 
@@ -176,29 +185,27 @@ The string constants are stored within one block of double quotes and can be org
 Assembler programs are texts holding a sequence of assembler instructions as described in section~\ref{sec:instructions}. The opcode has to be written in lower case letters.The programmer has to follow the instruction format, i.e., (s)he has to take care that the given operands fit into the required data format of the instruction.
 
 \section{Examples}
-The first example shows a non-empty assembler program which definitely does nothing. It is worth to be mentioned that \lstinline$//$ marks a comment which then lasts until the end of the line. Assembler instructions need not to start at every new line, they could also be written as a sequence in one line or one instruction could be broken up into several lines. Line breaks are only allowed between the opcode and operands or between the operands.
-
+\subsection{First Example}
+The first example shows a non-empty assembler program which definitely does nothing. It is worth to be mentioned that \lstinline$#$ marks a comment which then lasts until the end of the line. 
+\newcommand{\assemblerfilepath}{../../NoBeardProject/SamplePrograms/NbAssemblerPrograms/}
 \lstset{language=NoBeardAsm}
-\begin{lstlisting}
-# a lazy program
-nop	# This is an empty instruction which does nothing
-halt	# halt is mandatory to properly finish the program
-\end{lstlisting}
+\lstinputlisting[caption={Small and useless assembler program}]{\assemblerfilepath TinyProgramA.na}
 
-A \leongage{} assembler program writing ``Hello World'' into the console could look as follows. Note that the width of the column when writing ``Hello'' is set one character wider than the length of the string (line~\ref{line:colwidth}). With this ``trick'' we get the blank between the two words. Of course, in this case, one could achieve the same result much easier by specifying already the string constant as needed to output the required string in one \lstinline$out$ statement.
+Assembler instructions need {\em not} to start at every new line, they could also be written as a sequence in one line or one instruction could be broken up into several lines. Line breaks are only allowed between the opcode and operands or between the operands. Therefore the above program can be rewritten in the following way.
+\lstinputlisting[caption={Shorter way to write a small and useless program}]{\assemblerfilepath TinyProgramB.na}
 
-\begin{lstlisting}
-"HelloWorld"	# The string constants for output
-lit 0			# load address of "Hello"
-lit 5			# load length of "Hello"
-lit 6			# load column width |\label{line:colwidth}|
-out 2			# output string
-lit 5			# load address of "World"
-lit 5			# load lenght of "World"
-lit 5			# load column width
-out 2			# output string
-out 3			# output new line
-\end{lstlisting}
+\subsection{String Handling}
+A \leongage{} assembler program writing ``Hello World'' into the console could look as follows. The strings \lstinline$Hello$ and \lstinline$World$ must be specified at the very beginning of the program. We simply write the strings needed in a sequence, without any separator or similar.
+\lstinputlisting[caption={``Hello World'' in \leongage{} Assembler}]{\assemblerfilepath HelloWorld.na}
+
+Note that the width of the column when writing ``Hello'' is set one character wider than the length of the string (line~\ref{line:colwidth}). With this ``trick'' we get the blank between the two words. Of course, in this case, one could achieve the same result much easier by specifying already the string constant as needed to output the required string in one \lstinline$out$ statement.
+
+\subsection{Variables}
+As already described in section~\ref{sec:stackframes} local variables of the currently running function are stored on the stack frame. In order to be able to do so, we have to reserve memory for local variables. This is done by the \lstinline$inc$ instruction. Additionally we have to keep in mind that for each stack frame the \leongage{} machine reserves 32 bytes for frame house keeping tasks. This is the reason why the following program accesses then the local variable at address 32. For further details about the semantics of the assembler instructions used here we refer to section~\ref{sec:instructions}.
+
+\lstinputlisting[caption={A program defining one local variable}]{\assemblerfilepath OneVariable.na}
+
+Maybe it appears superfluous to reload the value from address 32 before it can be printed to the output. The reason for this extra load instruction becomes clear if one studies the semantics of the \lstinline$sto$ instruction. Since it removes the value to be stored from the stack it has to be reloaded before it can be printed.
 
 \section{Formal Description}
 
