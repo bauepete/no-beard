@@ -128,7 +128,9 @@ public class CodeGenerator {
      * @return The complete byte code.
      */
     public byte[] getByteCode() {
-        return prog;
+        byte[] returnedCode = new byte[pc];
+        System.arraycopy(prog, 0, returnedCode, 0, pc);
+        return returnedCode;
     }
 
 }

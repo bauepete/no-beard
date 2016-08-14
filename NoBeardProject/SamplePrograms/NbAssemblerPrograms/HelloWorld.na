@@ -8,3 +8,4 @@ lit 5			# load lenght of "World"
 lit 5			# load column width
 out 2			# output string
 out 3			# output new line
+halt

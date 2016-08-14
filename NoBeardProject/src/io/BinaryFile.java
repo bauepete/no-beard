@@ -44,11 +44,11 @@ public class BinaryFile {
         return new BinaryFile(filePath);
     }
 
-    byte[] getStringStorage() {
+    public byte[] getStringStorage() {
         return stringStorage;
     }
 
-    byte[] getProgram() {
+    public byte[] getProgram() {
         return program;
     }
 

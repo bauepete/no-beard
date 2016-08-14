@@ -76,9 +76,7 @@ public class NoBeardAssemblerTest {
             Instruction.OUT.getId(), 3,
             Instruction.HALT.getId()
         };
-        byte[] expectedProgramMemory = new byte[NoBeardMachine.MAX_PROG];
-        System.arraycopy(expectedProgram, 0, expectedProgramMemory, 0, expectedProgram.length);
-        assertArrayEquals(expectedProgramMemory, NoBeardAssembler.getByteCode());
+        assertArrayEquals(expectedProgram, NoBeardAssembler.getByteCode());
         
         byte[] expectedStringStorage = {
             (int) 'w', (int) 't', (int) 'f'

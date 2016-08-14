@@ -23,6 +23,11 @@
  */
 package nbm;
 
+import io.BinaryFile;
+import io.BinaryFileHandler;
+import java.io.IOException;
+import machine.NoBeardMachine;
+
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
@@ -33,7 +38,25 @@ public class NbM {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        if (args.length == 0) {
+            System.err.println("Usage: nbm <object_file>.no");
+            return;
+        }
+        if (args[0].compareTo("-v") == 0) {
+            System.out.println(NoBeardMachine.getVersion());
+            return;
+        }
+        BinaryFile objectFile;
+        try {
+            objectFile = BinaryFileHandler.open(args[0]);
+        } catch (IOException ex) {
+            System.err.println("Unable to open " + args[0]);
+            return;
+        }
+        NoBeardMachine machine = new NoBeardMachine();
+        machine.loadStringConstants(objectFile.getStringStorage());
+        machine.loadProgram(0, objectFile.getProgram());
+        machine.runProgram(0);
     }
     
 }

@@ -4,7 +4,6 @@
  */
 package machine;
 
-import machine.CodeGenerator;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 import machine.InstructionSet.Instruction;
@@ -175,7 +174,7 @@ public class CodeGeneratorTest {
 
         instance.emit(Instruction.ADD);
 
-        assertCodeEquals("Prog ", expected, instance.getByteCode());
+        assertArrayEquals(expected, instance.getByteCode());
     }
 
     /**
@@ -196,12 +195,6 @@ public class CodeGeneratorTest {
         g.emit(Instruction.STO);
         assertEquals(1, errorHandler.getCount());
         assertEquals(error.Error.ErrorType.PROGRAM_MEMORY_OVERFLOW.getNumber(), errorHandler.getLastError().getNumber());
-    }
-
-    private void assertCodeEquals(String msg, byte[] exp, byte[] act) {
-        for (int i = 0; i < Math.min(exp.length, act.length); i++) {
-            assertEquals("Byte " + i, exp[i], act[i]);
-        }
     }
 
     private static class FakeSourceCodeInfo implements SourceCodeInfo {

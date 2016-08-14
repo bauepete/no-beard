@@ -62,8 +62,7 @@ public class AssemblerParserTest {
         ParserFactory.setup(sr, errorHandler, scanner, codeGenerator, symbolTable);
         p = ParserFactory.create(AssemblerParser.class);
 
-        expectedProgramMemory = new byte[NoBeardMachine.MAX_PROG];
-        System.arraycopy(machineCode, 0, expectedProgramMemory, 0, machineCode.length);
+        expectedProgramMemory = machineCode;
     }
 
     @Test

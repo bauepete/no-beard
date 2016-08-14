@@ -63,6 +63,10 @@ public class NoBeardMachine implements SourceCodeInfo {
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
     }
+    
+    public static String getVersion() {
+        return "v2.0";
+    }
 
     public ControlUnit.MachineState getState() {
         return controlUnit.getMachineState();
