@@ -1,0 +1,3 @@
+# a lazy program
+nop	# This is an empty instruction which does nothing
+halt	# halt is mandatory to properly finish the program

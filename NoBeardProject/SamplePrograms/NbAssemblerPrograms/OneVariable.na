@@ -1,0 +1,10 @@
+# Define one variable and output it
+inc 4   # Reserve 4 bytes for local integer value
+la 0 32 # Load address 32 where the 4 bytes were reserved
+lit 17  # Load the number 17
+sto     # Store the number 17 at address 32
+lv 0 32 # Load the value stored at address 32
+lit 1   # Load the column width
+out 0   # Output an integer value
+out 3   # Output a new line
+halt

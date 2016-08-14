@@ -1,3 +1,4 @@
+# The unavoidable "Hello World"
 "HelloWorld"	# The string constants for output
 lit 0			# load address of "Hello"
 lit 5			# load length of "Hello"
