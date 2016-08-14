@@ -86,7 +86,7 @@ public class NoBeardCompilerTest {
      */
     @Test
     public void testAssignmentToStringsAndPutThem() {
-        String source = "SamplePrograms/VariableWorld.nb";
+        String source = "SamplePrograms/NoBeardPrograms/VariableWorld.nb";
         byte[] expected = {
             Instruction.INC.getId(), 0, 29, // stack pointer plus size of vars
             Instruction.LA.getId(), 0, 0, 32, // address of string x
@@ -164,7 +164,7 @@ public class NoBeardCompilerTest {
 
     @Test
     public void testOutputOfString() {
-        String sourceFilePath = "SamplePrograms/HelloWorld.nb";
+        String sourceFilePath = "SamplePrograms/NoBeardPrograms/HelloWorld.nb";
         byte[] expected = {
             Instruction.INC.getId(), 0, 0,
             Instruction.LIT.getId(), 0, 0, // address of string

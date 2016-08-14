@@ -57,7 +57,7 @@ public class OperandTest {
         c = new CodeGenerator(256);
         SourceReader sourceReader = null;
         try {
-            sourceReader = new SourceFileReader("SamplePrograms/Smallest.nb");
+            sourceReader = new SourceFileReader("SamplePrograms/NoBeardPrograms/Smallest.nb");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OperandTest.class.getName()).log(Level.SEVERE, null, ex);
         }

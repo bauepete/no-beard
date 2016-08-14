@@ -60,18 +60,18 @@ public class NbAsm {
         } catch (FileNotFoundException ex) {
             System.err.println("Assembler file " + args[0] + " not found");
         }
-        Path path = Paths.get(args[1]);
-        byte[] fileContent;
-        try {
-            fileContent = Files.readAllBytes(path);
-        } catch (IOException ex) {
-            System.out.println("File " + args[1] + " not found");
-            return;
-        }
-        int i = 0;
-        while (fileContent[i] != Instruction.HALT.getId()) {
-            
-        }
+//        Path path = Paths.get(args[1]);
+//        byte[] fileContent;
+//        try {
+//            fileContent = Files.readAllBytes(path);
+//        } catch (IOException ex) {
+//            System.out.println("File " + args[1] + " not found");
+//            return;
+//        }
+//        int i = 0;
+//        while (fileContent[i] != Instruction.HALT.getId()) {
+//            
+//        }
     }
     
 }
