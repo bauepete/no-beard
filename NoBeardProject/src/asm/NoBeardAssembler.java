@@ -36,27 +36,30 @@ import parser.ParserFactory;
 public class NoBeardAssembler {
     private static boolean wasSuccessFull = false;
     
+    public static String getVersion() {
+        return "v2.0";
+    }
     public static boolean assemble() {
         Parser p = ParserFactory.create(AssemblerParser.class);
         wasSuccessFull = p.parse();
         return wasSuccessFull;
     }
 
-    static void setSourceString(String sourceString) {
+    public static void setSourceString(String sourceString) {
         SourceReader sourceReader = new SourceStringReader(sourceString);
         ParserFactory.setup(sourceReader);
         wasSuccessFull = false;
     }
 
-    static boolean wasSuccessfull() {
+    public static boolean wasSuccessfull() {
         return wasSuccessFull;
     }
     
-    static byte[] getByteCode() {
+    public static byte[] getByteCode() {
         return ParserFactory.getCodeGenerator().getByteCode();
     }
     
-    static byte[] getStringStorage() {
+    public static byte[] getStringStorage() {
         return ParserFactory.getScanner().getStringManager().getStringStorage();
     }
 }
