@@ -24,7 +24,7 @@
 package parser;
 
 import java.util.HashMap;
-import nbm.InstructionSet.Instruction;
+import machine.InstructionSet.Instruction;
 import scanner.Scanner;
 
 /**

@@ -23,45 +23,17 @@
  */
 package nbm;
 
-import error.ErrorHandler;
-
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class ProgramMemory {
+public class NbM {
 
-    private final byte[] programMemory;
-    private final ErrorHandler errorHandler;
-
-    ProgramMemory(int memorySize, ErrorHandler errorHandler) {
-        programMemory = new byte[memorySize];
-        this.errorHandler = errorHandler;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
     }
-
-    void store(int startAddress, byte[] program) {
-        if (startAddress + program.length <= this.programMemory.length) {
-            System.arraycopy(program, 0, this.programMemory, startAddress, program.length);
-        } else {
-            errorHandler.throwProgramMemoryOverflow();
-        }
-    }
-
-    byte loadByte(int atAddress) {
-        if (atAddress < programMemory.length) {
-            return programMemory[atAddress];
-        } else {
-            errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
-            return -1;
-        }
-    }
-
-    int loadHalfWord(int atAddress) {
-        if (atAddress < programMemory.length - 1)
-            return ((programMemory[atAddress] & 0xff) * 256 + (programMemory[atAddress + 1] & 0xff));
-        else {
-            errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
-            return -1;
-        }
-    }
+    
 }

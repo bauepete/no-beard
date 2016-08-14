@@ -21,10 +21,11 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package parser.general;
+package machine;
 
-import parser.OpcodeToInstructionMap;
-import machine.InstructionSet.Instruction;
+import machine.DataMemory;
+import machine.CallStack;
+import error.ErrorHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,27 +35,58 @@ import static org.junit.Assert.*;
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class OpcodeToInstructionMapTest {
-    
-    public OpcodeToInstructionMapTest() {
+public class CallStackTest {
+
+    private DataMemory memory;
+    private CallStack callStack;
+
+    public CallStackTest() {
     }
-    
+
     @Before
     public void setUp() {
+        memory = new DataMemory(1024, new ErrorHandler(new FakeSourceCodeInfo()));
+        int addressOfFirstFrame = 40;
+        int sizeOfAuxiliaryCells = 28;
+        callStack = new CallStack(memory, addressOfFirstFrame, sizeOfAuxiliaryCells);
     }
-    
+
     @After
     public void tearDown() {
     }
 
     @Test
-    public void testAdd() {
-        Instruction i = OpcodeToInstructionMap.getInstruction("add");
-        assertEquals(Instruction.ADD, i);
+    public void testConstruction() {
+        assertEquals(40, callStack.getFramePointer());
+        assertEquals(68, callStack.getStackPointer());
     }
     
     @Test
-    public void testSub() {
-        assertEquals(Instruction.SUB, OpcodeToInstructionMap.getInstruction("sub"));
+    public void setCurrentFramePointer() {
+        callStack.setCurrentFramePointer(64);
+        assertEquals(64, callStack.getFramePointer());
+        assertEquals(92, callStack.getStackPointer());
+    }
+
+    @Test
+    public void testPush() {
+        callStack.push(42);
+        assertEquals(72, callStack.getStackPointer());
+        assertEquals(42, memory.loadWord(72));
+    }
+    
+    @Test
+    public void testPeek() {
+        callStack.push(17);
+        assertEquals(17, callStack.peek());
+        assertEquals(72, callStack.getStackPointer());
+    }
+    
+    @Test
+    public void testPop() {
+        callStack.push(42);
+        int value = callStack.pop();
+        assertEquals(42, value);
+        assertEquals(68, callStack.getStackPointer());
     }
 }

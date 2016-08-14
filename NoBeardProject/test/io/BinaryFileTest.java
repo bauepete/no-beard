@@ -23,7 +23,7 @@
  */
 package io;
 
-import nbm.InstructionSet.Instruction;
+import machine.InstructionSet.Instruction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

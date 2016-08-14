@@ -23,7 +23,7 @@
  */
 package compiler;
 
-import nbm.InstructionSet.Instruction;
+import machine.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.semantics.AssemblerCodeChecker;

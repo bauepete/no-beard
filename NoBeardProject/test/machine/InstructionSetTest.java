@@ -21,13 +21,18 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package nbm;
+package machine;
 
+import machine.DataMemory;
+import machine.ControlUnit;
+import machine.InstructionSet;
+import machine.CallStack;
+import machine.ProgramMemory;
 import error.ErrorHandler;
 import java.util.Arrays;
 import java.util.List;
-import nbm.InstructionSet.Instruction;
-import nbm.InstructionSet.OperandType;
+import machine.InstructionSet.Instruction;
+import machine.InstructionSet.OperandType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

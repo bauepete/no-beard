@@ -21,70 +21,47 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package nbm;
+package machine;
 
 import error.ErrorHandler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class CallStackTest {
+public class ProgramMemory {
 
-    private DataMemory memory;
-    private CallStack callStack;
+    private final byte[] programMemory;
+    private final ErrorHandler errorHandler;
 
-    public CallStackTest() {
-    }
-
-    @Before
-    public void setUp() {
-        memory = new DataMemory(1024, new ErrorHandler(new FakeSourceCodeInfo()));
-        int addressOfFirstFrame = 40;
-        int sizeOfAuxiliaryCells = 28;
-        callStack = new CallStack(memory, addressOfFirstFrame, sizeOfAuxiliaryCells);
+    ProgramMemory(int memorySize, ErrorHandler errorHandler) {
+        programMemory = new byte[memorySize];
+        this.errorHandler = errorHandler;
     }
 
-    @After
-    public void tearDown() {
+    void store(int startAddress, byte[] program) {
+        if (startAddress + program.length <= this.programMemory.length) {
+            System.arraycopy(program, 0, this.programMemory, startAddress, program.length);
+        } else {
+            errorHandler.throwProgramMemoryOverflow();
+        }
     }
 
-    @Test
-    public void testConstruction() {
-        assertEquals(40, callStack.getFramePointer());
-        assertEquals(68, callStack.getStackPointer());
-    }
-    
-    @Test
-    public void setCurrentFramePointer() {
-        callStack.setCurrentFramePointer(64);
-        assertEquals(64, callStack.getFramePointer());
-        assertEquals(92, callStack.getStackPointer());
+    byte loadByte(int atAddress) {
+        if (atAddress < programMemory.length) {
+            return programMemory[atAddress];
+        } else {
+            errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
+            return -1;
+        }
     }
 
-    @Test
-    public void testPush() {
-        callStack.push(42);
-        assertEquals(72, callStack.getStackPointer());
-        assertEquals(42, memory.loadWord(72));
-    }
-    
-    @Test
-    public void testPeek() {
-        callStack.push(17);
-        assertEquals(17, callStack.peek());
-        assertEquals(72, callStack.getStackPointer());
-    }
-    
-    @Test
-    public void testPop() {
-        callStack.push(42);
-        int value = callStack.pop();
-        assertEquals(42, value);
-        assertEquals(68, callStack.getStackPointer());
+    int loadHalfWord(int atAddress) {
+        if (atAddress < programMemory.length - 1)
+            return ((programMemory[atAddress] & 0xff) * 256 + (programMemory[atAddress + 1] & 0xff));
+        else {
+            errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
+            return -1;
+        }
     }
 }

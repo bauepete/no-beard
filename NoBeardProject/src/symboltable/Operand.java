@@ -5,7 +5,7 @@
 package symboltable;
 
 import error.ErrorHandler;
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 import scanner.StringManager;
 
 /**

@@ -21,8 +21,9 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package nbm;
+package machine;
 
+import machine.DataMemory;
 import error.ErrorHandler;
 import java.nio.ByteOrder;
 import org.junit.After;

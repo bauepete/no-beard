@@ -24,7 +24,7 @@
 package parser;
 
 import error.ErrorHandler;
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import scanner.Token;

@@ -15,7 +15,7 @@ import error.Error;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 import symboltable.Operand.Type;
 import org.junit.After;
 import org.junit.AfterClass;

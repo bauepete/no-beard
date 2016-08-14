@@ -4,7 +4,7 @@
  */
 package symboltable;
 
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 
 /**
  *

@@ -4,7 +4,7 @@
  */
 package parser.general;
 
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 import parser.ParserFactory;
 import parser.PutParser;
 import symboltable.SymbolTable;

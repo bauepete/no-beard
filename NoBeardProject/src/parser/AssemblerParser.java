@@ -24,10 +24,10 @@
 package parser;
 
 import error.ErrorHandler;
-import nbm.CodeGenerator;
-import nbm.InstructionSet;
-import nbm.InstructionSet.Instruction;
-import nbm.InstructionSet.OperandType;
+import machine.CodeGenerator;
+import machine.InstructionSet;
+import machine.InstructionSet.Instruction;
+import machine.InstructionSet.OperandType;
 import scanner.Scanner.Symbol;
 
 /**

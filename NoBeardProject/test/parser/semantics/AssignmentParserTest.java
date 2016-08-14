@@ -5,8 +5,8 @@
 package parser.semantics;
 
 import error.ErrorHandler;
-import nbm.CodeGenerator;
-import nbm.InstructionSet.Instruction;
+import machine.CodeGenerator;
+import machine.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.AssignmentParser;

@@ -4,23 +4,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/PutParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/AssignmentParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/semantics/TermParserTest.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/TermParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/BlockParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/NoBeardParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/ReferenceParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/AddExpressionParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/ExpressionParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/OperandExportingParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/FactorParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/StatementParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/IfParser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/VariableDeclarationParser.java</file>
             <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/Parser.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/ParserTestSetup.java</file>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/TermParserTestSetup.java</file>
         </group>
     </open-files>
 </project-private>

@@ -2,11 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nbm;
+package machine;
 
+import machine.CodeGenerator;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
-import nbm.InstructionSet.Instruction;
+import machine.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

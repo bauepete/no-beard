@@ -21,9 +21,11 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package nbm;
+package machine;
 
-import nbm.InstructionSet.Instruction;
+import machine.ControlUnit;
+import machine.NoBeardMachine;
+import machine.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

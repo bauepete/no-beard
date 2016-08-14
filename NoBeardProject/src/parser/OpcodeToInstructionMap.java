@@ -24,8 +24,8 @@
 package parser;
 
 import java.util.HashMap;
-import nbm.InstructionSet;
-import nbm.InstructionSet.Instruction;
+import machine.InstructionSet;
+import machine.InstructionSet.Instruction;
 
 /**
  *

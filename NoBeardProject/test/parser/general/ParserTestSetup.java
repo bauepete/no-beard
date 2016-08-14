@@ -5,7 +5,7 @@
 package parser.general;
 
 import error.ErrorHandler;
-import nbm.CodeGenerator;
+import machine.CodeGenerator;
 import parser.ParserFactory;
 import scanner.Scanner;
 import io.SourceReader;

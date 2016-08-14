@@ -4,8 +4,8 @@
  */
 package symboltable;
 
-import nbm.CodeGenerator;
-import nbm.InstructionSet.Instruction;
+import machine.CodeGenerator;
+import machine.InstructionSet.Instruction;
 
 /**
  *
