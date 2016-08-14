@@ -24,17 +24,15 @@
 package nbasm;
 
 import asm.NoBeardAssembler;
+import io.BinaryFile;
+import io.BinaryFileHandler;
 import io.SourceFileReader;
 import io.SourceReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import nbm.InstructionSet;
-import nbm.InstructionSet.Instruction;
+import parser.AssemblerParser;
+import parser.Parser;
+import parser.ParserFactory;
 
 /**
  *
@@ -47,31 +45,56 @@ public class NbAsm {
      */
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.err.println("Usage: nbasm <assembler_file>.na");
+            System.err.println("Usage: nba <assembler_file>.na");
             return;
         }
         if (args[0].compareTo("-v") == 0) {
             System.out.println(NoBeardAssembler.getVersion());
             return;
         }
-        SourceReader sourceReader;
+        SourceReader sourceReader = prepareSourceReader(args[0]);
+        if (sourceReader == null)
+            return;
+        Parser parser = parseFile(sourceReader);
+        presentParsingResult(parser, args);
+    }
+
+    private static SourceReader prepareSourceReader(String filePath) {
         try {
-            sourceReader = new SourceFileReader(args[0]);
+            SourceReader sourceReader = new SourceFileReader(filePath);
+            return sourceReader;
         } catch (FileNotFoundException ex) {
-            System.err.println("Assembler file " + args[0] + " not found");
+            System.err.println("Assembler file " + filePath + " not found");
+            return null;
         }
-//        Path path = Paths.get(args[1]);
-//        byte[] fileContent;
-//        try {
-//            fileContent = Files.readAllBytes(path);
-//        } catch (IOException ex) {
-//            System.out.println("File " + args[1] + " not found");
-//            return;
-//        }
-//        int i = 0;
-//        while (fileContent[i] != Instruction.HALT.getId()) {
-//            
-//        }
     }
     
+    private static Parser parseFile(SourceReader sourceReader) {
+        ParserFactory.setup(sourceReader);
+        Parser parser = ParserFactory.create(AssemblerParser.class);
+        parser.parse();
+        return parser;
+    }
+
+    private static void writeBinaryFile(String filePath, byte[] byteCode, byte[] stringStorage) {
+        BinaryFile file = BinaryFile.get(filePath);
+        file.setProgram(byteCode);
+        file.setStringStorage(stringStorage);
+        try {
+            BinaryFileHandler.save(file);
+        } catch (IOException ex) {
+            System.err.println("Unable to save binary file");
+        }
+    }
+    
+    private static void presentParsingResult(Parser parser, String[] args) {
+        if (parser.parsingWasSuccessful()) {
+            String binaryFilePath = args[0].replaceAll(".na", ".no");
+            writeBinaryFile(binaryFilePath, ParserFactory.getCodeGenerator().getByteCode(), ParserFactory.getScanner().getStringManager().getStringStorage());
+        } else {
+            parser.getErrorHandler().getAllErrors().stream().forEach((e) -> {
+                System.err.println(e.getMessage());
+            });
+        }
+    }
 }
