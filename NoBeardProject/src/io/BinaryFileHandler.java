@@ -35,7 +35,7 @@ import nbm.InstructionSet.Instruction;
  */
 public class BinaryFileHandler {
 
-    static void save(BinaryFile filePath) throws IOException {
+    public static void save(BinaryFile filePath) throws IOException {
         Path p = Paths.get(filePath.getPath());
         final int programLength = filePath.getProgram().length;
         final int stringStorageLength = filePath.getStringStorage().length;
@@ -45,7 +45,7 @@ public class BinaryFileHandler {
         Files.write(p, data);
     }
 
-    static BinaryFile open(String filePath) throws IOException {
+    public static BinaryFile open(String filePath) throws IOException {
         BinaryFile openedFile = BinaryFile.get(filePath);
 
         Path p = Paths.get(filePath);

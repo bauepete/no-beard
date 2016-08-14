@@ -52,7 +52,7 @@ public class BinaryFile {
         return program;
     }
 
-    void setStringStorage(byte[] stringStorage) {
+    public void setStringStorage(byte[] stringStorage) {
         if (stringStorage != null) {
             this.stringStorage = stringStorage;
         }
@@ -60,7 +60,7 @@ public class BinaryFile {
             this.stringStorage = new byte[]{};
     }
 
-    void setProgram(byte[] program) {
+    public void setProgram(byte[] program) {
         if (program != null) {
             this.program = program;
         } else
