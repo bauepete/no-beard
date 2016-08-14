@@ -249,3 +249,5 @@ dist/
 nbdist/
 nbactions.xml
 .nb-gradle/
+/NoBeardProject/Nbc/nbproject/private/
+/NoBeardProject/NbAsm/nbproject/private/
