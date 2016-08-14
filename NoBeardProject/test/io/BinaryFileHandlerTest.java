@@ -88,12 +88,12 @@ public class BinaryFileHandlerTest {
             InstructionSet.Instruction.ASSN.getId(),
             InstructionSet.Instruction.HALT.getId()
         };
-        BinaryFile exampleFile = BinaryFile.get(testFilePath + "ExampleProgram.no");
+        BinaryFile exampleFile = BinaryFile.get(testFilePath + "/ExampleProgram.no");
         exampleFile.setStringStorage(exampleStringStorage);
         exampleFile.setProgram(exampleProgram);
         
         BinaryFileHandler.save(exampleFile);
-        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "ExampleProgram.no");
+        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "/ExampleProgram.no");
         
         assertArrayEquals(exampleStringStorage, readFile.getStringStorage());
         assertArrayEquals(exampleProgram, readFile.getProgram());
@@ -110,12 +110,12 @@ public class BinaryFileHandlerTest {
             InstructionSet.Instruction.LIT.getId(), 0, 3,
             InstructionSet.Instruction.ASSN.getId(),
         };
-        BinaryFile exampleFile = BinaryFile.get(testFilePath + "ExampleProgram.no");
+        BinaryFile exampleFile = BinaryFile.get(testFilePath + "/ExampleProgram.no");
         exampleFile.setStringStorage(exampleStringStorage);
         exampleFile.setProgram(exampleProgram);        
         BinaryFileHandler.save(exampleFile);
         
-        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "ExampleProgram.no");
+        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "/ExampleProgram.no");
         
         byte[] expectedTrash = new byte[exampleStringStorage.length + exampleProgram.length];
         System.arraycopy(exampleProgram, 0, expectedTrash, 0, exampleProgram.length);
