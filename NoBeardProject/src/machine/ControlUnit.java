@@ -107,8 +107,8 @@ public class ControlUnit {
 
     void executeCycle() {
         fetchInstruction();
-        executeInstruction();
         setPc(getPc() + instructionRegister.getSize());
+        executeInstruction();
     }
     
     public void startMachine() {

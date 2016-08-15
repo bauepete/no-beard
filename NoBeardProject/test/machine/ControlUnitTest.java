@@ -23,10 +23,6 @@
  */
 package machine;
 
-import machine.ControlUnit;
-import machine.DataMemory;
-import machine.CallStack;
-import machine.ProgramMemory;
 import error.ErrorHandler;
 import machine.InstructionSet.Instruction;
 import org.junit.After;
@@ -129,8 +125,19 @@ public class ControlUnitTest {
             Instruction.STO.getId()
         };
         programMemory.store(0, program);
+        assertEquals(0, controlUnit.getPc());
         controlUnit.executeCycle();
         assertEquals(4, controlUnit.getPc());
         assertEquals(ControlUnit.MachineState.STOPPED, controlUnit.getMachineState());
+    }
+    
+    @Test
+    public void testExecJumpCycle() {
+        byte[] program = {
+            Instruction.JMP.getId(), 0, 32
+        };
+        programMemory.store(0, program);
+        controlUnit.executeCycle();
+        assertEquals(32, controlUnit.getPc());
     }
 }
