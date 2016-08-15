@@ -1,0 +1,5 @@
+# Division by zero
+lit 17
+lit 0
+div
+halt
