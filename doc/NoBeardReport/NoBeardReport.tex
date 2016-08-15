@@ -148,6 +148,7 @@ Austria
 \begin{tabular}{|l|l|p{.5\textwidth}|}
 \hline
 \cellcolor{Gray}\textcolor{White}{Date} & \cellcolor{Gray}\textcolor{White}{Author} & \cellcolor{Gray}\textcolor{White}{Change} \\ \hline
+August 15, 2016 & P. Bauer & Added introduction to assembler.  \\ \hline
 August 9, 2016 & P. Bauer & Explained call stack and control unit of the machine.  \\ \hline
 June 25, 2016 & P. Bauer & Added more detailed description of the machine and added all assembler instructions used so far.  \\ \hline
 June 12, 2016 & P. Bauer & Changed environment for grammar and formatting of source code. \\ \hline
@@ -194,19 +195,31 @@ The first example shows a non-empty assembler program which definitely does noth
 Assembler instructions need {\em not} to start at every new line, they could also be written as a sequence in one line or one instruction could be broken up into several lines. Line breaks are only allowed between the opcode and operands or between the operands. Therefore the above program can be rewritten in the following way.
 \lstinputlisting[caption={Shorter way to write a small and useless program}]{\assemblerfilepath TinyProgramB.na}
 
-\subsection{String Handling}
-A \leongage{} assembler program writing ``Hello World'' into the console could look as follows. The strings \lstinline$Hello$ and \lstinline$World$ must be specified at the very beginning of the program. We simply write the strings needed in a sequence, without any separator or similar.
+\subsection{String Handling and Output}
+A \leongage{} assembler program writing ``Hello World'' into the console could look like as follows. The strings \lstinline$Hello$ and \lstinline$World$ must be specified at the very beginning of the program. We simply write the strings needed in a sequence, without any separator or similar. The instruction \lstinline$out$ is used to produce output. When calling \lstinline$out$ with operand \lstinline$2$ (see line~\ref{line:helloworldout}) a string is printed. The instruction expects to have the address of the string, its length and the column width on the stack.
+
 \lstinputlisting[caption={``Hello World'' in \leongage{} Assembler}]{\assemblerfilepath HelloWorld.na}
 
-Note that the width of the column when writing ``Hello'' is set one character wider than the length of the string (line~\ref{line:colwidth}). With this ``trick'' we get the blank between the two words. Of course, in this case, one could achieve the same result much easier by specifying already the string constant as needed to output the required string in one \lstinline$out$ statement.
+Note that the width of the column when writing ``Hello'' is set one character wider than the length of the string (line~\ref{line:helloworldcolwidth}). With this ``trick'' we get the blank between the two words. Of course, in this case, one could achieve the same result much easier by specifying already the string constant as needed to output the required string in one \lstinline$out$ statement. Further details about outputting can be found in section~\ref{sec:out}.
 
-\subsection{Variables}
+\subsection{Variables and Basic Arithmetic}
 As already described in section~\ref{sec:stackframes} local variables of the currently running function are stored on the stack frame. In order to be able to do so, we have to reserve memory for local variables. This is done by the \lstinline$inc$ instruction. Additionally we have to keep in mind that for each stack frame the \leongage{} machine reserves 32 bytes for frame house keeping tasks. This is the reason why the following program accesses then the local variable at address 32. For further details about the semantics of the assembler instructions used here we refer to section~\ref{sec:instructions}.
 
 \lstinputlisting[caption={A program defining one local variable}]{\assemblerfilepath OneVariable.na}
 
 Maybe it appears superfluous to reload the value from address 32 before it can be printed to the output. The reason for this extra load instruction becomes clear if one studies the semantics of the \lstinline$sto$ instruction. Since it removes the value to be stored from the stack it has to be reloaded before it can be printed.
 
+The assembler provides a complete set of arithmetic operations such that one can express arbitrary arithmetic expressions. To illustrate this we want to write an assembler program which calculates the expression \lstinline$((b + 11)/a) % 2$
+for some previously stored values \lstinline$b$ and \lstinline$a != 0$. The result will be stored in some extra variable \lstinline$c$ which will then finally be printed.
+
+\lstinputlisting[caption={Basic Arithmetic}]{\assemblerfilepath BasicArithmetic.na}
+
+Regarding the arithmetic instructions it can be seen that all of these expect their operand(s) to be pushed on the stack. During their calculation they remove these from the stack and push the result of the calculation back to the stack.
+
+\subsection{Branching}
+The \leongage{} assembler language provides three branch instructions, namely \lstinline$tjmp$, \lstinline$fjmp$ and \lstinline$jmp$. In the following example we want to show how to check for a given number whether it is odd or even. The tricky part of dealing with branch instructions is to figure out the correct addresses in program memory where the branch destination is. Since we have no symbolic labels to indicate the branch destinations one has to check back the instruction sizes as given in section~\ref{sec:instructions} and calculate the branch destination addresses from there. In the following listing the program memory addresses at the start of each line are given in the comments.
+
+\lstinputlisting[caption={Odd/Even Checker}]{\assemblerfilepath SimpleSelection.na}
 \section{Formal Description}
 
 \begin{grammar}{.25\textwidth}{.75\textwidth}
