@@ -42,7 +42,7 @@ public class DataMemory {
     }
 
     void storeByte(int atAddress, byte value) {
-        if (atAddress < memory.length) {
+        if (0 <= atAddress && atAddress < memory.length) {
             memory[atAddress] = value;
         } else {
             errorHandler.throwDataAddressError("0x" + Integer.toHexString(atAddress));
@@ -50,7 +50,7 @@ public class DataMemory {
     }
 
     byte loadByte(int atAddress) {
-        if (atAddress < memory.length) {
+        if (0 <= atAddress && atAddress < memory.length) {
             return memory[atAddress];
         } else {
             errorHandler.throwDataAddressError("0x" + Integer.toHexString(atAddress));
@@ -59,10 +59,6 @@ public class DataMemory {
     }
 
     void storeWord(int atAddress, int value) {
-//        for (int i = 0; i < 4; i++) {
-//            storeByte(atAddress + i, (byte) (value % 256));
-//            value /= 256;
-//        }
         ByteBuffer byteBuffer = ByteBuffer.allocate(4);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.putInt(value);
@@ -70,16 +66,6 @@ public class DataMemory {
     }
 
     int loadWord(int atAddress) {
-//        int rv = 0;
-//        for (int i = 3; i >= 0; i--) {
-//            rv *= 256;
-//            if (i == 3) {
-//                rv += loadByte(atAddress + i);
-//            } else {
-//                rv += loadByte(atAddress + i) & 0xff;
-//            }
-//        }
-//        return rv;
         byte[] byteArray = load(atAddress, 4);
         if (errorHandler.getCount() == 0) {
             return ByteBuffer.wrap(byteArray).order(ByteOrder.LITTLE_ENDIAN).getInt();
@@ -89,7 +75,7 @@ public class DataMemory {
     }
 
     void store(int atAddress, byte[] memoryBlock) {
-        if (atAddress + memoryBlock.length <= memory.length) {
+        if (0 <= atAddress && atAddress + memoryBlock.length <= memory.length) {
             System.arraycopy(memoryBlock, 0, memory, atAddress, memoryBlock.length);
         } else {
             errorHandler.throwDataAddressError(Integer.toHexString(atAddress));
@@ -97,7 +83,7 @@ public class DataMemory {
     }
 
     byte[] load(int atAddress, int length) {
-        if (atAddress + length <= memory.length) {
+        if (0 <= atAddress && atAddress + length <= memory.length) {
             byte[] rv = new byte[length];
             System.arraycopy(memory, atAddress, rv, 0, length);
             return rv;

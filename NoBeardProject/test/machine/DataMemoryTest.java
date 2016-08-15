@@ -23,9 +23,7 @@
  */
 package machine;
 
-import machine.DataMemory;
 import error.ErrorHandler;
-import java.nio.ByteOrder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -72,7 +70,7 @@ public class DataMemoryTest {
     }
     
     @Test
-    public void testStoreByteDataAddressError() {
+    public void testStoreByteAtTooHighAddress() {
         int atAddress = 1024;
         byte value = (byte) 255;
         mem.storeByte(atAddress, value);
@@ -84,9 +82,24 @@ public class DataMemoryTest {
     }
     
     @Test
-    public void testLoadByteDataAddressError() {
+    public void testStoreByteAtTooLowAddress() {
+        int atAddress = -1;
+        byte value = (byte) 255;
+        mem.storeByte(atAddress, value);
+        assertDataAddressError();
+    }
+    
+    @Test
+    public void testLoadByteAtTooHighAddress() {
         int atAddress = 1024;
         byte retrievedValue = mem.loadByte(atAddress);
+        assertDataAddressError();
+    }
+    
+    @Test
+    public void testStoreAtTooLowAddress() {
+        int atAddress = -1;
+        mem.loadByte(atAddress);
         assertDataAddressError();
     }
 
@@ -121,17 +134,32 @@ public class DataMemoryTest {
     }
     
     @Test
-    public void testStoreWordDataAddressError() {
+    public void testStoreWordAtTooHighAddress() {
         int atAddress = 1023;
+        int value = Integer.MAX_VALUE;
+        mem.storeWord(atAddress, value);
+        assertDataAddressError();
+    }
+    
+    @Test
+    public void testStoreWordAtTooLowAddress() {
+        int atAddress = -1;
         int value = Integer.MAX_VALUE;
         mem.storeWord(atAddress, value);
         assertDataAddressError();
     }
 
     @Test
-    public void testLoadWordDataAddressError() {
+    public void testLoadWordAtTooHighAddress() {
         int atAddress = 1021;
         int retrievedValue = mem.loadWord(atAddress);
+        assertDataAddressError();
+    }
+    
+    @Test
+    public void testLoadWordAtTooLowAddress() {
+        int atAddress = -1;
+        mem.loadWord(atAddress);
         assertDataAddressError();
     }
     

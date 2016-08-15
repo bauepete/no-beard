@@ -1,19 +1,20 @@
 # Shows a selection
+# Prints whether given number is odd or even
 "The number is even The number is odd"
-lit 16
+lit 17   # number to be checked
 lit 2
-mod    # calculate 17 % 2
-lit 0  # check against value 0
-rel 2  # check for equality
-fjmp 29
-lit 0
+mod      # calculate 17 % 2
+lit 0    # check against value 0
+rel 2    # 2 -> equals: check whether 17 % 2 equals 0
+fjmp 29  # if not jump down to output "odd"
+lit 0    # start of output "even"
 lit 18
 lit 18
 out 2
-jmp 39 # jmp 40 is correct
-lit 19 # address of odd
+jmp 40   # if branch is finished -> jump to end
+lit 19   # pc == 29 here: start of output "odd"
 lit 17
 lit 17
 out 2
-out 3
+out 3    # pc == 40 here: output new line
 halt
