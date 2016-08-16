@@ -1,10 +1,16 @@
-\begin{thebibliography}{Wik16}
+\begin{thebibliography}{MRR91}
 
 \bibitem[Kha08]{khason_computer_2008}
 Tamir Khason.
 \newblock Computer languages and facial hair -- take two, 2008.
 \newblock URL:
   \url{http://khason.net/blog/computer-languages-and-facial-hair-%e2%80%93-take-two/}.
+
+\bibitem[MRR91]{mossenbock_formale_1991}
+Hanspeter M{\"o}ssenb{\"o}ck, Peter Rechenberg, and Christoph Reichenberger.
+\newblock Formale {Beschreibung} der {Programmiersprache} {MiniModula}2.
+\newblock Technical report, Johannes Kepler Universit{\"a}t Linz, Institut
+  f{\"u}r Informatik, Abteilung Software, Linz, September 1991.
 
 \bibitem[Ter04]{terry_compiling_2004}
 Pat Terry.

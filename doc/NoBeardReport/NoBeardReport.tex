@@ -8,6 +8,7 @@
 \usepackage{epstopdf}
 \usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{hyperref}
+\usepackage[utf8]{inputenc}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
@@ -166,14 +167,21 @@ This project aims to provide students who want to dig into the fields of assembl
 \begin{itemize}
 	\item The {\em \leongage{} Machine}. A virtual machine with an instruction set of less than 30 instructions which is pretty easy to grasp compared to the instruction set sizes of real life machines. The machine is purely stack based such that the structure of each instruction is again easy to understand and to follow.
 	\item The {\em \leongage{} Assembler}. To write programs for the \leongage{} Machine an assembler is provided. In the published version of the project no support of labels, symbolic variables, etc. is given. Here the focus is to direct the students to the very basics of how machine programs for the \leongage{} Machine look like and how they work. Extensions as the ones mentioned above can be done by the interested student as an exercise.
-	\item The {\em \leongage{} Compiler}. To facilitate programming for the \leongage{} Machine and to give insights into the basic techniques of compiler construction a dedicated language is defined and the corresponding compiler is implemented. We did not go for the automated construction of compilers with compiler generators since we wanted to emphasize the direct relationship of formal grammars to parsers using the recursive descending method. For students interested in this the great book of Pat Terry~\cite{terry_compiling_2004} is recommended.
+	\item The {\em \leongage{} Compiler}. To facilitate programming for the \leongage{} Machine and to give insights into the basic techniques of compiler construction a dedicated language is defined and the corresponding compiler is implemented. We did not go for the automated construction of compilers with compiler generators since we wanted to emphasize the direct relationship of formal grammars to parsers using the recursive descending method. For students interested in compiler construction using compiler generators the great book of Pat Terry~\cite{terry_compiling_2004} is recommended.
 \end{itemize}
 
-The \leongage{} tools are used to support the courses {\em Technical Informatics} and {\em Programming and Software Engineering} (in particular the part {\em Theoretical Informatics}) held for the third grade students of the Department of Informatics at the HTBLA Leonding. Therefore the students of these grades are forced to go through this material in more detail. In case of typos, misleading wording or other problems, please feel free to contact the author. Thanks for your help.
+\section{Structure of the Report}
 
-\section{About the Name}
+\section{Trivia and Acknowledgements}
+The \leongage{} tools are used to support the courses {\em Technical Informatics} and {\em Programming and Software Engineering} (in particular the part {\em Theoretical Informatics}) held for third grade students of the Department of Informatics at the HTBLA Leonding. Therefore the students of these grades are forced to go through this material in more detail. All remarks from students of the former years helped to improve the project and to bring it into the shape as it is today. A big Thank You at this point is the least one can do in return for that. Since the whole project is still ongoing: In case of typos, misleading wording or other problems, please feel free to contact the author. Any help in this direction is highly appreciated.
+
 According to a web article (see \cite{khason_computer_2008}) the popularity of programming languages is strongly related to the fact whether its inventor(s) is a / are  bearded m[ae]n or not. Well, the main aim of the programming language \leongage{} is not to be popular,
-moreover it should give the reader a clear insight how the main principles of compiler construction are.
+moreover it should give the reader a clear insight how the main principles of assembler programming, system programming, and compiler construction are. This is the background of the name of the whole project. Thanks to my former colleagues Peter Penz, Hugo Koblmüller, and Harald Wick for their constant friendship and creativity which not only helped me to find a proper name for this project.
+
+When developing this project we had an extremely helpful guideline in the {\em MiniModula2} project developed by Hanspeter Mössenböck at the Johannes Kepler University in Linz~\cite{mossenbock_formale_1991}. Actually all basic concepts used here are stolen from this project.
+
+\section{Structure}
+
 
 \include{NoBeardMachine}
 
