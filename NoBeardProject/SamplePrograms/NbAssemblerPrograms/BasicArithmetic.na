@@ -20,7 +20,9 @@ lv 0 32    # load value of a
 div        # (b + 11) / a
 lit 2      # load 2
 mod        # ((b + 11)/a)%2
+sto        # store result to c
 
+lv 0 40    # load value of c
 lit 1      # load column width for out
 out 0      # ouput int value
 out 3      # output newline
