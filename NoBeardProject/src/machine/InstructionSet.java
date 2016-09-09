@@ -90,6 +90,14 @@ public class InstructionSet {
             int x = cu.getDataMemory().loadWord(finalAddress);
             cu.getCallStack().push(x);
         }),
+        LCI((byte) 0x06, OperandType.BYTE, OperandType.HALFWORD, (cu) -> {
+            byte d = cu.getDisplacement();
+            int a = cu.getAddress();
+            int base = cu.getBaseFromDisplacement(d);
+            int finalAddress = cu.getDataMemory().loadWord(base + a);
+            int c = cu.getDataMemory().loadByte(finalAddress);
+            cu.getCallStack().push(c);
+        }),
         STO((byte) 0x07, (cu) -> {
             int value = cu.getCallStack().pop();
             int a = cu.getCallStack().pop();
@@ -246,7 +254,8 @@ public class InstructionSet {
         }),
         HALT((byte) 0x1F, (cu) -> {
             cu.stopMachine();
-        });
+        }),
+        ;
 
         private final byte id;
         private final List<OperandType> operandTypes;

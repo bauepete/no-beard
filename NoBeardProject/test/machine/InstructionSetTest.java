@@ -180,11 +180,23 @@ public class InstructionSetTest {
     @Test
     public void testLvi() {
         byte[] program = {
-            Instruction.LVI.getId(), 0, 0, 76
+            Instruction.LVI.getId(), 0, 0, 37
         };
         setupThreeFrames();
+        callStack.push(76);
         checkInstruction(program, 0x05, Instruction.LVI, 4, OperandType.BYTE, OperandType.HALFWORD);
-        assertEquals(0, callStack.peek());
+        assertEquals(36, callStack.peek());
+    }
+
+    @Test
+    public void testLci() {
+        byte[] program = {
+            Instruction.LCI.getId(), 0, 0, 37
+        };
+        setupThreeFrames();
+        callStack.push(108);
+        checkInstruction(program, 0x06, Instruction.LCI, 4, OperandType.BYTE, OperandType.HALFWORD);
+        assertEquals('5', (char)callStack.peek());
     }
 
     @Test
