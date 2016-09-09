@@ -4,7 +4,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/parser/Parser.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/parser/general/AssemblerParserTest.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/io/BinaryFile.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/asm/NoBeardAssemblerTest.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/test/machine/InstructionSetTest.java</file>
+            <file>file:/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/src/machine/InstructionSet.java</file>
         </group>
     </open-files>
 </project-private>

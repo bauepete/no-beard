@@ -83,6 +83,12 @@ public class InstructionSet {
             cu.getCallStack().push(c);
         }),
         LVI((byte) 0x05, OperandType.BYTE, OperandType.HALFWORD, (cu) -> {
+            byte d = cu.getDisplacement();
+            int a = cu.getAddress();
+            int base = cu.getBaseFromDisplacement(d);
+            int finalAddress = cu.getDataMemory().loadWord(base + a);
+            int x = cu.getDataMemory().loadWord(finalAddress);
+            cu.getCallStack().push(x);
         }),
         STO((byte) 0x07, (cu) -> {
             int value = cu.getCallStack().pop();

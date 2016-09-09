@@ -23,11 +23,6 @@
  */
 package machine;
 
-import machine.DataMemory;
-import machine.ControlUnit;
-import machine.InstructionSet;
-import machine.CallStack;
-import machine.ProgramMemory;
 import error.ErrorHandler;
 import java.util.Arrays;
 import java.util.List;
@@ -180,6 +175,16 @@ public class InstructionSetTest {
         setupThreeFrames();
         checkInstruction(program, 0x04, Instruction.LC, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals('5', (char) callStack.peek());
+    }
+    
+    @Test
+    public void testLvi() {
+        byte[] program = {
+            Instruction.LVI.getId(), 0, 0, 76
+        };
+        setupThreeFrames();
+        checkInstruction(program, 0x05, Instruction.LVI, 4, OperandType.BYTE, OperandType.HALFWORD);
+        assertEquals(0, callStack.peek());
     }
 
     @Test
