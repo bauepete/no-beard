@@ -1,20 +1,37 @@
 # Shows a selection
 # Prints whether given number is odd or even
-"The number is even The number is odd"
-lit 17   # pc == 0: number to be checked
-lit 2    # pc == 3
-mod      # pc == 6: calculate 17 % 2
-lit 0    # pc == 7: check against value 0
-rel 2    # pc == 10: 2->equals: check whether 17%2 equals 0
-fjmp 29  # pc == 12: if not jump down to output "odd"
-lit 0    # pc == 15: start of output "even"
-lit 18   # pc == 18
-lit 18   # pc == 21
-out 2    # pc == 24
-jmp 40   # pc == 26: if branch is finished -> jump to end
-lit 19   # pc == 29: start of output "odd"
-lit 17   # pc == 32
-lit 17   # pc == 35
-out 2    # pc == 38
-out 3    # pc == 40: output new line
-halt     # pc == 42
+"Please enter a number:The number is evenThe number is odd"
+inc 8     # pc == 0: reserve space for local variables
+
+# print "Please enter a number: "
+lit 0     # pc == 3
+lit 22    # pc == 6
+lit 23    # pc == 9
+out 2     # pc == 12
+
+# read input from stdin
+la 0 32   # pc == 14
+la 0 36   # pc == 18
+in 0      # pc == 22
+
+lv 0 32   # pc == 24: number to be checked
+lit 2     # pc == 28
+mod       # pc == 31: calculate 17 % 2
+lit 0     # pc == 32: check against value 0
+rel 2     # pc == 35: 2->equals: check whether 17%2 equals 0
+fjmp 54   # pc == 37: if not jump down to output "odd"
+
+# start of output "even"
+lit 22    # pc == 40
+lit 18    # pc == 43
+lit 19    # pc == 46
+out 2     # pc == 49
+jmp 65    # pc == 51: if branch is finished -> jump to end
+
+# start of output "odd"
+lit 40   # pc == 54
+lit 17   # pc == 57
+lit 18   # pc == 60
+out 2    # pc == 63
+out 3    # pc == 65: output new line
+halt     # pc == 67

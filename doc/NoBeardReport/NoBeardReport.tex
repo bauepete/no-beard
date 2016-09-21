@@ -71,7 +71,7 @@
 	frame=single,
 	sensitive=true,
 	tabsize=3,
-	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, out, inc, halt},
+	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt},
 	morecomment=[l][\color{srcgreen}]{\#},
 	morestring=[b][\color{srcred}]{"},
 	keywordstyle=\color{srcpurple},
@@ -149,6 +149,8 @@ Austria
 \begin{tabular}{|l|l|p{.5\textwidth}|}
 \hline
 \cellcolor{Gray}\textcolor{White}{Date} & \cellcolor{Gray}\textcolor{White}{Author} & \cellcolor{Gray}\textcolor{White}{Change} \\ \hline
+September 21, 2016 & P. Bauer & Added instructins in.  \\ \hline
+September 2, 2016 & P. Bauer & Added instructins lci, lvi.  \\ \hline
 August 15, 2016 & P. Bauer & Added introduction to assembler.  \\ \hline
 August 9, 2016 & P. Bauer & Explained call stack and control unit of the machine.  \\ \hline
 June 25, 2016 & P. Bauer & Added more detailed description of the machine and added all assembler instructions used so far.  \\ \hline
@@ -169,8 +171,6 @@ This project aims to provide students who want to dig into the fields of assembl
 	\item The {\em \leongage{} Assembler}. To write programs for the \leongage{} Machine an assembler is provided. In the published version of the project no support of labels, symbolic variables, etc. is given. Here the focus is to direct the students to the very basics of how machine programs for the \leongage{} Machine look like and how they work. Extensions as the ones mentioned above can be done by the interested student as an exercise.
 	\item The {\em \leongage{} Compiler}. To facilitate programming for the \leongage{} Machine and to give insights into the basic techniques of compiler construction a dedicated language is defined and the corresponding compiler is implemented. We did not go for the automated construction of compilers with compiler generators since we wanted to emphasize the direct relationship of formal grammars to parsers using the recursive descending method. For students interested in compiler construction using compiler generators the great book of Pat Terry~\cite{terry_compiling_2004} is recommended.
 \end{itemize}
-
-\section{Structure of the Report}
 
 \section{Trivia and Acknowledgements}
 The \leongage{} tools are used to support the courses {\em Technical Informatics} and {\em Programming and Software Engineering} (in particular the part {\em Theoretical Informatics}) held for third grade students of the Department of Informatics at the HTBLA Leonding. Therefore the students of these grades are forced to go through this material in more detail. All remarks from students of the former years helped to improve the project and to bring it into the shape as it is today. A big Thank You at this point is the least one can do in return for that. Since the whole project is still ongoing: In case of typos, misleading wording or other problems, please feel free to contact the author. Any help in this direction is highly appreciated.
@@ -210,12 +210,17 @@ A \leongage{} assembler program writing ``Hello World'' into the console could l
 
 Note that the width of the column when writing ``Hello'' is set one character wider than the length of the string (line~\ref{line:helloworldcolwidth}). With this ``trick'' we get the blank between the two words. Of course, in this case, one could achieve the same result much easier by specifying already the string constant as needed to output the required string in one \lstinline$out$ statement. Further details about outputting can be found in section~\ref{sec:out}.
 
-\subsection{Variables and Basic Arithmetic}
+\subsection{Variables, Reading Integers from Terminal and Basic Arithmetic}
 As already described in section~\ref{sec:stackframes} local variables of the currently running function are stored on the stack frame. In order to be able to do so, we have to reserve memory for local variables. This is done by the \lstinline$inc$ instruction. Additionally we have to keep in mind that for each stack frame the \leongage{} machine reserves 32 bytes for frame house keeping tasks. This is the reason why the following program accesses then the local variable at address 32. For further details about the semantics of the assembler instructions used here we refer to section~\ref{sec:instructions}.
 
 \lstinputlisting[caption={A program defining one local variable}]{\assemblerfilepath OneVariable.na}
 
 Maybe it appears superfluous to reload the value from address 32 before it can be printed to the output. The reason for this extra load instruction becomes clear if one studies the semantics of the \lstinline$sto$ instruction. Since it removes the value to be stored from the stack it has to be reloaded before it can be printed.
+
+Since doing calculations is only of limited fun if the corresponding values cannot be entered by the user we show here how to read values provided by the user via the \lstinline$stdin$. In order to do so, \leongage{} assembler provides an instruction \lstinline$in$. This instruction expects two addresses on the stack, one for holding the value inputted by the user and another one holding a success flag indicating whether reading the value succeeded or not. The following program reserves space for these two variables, reads an integer value from the user and finally outputs this value and the success flag.
+
+\lstinputlisting[caption={A program reading an input value}]{\assemblerfilepath Io.na}
+The value of the success flag can be verified by providing a valid integer value on a first run and entering an invalid integer (e.g., an alphanumeric character) on a second run.
 
 The assembler provides a complete set of arithmetic operations such that one can express arbitrary arithmetic expressions. To illustrate this we want to write an assembler program which calculates the expression \lstinline$((b + 11)/a) % 2$
 for some previously stored values \lstinline$b$ and \lstinline$a != 0$. The result will be stored in some extra variable \lstinline$c$ which will then finally be printed.

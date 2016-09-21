@@ -1,3 +1,4 @@
+%!TEX root = NoBeardReport.tex
 \chapter{The \leongage{} Machine}
 \lstset{language=AsmDef}
 \section{Overview}
@@ -58,6 +59,33 @@ The control unit is responsible for the proper execution of programs. It execute
 \end{tabular}
 
 \section{Stack Frames}\label{sec:stackframes}
+\begin{figure}
+\begin{center}
+\begin{tabular}{p{8em}|p{4em}|p{15em}}
+\parbox[b][1em][b]{8em}{\hfill \cellcolor{Gray}\textcolor{White}{Address}} & \cellcolor{Gray}\textcolor{White}{Content} & \cellcolor{Gray}\textcolor{White}{Remark} \\ \cline{2-2} 
+\cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 0} & 0 & frame pointer of frame 0 \\ \cline{2-2}
+& \ldots \\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 32} & 13 & local int in frame 0 \\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 36} & 0 & static link to frame 0 (start of frame 1)\\ \cline{2-2}
+& \ldots \\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 68} & 17 & local int in frame 1\\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 72} & 42 & local int in frame 1\\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 76} & 36 & static link to frame 1 (start of frame 2) \\ \cline{2-2}
+& \ldots \\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 108} & `D' \\ \cline{2-2}
+\parbox[t][1em][t]{5em}{\hfill 109} & 61 \\ \cline{2-2}
+\parbox[b][4em][b]{8em}{\hfill MAX\_DATA} & free \\ \cline{2-2}
+\end{tabular}
+\end{center}
+\caption{Snapshot of a call stack with three frames}\label{fig:threeframes}
+\end{figure}
+
+Considering a concrete scenario as given in figure~\ref{fig:threeframes} we have three frames. Frame~0 starts at address 0. The first 32 bytes of each frame are reserved for administrative data like the static link and the dynamic link to the surrounding frame, the return value, etc. Address~32 holds the value of a local variable in frame~0.
+
+\lstset{language=NoBeardAsm}
+
+At address~36 frame~1 starts with the address to its statically surrounding frame, i.e, the function (or unit or block) represented by frame~0 is defining the function (or block) represented by frame~1. Frame~1 defines two local values at addresses 68 and 72. Now it can be easily verified that an assembler instruction \lstinline$la 0 32$ (see section~\ref{sec:instructions}) loads the value of the local (i.e., relative to the closest frame pointer) address 32. In the concrete example this is address $36 + 32 = 68$.
 
 \section{Binary File Format}
 \leongage{} binaries have the extension \lstinline$.no$ (from \leongage{} object file) and have a format as shown in figure~\ref{fig:binaryfileformat}. From byte 0 onwards the machine instructions are stored in a continuous stream. After the final \lstinline$halt$ instruction the stream of string constants follows immediately.
@@ -75,13 +103,14 @@ The control unit is responsible for the proper execution of programs. It execute
 
 
 \section{Runtime Structure of a \leongage{} Program}
+\lstset{language=AsmDef}
 The \leongage{} Machine follows the following fixed execution cycle:
 \begin{enumerate}
 	\item Fetch instruction
 	\item Decode instruction
 	\item Execute instruction
 \end{enumerate}
-The very first instruction is fetched from {\tt prog[startPc]} where {\tt startPc} has to be provided as an argument when starting the program. From this point of time onwards the program is executed until the machine state changes from {\em run}.
+The very first instruction is fetched from \lstinline$prog[startPc]$ where \lstinline$startPc$ has to be provided as an argument when starting the program. From this point of time onwards the program is executed until the machine state changes from {\em run}.
 
 \begin{lstlisting}
 runProg(startPc) {
@@ -190,6 +219,45 @@ Loads a character on the stack.
 	}
 	// fill 3 bytes of zeros to get a full word
 	lw = 000dat[base + Address];
+	push(lw);
+	\end{lstlisting}
+
+% ----------------------------- LVI ----------------------------
+\subsection{lvi}
+\subsubsection{Instruction}
+\fourbyteinstructiona{0x03}{Displacement}{DataAddress}
+
+\subsubsection{Operation}
+Loads a value indirectly on the stack.
+
+	\begin{lstlisting}
+	lvi Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	adr = base + DataAddress;
+	ra = dat[addr ... addr + 3];
+	push(ra);
+	\end{lstlisting}
+
+% ----------------------------- LCI ----------------------------
+\subsection{lci}
+\subsubsection{Instruction}
+\fourbyteinstructiona{0x05}{Displacement}{DataAddress}
+
+\subsubsection{Operation}
+Loads a character indirectly on the stack.
+
+	\begin{lstlisting}
+	lci Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	ra = dat[base + Address];
+	// fill 3 bytes of zeros to get a full word
+	lw = 000dat[ra];
 	push(lw);
 	\end{lstlisting}
 
@@ -430,6 +498,41 @@ Unconditional jump: Sets \lstinline$pc$ to \lstinline$newPc$.
 	pc = NewPc;
 	\end{lstlisting}
 
+% ----------------------------- IN ----------------------------
+\subsection{in}\label{sec:in}
+\subsubsection{Instruction}
+\twobyteinstruction{0x19}{Type}
+
+\subsubsection{Operation}
+Reads data from the terminal. Depending on \lstinline$Type$ different data types are read:
+
+\begin{itemize}
+	\item 0: An \lstinline$int$ is read and stored at the address on top of the stack. After execution the value 1 is pushed if an integer was read successfully, otherwise 0 is pushed.
+	\item 1: A \lstinline$char$ is read and stored at the address on top of the stack. After execution the value 1 is pushed 
+	\item 2: a \lstinline$string$ with a specific length is read
+\end{itemize}
+
+	\begin{lstlisting}
+	in Type
+	switch(Type) {
+		case 0:
+			a = pop();
+			n = readInt();
+			dat[a ... a + 3] = n;
+			break;
+		case 1:
+			a= pop();
+			ch = readChar();
+			dat[a] = ch;
+			break;
+		case 2:
+			a = pop();
+			strLen = pop();
+			
+			break;
+	}
+	\end{lstlisting}
+
 % ----------------------------- OUT ----------------------------
 \subsection{out}\label{sec:out}
 \subsubsection{Instruction}
@@ -446,7 +549,7 @@ Writes data to the terminal. Depending on \lstinline$Type$ different data types 
 \end{itemize}
 
 	\begin{lstlisting}
-	put Type
+	out Type
 	switch(Type) {
 		case 0:
 			width = pop();
