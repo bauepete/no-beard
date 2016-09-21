@@ -23,6 +23,7 @@
  */
 package machine;
 
+import config.Configuration;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 
@@ -65,7 +66,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     }
     
     public static String getVersion() {
-        return "v2.0";
+        return Configuration.getVersion();
     }
 
     public ControlUnit.MachineState getState() {

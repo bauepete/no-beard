@@ -24,6 +24,7 @@
 package machine;
 
 import error.ErrorHandler;
+import java.util.Scanner;
 
 /**
  *
@@ -147,6 +148,19 @@ public class ControlUnit {
      */
     void stopDueToError() {
         machineState = MachineState.ERROR;
+    }
+    
+    void inputInt() {
+        int successful = callStack.pop();
+        int data = callStack.pop();
+        Scanner c = new Scanner(System.in);
+        if (c.hasNextInt()) {
+            int readInt = c.nextInt();
+            dataMemory.storeWord(successful, 1);
+            dataMemory.storeWord(data, readInt);
+        } else {
+            dataMemory.storeWord(successful, 0);
+        }
     }
 
     void outputInt() {

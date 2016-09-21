@@ -21,46 +21,14 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package asm;
-
-import config.Configuration;
-import io.SourceReader;
-import io.SourceStringReader;
-import parser.AssemblerParser;
-import parser.Parser;
-import parser.ParserFactory;
+package config;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class NoBeardAssembler {
-    private static boolean wasSuccessFull = false;
-    
+public class Configuration {
     public static String getVersion() {
-        return Configuration.getVersion();
-    }
-    public static boolean assemble() {
-        Parser p = ParserFactory.create(AssemblerParser.class);
-        wasSuccessFull = p.parse();
-        return wasSuccessFull;
-    }
-
-    public static void setSourceString(String sourceString) {
-        SourceReader sourceReader = new SourceStringReader(sourceString);
-        ParserFactory.setup(sourceReader);
-        wasSuccessFull = false;
-    }
-
-    public static boolean wasSuccessfull() {
-        return wasSuccessFull;
-    }
-    
-    public static byte[] getByteCode() {
-        return ParserFactory.getCodeGenerator().getByteCode();
-    }
-    
-    public static byte[] getStringStorage() {
-        return ParserFactory.getScanner().getStringManager().getStringStorage();
+        return "v2.0 beta 1";
     }
 }

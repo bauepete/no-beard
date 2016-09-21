@@ -228,6 +228,16 @@ public class InstructionSet {
             int newPc = cu.getAddress();
             cu.setPc(newPc);
         }),
+        IN((byte) 0x19, OperandType.BYTE, (cu) -> {
+            byte type = cu.getType();
+            switch (type) {
+                case 0:
+                    cu.inputInt();
+                    break;
+                default:
+                    cu.stopDueToOperandRangeError();
+            }
+        }),
         OUT((byte) 0x1A, OperandType.BYTE, (cu) -> {
             byte type = cu.getType();
             switch (type) {

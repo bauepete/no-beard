@@ -1,0 +1,14 @@
+"Enter an int:You entered"
+inc 8
+lit 0     # address
+lit 13    # string length
+lit 14    # col width
+out 2     # out string
+la 0 32   # addr to store int
+la 0 36   # addr to store success flag
+in 0      # input int
+lv 0 32   # load int inputted before
+lit 1     # load column width
+out 0     # out int
+out 3     # new line
+halt
