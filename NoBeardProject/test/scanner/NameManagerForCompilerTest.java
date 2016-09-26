@@ -7,7 +7,6 @@ package scanner;
 import io.SourceStringReader;
 import io.SourceReader;
 import scanner.Scanner.Symbol;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -49,7 +48,7 @@ public class NameManagerForCompilerTest {
         assertFalse(nameManager.isAPossibleStartOfName('0'));
         assertFalse(nameManager.isAPossibleStartOfName('.'));
     }
-    
+
     /**
      * Test of readName method, of class NameManagerForCompiler.
      */
@@ -74,9 +73,43 @@ public class NameManagerForCompilerTest {
     }
 
     @Test
-    public void testReadNameDouble() {
-        System.out.println("testReadNameDouble");
+    public void testReadWeirdNames() {
+        SourceReader srWeird = new SourceStringReader("__;_$;$_;$$");
+        srWeird.nextChar();
+        NameManagerForCompiler nm = new NameManagerForCompiler(srWeird);
 
+        nm.readName(token);
+        assertEquals(Symbol.IDENTIFIER, token.getSymbol());
+        assertEquals("__", token.getClearName());
+
+        srWeird.nextChar();
+        nm.readName(token);
+        assertEquals(Symbol.IDENTIFIER, token.getSymbol());
+        assertEquals("_$", token.getClearName());
+
+        srWeird.nextChar();
+        nm.readName(token);
+        assertEquals(Symbol.IDENTIFIER, token.getSymbol());
+        assertEquals("$_", token.getClearName());
+
+        srWeird.nextChar();
+        nm.readName(token);
+        assertEquals(Symbol.IDENTIFIER, token.getSymbol());
+        assertEquals("$$", token.getClearName());
+    }
+    
+    @Test
+    public void testInvalidName() {
+        SourceReader sr = new SourceStringReader("_");
+        sr.nextChar();
+        NameManagerForCompiler nm = new NameManagerForCompiler(sr);
+        
+        nm.readName(token);
+        assertEquals(Symbol.ILLEGALSY, token.getSymbol());
+    }
+
+    @Test
+    public void testReadNameDouble() {
         srMany.nextChar();
         nameManagerMany.readName(token); // var1
         srMany.nextChar();

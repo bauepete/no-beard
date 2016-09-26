@@ -62,6 +62,10 @@ public class NameManagerForCompiler {
      */
     public void readName(Token t) {
         String s = readString();
+        if (s.equals("_")) {
+            t.setSymbol(Symbol.ILLEGALSY);
+            return;
+        }
         Symbol readSymbol = getTokenType(s);
         t.setSymbol(readSymbol);
         t.setClearName(s);
@@ -73,12 +77,18 @@ public class NameManagerForCompiler {
 
     private String readString() {
         StringBuilder s = new StringBuilder();
-
-        while (Character.isLetter(sr.getCurrentChar()) || Character.isDigit(sr.getCurrentChar())) {
+        
+        while (isValidNameCharacter()) {
             s.append((char) (sr.getCurrentChar()));
             sr.nextChar();
         }
         return s.toString();
+    }
+
+    private boolean isValidNameCharacter() {
+        char currentChar = (char)sr.getCurrentChar();
+        return Character.isLetter(currentChar) || Character.isDigit(currentChar)
+                || currentChar == '_' || currentChar == '$';
     }
 
     // if s is found in keywords it returns the keyword symbol otherwise
