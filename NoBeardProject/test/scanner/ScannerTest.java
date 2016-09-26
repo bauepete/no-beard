@@ -47,7 +47,7 @@ public class ScannerTest {
     private void setupReaderAndErrorHandler(String srcLine) {
         sourceReader = new SourceStringReader(srcLine);
         errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler);
+        scanner = new Scanner(sourceReader, errorHandler, new NameManager(sourceReader));
     }
     
     @Test

@@ -33,6 +33,7 @@ import machine.NoBeardMachine;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ParserFactory;
+import scanner.NameManager;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.SymbolTable;
@@ -56,7 +57,7 @@ public class AssemblerParserTest {
     private void setupTest(final String assemblerInstruction, final byte[] machineCode) {
         SourceReader sr = new SourceStringReader(assemblerInstruction);
         errorHandler = new ErrorHandler(sr);
-        Scanner scanner = new Scanner(sr, errorHandler);
+        Scanner scanner = new Scanner(sr, errorHandler, new NameManager(sr));
         SymbolTable symbolTable = new SymbolTable(scanner, errorHandler);
         CodeGenerator codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);
         ParserFactory.setup(sr, errorHandler, scanner, codeGenerator, symbolTable);

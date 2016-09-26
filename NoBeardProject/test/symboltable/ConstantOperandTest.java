@@ -20,6 +20,7 @@ import org.junit.Test;
 import io.SourceStringReader;
 import static org.junit.Assert.*;
 import io.SourceReader;
+import scanner.NameManager;
 
 /**
  *
@@ -48,7 +49,7 @@ public class ConstantOperandTest {
     public void setUp() {
         SourceReader sourceReader = new SourceStringReader("unit A; do done A;");
         errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler);
+        scanner = new Scanner(sourceReader, errorHandler, new NameManager(sourceReader));
         c = new CodeGenerator(256);
         Operand.setStringManager(scanner.getStringManager());
         Operand.setErrorHandler(errorHandler);

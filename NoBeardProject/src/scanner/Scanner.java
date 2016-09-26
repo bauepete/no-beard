@@ -64,11 +64,11 @@ public class Scanner {
     private Token currentToken;
     private final ErrorHandler errorHandler;
 
-    public Scanner(SourceReader sr, ErrorHandler errorHandler) {
+    public Scanner(SourceReader sr, ErrorHandler errorHandler, final NameManager nameManager) {
         srcReader = sr;
         sr.nextChar();
 
-        nameManager = new NameManager(sr);
+        this.nameManager = nameManager;
         stringManager = new StringManager(sr, errorHandler);
 
         currentToken = new Token();

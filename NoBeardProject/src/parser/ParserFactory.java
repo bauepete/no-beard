@@ -30,6 +30,7 @@ import machine.CodeGenerator;
 import machine.NoBeardMachine;
 import scanner.Scanner;
 import io.SourceReader;
+import scanner.NameManager;
 import symboltable.Operand;
 import symboltable.SymbolTable;
 
@@ -48,7 +49,7 @@ public class ParserFactory {
 
     public static void setup(SourceReader sourceReader) {
         ParserFactory.errorHandler = new ErrorHandler(sourceReader);
-        ParserFactory.scanner = new Scanner(sourceReader, errorHandler);
+        ParserFactory.scanner = new Scanner(sourceReader, errorHandler, new NameManager(sourceReader));
         scanner.nextToken();
 
         ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);

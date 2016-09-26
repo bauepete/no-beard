@@ -17,6 +17,7 @@ import io.SourceStringReader;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import io.SourceReader;
+import scanner.NameManager;
 
 /**
  *
@@ -41,7 +42,7 @@ public class SymbolTableTest {
     }
     
     private Scanner prepareScanner(SourceReader sr) {
-        Scanner s = new Scanner(sr, errorHandler);
+        Scanner s = new Scanner(sr, errorHandler, new NameManager(sr));
         s.nextToken();
         s.nextToken();
         s.nextToken();
