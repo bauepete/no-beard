@@ -10,7 +10,7 @@ import parser.ParserFactory;
 import scanner.Scanner;
 import io.SourceReader;
 import io.SourceStringReader;
-import scanner.NameManager;
+import scanner.NameManagerForCompiler;
 import symboltable.SymbolTable;
 
 /**
@@ -39,7 +39,7 @@ public class ParserTestSetup {
     protected static void setupInfraStructure(String sourceLine) {
         SourceReader sourceReader = new SourceStringReader(sourceLine);
         errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler, new NameManager(sourceReader));
+        scanner = new Scanner(sourceReader, errorHandler, new NameManagerForCompiler(sourceReader));
         code = new CodeGenerator(256);
         symListManager = new SymbolTable(scanner, errorHandler);
 

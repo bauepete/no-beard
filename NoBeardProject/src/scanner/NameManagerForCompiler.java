@@ -30,16 +30,16 @@ import scanner.Scanner.Symbol;
 
 /**
  *
- * @author Peter Bauer The NameManager is responsible to store and retrieve
- * names. It furthermore calculates the spix. An arithmetic representation of a
- * name.
+ * @author Peter Bauer The NameManagerForCompiler is responsible to store and retrieve
+ names. It furthermore calculates the spix. An arithmetic representation of a
+ name.
  */
-public class NameManager {
+public class NameManagerForCompiler {
 
     private final SourceReader sr;
     private final HashMap<String, Integer> names;
 
-    public NameManager(SourceReader sr) {
+    public NameManagerForCompiler(SourceReader sr) {
         this.sr = sr;
         names = new HashMap<>();
     }
@@ -119,5 +119,9 @@ public class NameManager {
             }
         }
         return name;
+    }
+
+    boolean isAPossibleStartOfName(char c) {
+        return Character.isLetter(c) || c == '_' || c == '$';
     }
 }

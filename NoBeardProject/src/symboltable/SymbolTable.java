@@ -11,7 +11,7 @@ import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 import java.util.ListIterator;
 import java.util.Stack;
-import scanner.NameManager;
+import scanner.NameManagerForCompiler;
 import scanner.Scanner;
 
 /**
@@ -263,7 +263,7 @@ public class SymbolTable {
         }
     }
 
-    private NameManager nameManager() {
+    private NameManagerForCompiler nameManager() {
         return scanner.getNameManager();
     }
 

@@ -25,7 +25,7 @@ import org.junit.Test;
 import io.SourceFileReader;
 import static org.junit.Assert.*;
 import io.SourceReader;
-import scanner.NameManager;
+import scanner.NameManagerForCompiler;
 
 /**
  *
@@ -63,7 +63,7 @@ public class OperandTest {
             Logger.getLogger(OperandTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         errorHandler = new ErrorHandler(sourceReader);
-        scanner = new Scanner(sourceReader, errorHandler, new NameManager(sourceReader));
+        scanner = new Scanner(sourceReader, errorHandler, new NameManagerForCompiler(sourceReader));
 
         Operand.setStringManager(scanner.getStringManager());
         Operand.setErrorHandler(errorHandler);

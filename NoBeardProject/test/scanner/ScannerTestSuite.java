@@ -29,7 +29,7 @@ import org.junit.runners.Suite;
  * @author peter
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({io.SrcReaderTest.class, scanner.NameManagerTest.class, scanner.ScannerTest.class, scanner.StringManagerTest.class})
+@Suite.SuiteClasses({io.SrcReaderTest.class, scanner.NameManagerForCompilerTest.class, scanner.ScannerTest.class, scanner.StringManagerTest.class})
 public class ScannerTestSuite {
 
     @BeforeClass

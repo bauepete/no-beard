@@ -16,17 +16,17 @@ import static org.junit.Assert.*;
  *
  * @author peter
  */
-public class NameManagerTest {
+public class NameManagerForCompilerTest {
 
     private SourceReader sr;
     private SourceReader srMany;
     private SourceReader srKeywords;
     private Token token;
-    private NameManager nameManager;
-    private NameManager nameManagerMany;
-    private NameManager nmKeywords;
+    private NameManagerForCompiler nameManager;
+    private NameManagerForCompiler nameManagerMany;
+    private NameManagerForCompiler nmKeywords;
 
-    public NameManagerTest() {
+    public NameManagerForCompilerTest() {
     }
 
     @Before
@@ -35,17 +35,23 @@ public class NameManagerTest {
         srMany = new SourceStringReader("var1; var2; bla; blu; var2; blu;");
         srKeywords = new SourceStringReader("put, putln, unit, do, done, if, else, int, bool, char, true, false,");
         token = new Token();
-        nameManager = new NameManager(sr);
-        nameManagerMany = new NameManager(srMany);
-        nmKeywords = new NameManager(srKeywords);
+        nameManager = new NameManagerForCompiler(sr);
+        nameManagerMany = new NameManagerForCompiler(srMany);
+        nmKeywords = new NameManagerForCompiler(srKeywords);
     }
 
-    @After
-    public void tearDown() {
+    @Test
+    public void testIsAPossibleStartOfName() {
+        assertTrue(nameManager.isAPossibleStartOfName('a'));
+        assertTrue(nameManager.isAPossibleStartOfName('z'));
+        assertTrue(nameManager.isAPossibleStartOfName('_'));
+        assertTrue(nameManager.isAPossibleStartOfName('$'));
+        assertFalse(nameManager.isAPossibleStartOfName('0'));
+        assertFalse(nameManager.isAPossibleStartOfName('.'));
     }
-
+    
     /**
-     * Test of readName method, of class NameManager.
+     * Test of readName method, of class NameManagerForCompiler.
      */
     @Test
     public void testReadName() {
@@ -102,7 +108,7 @@ public class NameManagerTest {
     }
 
     /**
-     * Test of getStringName method, of class NameManager.
+     * Test of getStringName method, of class NameManagerForCompiler.
      */
     @Test
     public void testGetStringName() {
