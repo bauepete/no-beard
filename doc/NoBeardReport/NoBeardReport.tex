@@ -353,12 +353,13 @@ Writes the value of {\em Expression1} to the output medium. If {\em Expression2}
 \end{tabular}
 
 \chapter{Some Translations by Example}
+\lstset{language=NoBeardAsm}
 \section{Reserving Space for Local Variables}
 
 \section{Assignments}
 
 \section{Boolean Expressions}
-We show the translation of a boolean expression {\tt a $\mid \mid$ b $\mid \mid$ c} where {\tt a}, {\tt b}, and {\tt c} are variables of type {\tt bool}. The sequence of several relational expressions or boolean variables connected via a boolean {\em or} is realized by a so-called or-chain. In particular, after evaluation of each single relational expression (or boolean variable) and this evaluation yields {\em true} all further evaluations are skipped and the program flow is continued at the end of the complete boolean expression. Figure~\ref{fig:orchain} shows this principle. In order to keep the program flow simple, the load value parts in front of each evaluation are skipped. The more detailed \leongage{} assembler code for this sequence is given in listing~\ref{cod:orchain}. Note that, for the sake of simplicity, the addresses given as operands to the {\tt JMP} and {\tt TJMP} instructions are the line numbers here. Of course, the ``real" code generates the memory addresses of the targeted assembler instruction.
+We show the translation of a boolean expression {\tt a $\mid \mid$ b $\mid \mid$ c} where {\tt a}, {\tt b}, and {\tt c} are variables of type {\tt bool}. The sequence of several relational expressions or boolean variables connected via a boolean {\em or} is realized by a so-called or-chain. In particular, after evaluation of each single relational expression (or boolean variable) and this evaluation yields {\em true} all further evaluations are skipped and the program flow is continued at the end of the complete boolean expression. Figure~\ref{fig:orchain} shows this principle. In order to keep the program flow simple, the load value parts in front of each evaluation are skipped. The more detailed \leongage{} assembler code for this sequence is given in listing~\ref{cod:orchain}. Note that, for the sake of simplicity, the addresses given as operands to the \lstinline$jmp$ and \lstinline{tjmp} instructions are the line numbers here. Of course, the ``real" code generates the memory addresses of the targeted assembler instruction.
 
 \begin{figure}
 \begin{center}
@@ -368,17 +369,17 @@ We show the translation of a boolean expression {\tt a $\mid \mid$ b $\mid \mid$
 \label{fig:orchain}
 \end{figure}
 
-\lstset{language=[x86masm]Assembler, morekeywords={LV,TJMP,LIT}}
+%\lstset{language=[x86masm]Assembler, morekeywords={LV,TJMP,LIT}}
 
 \begin{lstlisting}[float,caption={Assembler code of or-chain}, captionpos=b,label=cod:orchain]
 ...
-LV 0, 32		; load value a
-TJMP 8			; if true, jump to the end
-LV 0, 36		; load value b
-TJMP 8			; if true, jump to the end
-LV 0, 40		; load value c
-JMP 9				; result is determined by c only
-LIT 1
+lv 0, 32		# load value a
+tjmp 8		# if true, jump to the end
+lv 0, 36		# load value b
+tjmp 8		# if true, jump to the end
+lv 0, 40		# load value c
+jmp 9			# result is determined by c only
+lit 1
 ...
 \end{lstlisting}
 When generating this kind of code, we have to deal with the situation that the final addresses we have to jump to are not known in prior. Therefore, we have to construct a so-called or-chain, which work as follows. While parsing a conditional expression, we maintain an int variable holding the 
