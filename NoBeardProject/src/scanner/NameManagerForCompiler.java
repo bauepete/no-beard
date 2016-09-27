@@ -62,10 +62,6 @@ public class NameManagerForCompiler {
      */
     public void readName(Token t) {
         String s = readString();
-        if (s.equals("_")) {
-            t.setSymbol(Symbol.ILLEGALSY);
-            return;
-        }
         Symbol readSymbol = getTokenType(s);
         t.setSymbol(readSymbol);
         t.setClearName(s);

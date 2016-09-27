@@ -74,10 +74,15 @@ public class NameManagerForCompilerTest {
 
     @Test
     public void testReadWeirdNames() {
-        SourceReader srWeird = new SourceStringReader("__;_$;$_;$$");
+        SourceReader srWeird = new SourceStringReader("_;__;_$;$_;$$");
         srWeird.nextChar();
         NameManagerForCompiler nm = new NameManagerForCompiler(srWeird);
 
+        nm.readName(token);
+        assertEquals(Symbol.IDENTIFIER, token.getSymbol());
+        assertEquals("_", token.getClearName());
+
+        srWeird.nextChar();
         nm.readName(token);
         assertEquals(Symbol.IDENTIFIER, token.getSymbol());
         assertEquals("__", token.getClearName());
@@ -98,16 +103,6 @@ public class NameManagerForCompilerTest {
         assertEquals("$$", token.getClearName());
     }
     
-    @Test
-    public void testInvalidName() {
-        SourceReader sr = new SourceStringReader("_");
-        sr.nextChar();
-        NameManagerForCompiler nm = new NameManagerForCompiler(sr);
-        
-        nm.readName(token);
-        assertEquals(Symbol.ILLEGALSY, token.getSymbol());
-    }
-
     @Test
     public void testReadNameDouble() {
         srMany.nextChar();

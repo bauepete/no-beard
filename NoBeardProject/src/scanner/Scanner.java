@@ -113,7 +113,7 @@ public class Scanner {
                 return;
             }
 
-            if (Character.isLetter(srcReader.getCurrentChar())) {
+            if (nameManager.isAPossibleStartOfName((char)srcReader.getCurrentChar())) {
                 handleName();
                 return;
             }
