@@ -4,14 +4,12 @@
  */
 package symboltable;
 
-import error.Error;
-import error.Error.ErrorType;
 import error.ErrorHandler;
 import symboltable.Operand.Kind;
 import symboltable.Operand.Type;
 import java.util.ListIterator;
 import java.util.Stack;
-import scanner.NameManagerForCompiler;
+import scanner.NameManager;
 import scanner.Scanner;
 
 /**
@@ -263,7 +261,7 @@ public class SymbolTable {
         }
     }
 
-    private NameManagerForCompiler nameManager() {
+    private NameManager nameManager() {
         return scanner.getNameManager();
     }
 

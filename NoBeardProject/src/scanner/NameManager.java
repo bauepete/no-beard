@@ -1,5 +1,5 @@
 /*
- * Copyright ©2012 - 2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
  * Department of Informatics and Media Technique, HTBLA Leonding, 
  * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
  * to use, copy, modify, and distribute this software and its documentation
@@ -24,23 +24,16 @@
 package scanner;
 
 import io.SourceReader;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import scanner.Scanner.Symbol;
 
 /**
  *
- * @author Peter Bauer The NameManagerForCompiler is responsible to store and retrieve
- names. It furthermore calculates the spix. An arithmetic representation of a
- name.
+ * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class NameManagerForCompiler extends NameManager {
+public abstract class NameManager {
+    protected final SourceReader sr;
 
-    private final HashMap<String, Integer> names;
-
-    public NameManagerForCompiler(SourceReader sr) {
-        super(sr);
-        names = new HashMap<>();
+    public NameManager(SourceReader sr) {
+        this.sr = sr;
     }
 
     /**
@@ -59,47 +52,18 @@ public class NameManagerForCompiler extends NameManager {
      * @see Token
      * @see Symbol
      */
-    @Override
-    public void readName(Token t) {
-        String s = readString();
-        Symbol readSymbol = getTokenType(s);
-        t.setSymbol(readSymbol);
-        t.setClearName(s);
-        if (readSymbol == Symbol.IDENTIFIER) {
-            int spix = addName(s);
-            t.setValue(spix);
+    public abstract void readName(Token t);
+
+    protected String readString() {
+        StringBuilder s = new StringBuilder();
+        while (isValidNameCharacter()) {
+            s.append((char) (sr.getCurrentChar()));
+            sr.nextChar();
         }
+        return s.toString();
     }
 
-
-    @Override
-    protected boolean isValidNameCharacter() {
-        char currentChar = (char)sr.getCurrentChar();
-        return Character.isLetter(currentChar) || Character.isDigit(currentChar)
-                || currentChar == '_' || currentChar == '$';
-    }
-
-    // if s is found in keywords it returns the keyword symbol otherwise
-    // it returns IDENTIFIER
-    private Scanner.Symbol getTokenType(String s) {
-        Scanner.Symbol sy = KeywordTable.getSymbol(s);
-        if (sy == Symbol.NOSY) {
-            return Symbol.IDENTIFIER;
-        } else {
-            return sy;
-        }
-    }
-
-    private int addName(String s) {
-        int spix;
-        if (names.containsKey(s)) {
-            spix = names.get(s);
-        } else {
-            spix = names.size();
-            names.put(s, spix);
-        }
-        return spix;
-    }
+    protected abstract boolean isValidNameCharacter();
 
     /**
      * Returns the string which corresponds to the given spix.
@@ -107,21 +71,8 @@ public class NameManagerForCompiler extends NameManager {
      * @param spix The unique identifier.
      * @return Corresponding string if spix can be found otherwise null.
      */
-    @Override
-    public String getStringName(int spix) {
-        String name = null;
-        if (names.containsValue(spix)) {
-            for (Entry<String, Integer> entry : names.entrySet()) {
-                if (entry.getValue() == spix) {
-                    name = entry.getKey();
-                }
-            }
-        }
-        return name;
-    }
+    public abstract String getStringName(int spix);
 
-    @Override
-    boolean isAPossibleStartOfName(char c) {
-        return Character.isLetter(c) || c == '_' || c == '$';
-    }
+    abstract boolean isAPossibleStartOfName(char c);
+    
 }

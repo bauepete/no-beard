@@ -59,12 +59,12 @@ public class Scanner {
         }
     }
     private final SourceReader srcReader;
-    private final NameManagerForCompiler nameManager;
+    private final NameManager nameManager;
     private final StringManager stringManager;
     private Token currentToken;
     private final ErrorHandler errorHandler;
 
-    public Scanner(SourceReader sr, ErrorHandler errorHandler, final NameManagerForCompiler nameManager) {
+    public Scanner(SourceReader sr, ErrorHandler errorHandler, final NameManager nameManager) {
         srcReader = sr;
         sr.nextChar();
 
@@ -75,7 +75,7 @@ public class Scanner {
         this.errorHandler = errorHandler;
     }
 
-    public NameManagerForCompiler getNameManager() {
+    public NameManager getNameManager() {
         return nameManager;
     }
 
