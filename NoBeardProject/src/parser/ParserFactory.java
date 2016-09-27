@@ -47,9 +47,9 @@ public class ParserFactory {
     private static CodeGenerator codeGenerator;
     private static SymbolTable symbolListManager;
 
-    public static void setup(SourceReader sourceReader) {
+    public static void setup(SourceReader sourceReader, final NameManagerForCompiler nameManager) {
         ParserFactory.errorHandler = new ErrorHandler(sourceReader);
-        ParserFactory.scanner = new Scanner(sourceReader, errorHandler, new NameManagerForCompiler(sourceReader));
+        ParserFactory.scanner = new Scanner(sourceReader, errorHandler, nameManager);
         scanner.nextToken();
 
         ParserFactory.codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);

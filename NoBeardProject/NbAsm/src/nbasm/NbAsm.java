@@ -33,6 +33,7 @@ import java.io.IOException;
 import parser.AssemblerParser;
 import parser.Parser;
 import parser.ParserFactory;
+import scanner.NameManagerForCompiler;
 
 /**
  *
@@ -70,7 +71,7 @@ public class NbAsm {
     }
     
     private static Parser parseFile(SourceReader sourceReader) {
-        ParserFactory.setup(sourceReader);
+        ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
         Parser parser = ParserFactory.create(AssemblerParser.class);
         parser.parse();
         return parser;

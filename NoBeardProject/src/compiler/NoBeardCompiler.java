@@ -30,6 +30,7 @@ import parser.ParserFactory;
 import io.SourceFileReader;
 import io.SourceReader;
 import io.SourceStringReader;
+import scanner.NameManagerForCompiler;
 
 /**
  *
@@ -44,7 +45,7 @@ public class NoBeardCompiler {
     public static void setSourceString(String source) {
         NoBeardCompiler.sourceReader = new SourceStringReader(source);
         sourceIsAvailable = true;
-        ParserFactory.setup(sourceReader);
+        ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
         parserl = ParserFactory.create(NoBeardParser.class);
     }
 
@@ -68,7 +69,7 @@ public class NoBeardCompiler {
             NoBeardCompiler.sourceReader = new SourceStringReader("");
             sourceIsAvailable = false;
         } finally {
-            ParserFactory.setup(sourceReader);
+            ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
             parserl = ParserFactory.create(NoBeardParser.class);
         }
     }
