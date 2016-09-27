@@ -50,7 +50,10 @@ public class Scanner {
         NOT, AND, OR,
         /// Delimiters
         ASSIGN, SEMICOLON, COMMA, LPAR, RPAR,
-        LBRACKET, RBRACKET;
+        LBRACKET, RBRACKET,
+        
+        /// Assembler symbols
+        OPCODE, LABEL;
 
         @Override
         public String toString() {

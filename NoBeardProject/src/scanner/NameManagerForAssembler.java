@@ -21,49 +21,43 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package asm;
+package scanner;
 
-import config.Configuration;
 import io.SourceReader;
-import io.SourceStringReader;
-import parser.AssemblerParser;
-import parser.Parser;
-import parser.ParserFactory;
-import scanner.NameManagerForCompiler;
 
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class NoBeardAssembler {
+public class NameManagerForAssembler extends NameManager {
 
-    private static boolean wasSuccessFull = false;
-
-    public static String getVersion() {
-        return Configuration.getVersion();
+    public NameManagerForAssembler(SourceReader sr) {
+        super(sr);
     }
 
-    public static boolean assemble() {
-        Parser p = ParserFactory.create(AssemblerParser.class);
-        wasSuccessFull = p.parse();
-        return wasSuccessFull;
+    @Override
+    public void readName(Token t) {
+        String s = readString();
+        if (s.charAt(0) == '.')
+            t.setSymbol(Scanner.Symbol.LABEL);
+        else
+            t.setSymbol(Scanner.Symbol.OPCODE);
+        t.setClearName(s);
     }
 
-    public static void setSourceString(String sourceString) {
-        SourceReader sourceReader = new SourceStringReader(sourceString);
-        ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
-        wasSuccessFull = false;
+    @Override
+    protected boolean isValidNameCharacter() {
+        return isAPossibleStartOfName((char)sr.getCurrentChar()) || sr.getCurrentChar() == '_';
     }
 
-    public static boolean wasSuccessfull() {
-        return wasSuccessFull;
+    @Override
+    public String getStringName(int spix) {
+        return "";
     }
 
-    public static byte[] getByteCode() {
-        return ParserFactory.getCodeGenerator().getByteCode();
+    @Override
+    boolean isAPossibleStartOfName(char c) {
+        return Character.isLetter(c) || c == '.';
     }
-
-    public static byte[] getStringStorage() {
-        return ParserFactory.getScanner().getStringManager().getStringStorage();
-    }
+    
 }
