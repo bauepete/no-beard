@@ -32,6 +32,7 @@ import machine.InstructionSet.Instruction;
 import machine.NoBeardMachine;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import parser.ParserFactory;
 import scanner.NameManagerForAssembler;
 import scanner.Scanner;
@@ -135,7 +136,79 @@ public class AssemblerParserTest {
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
+
+    @Test
+    public void testParseLabel() {
+        setupTest("inc 12 .start_calculation la 0 32 .end_calculation",
+                new byte[]{Instruction.INC.getId(), 0, 12, Instruction.LA.getId(), 0, 0, 32});
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+
+        assertEquals(3, p.getAddressOfLabel(".start_calculation"));
+        assertEquals(0, p.getUnresolvedJumpAddresses(".start_calculation").size());
+        assertEquals(7, p.getAddressOfLabel(".end_calculation"));
+        assertEquals(0, p.getUnresolvedJumpAddresses(".end_calculation").size());
+    }
+
+    @Test
+    public void testBackwardJmpWithLabel() {
+        setupTest("inc 4 .start_loop la 0 32 lv 0 32 lit 1 add sto lv 0 32 lit 10 rel 0 tjmp .start_loop halt",
+                new byte[]{
+                    Instruction.INC.getId(), 0, 4,
+                    Instruction.LA.getId(), 0, 0, 32,
+                    Instruction.LV.getId(), 0, 0, 32,
+                    Instruction.LIT.getId(), 0, 1,
+                    Instruction.ADD.getId(),
+                    Instruction.STO.getId(),
+                    Instruction.LV.getId(), 0, 0, 32,
+                    Instruction.LIT.getId(), 0, 10,
+                    Instruction.REL.getId(), 0,
+                    Instruction.TJMP.getId(), 0, 3, // label defined on address 3
+                    Instruction.HALT.getId()
+                });
+        assertTrue(p.parse());
+        assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
     
+    @Test
+    public void testForwardJmpWithLabel() {
+        setupTest("inc 4 .start_loop lv 0 32 lit 0 rel 2 fjmp .end_loop lv 0 32 lit 1 sub sto jmp .start_loop .end_loop halt",
+                new byte[] {
+                    Instruction.INC.getId(), 0, 4,
+                    Instruction.LV.getId(), 0, 0, 32,
+                    Instruction.LIT.getId(), 0, 0,
+                    Instruction.REL.getId(), 2,
+                    Instruction.FJMP.getId(), 0, 27,
+                    Instruction.LV.getId(), 0, 0, 32,
+                    Instruction.LIT.getId(), 0, 1,
+                    Instruction.SUB.getId(),
+                    Instruction.STO.getId(),
+                    Instruction.JMP.getId(), 0, 3,
+                    Instruction.HALT.getId()
+                });
+        assertTrue(p.parse());
+        assertArrayEquals(expectedProgramMemory, p.getByteCode());
+    }
+    
+    @Test
+    public void testJmpToUndefinedLabel() {
+        // label .end_loop is undefined here
+        setupTest("inc 4 .start_loop lv 0 32 lit 0 rel 2 fjmp .end_loop lv 0 32 lit 1 sub sto jmp .start_loop .end halt",
+                new byte[] {});
+        assertFalse(p.parse());
+        assertEquals(1, errorHandler.getCount());
+        assertEquals(".end_loop not defined in this context.", errorHandler.getLastError().getMessage());
+    }
+    
+    @Test
+    public void testIllegalUseOfLabel() {
+        setupTest("inc .size .size", new byte[]{});
+        assertFalse(p.parse());
+        assertEquals("Operator inc requires a number operand", errorHandler.getLastError().getMessage());
+    }
+
     @Test
     public void testAssembleMoreInstructions() {
         byte[] expectedCode = {

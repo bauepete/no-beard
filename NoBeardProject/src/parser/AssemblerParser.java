@@ -24,6 +24,8 @@
 package parser;
 
 import error.ErrorHandler;
+import java.util.ArrayList;
+import java.util.List;
 import machine.CodeGenerator;
 import machine.InstructionSet;
 import machine.InstructionSet.Instruction;
@@ -45,9 +47,12 @@ public class AssemblerParser extends Parser {
     private Instruction parsedInstruction;
     private OperandType requestedOperandType;
 
+    private final LabelToAddressMap labelToAddressMap;
+
     AssemblerParser() {
         this.errorHandler = ParserFactory.getErrorHandler();
         this.codeGenerator = ParserFactory.getCodeGenerator();
+        this.labelToAddressMap = new LabelToAddressMap(codeGenerator);
     }
 
     @Override
@@ -56,6 +61,16 @@ public class AssemblerParser extends Parser {
             parseSymbol(Symbol.STRING);
         }
         while (ParserFactory.getScanner().getCurrentToken().getSymbol() != Symbol.EOFSY) {
+            parseInstruction();
+        }
+        checkForUndefinedLabels();
+    }
+
+    private void parseInstruction() {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.LABEL) {
+            parseSymbol(Symbol.LABEL);
+            labelToAddressMap.add(getLastParsedToken().getClearName(), codeGenerator.getPc());
+        } else {
             parseOpcode();
             if (parsedInstruction != null && parsedInstruction.hasOperands()) {
                 parseOperands();
@@ -71,6 +86,21 @@ public class AssemblerParser extends Parser {
     }
 
     private void parseOperands() {
+        if (getScanner().getCurrentToken().getSymbol() == Symbol.LABEL) {
+            parseJmpLabelOperand();
+        } else {
+            parseNumberOperands();
+        }
+    }
+
+    private void parseJmpLabelOperand() {
+        where(getLastParsedToken().getClearName().endsWith("jmp"), () -> errorHandler.throwOperatorOperandTypeMismatch(getLastParsedToken().getClearName(), "number"));
+        parseSymbol(Symbol.LABEL);
+        int jmpDestination = getAddressOfLabel(getLastParsedToken().getClearName());
+        codeGenerator.emit(jmpDestination);
+    }
+
+    private void parseNumberOperands() {
         parsedInstruction.getOperandTypes().stream().map((operandType) -> {
             parseSymbol(Symbol.NUMBER);
             return operandType;
@@ -99,7 +129,23 @@ public class AssemblerParser extends Parser {
         }
     }
 
+    private void checkForUndefinedLabels() {
+        where(!labelToAddressMap.hasUndefinedLabels(), () -> {
+            for (String undefinedLabel : labelToAddressMap.getUndefinedLabels()) {
+                errorHandler.throwNameUndefined(undefinedLabel);
+            }
+        });
+    }
+
     public byte[] getByteCode() {
         return codeGenerator.getByteCode();
+    }
+
+    public int getAddressOfLabel(String label) {
+        return labelToAddressMap.getAddress(label);
+    }
+
+    public List<Integer> getUnresolvedJumpAddresses(String label) {
+        return new ArrayList<>();
     }
 }
