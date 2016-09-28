@@ -33,7 +33,7 @@ import machine.NoBeardMachine;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.ParserFactory;
-import scanner.NameManagerForCompiler;
+import scanner.NameManagerForAssembler;
 import scanner.Scanner;
 import scanner.Scanner.Symbol;
 import symboltable.SymbolTable;
@@ -57,7 +57,7 @@ public class AssemblerParserTest {
     private void setupTest(final String assemblerInstruction, final byte[] machineCode) {
         SourceReader sr = new SourceStringReader(assemblerInstruction);
         errorHandler = new ErrorHandler(sr);
-        Scanner scanner = new Scanner(sr, errorHandler, new NameManagerForCompiler(sr));
+        Scanner scanner = new Scanner(sr, errorHandler, new NameManagerForAssembler(sr));
         SymbolTable symbolTable = new SymbolTable(scanner, errorHandler);
         CodeGenerator codeGenerator = new CodeGenerator(NoBeardMachine.MAX_PROG);
         ParserFactory.setup(sr, errorHandler, scanner, codeGenerator, symbolTable);
@@ -135,7 +135,7 @@ public class AssemblerParserTest {
         assertEquals(Symbol.EOFSY, ParserFactory.getScanner().getCurrentToken().getSymbol());
         assertArrayEquals(expectedProgramMemory, p.getByteCode());
     }
-
+    
     @Test
     public void testAssembleMoreInstructions() {
         byte[] expectedCode = {

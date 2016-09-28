@@ -29,7 +29,7 @@ import io.SourceStringReader;
 import parser.AssemblerParser;
 import parser.Parser;
 import parser.ParserFactory;
-import scanner.NameManagerForCompiler;
+import scanner.NameManagerForAssembler;
 
 /**
  *
@@ -51,7 +51,7 @@ public class NoBeardAssembler {
 
     public static void setSourceString(String sourceString) {
         SourceReader sourceReader = new SourceStringReader(sourceString);
-        ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
+        ParserFactory.setup(sourceReader, new NameManagerForAssembler(sourceReader));
         wasSuccessFull = false;
     }
 

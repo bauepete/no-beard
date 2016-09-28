@@ -64,7 +64,7 @@ public class AssemblerParser extends Parser {
     }
 
     private void parseOpcode() {
-        parseSymbol(Symbol.IDENTIFIER);
+        parseSymbol(Symbol.OPCODE);
         sem(() -> parsedInstruction = OpcodeToInstructionMap.getInstruction(getLastParsedToken().getClearName()));
         where(parsedInstruction != null, () -> errorHandler.throwSymbolExpectedError("Opcode", getLastParsedToken().getClearName()));
         sem(() -> codeGenerator.emit(parsedInstruction));
