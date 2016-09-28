@@ -9,6 +9,7 @@
 \usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{hyperref}
 \usepackage[utf8]{inputenc}
+\usepackage{multicol}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
@@ -230,16 +231,28 @@ for some previously stored values \lstinline$b$ and \lstinline$a != 0$. The resu
 Regarding the arithmetic instructions it can be seen that all of these expect their operand(s) to be pushed on the stack. During their calculation they remove these from the stack and push the result of the calculation back to the stack.
 
 \subsection{Branching}
-The \leongage{} assembler language provides three branch instructions, namely \lstinline$tjmp$, \lstinline$fjmp$ and \lstinline$jmp$. In the following example we want to show how to check for a given number whether it is odd or even. The tricky part of dealing with branch instructions is to figure out the correct addresses in program memory where the branch destination is. Since we have no symbolic labels to indicate the branch destinations one has to check back the instruction sizes as given in section~\ref{sec:instructions} and calculate the branch destination addresses from there. In the following listing the program memory addresses at the start of each line are given in the comments.
+The \leongage{} assembler language provides three branch instructions, namely \lstinline$tjmp$, \lstinline$fjmp$ and \lstinline$jmp$, which jump to a destination address in case of the top value of the stack being non-zero, zero, or unconditionally, respecitvely. In order to prevent the programmer from counting the instruction sizes to get the correct jump destination fixed, the \leongage{} assembler provides so-called labels as jump destinations. In the following example we want to show how to check for a given number whether it is odd or even. 
 
 \lstinputlisting[caption={Odd/Even Checker}]{\assemblerfilepath SimpleSelection.na}
 \section{Formal Description}
+\subsection{Opcodes}
+The opcodes are exhaustively described in section~\ref{sec:instructions}. They can be taken directly from the first word of the first line of the formal operation description.
 
+\subsection{Token Classes}
+Token classes are described in form of a regular expression.
+\begin{description}
+	\item[letter] \lstinline$[a-zA-Z]$
+	\item[digit] \lstinline$[0-9]$
+	\item[label] \lstinline$\.letter(letter|digit|_)*$
+	\item[number] \texttt{digit digit*}
+	\item [string]: \verb$'"' {nodoublequote} '"'$
+\end{description}
+
+\subsection{Syntax}
 \begin{grammar}{.25\textwidth}{.75\textwidth}
-	\completerule{NoBeardAssembler}{\{AssemblerInstruction\}}
-	\completerule{AssemblerInstruction}{opcode OneOperand $|$ TwoOperands}
-	\completerule{OneOperand}{number}
-	\completerule{TwoOperands}{number number}
+	\completerule{NoBeardAssembler}{[string]\{AssemblerInstruction\}}
+	\completerule{AssemblerInstruction}{label $|$ opcode [Operands]}
+	\completerule{Operands}{label $|$ number [number]}
 \end{grammar}
 
 \chapter{The Programming Language}
@@ -251,23 +264,57 @@ with the extension that we allow "definitions" of non-terminals. This means in p
 {\em letter} as it can be seen in the next section) this term can be used in subsequent definitions and is rewritten as
 given in its original definition.
 
-\subsection{Character Sets}
+\subsection{Token Classes}
 \begin{description}
-	\item[letter] \texttt{'[A-Za-z]'}
-	\item[digit]\texttt{'[0-9]'}
+	\item [identifier]: \verb$letter{letter|digit|_}$
+	\item [number]: \verb$digit{digit}$
+	\item [string]: \verb$'"' {nodoublequote} '"'$
 \end{description}
 
 \subsection{Keywords}
-There is only one keyword, namely \texttt{PUT}.
-
-\subsection{Token Classes}
-\begin{description}
-	\item[ident] \texttt{['letter(letter \alternative digit)*']}
-	\item[number] \texttt{['digit digit*]}
-\end{description}
+\begin{multicols}{3}
+\begin{enumerate}
+	\item \verb$bool$
+	\item \verb$char$
+	% \item \verb$const$
+	\item \verb$else$
+	\item \verb$false$
+	\item \verb$if$
+	\item \verb$int$
+	\item \verb$true$
+\end{enumerate}
+\end{multicols}
 
 \subsection{Single Tokens}
-The characters "{\tt+}", "{\tt-}", "{\tt*}", "{\tt/}", "{\tt:=}", "{\tt;}", "{\tt(}", and "{\tt)}" are mapped to single tokens.
+\begin{multicols}{4}
+\begin{enumerate}
+	\item \verb$"&&"$
+	\item \verb$"||"$
+	\item \verb$"!"$
+	\item \verb$"+"$
+	\item \verb$"-"$
+	\item \verb$"*"$
+	\item \verb$"/"$
+	\item \verb$"%"$
+	\item \verb$"<"$
+	\item \verb$"<="$
+	\item \verb$"=="$
+	\item \verb$"!="$
+	\item \verb$">="$
+	\item \verb$">"$
+	\item \verb$"&"$
+	\item \verb$";"$
+	\item \verb$","$
+	\item \verb$"{"$
+	\item \verb$"}"$
+	\item \verb$"("$
+	\item \verb$")"$
+	\item \verb$"="$
+\end{enumerate}
+\end{multicols}
+
+\subsection{Comments}
+Comments are treated like whitespace characters (space, tab, cr/lf). A comment starts with \lstinline$#$ and lasts until the end of the current line.
 
 \subsection{Semantics}
 \begin{itemize}
