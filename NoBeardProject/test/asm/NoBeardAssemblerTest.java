@@ -23,9 +23,7 @@
  */
 package asm;
 
-import machine.InstructionSet;
 import machine.InstructionSet.Instruction;
-import machine.NoBeardMachine;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
