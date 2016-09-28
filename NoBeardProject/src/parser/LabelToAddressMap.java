@@ -26,6 +26,7 @@ package parser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import machine.CodeGenerator;
 
 /**
@@ -84,4 +85,20 @@ public class LabelToAddressMap {
     List<Integer> getUnresolvedJmpAddresses(String label) {
         return labelToAddressMap.get(label).unresolvedJumpSources;
     }
+
+    boolean hasUndefinedLabels() {
+        if (labelToAddressMap.entrySet().stream().anyMatch((l) -> (!l.getValue().unresolvedJumpSources.isEmpty()))) {
+            return true;
+        }
+        return false;
+    }
+
+    String[] getUndefinedLabels() {
+        List<String> undefinedLabels = new ArrayList<>();
+        labelToAddressMap.entrySet().stream().filter((l) -> (!l.getValue().unresolvedJumpSources.isEmpty())).forEach((l) -> {
+            undefinedLabels.add(l.getKey());
+        });
+        return undefinedLabels.stream().toArray(String[]::new);
+    }
+
 }

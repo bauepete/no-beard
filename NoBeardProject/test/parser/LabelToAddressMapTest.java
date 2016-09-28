@@ -96,4 +96,17 @@ public class LabelToAddressMapTest {
         assertEquals(6, codeGenerator.getCodeHalfWord(1));
         assertEquals(6, codeGenerator.getCodeHalfWord(4));
     }
+    
+    @Test
+    public void testHasUndefinedLabels() {
+        ltm.getAddress(".some_label");
+        ltm.getAddress(".another_label");
+        
+        assertTrue(ltm.hasUndefinedLabels());
+        assertArrayEquals(new String[] {".another_label", ".some_label"}, ltm.getUndefinedLabels());
+        
+        ltm.add(".some_label", 17);
+        ltm.add(".another_label", 42);
+        assertFalse(ltm.hasUndefinedLabels());
+    }
 }
