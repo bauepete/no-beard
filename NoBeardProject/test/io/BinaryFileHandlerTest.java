@@ -32,6 +32,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -39,13 +40,15 @@ import static org.junit.Assert.*;
  */
 public class BinaryFileHandlerTest {
 
-    private final String testFilePath = "test/io";
+    private final String TEST_DIRECTORY = "test/io";
+    private final String TEST_FILE = "/ExampleProgram.no";
+    private final String TEST_FILE_PATH = TEST_DIRECTORY + TEST_FILE;
 
     public BinaryFileHandlerTest() {
     }
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
     }
 
     @After
@@ -54,7 +57,7 @@ public class BinaryFileHandlerTest {
     }
 
     private void deleteAllBinaryFiles() throws IOException {
-        Path path = Paths.get(testFilePath);
+        Path path = Paths.get(TEST_DIRECTORY);
         Files.list(path).filter(p -> p.toString().endsWith(".no")).forEach((p) -> {
             try {
                 Files.deleteIfExists(p);
@@ -65,42 +68,24 @@ public class BinaryFileHandlerTest {
     }
 
     @Test
-    public void testEmptyFile() throws IOException {
-        BinaryFile emptyFile = BinaryFile.get(testFilePath + "/EmptyFile.no");
+    public void testEmptyFileSave() throws IOException {
+        BinaryFile emptyFile = BinaryFile.get(TEST_DIRECTORY + "/EmptyFile.no");
         BinaryFileHandler.save(emptyFile);
-        Path p = Paths.get(testFilePath + "/EmptyFile.no");
+        Path p = Paths.get(TEST_DIRECTORY + "/EmptyFile.no");
         assertTrue(Files.isRegularFile(p));
-        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "/EmptyFile.no");
-        assertEquals(testFilePath + "/EmptyFile.no", readFile.getPath());
-        assertArrayEquals(new byte[]{}, readFile.getProgram());
-        assertArrayEquals(new byte[]{}, readFile.getStringStorage());
+        
+        byte[] expectedFileContent = {
+            '1', '7', 'v', 1, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0
+        };
+        byte[] fileContent = Files.readAllBytes(p);
+        assertArrayEquals(expectedFileContent, fileContent);
     }
 
-    @Test
-    public void testNonEmptyFile() throws IOException {
-        byte[] exampleStringStorage = {
-            (byte) 'f', (byte) 'o', (byte) 'o'
-        };
-        byte[] exampleProgram = {
-            InstructionSet.Instruction.LA.getId(), 0, 0, 32,
-            InstructionSet.Instruction.LIT.getId(), 0, 0,
-            InstructionSet.Instruction.LIT.getId(), 0, 3,
-            InstructionSet.Instruction.ASSN.getId(),
-            InstructionSet.Instruction.HALT.getId()
-        };
-        BinaryFile exampleFile = BinaryFile.get(testFilePath + "/ExampleProgram.no");
-        exampleFile.setStringStorage(exampleStringStorage);
-        exampleFile.setProgram(exampleProgram);
-        
-        BinaryFileHandler.save(exampleFile);
-        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "/ExampleProgram.no");
-        
-        assertArrayEquals(exampleStringStorage, readFile.getStringStorage());
-        assertArrayEquals(exampleProgram, readFile.getProgram());
-    }
 
     @Test
-    public void testNonEmptyFileWithMissingHalt() throws IOException {
+    public void testOpenFile() throws IOException {
         byte[] exampleStringStorage = {
             (byte) 'f', (byte) 'o', (byte) 'o'
         };
@@ -110,17 +95,46 @@ public class BinaryFileHandlerTest {
             InstructionSet.Instruction.LIT.getId(), 0, 3,
             InstructionSet.Instruction.ASSN.getId(),
         };
-        BinaryFile exampleFile = BinaryFile.get(testFilePath + "/ExampleProgram.no");
+        BinaryFile exampleFile = BinaryFile.get(TEST_FILE_PATH);
         exampleFile.setStringStorage(exampleStringStorage);
         exampleFile.setProgram(exampleProgram);        
         BinaryFileHandler.save(exampleFile);
         
-        BinaryFile readFile = BinaryFileHandler.open(testFilePath + "/ExampleProgram.no");
+        BinaryFile readFile = BinaryFileHandler.open(TEST_FILE_PATH);
         
-        byte[] expectedTrash = new byte[exampleStringStorage.length + exampleProgram.length];
-        System.arraycopy(exampleProgram, 0, expectedTrash, 0, exampleProgram.length);
-        System.arraycopy(exampleStringStorage, 0, expectedTrash, exampleProgram.length, exampleStringStorage.length);
+        assertArrayEquals(new byte[] {'v', 1, 0, 0}, readFile.getVersion());
+        assertArrayEquals(exampleStringStorage, readFile.getStringStorage());
+        assertArrayEquals(exampleProgram, readFile.getProgram());
+    }
+    
+    @Test
+    public void testFileWithHaltNotAtEnd() throws IOException {
+        byte[] exampleStringStorage = {
+            (byte) 'f', (byte) 'o', (byte) 'o'
+        };
+        byte[] exampleProgram = {
+            InstructionSet.Instruction.LA.getId(), 0, 0, 32,
+            InstructionSet.Instruction.LIT.getId(), 0, 0,
+            InstructionSet.Instruction.HALT.getId(),
+            InstructionSet.Instruction.LIT.getId(), 0, 3,
+            InstructionSet.Instruction.ASSN.getId(),
+        };
         
-        assertArrayEquals(expectedTrash, readFile.getProgram());
+        BinaryFile exampleFile = BinaryFile.get(TEST_FILE_PATH);
+        exampleFile.setStringStorage(exampleStringStorage);
+        exampleFile.setProgram(exampleProgram);
+        BinaryFileHandler.save(exampleFile);
+        
+        BinaryFile readFile = BinaryFileHandler.open(TEST_FILE_PATH);
+        assertArrayEquals(exampleStringStorage, readFile.getStringStorage());
+        assertArrayEquals(exampleProgram, readFile.getProgram());
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoNoBeardFile() throws IOException {
+        Path path = Paths.get(TEST_FILE_PATH);
+        Files.write(path, new byte[] {});
+        
+        BinaryFile readFile = BinaryFileHandler.open(TEST_FILE_PATH);
     }
 }

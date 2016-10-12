@@ -1,0 +1,33 @@
+"Geben Sie eine Zahl ein:"
+inc 8
+
+# print "Geben Sie eine Zahl ein: "
+lit 0
+lit 24
+lit 25
+out 2
+
+# read input from user
+la 0 32
+la 0 36
+in 0
+
+
+.loop
+lv 0 32
+lit 5
+out 0
+
+la 0 32
+lv 0 32
+lit 1
+sub
+sto
+
+lv 0 32
+lit 0
+rel 2
+fjmp .loop
+
+out 3
+halt

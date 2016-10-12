@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import machine.InstructionSet.Instruction;
 
 /**
  *
@@ -37,12 +36,7 @@ public class BinaryFileHandler {
 
     public static void save(BinaryFile filePath) throws IOException {
         Path p = Paths.get(filePath.getPath());
-        final int programLength = filePath.getProgram().length;
-        final int stringStorageLength = filePath.getStringStorage().length;
-        byte[] data = new byte[programLength + stringStorageLength];
-        System.arraycopy(filePath.getProgram(), 0, data, 0, programLength);
-        System.arraycopy(filePath.getStringStorage(), 0, data, programLength, stringStorageLength);
-        Files.write(p, data);
+        Files.write(p, filePath.getByteStream());
     }
 
     public static BinaryFile open(String filePath) throws IOException {
@@ -51,23 +45,7 @@ public class BinaryFileHandler {
         Path p = Paths.get(filePath);
         byte[] rawData = Files.readAllBytes(p);
 
-        int positionOfHalt = 0;
-        while (positionOfHalt < rawData.length && rawData[positionOfHalt] != Instruction.HALT.getId()) {
-            positionOfHalt++;
-        }
-        if (positionOfHalt == rawData.length) {
-            byte[] program = new byte[rawData.length];
-            System.arraycopy(rawData, 0, program, 0, program.length);
-            openedFile.setProgram(program);
-        } else {
-            byte[] program = new byte[positionOfHalt + 1];
-            System.arraycopy(rawData, 0, program, 0, program.length);
-            openedFile.setProgram(program);
-
-            byte[] stringStorage = new byte[rawData.length - positionOfHalt - 1];
-            System.arraycopy(rawData, positionOfHalt + 1, stringStorage, 0, stringStorage.length);
-            openedFile.setStringStorage(stringStorage);
-        }
+        openedFile.setByteStream(rawData);
         return openedFile;
     }
 
