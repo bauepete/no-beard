@@ -27,8 +27,6 @@ import compiler.NoBeardCompiler;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import java.io.IOException;
-import parser.Parser;
-import parser.ParserFactory;
 
 /**
  *
@@ -50,7 +48,7 @@ public class Nbc {
             String binaryFilePath = args[0].replaceAll(".nb", ".no");
             writeBinaryFile(binaryFilePath, NoBeardCompiler.getByteCode(), NoBeardCompiler.getStringStorage());
         } else {
-            parser.getErrorHandler().printSummary();
+            NoBeardCompiler.getErrorList().forEach(System.out::println);
         }
     }
 
@@ -62,17 +60,6 @@ public class Nbc {
             BinaryFileHandler.save(file);
         } catch (IOException ex) {
             System.err.println("Unable to save binary file");
-        }
-    }
-
-    private static void presentParsingResult(Parser parser, String[] args) {
-        if (parser.parsingWasSuccessful()) {
-            String binaryFilePath = args[0].replaceAll(".nb", ".no");
-            writeBinaryFile(binaryFilePath, ParserFactory.getCodeGenerator().getByteCode(), ParserFactory.getScanner().getStringManager().getStringStorage());
-        } else {
-            parser.getErrorHandler().getAllErrors().stream().forEach((e) -> {
-                System.err.println(e.getMessage());
-            });
         }
     }
 }

@@ -84,7 +84,7 @@ public class NoBeardCompiler {
         return parserl.parsingWasSuccessful();
     }
 
-    static List<String> getErrorList() {
+    public static List<String> getErrorList() {
         List<Error> allErrors = parserl.getErrorHandler().getAllErrors();
         return allErrors.stream().map(e -> "Error in line " + e.getLineNumber() + ": " + e.getMessage()).collect(Collectors.toList());
     }
