@@ -65,6 +65,7 @@ public class NoBeardCompilerTest {
         NoBeardCompiler.setSourceFile(source);
         assertFalse(NoBeardCompiler.compile());
         assertEquals(1, NoBeardCompiler.getErrorList().size());
+        assertEquals("Error in line 1: Source file SamplePrograms/FileNotFound.nb not found.", NoBeardCompiler.getErrorList().get(0));
     }
 
     /**
