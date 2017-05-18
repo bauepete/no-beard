@@ -55,6 +55,7 @@ public class NoBeardCompilerTest {
     private void testCompilationWithSourceString(String source, byte[] expectedCode) {
         NoBeardCompiler.setSourceString(source);
         assertTrue(NoBeardCompiler.compile());
+        assertTrue(NoBeardCompiler.lastCompilationWasSuccessful());
         AssemblerCodeChecker.assertCodeEquals(expectedCode, NoBeardCompiler.getByteCode());
     }
 
