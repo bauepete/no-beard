@@ -23,12 +23,12 @@
  */
 package nbc;
 
-import compiler.NbCompiler;
+import compiler.NoBeardCompiler;
+import io.BinaryFile;
+import io.BinaryFileHandler;
+import java.io.IOException;
 import parser.Parser;
-import java.io.FileNotFoundException;
-import nbm.Nbm;
-import scanner.SrcFileReader;
-import scanner.SrcReader;
+import parser.ParserFactory;
 
 /**
  *
@@ -44,24 +44,35 @@ public class Nbc {
             System.err.println("Usage nbc <source file>");
             return;
         }
-        SrcReader sourceReader;
-        try {
-            sourceReader = new SrcFileReader(args[0]);
-        } catch (FileNotFoundException ex) {
-            System.err.println("Source file " + args[0] + " not found");
-            return;
-        }
-        NbCompiler compiler = new NbCompiler(sourceReader);
-        Parser parser = compiler.getParser();
-        boolean parsingWasSuccessfull = parser.parse();
-        if (parsingWasSuccessfull) {
-            Nbm machine = new Nbm();
-            machine.loadProg(0, compiler.getCode().getByteCode());
-            machine.loadDat(0, compiler.getStringStorage());
-            machine.runProg(0);
+        NoBeardCompiler.setSourceFile(args[0]);
+        NoBeardCompiler.compile();
+        if (NoBeardCompiler.lastCompilationWasSuccessful()) {
+            String binaryFilePath = args[0].replaceAll(".nb", ".no");
+            writeBinaryFile(binaryFilePath, NoBeardCompiler.getByteCode(), NoBeardCompiler.getStringStorage());
         } else {
             parser.getErrorHandler().printSummary();
         }
     }
-    
+
+    private static void writeBinaryFile(String filePath, byte[] byteCode, byte[] stringStorage) {
+        BinaryFile file = BinaryFile.get(filePath);
+        file.setProgram(byteCode);
+        file.setStringStorage(stringStorage);
+        try {
+            BinaryFileHandler.save(file);
+        } catch (IOException ex) {
+            System.err.println("Unable to save binary file");
+        }
+    }
+
+    private static void presentParsingResult(Parser parser, String[] args) {
+        if (parser.parsingWasSuccessful()) {
+            String binaryFilePath = args[0].replaceAll(".nb", ".no");
+            writeBinaryFile(binaryFilePath, ParserFactory.getCodeGenerator().getByteCode(), ParserFactory.getScanner().getStringManager().getStringStorage());
+        } else {
+            parser.getErrorHandler().getAllErrors().stream().forEach((e) -> {
+                System.err.println(e.getMessage());
+            });
+        }
+    }
 }

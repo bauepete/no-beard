@@ -29,6 +29,6 @@ package config;
  */
 public class Configuration {
     public static String getVersion() {
-        return "v2.0 beta 2";
+        return "v2.0 beta 3";
     }
 }

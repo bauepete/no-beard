@@ -1,3 +1,4 @@
+# x
 "Please enter a temperature in Celsius:The temperature in Fahrenheit:"
 inc 12  # 32: celsius, 36: done, 40: fahrenheit
 
@@ -24,7 +25,7 @@ sto
 # print "Temperature in Fahrenheit"
 lit 38
 lit 30
-lit 32
+lit 31
 out 2
 
 # print value in Fahrenheit

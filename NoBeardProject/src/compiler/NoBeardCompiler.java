@@ -24,12 +24,16 @@
 package compiler;
 
 import java.io.FileNotFoundException;
+import error.Error;
 import parser.NoBeardParser;
 import parser.Parser;
 import parser.ParserFactory;
 import io.SourceFileReader;
 import io.SourceReader;
 import io.SourceStringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import scanner.NameManagerForCompiler;
 
 /**
@@ -56,7 +60,7 @@ public class NoBeardCompiler {
     public static byte[] getByteCode() {
         return ParserFactory.getCodeGenerator().getByteCode();
     }
-    
+
     public static byte[] getStringStorage() {
         return ParserFactory.getScanner().getStringManager().getStringStorage();
     }
@@ -65,12 +69,23 @@ public class NoBeardCompiler {
         try {
             NoBeardCompiler.sourceReader = new SourceFileReader(sourceFilePath);
             sourceIsAvailable = true;
-        } catch (FileNotFoundException ex) {
-            NoBeardCompiler.sourceReader = new SourceStringReader("");
-            sourceIsAvailable = false;
-        } finally {
             ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
             parserl = ParserFactory.create(NoBeardParser.class);
-        }
+        } catch (FileNotFoundException ex) {
+            NoBeardCompiler.sourceReader = new SourceStringReader("");
+            ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
+            parserl = ParserFactory.create(NoBeardParser.class);
+            parserl.getErrorHandler().throwFileNotFound(sourceFilePath);
+            sourceIsAvailable = false;
+        } 
+    }
+
+    public static boolean lastCompilationWasSuccessful() {
+        return parserl.parsingWasSuccessful();
+    }
+
+    static List<String> getErrorList() {
+        List<Error> allErrors = parserl.getErrorHandler().getAllErrors();
+        return allErrors.stream().map(e -> "Error in line " + e.getLineNumber() + ": " + e.getMessage()).collect(Collectors.toList());
     }
 }

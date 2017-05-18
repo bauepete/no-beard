@@ -4,7 +4,6 @@
  */
 package io;
 
-import io.SourceReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class SourceFileReader implements SourceReader {
 
-    private FileReader fd;
+    private final FileReader fd;
     private int currentChar;
     private int currentCol;
     private int currentLine;
@@ -28,17 +27,26 @@ public class SourceFileReader implements SourceReader {
 
     @Override
     public void nextChar() {
+        readNextChar();
+        handleLineBreak();
+    }
+
+    private void readNextChar() {
         try {
             currentChar = fd.read();
         } catch (IOException ex) {
             Logger.getLogger(SourceFileReader.class.getName()).log(Level.SEVERE, null, ex);
         }
         currentCol++;
-        if (currentChar == '\n') {
+    }
+
+    private void handleLineBreak() {
+        if (currentChar == LINE_FEED) {
             currentCol = -1;
             currentLine++;
         }
     }
+    private static final char LINE_FEED = '\n';
 
     @Override
     public int getCurrentChar() {
