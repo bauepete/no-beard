@@ -31,7 +31,6 @@ import parser.ParserFactory;
 import io.SourceFileReader;
 import io.SourceReader;
 import io.SourceStringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import scanner.NameManagerForCompiler;
@@ -52,7 +51,7 @@ public class NoBeardCompiler {
         ParserFactory.setup(sourceReader, new NameManagerForCompiler(sourceReader));
         parserl = ParserFactory.create(NoBeardParser.class);
     }
-
+    
     public static boolean compile() {
         return sourceIsAvailable && parserl.parse();
     }

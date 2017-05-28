@@ -24,6 +24,7 @@
 package nbc;
 
 import compiler.NoBeardCompiler;
+import config.Configuration;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import java.io.IOException;
@@ -40,6 +41,10 @@ public class Nbc {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.err.println("Usage nbc <source file>");
+            return;
+        }
+        if (args[0].equals("-v")) {
+            System.out.println("NoBeard compiler version " + Configuration.getVersion());
             return;
         }
         NoBeardCompiler.setSourceFile(args[0]);
