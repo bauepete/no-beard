@@ -72,4 +72,11 @@ public class StatementParserTestSetup extends ParserTestSetup {
         setupInfraStructure("putln;");
         return ParserFactory.create(StatementParser.class);
     }
+
+    public static StatementParser getIfTestSetup() {
+        setupInfraStructure("if x < 5 do x = 0; done else do x = 10; done");
+        getSymListManager().newUnit(1);
+        getSymListManager().newVar(0, SymbolTable.ElementType.INT);
+        return ParserFactory.create(StatementParser.class);
+    }
 }

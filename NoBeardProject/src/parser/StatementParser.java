@@ -44,6 +44,11 @@ public class StatementParser extends Parser {
                 p = ParserFactory.create(VariableDeclarationParser.class);
                 parseSymbol(p);
                 break;
+                
+            case IF:
+                p = ParserFactory.create(IfParser.class);
+                parseSymbol(p);
+                break;
 
             case PUT:
             case PUTLN:

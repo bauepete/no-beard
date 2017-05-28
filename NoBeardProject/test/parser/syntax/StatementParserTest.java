@@ -83,6 +83,12 @@ public class StatementParserTest {
     }
     
     @Test
+    public void testIf() {
+        StatementParser instance = StatementParserTestSetup.getIfTestSetup();
+        assertTrue(instance.parse());
+    }
+    
+    @Test
     public void testPut() {
         StatementParser instance = StatementParserTestSetup.getPutTestSetup();
         assertTrue(instance.parse());
