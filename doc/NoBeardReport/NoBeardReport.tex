@@ -359,8 +359,9 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 %	StatSeq & = & Stat \{Stat\}. \\
 
 		\startrule{Statement}{VariableDeclaration}
-		\alternativerule{Put}
 		\alternativerule{If}
+		\alternativerule{Put}
+		\alternativerule{Get}
 		\alternativerule{Assignment}
 		\\
 		\completerule{VariableDeclaration}{Type identifier [``='' Expression]``;''}
@@ -368,13 +369,14 @@ The following context free grammar gives the syntax of \leongage{}. The well-kno
 		\completerule{SimpleType}{``int'' $|$ ``char'' $|$ ``bool''}
 		\completerule{ArraySpecification}{``['' number ``]''}
 		\\
+		\completerule{If}{``if'' Expression Block [ ``else'' Block ]}
+		\\
 		\startrule{Put}{``put'' ``('' Expression [``,'' Expression] ``)''``;''}
 		\alternativeend{``putln'' ``;''}
 		\\
-		\completerule{If}{``if'' Expression Block [ ``else'' Block ]}
-		\\
+		\completerule{Get}{``get'' ``('' identifier [``,'' identifier] ``)'' ``;''}
 		\completerule{Assignment}{Reference ``='' Expression ``;''}
-		\completerule{Reference}{Identifier [ ``['' Expression``]'']}
+		\completerule{Reference}{identifier [ ``['' Expression``]'']}
 		\\
 		\completerule{Expression}{AddExpression [RelOp AddExpression]}
 		\completerule{AddExpression}{[AddOp] Term \{AddOp Term\}}
@@ -396,7 +398,14 @@ Here a non-formal description of the semantics of \leongage{} is given.
 	\finishrule {[``,'' Expression2] ``)''``;''}
 \end{grammar}
 &
-Writes the value of {\em Expression1} to the output medium. If {\em Expression2} is given it defines the column width as follows: Integers are outputted as is. If the number of digits is less then {\em Expression2} the output is padded on the left. Characters are outputted as is. If {\em Expression2} is greater than 1 the output is padded on the right. Strings are outputted in the length of {\em Expression2}, i.e., they are truncated if longer than {\em Expression2} or padded on the right if shorter.
+Writes the value of {\em Expression1} to the output medium. If {\em Expression2} is given it defines the column width as follows: Integers are outputted as is. If the number of digits is less then {\em Expression2} the output is padded on the left. Characters are outputted as is. If {\em Expression2} is greater than 1 the output is padded on the right. Strings are outputted in the length of {\em Expression2}, i.e., they are truncated if longer than {\em Expression2} or padded on the right if shorter. \\
+
+\begin{grammar}{.05\textwidth}{.35\textwidth}
+	\startrule{Get}{``get'' ``('' identifier1}
+	\finishrule {[``,'' identifier2] ``)''``;''}
+\end{grammar}
+&
+Reads an integer value from the stdin and stores it into {\em identifier1}. If {\em identifier2} is given it must be of type \lstinline$bool$ and gets \lstinline$true$ if an integer value has been read successfully (and, therefore it has been stored into {\em identifier1}) and \lstinline$false$ otherwise. In case {\em identifier2} is not given there is no feedback about success of the read operation and in case of no success {\em identifier1} has an undefined value.
 \end{tabular}
 
 \chapter{Some Translations by Example}
