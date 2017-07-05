@@ -42,6 +42,7 @@ public class KeywordTable {
                 put("done", Symbol.DONE);
                 put("put", Symbol.PUT);
                 put("putln", Symbol.PUTLN);
+                put("get", Symbol.GET);
                 put("if", Symbol.IF);
                 put("else", Symbol.ELSE);
                 put("int", Symbol.INT);

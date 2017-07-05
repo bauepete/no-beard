@@ -50,6 +50,17 @@ public class KeywordTableTest {
     public void testAvailableKeywords() {
         assertEquals(Scanner.Symbol.UNIT, KeywordTable.getSymbol("unit"));
         assertEquals(Scanner.Symbol.DO, KeywordTable.getSymbol("do"));
+        assertEquals(Scanner.Symbol.DONE, KeywordTable.getSymbol("done"));
+        assertEquals(Scanner.Symbol.PUT, KeywordTable.getSymbol("put"));
+        assertEquals(Scanner.Symbol.PUTLN, KeywordTable.getSymbol("putln"));
+        assertEquals(Scanner.Symbol.GET, KeywordTable.getSymbol("get"));
+        assertEquals(Scanner.Symbol.IF, KeywordTable.getSymbol("if"));
+        assertEquals(Scanner.Symbol.ELSE, KeywordTable.getSymbol("else"));
+        assertEquals(Scanner.Symbol.INT, KeywordTable.getSymbol("int"));
+        assertEquals(Scanner.Symbol.CHAR, KeywordTable.getSymbol("char"));
+        assertEquals(Scanner.Symbol.BOOL, KeywordTable.getSymbol("bool"));
+        assertEquals(Scanner.Symbol.TRUE, KeywordTable.getSymbol("true"));
+        assertEquals(Scanner.Symbol.FALSE, KeywordTable.getSymbol("false"));
     }
     
     @Test
