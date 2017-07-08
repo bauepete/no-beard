@@ -1,0 +1,13 @@
+unit AddInt;
+# Adding two integer values and printing them
+
+do
+    int x;
+    int y;
+
+    x = 28;
+    y = 40;
+    put ("Result: ");
+    put (x + y);
+
+done AddInt;

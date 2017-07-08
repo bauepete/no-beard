@@ -1,0 +1,29 @@
+# Doing calculations
+# Define three variables a, b, c
+# Store the values 17 and 42 in a and b
+# Calculate ((b + 11) / a) % 2
+# Store result of above calculation to c
+inc 12     # reserve space for variables a, b, c
+la 0 32    # load address of a
+lit 17     # load value for a
+sto        # store a
+
+la 0 36
+lit 42
+sto        # b
+
+la 0 40    # load address of c
+lv 0 36    # load value of b
+lit 11     # load 11
+add        # b + 11
+lv 0 32    # load value of a
+div        # (b + 11) / a
+lit 2      # load 2
+mod        # ((b + 11)/a)%2
+sto        # store result to c
+
+lv 0 40    # load value of c
+lit 1      # load column width for out
+out 0      # ouput int value
+out 3      # output newline
+halt

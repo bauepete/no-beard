@@ -1,0 +1,17 @@
+unit FutureProgram;
+# A program with function definition
+do
+    int v1;
+    do      # start an anonymous block
+        int v1;
+        # more statements
+    done
+
+    void f() do
+        int v1;
+        # more statements
+    done f;
+
+    int v2;
+    # more statements
+done FutureProgram;

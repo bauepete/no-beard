@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NbAsm:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NbAsm_jar</output-path>
+    <root id="archive" name="NbAsm.jar">
+      <element id="extracted-dir" path="$PROJECT_DIR$/../NoBeardProject/out/artifacts/NoBeardProject_jar/NoBeardProject.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/java" />
+      <element id="module-output" name="NbAsm" />
+    </root>
+  </artifact>
+</component>

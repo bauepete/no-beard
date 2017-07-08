@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Nbc:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Nbc_jar</output-path>
+    <root id="archive" name="Nbc.jar">
+      <element id="module-output" name="Nbc" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../NoBeardProject/out/artifacts/NoBeardProject_jar/NoBeardProject.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/java" />
+    </root>
+  </artifact>
+</component>

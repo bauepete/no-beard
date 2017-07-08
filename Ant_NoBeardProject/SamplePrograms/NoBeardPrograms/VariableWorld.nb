@@ -1,0 +1,8 @@
+unit VariableWorld;
+# Hello World but using a variable.
+do
+    char[12] x = "Hello World ";
+    put(x);
+    char[17] y;
+    y = "... another World";
+done VariableWorld;

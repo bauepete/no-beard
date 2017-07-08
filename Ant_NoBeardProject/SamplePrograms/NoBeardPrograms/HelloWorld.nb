@@ -1,0 +1,6 @@
+unit HelloWorld;
+# Unavoidable
+do
+    put("Hello World");
+    putln;
+done HelloWorld;

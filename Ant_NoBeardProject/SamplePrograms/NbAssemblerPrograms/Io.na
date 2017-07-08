@@ -1,0 +1,40 @@
+# Reads in an integer value from the
+# stdin and prints it to the stdout.
+"Enter an int:You entered:Read operation successful?"
+inc 8     # reserve space for two variables
+
+# print "Enter an int: "
+lit 0     # address
+lit 13    # string length
+lit 14    # col width
+out 2     # out string
+
+# read int from stdin
+la 0 32   # addr to store int
+la 0 36   # addr to store success flag
+in 0      # input int
+
+# print "You entered: "
+lit 13
+lit 12
+lit 13
+out 2
+
+# print value entered
+lv 0 32   # load int inputted before
+lit 1     # load column width
+out 0     # out int
+out 3     # new line
+
+# print "Read operation successful? "
+lit 25
+lit 26
+lit 27
+out 2
+
+# print success flag
+lv 0 36
+lit 1
+out 0
+out 3
+halt

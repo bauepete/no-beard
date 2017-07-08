@@ -1,0 +1,13 @@
+unit SimpleIf;
+do
+  int x = 99;
+  int y = 42;
+  put("Rock'n Roll"); putln;
+  if x < y do
+    put("x < y");
+  done
+  else do
+    put("x >= y");
+  done
+  putln;
+done SimpleIf;

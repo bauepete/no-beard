@@ -1,0 +1,12 @@
+# The unavoidable "Hello World"
+"HelloWorld"	# The string constants for output
+lit 0			# load address of "Hello"
+lit 5			# load length of "Hello"
+lit 6			# load column width |\label{line:helloworldcolwidth}|
+out 2			# output string     |\label{line:helloworldout}|
+lit 5			# load address of "World"
+lit 5			# load length of "World"
+lit 5			# load column width
+out 2			# output string
+out 3			# output new line
+halt

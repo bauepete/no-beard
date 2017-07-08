@@ -1,0 +1,3 @@
+#!/bin/bash
+PROJECTROOT=/Users/peter/Documents/dev/Java/NoBeard/NoBeardProject/
+java -jar $PROJECTROOT/NbAsm/dist/NbAsm.jar $@

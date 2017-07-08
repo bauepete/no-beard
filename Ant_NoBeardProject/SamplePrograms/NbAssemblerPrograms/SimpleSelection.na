@@ -1,0 +1,40 @@
+# Shows a selection
+# Prints whether given number is odd or even
+"Please enter a number:The number is evenThe number is odd"
+inc 8     # reserve space for local variables:
+          # 32: value entered by the user;
+          # 36: flag whether reading int was ok
+# print "Please enter a number: "
+lit 0
+lit 22
+lit 23
+out 2
+
+# read input from stdin
+la 0 32
+la 0 36
+in 0
+
+lv 0 32   # number to be checked
+lit 2
+mod       # calculate 17 % 2
+lit 0     # check against value 0
+rel 2     # 2->equals: check whether 17%2 equals 0
+fjmp .output_odd   # if not jump down to output "odd"
+
+# start of output "even"
+lit 22
+lit 18
+lit 19
+out 2
+jmp .end    # the if branch is finished -> jump to end
+
+.output_odd # jmp label where output "number is odd" starts
+lit 40
+lit 17
+lit 18
+out 2
+
+.end
+out 3    # output new line
+halt     #

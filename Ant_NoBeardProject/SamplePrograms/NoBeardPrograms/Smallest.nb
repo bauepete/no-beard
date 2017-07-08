@@ -1,0 +1,6 @@
+unit Smallest;
+# This is the smallest non empty unit you can write in NoBeard
+# except this comment
+do
+    put (3);
+done Smallest;
