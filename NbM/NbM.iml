@@ -22,5 +22,14 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: at.ac.htlleonding:NoBeardProject:1.2">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/NoBeardProject.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

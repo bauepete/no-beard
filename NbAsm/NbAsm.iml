@@ -12,14 +12,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
-      <library>
+      <library name="Maven: at.ac.htlleonding:NoBeardProject:1.2">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../NoBeardProject/out/artifacts/NoBeardProject_jar/NoBeardProject.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/NoBeardProject.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../NoBeardProject/out/artifacts/NoBeardProject_jar/NoBeardProject.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
