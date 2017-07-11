@@ -53,9 +53,14 @@
       <items>
         <AnchorPane>
           <children>
-                  <SplitPane dividerPositions="0.6273062730627307" layoutX="-32.0" layoutY="59.0" orientation="VERTICAL" prefHeight="544.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5295202952029521" layoutX="-32.0" layoutY="59.0" orientation="VERTICAL" prefHeight="544.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="219.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="219.0">
+                           <children>
+                              <Button layoutX="64.0" layoutY="34.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Start" />
+                              <Button layoutX="64.0" layoutY="117.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Step" />
+                              <Button layoutX="64.0" layoutY="201.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="201.0" />
+                           </children></AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
                         <Label alignment="CENTER" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Output" textAlignment="CENTER" wrapText="false">
