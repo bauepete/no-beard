@@ -1,0 +1,36 @@
+# x
+"Please enter a temperature in Celsius:The temperature in Fahrenheit:"
+inc 12  # 32: celsius, 36: done, 40: fahrenheit
+
+# print "Please enter ..."
+lit 0
+lit 38
+lit 39
+out 2
+
+# read user input celsius
+la 0 32
+la 0 36
+in 0
+
+# calculate Fahrenheit
+la 0 40 # address of Fahrenheit
+lv 0 32 # value of celsius
+lit 2
+mul
+lit 32
+add
+sto
+
+# print "Temperature in Fahrenheit"
+lit 38
+lit 30
+lit 31
+out 2
+
+# print value in Fahrenheit
+lv 0 40
+lit 1
+out 0
+out 3
+halt
