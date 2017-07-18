@@ -23,7 +23,8 @@ public class Main extends Application {
     public void initRootLayout() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("view/RootLayout.fxml"));
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

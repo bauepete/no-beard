@@ -2,17 +2,15 @@ package nbmgui.controller;
 
 import io.BinaryFile;
 import io.BinaryFileHandler;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import machine.ControlUnit;
 import machine.NoBeardMachine;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class Controller {
     private String path;
@@ -20,7 +18,24 @@ public class Controller {
     private BinaryFile objectFile;
 
     @FXML
+    private AnchorPane outputPane;
+
+    private PrintStream ps ;
+
     private TextArea outputView;
+
+    public void initialize() {
+        this.outputView = new OutputArea();
+        AnchorPane.setTopAnchor(outputView, 0.0);
+        AnchorPane.setLeftAnchor(outputView, 0.0);
+        AnchorPane.setRightAnchor(outputView, 0.0);
+        AnchorPane.setBottomAnchor(outputView, 0.0);
+        outputPane.getChildren().add(outputView);
+        ps = new PrintStream(new Console(outputView));
+        System.setOut(ps);
+        System.setErr(ps);
+        machine = new NoBeardMachine();
+    }
 
     @FXML
     void openFile(ActionEvent event) {
@@ -35,22 +50,52 @@ public class Controller {
     @FXML
     void startProgram(ActionEvent event) {
         if (path == null) {
-            outputView.setText(outputView.getText() + "\nSelect a NoBeard object file");
+            System.out.println("Select a NoBeard object file");
             return;
         }
         try {
             objectFile = BinaryFileHandler.open(path);
         } catch (IOException ex) {
-            outputView.setText(outputView.getText() + "\nUnable to open " + path);
+            System.out.println("Unable to open " + path);
             return;
         }
-        machine = new NoBeardMachine();
         machine.loadStringConstants(objectFile.getStringStorage());
         machine.loadProgram(0, objectFile.getProgram());
-        machine.getControlUnit().startMachine();
+        machine.runProgram(0);
+    }
 
-        while(machine.getState() == ControlUnit.MachineState.RUNNING) {
-            machine.step();
+    public class Console extends OutputStream {
+        private TextArea console;
+
+        public Console(TextArea console) {
+            this.console = console;
+        }
+
+        public void appendText(String valueOf) {
+            Platform.runLater(() -> console.appendText(valueOf));
+        }
+
+        public void write(int b) throws IOException {
+            appendText(String.valueOf((char)b));
+        }
+    }
+
+    public static class OutputArea extends TextArea {
+        @Override
+        public void replaceText(int start, int end, String text) {
+            String current = getText();
+            // only insert if no new lines after insert position:
+            if (! current.substring(start).contains("\n")) {
+                super.replaceText(start, end, text);
+            }
+        }
+        @Override
+        public void replaceSelection(String text) {
+            String current = getText();
+            int selectionStart = getSelection().getStart();
+            if (! current.substring(selectionStart).contains("\n")) {
+                super.replaceSelection(text);
+            }
         }
     }
 }

@@ -106,9 +106,4 @@ public class NoBeardMachine implements SourceCodeInfo {
         return dataMemory;
     }
 
-    public CallStack getCallStack() { return callStack; }
-
-    public ProgramMemory getProgramMemory() { return programMemory; }
-
-    public ControlUnit getControlUnit() { return controlUnit; }
 }
