@@ -66,7 +66,7 @@ public class ControlUnit {
         return callStack;
     }
 
-    int getPc() {
+    public int getPc() {
         return pc;
     }
 

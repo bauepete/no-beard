@@ -24,6 +24,7 @@
 package compiler;
 
 import machine.InstructionSet.Instruction;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import parser.semantics.AssemblerCodeChecker;

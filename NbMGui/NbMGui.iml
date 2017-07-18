@@ -10,7 +10,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../NoBeardProject/target/NoBeardProject-1.2.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
