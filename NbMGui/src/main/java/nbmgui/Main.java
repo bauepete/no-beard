@@ -22,7 +22,7 @@ public class Main extends Application {
 
     public void initRootLayout() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("view/RootLayout.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("RootLayout.fxml"));
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();
