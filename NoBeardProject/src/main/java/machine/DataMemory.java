@@ -65,6 +65,11 @@ public class DataMemory {
         store(atAddress, byteBuffer.array());
     }
 
+    /**
+     * Loads 4 byte (one word) from a specific address.
+     * @param atAddress – the address from where the word to be read
+     * @return The word located at address.
+     */
     int loadWord(int atAddress) {
         byte[] byteArray = load(atAddress, 4);
         if (errorHandler.getCount() == 0) {

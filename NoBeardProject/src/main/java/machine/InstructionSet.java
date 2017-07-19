@@ -251,7 +251,7 @@ public class InstructionSet {
                     cu.outputString();
                     break;
                 case 3:
-                    System.out.println();
+                    cu.outputNewln();
                     break;
                 default:
                     cu.stopDueToOperandRangeError();

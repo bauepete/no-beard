@@ -51,7 +51,9 @@ public class ControlUnitTest {
         dataMemory = new DataMemory(1024, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
         programMemory = new ProgramMemory(1024, errorHandler);
-        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
+        InputDevice in = new FakeInputDevice();
+        OutputDevice out = new FakeOutputDevice();
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
     }
     
     @After

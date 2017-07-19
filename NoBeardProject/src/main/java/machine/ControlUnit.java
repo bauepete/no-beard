@@ -24,7 +24,6 @@
 package machine;
 
 import error.ErrorHandler;
-import java.util.Scanner;
 
 /**
  *
@@ -45,13 +44,17 @@ public class ControlUnit {
     private int currentAddressInProgramMemory;
     private InstructionSet.Instruction instructionRegister;
     private MachineState machineState;
+    private final InputDevice in;
+    private final OutputDevice out;
 
-    ControlUnit(ProgramMemory programMemory, DataMemory dataMemory, CallStack callStack, ErrorHandler errorHandler) {
+    ControlUnit(ProgramMemory programMemory, DataMemory dataMemory, CallStack callStack, ErrorHandler errorHandler, InputDevice in, OutputDevice out) {
         this.programMemory = programMemory;
         this.dataMemory = dataMemory;
         this.callStack = callStack;
         this.errorHandler = errorHandler;
         this.machineState = MachineState.STOPPED;
+        this.in = in;
+        this.out = out;
     }
 
     public ProgramMemory getProgramMemory() {
@@ -111,7 +114,7 @@ public class ControlUnit {
         setPc(getPc() + instructionRegister.getSize());
         executeInstruction();
     }
-    
+
     public void startMachine() {
         machineState = MachineState.RUNNING;
     }
@@ -149,13 +152,12 @@ public class ControlUnit {
     void stopDueToError() {
         machineState = MachineState.ERROR;
     }
-    
+
     void inputInt() {
         int successful = callStack.pop();
         int data = callStack.pop();
-        Scanner c = new Scanner(System.in);
-        if (c.hasNextInt()) {
-            int readInt = c.nextInt();
+        if (in.hasNextInt()) {
+            int readInt = in.nextInt();
             dataMemory.storeWord(successful, 1);
             dataMemory.storeWord(data, readInt);
         } else {
@@ -166,28 +168,23 @@ public class ControlUnit {
     void outputInt() {
         int width = callStack.pop();
         int x = callStack.pop();
-        String formatString = "%" + width + "d";
-        System.out.printf(formatString, x);
+        out.printInt(x, width);
     }
 
     void outputChar() {
         int width = callStack.pop();
         int c = callStack.pop();
-        System.out.print((char) c);
-        outputBlanks(width - 1);
-    }
-
-    private void outputBlanks(int number) {
-        for (int i = 0; i < number; i++) {
-            System.out.print(" ");
-        }
+        out.printChar((char) c, width);
     }
 
     void outputString() {
         int width = callStack.pop();
         int stringLength = callStack.pop();
         int address = callStack.pop();
-        System.out.print(new String(dataMemory.load(address, stringLength)));
-        outputBlanks(width - stringLength);
+        out.print(new String(dataMemory.load(address, stringLength)), width);
+    }
+
+    void outputNewln() {
+        out.println();
     }
 }
