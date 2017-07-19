@@ -53,7 +53,7 @@ public class NbM {
             System.err.println("Unable to open " + args[0]);
             return;
         }
-        NoBeardMachine machine = new NoBeardMachine();
+        NoBeardMachine machine = new NoBeardMachine(new ConsoleInputDevice(), new ConsoleOutputDevice());
         machine.loadStringConstants(objectFile.getStringStorage());
         machine.loadProgram(0, objectFile.getProgram());
         machine.runProgram(0);
