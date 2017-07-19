@@ -53,7 +53,10 @@ public class InstructionSetTest {
         programMemory = new ProgramMemory(1024, errorHandler);
         dataMemory = new DataMemory(1024, errorHandler);
         callStack = new CallStack(dataMemory, 0, 28);
-        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
+        InputDevice in = new FakeInputDevice();
+        OutputDevice out = new FakeOutputDevice();
+
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
     }
 
     @After
@@ -91,7 +94,7 @@ public class InstructionSetTest {
         assertTrue(i.getOperandTypes().equals(Arrays.asList(operands)));
         i.execute(controlUnit);
     }
-    
+
     @Test
     public void testLa() {
         byte[] program = {
@@ -176,7 +179,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x04, Instruction.LC, 4, OperandType.BYTE, OperandType.HALFWORD);
         assertEquals('5', (char) callStack.peek());
     }
-    
+
     @Test
     public void testLvi() {
         byte[] program = {
@@ -196,7 +199,7 @@ public class InstructionSetTest {
         setupThreeFrames();
         callStack.push(108);
         checkInstruction(program, 0x06, Instruction.LCI, 4, OperandType.BYTE, OperandType.HALFWORD);
-        assertEquals('5', (char)callStack.peek());
+        assertEquals('5', (char) callStack.peek());
     }
 
     @Test
@@ -371,9 +374,9 @@ public class InstructionSetTest {
         callStack.push(17);
         callStack.push(42);
         checkInstruction(program, 0x12, Instruction.REL, 2, OperandType.BYTE);
-        assertEquals(1, callStack.pop());        
+        assertEquals(1, callStack.pop());
     }
-    
+
     @Test
     public void testRelError() {
         byte[] program = {
@@ -384,7 +387,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x12, Instruction.REL, 2, OperandType.BYTE);
         assertEquals(error.Error.ErrorType.OPERAND_RANGE_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
-    
+
     @Test
     public void testFJmp() {
         byte[] program = {
@@ -394,7 +397,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x16, Instruction.FJMP, 3, OperandType.HALFWORD);
         assertEquals(128 * 256 + 128, controlUnit.getPc());
     }
-    
+
     @Test
     public void testInc() {
         byte[] program = {
@@ -404,7 +407,7 @@ public class InstructionSetTest {
         checkInstruction(program, 0x1D, Instruction.INC, 3, OperandType.HALFWORD);
         assertEquals(top + 42, callStack.getStackPointer());
     }
-    
+
     @Test
     public void testHalt() {
         byte[] program = {

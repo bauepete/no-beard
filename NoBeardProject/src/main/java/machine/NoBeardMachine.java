@@ -57,12 +57,12 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
 
-    public NoBeardMachine() {
+    public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
         dataMemory = new DataMemory(MAX_DATA, errorHandler);
         callStack = new CallStack(dataMemory, 0, SIZE_OF_AUXILIARY_CELLS);
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
-        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler);
+        controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
     }
     
     public static String getVersion() {

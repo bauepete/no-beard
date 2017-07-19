@@ -1,5 +1,5 @@
 /*
- * Copyright ©2016. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
+ * Copyright ©2017. Created by P. Bauer (p.bauer@htl-leonding.ac.at),
  * Department of Informatics and Media Technique, HTBLA Leonding, 
  * Limesstr. 12 - 14, 4060 Leonding, AUSTRIA. All Rights Reserved. Permission
  * to use, copy, modify, and distribute this software and its documentation
@@ -21,42 +21,42 @@
  * PROVIDED HEREUNDER IS PROVIDED "AS IS". HTBLA LEONDING HAS NO OBLIGATION
  * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
-package nbm;
+package machine;
 
-import io.BinaryFile;
-import io.BinaryFileHandler;
-import java.io.IOException;
-import machine.NoBeardMachine;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 
 /**
  *
- * @author P. Bauer (p.bauer@htl-leonding.ac.at)
+ * @author Peter Bauer (p.bauer@htl-leonding.ac.at)
+ * Defines a contract every input device has to fulfill if it aims to support
+ * the NoBeard Machine
  */
-public class NbM {
-
+public interface InputDevice {
     /**
-     * @param args the command line arguments
+     * hasNext() checks whether there exists a further input.
+     * @return true if there exists an input and false otherwise
      */
-    public static void main(String[] args) {
-        if (args.length == 0) {
-            System.err.println("Usage: nbm <object_file>.no");
-            return;
-        }
-        if (args[0].compareTo("-v") == 0) {
-            System.out.println(NoBeardMachine.getVersion());
-            return;
-        }
-        BinaryFile objectFile;
-        try {
-            objectFile = BinaryFileHandler.open(args[0]);
-        } catch (IOException ex) {
-            System.err.println("Unable to open " + args[0]);
-            return;
-        }
-        NoBeardMachine machine = new NoBeardMachine(new ConsoleInputDevice(), new ConsoleOutputDevice());
-        machine.loadStringConstants(objectFile.getStringStorage());
-        machine.loadProgram(0, objectFile.getProgram());
-        machine.runProgram(0);
-    }
+    boolean hasNext();
     
+    /**
+     * nextChar() returns the next character on the input device
+     * @throws NoSuchElementException - if no more tokens are available
+     * @return the next char
+     */
+    char nextChar() throws NoSuchElementException;
+    
+    /**
+     * hasNextInt() checks whether the input device has a further int available
+     * @return true if an int is available, false otherwise
+     */
+    boolean hasNextInt();
+    
+    /**
+     * returns the next input as int.
+     * @throws InputMismatchException – if the scanned token is no int
+     * NoSuchElementException - if no more tokens are available
+     * @return the next int scanned from input
+     */
+    int nextInt() throws InputMismatchException, NoSuchElementException;
 }

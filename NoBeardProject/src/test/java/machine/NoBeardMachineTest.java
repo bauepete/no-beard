@@ -23,8 +23,8 @@
  */
 package machine;
 
-import machine.ControlUnit;
-import machine.NoBeardMachine;
+import java.util.Arrays;
+import java.util.List;
 import machine.InstructionSet.Instruction;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,13 +37,17 @@ import org.junit.Before;
 public class NoBeardMachineTest {
 
     private NoBeardMachine machine;
+    private FakeInputDevice in;
+    private FakeOutputDevice out;
 
     public NoBeardMachineTest() {
     }
-    
+
     @Before
     public void setUp() {
-        machine = new NoBeardMachine();
+        in = new FakeInputDevice();
+        out = new FakeOutputDevice();
+        machine = new NoBeardMachine(in, out);
     }
 
     @Test
@@ -56,13 +60,13 @@ public class NoBeardMachineTest {
         machine.loadStringConstants(new byte[4]);
         assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
-    
+
     @Test
     public void testLoadMaxNumberOfStrings() {
         machine.loadStringConstants(new byte[NoBeardMachine.MAX_DATA]);
         assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
-    
+
     @Test
     public void testStoreStringsOverflow() {
         machine.loadStringConstants(new byte[NoBeardMachine.MAX_DATA + 1]);
@@ -87,7 +91,7 @@ public class NoBeardMachineTest {
         machine.step();
         assertEquals(ControlUnit.MachineState.STOPPED, machine.getState());
     }
-    
+
     @Test
     public void runProgram() {
         String output = "Calculating+=";
@@ -99,7 +103,7 @@ public class NoBeardMachineTest {
             Instruction.STO.getId(), // store 17
             Instruction.LA.getId(), 0, 0, 36, // load second variable
             Instruction.LIT.getId(), 0, 42, // load 42
-            Instruction.STO.getId(), // store -42
+            Instruction.STO.getId(), // store 42
             Instruction.LA.getId(), 0, 0, 40, // load third variable
             Instruction.LV.getId(), 0, 0, 32, // load value of first var
             Instruction.LV.getId(), 0, 0, 36, // load value of second var
@@ -129,10 +133,13 @@ public class NoBeardMachineTest {
             Instruction.OUT.getId(), 3,
             Instruction.HALT.getId()
         };
-        
+
         machine.loadStringConstants(stringMemory);
         machine.loadProgram(0, program);
         machine.runProgram(0);
+        
+        List<String> expectedOutput = Arrays.asList("Calculating", "17", "+", "42", "=", "59", "\n");
+        assertEquals(expectedOutput, out.output);
         assertEquals(17 + 42, machine.getDataMemory().loadWord(56));
     }
 }
