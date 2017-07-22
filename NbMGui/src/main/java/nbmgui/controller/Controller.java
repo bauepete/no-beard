@@ -9,6 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
+import nbmgui.InputReader;
+import nbmgui.OutputPrinter;
 
 import java.io.*;
 
@@ -20,8 +22,6 @@ public class Controller {
     @FXML
     private AnchorPane outputPane;
 
-    private PrintStream ps ;
-
     private TextArea outputView;
 
     public void initialize() {
@@ -31,10 +31,11 @@ public class Controller {
         AnchorPane.setRightAnchor(outputView, 0.0);
         AnchorPane.setBottomAnchor(outputView, 0.0);
         outputPane.getChildren().add(outputView);
-        ps = new PrintStream(new Console(outputView));
-        System.setOut(ps);
-        System.setErr(ps);
-        machine = new NoBeardMachine();
+        machine = new NoBeardMachine(new InputReader(this), new OutputPrinter(this));
+    }
+
+    public TextArea getOutputView() {
+        return outputView;
     }
 
     @FXML
@@ -50,34 +51,18 @@ public class Controller {
     @FXML
     void startProgram(ActionEvent event) {
         if (path == null) {
-            System.out.println("Select a NoBeard object file");
+            outputView.appendText("Select a NoBeard object file\n");
             return;
         }
         try {
             objectFile = BinaryFileHandler.open(path);
         } catch (IOException ex) {
-            System.out.println("Unable to open " + path);
+            outputView.appendText("Unable to open " + path + "\n");
             return;
         }
         machine.loadStringConstants(objectFile.getStringStorage());
         machine.loadProgram(0, objectFile.getProgram());
         machine.runProgram(0);
-    }
-
-    public class Console extends OutputStream {
-        private TextArea console;
-
-        public Console(TextArea console) {
-            this.console = console;
-        }
-
-        public void appendText(String valueOf) {
-            Platform.runLater(() -> console.appendText(valueOf));
-        }
-
-        public void write(int b) throws IOException {
-            appendText(String.valueOf((char)b));
-        }
     }
 
     public static class OutputArea extends TextArea {

@@ -63,8 +63,8 @@
       <file leaf-file-name="ControlUnit.class" pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/ControlUnit.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1701">
-              <caret line="99" column="40" lean-forward="false" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="40" />
+            <state relative-caret-position="2058">
+              <caret line="102" column="40" lean-forward="false" selection-start-line="102" selection-start-column="40" selection-end-line="102" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -928,8 +928,8 @@
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/ControlUnit.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1701">
-          <caret line="99" column="40" lean-forward="false" selection-start-line="99" selection-start-column="33" selection-end-line="99" selection-end-column="40" />
+        <state relative-caret-position="2058">
+          <caret line="102" column="40" lean-forward="false" selection-start-line="102" selection-start-column="40" selection-end-line="102" selection-end-column="40" />
           <folding />
         </state>
       </provider>
