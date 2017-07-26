@@ -8,7 +8,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nbmgui.controller.Controller">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nbmgui.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -62,7 +62,23 @@
                               <Button layoutX="64.0" layoutY="237.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="237.0" />
                               <Button layoutX="64.0" layoutY="24.0" mnemonicParsing="false" onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File" />
                            </children></AnchorPane>
-                      <AnchorPane fx:id="outputPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                      <AnchorPane fx:id="outputPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <SplitPane dividerPositions="0.7894736842105263" layoutX="64.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="211.0" prefWidth="248.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <TextArea fx:id="outputView" editable="false" layoutX="23.0" layoutY="-53.0" prefHeight="161.0" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                       <children>
+                                          <TextField fx:id="inputView" layoutX="81.0" layoutY="-1.0" prefHeight="40.0" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children></AnchorPane>
                     </items>
                   </SplitPane>
           </children>

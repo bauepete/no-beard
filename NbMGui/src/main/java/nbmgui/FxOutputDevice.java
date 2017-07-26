@@ -1,15 +1,14 @@
 package nbmgui;
 
 import machine.OutputDevice;
-import nbmgui.controller.Controller;
 
 /**
  * Created by Egon on 22.07.2017.
  */
-public class OutputPrinter implements OutputDevice {
+public class FxOutputDevice implements OutputDevice {
     private final Controller controller;
 
-    public OutputPrinter(Controller controller) {
+    public FxOutputDevice(Controller controller) {
         this.controller = controller;
     }
 
