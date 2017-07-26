@@ -115,7 +115,8 @@ public class ControlUnit {
         executeInstruction();
     }
 
-    public void startMachine() {
+    public void startMachine(int startPc) {
+        setPc(startPc);
         machineState = MachineState.RUNNING;
     }
 

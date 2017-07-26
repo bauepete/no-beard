@@ -88,7 +88,7 @@ public class NoBeardMachine implements SourceCodeInfo {
 
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
-        controlUnit.startMachine();
+        controlUnit.startMachine(startPc);
         while (getState() == ControlUnit.MachineState.RUNNING) {
             step();
         }
