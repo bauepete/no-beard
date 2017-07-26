@@ -14,8 +14,7 @@ public class FxOutputDevice implements OutputDevice {
 
     @Override
     public void printInt(int value, int columnwidth) {
-
-        controller.getOutputView().appendText(String.valueOf(value));
+        controller.getOutputView().appendText(String.format("%" + columnwidth + "d", value));
     }
 
     @Override
