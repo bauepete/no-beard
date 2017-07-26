@@ -19,6 +19,7 @@ public class FxInputDevice implements InputDevice {
     @Override
     public boolean hasNext() {
         try {
+            controller.getInputView().setDisable(false);
             controller.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -34,6 +35,7 @@ public class FxInputDevice implements InputDevice {
     @Override
     public boolean hasNextInt() {
         try {
+            controller.getInputView().setDisable(false);
             controller.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -29,6 +29,7 @@ public class Controller {
     public void initialize() {
         machine = new NoBeardMachine(new FxInputDevice(this), new FxOutputDevice(this));
         semaphore = new Semaphore(0);
+        inputView.setDisable(true);
         inputView.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty()){
                 inputIsAvailable(inputView.getText());
@@ -43,6 +44,8 @@ public class Controller {
     public TextArea getOutputView() {
         return outputView;
     }
+
+    public TextField getInputView() { return inputView; }
 
     @FXML
     void openFile(ActionEvent event) {
@@ -81,6 +84,7 @@ public class Controller {
         this.getOutputView().appendText(providedInput + "\n");
         this.input = providedInput;
         this.inputView.clear();
+        this.inputView.setDisable(true);
         this.getSemaphore().release();
     }
 }
