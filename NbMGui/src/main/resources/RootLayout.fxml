@@ -49,7 +49,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.2828507795100223, 0.6369710467706013" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.3207126948775056, 0.700445434298441" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
         <AnchorPane>
           <children>
@@ -62,7 +62,7 @@
                               <Button layoutX="64.0" layoutY="237.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="237.0" />
                               <Button layoutX="64.0" layoutY="24.0" mnemonicParsing="false" onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File" />
                            </children></AnchorPane>
-                      <AnchorPane fx:id="outputPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
                               <SplitPane dividerPositions="0.7894736842105263" layoutX="64.0" layoutY="-11.0" orientation="VERTICAL" prefHeight="211.0" prefWidth="248.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
@@ -71,7 +71,7 @@
                                           <TextArea fx:id="outputView" editable="false" layoutX="23.0" layoutY="-53.0" prefHeight="161.0" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                  <AnchorPane maxHeight="100.0" minHeight="0.0" minWidth="100.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
                                           <TextField fx:id="inputView" layoutX="81.0" layoutY="-1.0" prefHeight="40.0" prefWidth="246.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
@@ -83,14 +83,21 @@
                   </SplitPane>
           </children>
         </AnchorPane>
-        <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
-          <content>
-            <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="544.0" prefWidth="300.0">
-            </AnchorPane>
-          </content>
-        </ScrollPane>
         <AnchorPane>
-        </AnchorPane>
+               <children>
+                  <Label fx:id="fileTitle" alignment="CENTER" maxHeight="40.0" minHeight="40.0" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="programDataView" editable="false" layoutX="94.0" layoutY="161.0" prefHeight="544.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+               </children></AnchorPane>
+      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="544.0" prefWidth="300.0">
+            </AnchorPane>
       </items>
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

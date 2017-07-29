@@ -293,7 +293,7 @@ public class InstructionSet {
             return id;
         }
 
-        byte getSize() {
+        public byte getSize() {
             int s = 0;
             s = getOperandTypes().stream().map((t) -> t.getSizeInBytes()).reduce(s, Integer::sum) + 1;
             return (byte) s;

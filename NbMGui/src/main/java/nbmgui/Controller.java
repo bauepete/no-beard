@@ -4,6 +4,8 @@ import io.BinaryFile;
 import io.BinaryFileHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -12,12 +14,13 @@ import machine.NoBeardMachine;
 
 import java.io.*;
 import java.util.concurrent.Semaphore;
+import java.util.regex.Pattern;
 
 public class Controller {
-    private String path;
     private NoBeardMachine machine;
-    private BinaryFile objectFile;
     private Semaphore semaphore;
+    private BinaryFile objectFile;
+    private String path;
     private String input;
 
     @FXML
@@ -26,10 +29,20 @@ public class Controller {
     @FXML
     private TextArea outputView;
 
+    @FXML
+    private TextArea programDataView;
+
+    @FXML
+    private Label fileTitle;
+
+    @FXML
+    private Button startButton;
+
     public void initialize() {
         machine = new NoBeardMachine(new FxInputDevice(this), new FxOutputDevice(this));
         semaphore = new Semaphore(0);
         inputView.setDisable(true);
+        startButton.setDisable(true);
         inputView.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty()){
                 inputIsAvailable(inputView.getText());
@@ -53,25 +66,36 @@ public class Controller {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("NoBeard-object Files", "*.no"));
         File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null)
+        if (selectedFile != null){
             this.path = selectedFile.getAbsolutePath();
+            prepareObjectFile();
+        }
+        else
+            outputView.appendText("Select a NoBeard object file\n");
+    }
+
+    private void prepareObjectFile() {
+        try {
+            objectFile = BinaryFileHandler.open(path);
+        } catch (IOException ex) {
+            outputView.appendText("Unable to open " + path + "\n");
+            return;
+        }
+        programDataView.clear();
+        Disassembler disassembler = new Disassembler(objectFile);
+        for (String line : disassembler.getProgramData()) {
+            programDataView.appendText(line + "\n");
+        }
+        String[] splittedPath = path.split(Pattern.quote("\\"));
+        fileTitle.setText(splittedPath[splittedPath.length-1]);
+        startButton.setDisable(false);
     }
 
     @FXML
     void startProgram(ActionEvent event) {
-        if (path == null) {
-            outputView.appendText("Select a NoBeard object file\n");
-            return;
-        }
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                    try {
-                        objectFile = BinaryFileHandler.open(path);
-                    } catch (IOException ex) {
-                        outputView.appendText("Unable to open " + path + "\n");
-                        return;
-                    }
                     machine.loadStringConstants(objectFile.getStringStorage());
                     machine.loadProgram(0, objectFile.getProgram());
                     machine.runProgram(0);
