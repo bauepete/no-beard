@@ -90,11 +90,8 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="programDataView" editable="false" layoutX="94.0" layoutY="161.0" prefHeight="544.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </TextArea>
+                  <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                  <ScrollPane fx:id="programDataView" layoutX="100.0" layoutY="121.0" prefHeight="544.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0" />
                </children></AnchorPane>
       <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="544.0" prefWidth="300.0">
             </AnchorPane>

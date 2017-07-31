@@ -4,19 +4,19 @@ import io.BinaryFile;
 import io.BinaryFileHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.concurrent.Semaphore;
-import java.util.regex.Pattern;
 
 public class Controller {
     private NoBeardMachine machine;
@@ -32,7 +32,7 @@ public class Controller {
     private TextArea outputView;
 
     @FXML
-    private TextArea programDataView;
+    private ScrollPane programDataView;
 
     @FXML
     private Label fileTitle;
@@ -83,13 +83,20 @@ public class Controller {
             outputView.appendText("Unable to open " + path.getFileName().toString() + "\n");
             return;
         }
-        programDataView.clear();
         Disassembler disassembler = new Disassembler(objectFile);
-        for (String line : disassembler.getProgramData()) {
-            programDataView.appendText(line + "\n");
-        }
+        fillProgramDataView(disassembler.getProgramData());
         fileTitle.setText(path.getFileName().toString());
         startButton.setDisable(false);
+    }
+
+    private void fillProgramDataView(List<String> programData) {
+        VBox result = new VBox();
+        for (String lineStr : programData) {
+            HBox line = new HBox(new CheckBox(lineStr));
+            line.setPadding(new Insets(10));
+            result.getChildren().add(line);
+        }
+        programDataView.setContent(result);
     }
 
     @FXML

@@ -24,6 +24,7 @@ public class Main extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("RootLayout.fxml"));
             Scene scene = new Scene(root);
+            scene.getStylesheets().add("style.css");
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
