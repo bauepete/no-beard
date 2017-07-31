@@ -26,14 +26,18 @@ public class Disassembler {
         int currentAddressInProgramMemory = pc;
         while (pc < objectFile.getProgram().length) {
             instructionRegister = InstructionSet.getInstructionById(programMemory.loadByte(pc));
+            currentAddressInProgramMemory++;
             StringBuilder line = new StringBuilder("0x" + String.format("%0" + 3 + "d  ", pc) + instructionRegister.toString());
             for (InstructionSet.OperandType operandType : instructionRegister.getOperandTypes()) {
                 line.append(" ");
-                currentAddressInProgramMemory++;
-                if (operandType == InstructionSet.OperandType.BYTE)
+                if (operandType == InstructionSet.OperandType.BYTE) {
                     line.append(String.valueOf(programMemory.loadByte(currentAddressInProgramMemory)));
-                else
+                    currentAddressInProgramMemory++;
+                }
+                else {
                     line.append(String.valueOf(programMemory.loadHalfWord(currentAddressInProgramMemory)));
+                    currentAddressInProgramMemory += 2;
+                }
             }
             result.add(line.toString());
             pc += instructionRegister.getSize();
