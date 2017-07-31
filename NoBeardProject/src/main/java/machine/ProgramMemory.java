@@ -39,6 +39,11 @@ public class ProgramMemory {
         this.errorHandler = errorHandler;
     }
 
+    public ProgramMemory(byte[] programMemory, ErrorHandler errorHandler) {
+        this.programMemory = programMemory;
+        this.errorHandler = errorHandler;
+    }
+
     void store(int startAddress, byte[] program) {
         if (startAddress + program.length <= this.programMemory.length) {
             System.arraycopy(program, 0, this.programMemory, startAddress, program.length);
@@ -47,7 +52,7 @@ public class ProgramMemory {
         }
     }
 
-    byte loadByte(int atAddress) {
+    public byte loadByte(int atAddress) {
         if (atAddress < programMemory.length) {
             return programMemory[atAddress];
         } else {
@@ -56,7 +61,7 @@ public class ProgramMemory {
         }
     }
 
-    int loadHalfWord(int atAddress) {
+    public int loadHalfWord(int atAddress) {
         if (atAddress < programMemory.length - 1)
             return ((programMemory[atAddress] & 0xff) * 256 + (programMemory[atAddress + 1] & 0xff));
         else {

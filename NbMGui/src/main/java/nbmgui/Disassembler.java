@@ -12,34 +12,33 @@ import java.util.List;
  */
 public class Disassembler {
     private final BinaryFile objectFile;
+    private final ProgramMemory programMemory;
     private InstructionSet.Instruction instructionRegister;
-    private byte[] programMemory;
 
     public Disassembler(BinaryFile objectFile) {
         this.objectFile = objectFile;
-        this.programMemory = new byte[]{};
+        this.programMemory = new ProgramMemory(objectFile.getProgram(), null);
     }
 
     public List<String> getProgramData() {
-        programMemory = objectFile.getProgram().clone();
         List<String> result = new ArrayList<>();
         int pc = 0;
         int currentAddressInProgramMemory = pc;
-        while (pc < programMemory.length) {
-            instructionRegister = InstructionSet.getInstructionById(programMemory[pc]);
+        while (pc < objectFile.getProgram().length) {
+            instructionRegister = InstructionSet.getInstructionById(programMemory.loadByte(pc));
             StringBuilder line = new StringBuilder("0x" + String.format("%0" + 3 + "d  ", pc) + instructionRegister.toString());
             currentAddressInProgramMemory++;
             if (instructionRegister.hasOperands()) {
                 line.append(" ");
                 if (instructionRegister.getOperandTypes().size() == 1) {
                     if (instructionRegister.getOperandTypes().get(0) == InstructionSet.OperandType.BYTE)
-                        line.append(String.valueOf(programMemory[currentAddressInProgramMemory]));
+                        line.append(String.valueOf(programMemory.loadByte(currentAddressInProgramMemory)));
                     else
-                        line.append(String.valueOf(((programMemory[currentAddressInProgramMemory] & 0xff) * 256 + (programMemory[currentAddressInProgramMemory + 1] & 0xff))));
+                        line.append(String.valueOf(programMemory.loadHalfWord(currentAddressInProgramMemory)));
                 } else {
-                    line.append(String.valueOf(programMemory[currentAddressInProgramMemory]));
+                    line.append(String.valueOf(programMemory.loadByte(currentAddressInProgramMemory)));
                     currentAddressInProgramMemory++;
-                    line.append(" " + String.valueOf(((programMemory[currentAddressInProgramMemory] & 0xff) * 256 + (programMemory[currentAddressInProgramMemory + 1] & 0xff))));
+                    line.append(" ").append(String.valueOf(programMemory.loadHalfWord(currentAddressInProgramMemory)));
                 }
             }
             result.add(line.toString());
