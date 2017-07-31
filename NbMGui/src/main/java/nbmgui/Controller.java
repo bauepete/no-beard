@@ -13,6 +13,8 @@ import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Semaphore;
 import java.util.regex.Pattern;
 
@@ -20,7 +22,7 @@ public class Controller {
     private NoBeardMachine machine;
     private Semaphore semaphore;
     private BinaryFile objectFile;
-    private String path;
+    private Path path;
     private String input;
 
     @FXML
@@ -67,7 +69,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("NoBeard-object Files", "*.no"));
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null){
-            this.path = selectedFile.getAbsolutePath();
+            this.path = Paths.get(selectedFile.getAbsolutePath());
             prepareObjectFile();
         }
         else
@@ -76,9 +78,9 @@ public class Controller {
 
     private void prepareObjectFile() {
         try {
-            objectFile = BinaryFileHandler.open(path);
+            objectFile = BinaryFileHandler.open(path.toString());
         } catch (IOException ex) {
-            outputView.appendText("Unable to open " + path + "\n");
+            outputView.appendText("Unable to open " + path.getFileName().toString() + "\n");
             return;
         }
         programDataView.clear();
@@ -86,8 +88,7 @@ public class Controller {
         for (String line : disassembler.getProgramData()) {
             programDataView.appendText(line + "\n");
         }
-        String[] splittedPath = path.split(Pattern.quote("\\"));
-        fileTitle.setText(splittedPath[splittedPath.length-1]);
+        fileTitle.setText(path.getFileName().toString());
         startButton.setDisable(false);
     }
 
