@@ -1,2 +1,2 @@
 language: java
-before-install: cd NoBeardProject
+script: mvn test
