@@ -93,7 +93,7 @@ public class Controller {
         VBox result = new VBox();
         for (String lineStr : programData) {
             HBox line = new HBox(new CheckBox(lineStr));
-            line.setPadding(new Insets(10));
+            line.setPadding(new Insets(1));
             result.getChildren().add(line);
         }
         programDataView.setContent(result);
