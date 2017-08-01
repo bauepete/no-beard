@@ -1,2 +1,2 @@
 language: java
-before-script: cd NoBeardProject
+before-install: cd NoBeardProject
