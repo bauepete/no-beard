@@ -27,8 +27,10 @@ import config.Configuration;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * @author peter
  */
 public class NoBeardMachine implements SourceCodeInfo {
@@ -56,6 +58,8 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final CallStack callStack;
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
+    private final List<Integer> breakpoints;
+    private int breakpointIndex;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -63,8 +67,9 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack = new CallStack(dataMemory, 0, SIZE_OF_AUXILIARY_CELLS);
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
+        breakpoints = new ArrayList<>();
     }
-    
+
     public static String getVersion() {
         return Configuration.getVersion();
     }
@@ -89,9 +94,37 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
         controlUnit.startMachine(startPc);
-        while (getState() == ControlUnit.MachineState.RUNNING) {
-            step();
+        breakpointIndex = 0;
+        jumpToNextBreakpoint();
+    }
+
+    public void jumpToNextBreakpoint() {
+        if (breakpointIndex < breakpoints.size()) {
+            while (controlUnit.getPc() < breakpoints.get(breakpointIndex)) {
+                step();
+            }
+            breakpointIndex++;
         }
+        else{
+            while (getState() == ControlUnit.MachineState.RUNNING)
+                step();
+        }
+    }
+
+    public void addBreakpoint(int atAddress) {
+        breakpoints.add(atAddress);
+    }
+
+    public void clearBreakpoints() {
+        breakpoints.clear();
+    }
+
+    public void stopProgram() {
+        controlUnit.stopMachine();
+    }
+
+    public int getPc() {
+        return controlUnit.getPc();
     }
 
     public void step() {
