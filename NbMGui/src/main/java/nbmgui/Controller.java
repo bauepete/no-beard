@@ -3,6 +3,7 @@ package nbmgui;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -85,7 +86,6 @@ public class Controller {
 
     @FXML
     void startProgram(ActionEvent event) {
-        setBreakpoints();
         stepButton.setDisable(false);
         continueButton.setDisable(false);
         stopButton.setDisable(false);
@@ -95,7 +95,7 @@ public class Controller {
                 machine.loadStringConstants(objectFile.getStringStorage());
                 machine.loadProgram(0, objectFile.getProgram());
                 machine.runProgram(0);
-                setCurrentPcOfUI();
+                highlightNextInstructionToBeExecuted();
             }
         });
         thread.start();
@@ -104,14 +104,13 @@ public class Controller {
     @FXML
     void step(ActionEvent event) {
         machine.step();
-        setCurrentPcOfUI();
+        highlightNextInstructionToBeExecuted();
     }
 
     @FXML
     void continueToBreakpoint(ActionEvent event) {
-        setBreakpoints();
-        machine.jumpToNextBreakpoint();
-        setCurrentPcOfUI();
+        machine.runUntilNextBreakpoint();
+        highlightNextInstructionToBeExecuted();
     }
     @FXML
     void stopProgram(ActionEvent event) {
@@ -139,29 +138,30 @@ public class Controller {
         for (String lineStr : programDataList) {
             CheckBox line = new CheckBox(lineStr);
             line.setPadding(new Insets(1));
+            line.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (event.getSource() instanceof CheckBox) {
+                        CheckBox breakpoint = (CheckBox) event.getSource();
+                        if (breakpoint.isSelected())
+                            machine.addBreakpoint(Integer.valueOf(breakpoint.getText().substring(2, 5)));
+                        else
+                            machine.removeBreakpoint(Integer.valueOf(breakpoint.getText().substring(2, 5)));
+                    }
+                }
+            });
             programData.getChildren().add(line);
         }
         programDataView.setContent(programData);
     }
 
-    private void setCurrentPcOfUI() {
+    private void highlightNextInstructionToBeExecuted() {
         for (int i = 0; i < programData.getChildren().size(); i++) {
             CheckBox checkBox = (CheckBox) programData.getChildren().get(i);
-            if (Integer.valueOf(checkBox.getText().substring(2, 5)) == machine.getPc()) {
+            if (Integer.valueOf(checkBox.getText().substring(2, 5)) == machine.getPc())
                 ((CheckBox) programData.getChildren().get(i)).setStyle("-fx-background-color: #999999");
-            }
             else
                 ((CheckBox) programData.getChildren().get(i)).setStyle("-fx-background-color: transparent");
-        }
-    }
-
-    private void setBreakpoints() {
-        machine.clearBreakpoints();
-        for (int i = 0; i < programData.getChildren().size(); i++) {
-            CheckBox checkBox = (CheckBox) programData.getChildren().get(i);
-            if (checkBox.isSelected()) {
-                machine.addBreakpoint(Integer.valueOf(checkBox.getText().substring(2, 5)));
-            }
         }
     }
 

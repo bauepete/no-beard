@@ -27,8 +27,7 @@ import config.Configuration;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author peter
@@ -58,8 +57,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final CallStack callStack;
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
-    private final List<Integer> breakpoints;
-    private int breakpointIndex;
+    private final TreeSet<Integer> breakpoints;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -67,7 +65,7 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack = new CallStack(dataMemory, 0, SIZE_OF_AUXILIARY_CELLS);
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
-        breakpoints = new ArrayList<>();
+        breakpoints = new TreeSet<>();
     }
 
     public static String getVersion() {
@@ -94,16 +92,15 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
         controlUnit.startMachine(startPc);
-        breakpointIndex = 0;
-        jumpToNextBreakpoint();
+        runUntilNextBreakpoint();
     }
 
-    public void jumpToNextBreakpoint() {
-        if (breakpointIndex < breakpoints.size()) {
-            while (controlUnit.getPc() < breakpoints.get(breakpointIndex)) {
+    public void runUntilNextBreakpoint() {
+        Integer nextBreakpoint = breakpoints.stream().filter(e -> e > this.getPc()).findFirst().orElse(null);
+        if (nextBreakpoint != null) {
+            while (controlUnit.getPc() < nextBreakpoint) {
                 step();
             }
-            breakpointIndex++;
         }
         else{
             while (getState() == ControlUnit.MachineState.RUNNING)
@@ -115,8 +112,8 @@ public class NoBeardMachine implements SourceCodeInfo {
         breakpoints.add(atAddress);
     }
 
-    public void clearBreakpoints() {
-        breakpoints.clear();
+    public void removeBreakpoint(int atAddress) {
+        breakpoints.remove(atAddress);
     }
 
     public void stopProgram() {
