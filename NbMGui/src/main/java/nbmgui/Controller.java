@@ -51,13 +51,10 @@ public class Controller {
         programDataMap = new HashMap<>();
         inputView.setDisable(true);
         startButton.setDisable(true);
-        stepButton.setDisable(true);
-        continueButton.setDisable(true);
-        stopButton.setDisable(true);
+        setDebuggerButtonsDisable(true);
         inputView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty()) {
+            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
                 inputIsAvailable(inputView.getText());
-            }
         });
     }
 
@@ -92,9 +89,7 @@ public class Controller {
 
     @FXML
     void startProgram(ActionEvent event) {
-        stepButton.setDisable(false);
-        continueButton.setDisable(false);
-        stopButton.setDisable(false);
+        setDebuggerButtonsDisable(false);
         lastProgramLine = -1;
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -122,9 +117,7 @@ public class Controller {
 
     @FXML
     void stopProgram(ActionEvent event) {
-        stepButton.setDisable(true);
-        continueButton.setDisable(true);
-        stopButton.setDisable(true);
+        setDebuggerButtonsDisable(true);
         machine.stopProgram();
     }
 
@@ -143,7 +136,7 @@ public class Controller {
 
     private void fillProgramDataView(List<String> programDataList) {
         VBox programData = new VBox();
-        for (String lineStr : programDataList) {
+        for  (String lineStr : programDataList) {
             CheckBox line = new CheckBox(lineStr);
             line.setPadding(new Insets(1));
             line.setOnAction((event) -> {
@@ -168,9 +161,17 @@ public class Controller {
     private void highlightNextInstructionToBeExecuted() {
         if (programDataMap.containsKey(machine.getPc()))
             programDataMap.get(machine.getPc()).setStyle("-fx-background-color: #999999");
+        else
+            setDebuggerButtonsDisable(true);
         if (lastProgramLine > -1)
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
         lastProgramLine = machine.getPc();
+    }
+
+    private void setDebuggerButtonsDisable(boolean state) {
+        stepButton.setDisable(state);
+        continueButton.setDisable(state);
+        stopButton.setDisable(state);
     }
 
     private void inputIsAvailable(String providedInput) {
