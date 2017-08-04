@@ -57,10 +57,11 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="219.0">
                            <children>
-                              <Button fx:id="startButton" layoutX="64.0" layoutY="97.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="45.0" prefWidth="120.0" text="Run" textAlignment="CENTER" />
-                              <Button layoutX="64.0" layoutY="168.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Step" />
-                              <Button layoutX="64.0" layoutY="237.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="237.0" />
-                              <Button layoutX="64.0" layoutY="24.0" mnemonicParsing="false" onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File" />
+                              <Button fx:id="startButton" layoutX="81.0" layoutY="83.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="45.0" prefWidth="120.0" text="Run" textAlignment="CENTER" />
+                              <Button fx:id="stepButton" layoutX="81.0" layoutY="144.0" mnemonicParsing="false" onAction="#step" prefHeight="45.0" prefWidth="120.0" text="Step" />
+                              <Button fx:id="stopButton" layoutX="81.0" layoutY="264.0" mnemonicParsing="false" onAction="#stopProgram" prefHeight="45.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="264.0" />
+                              <Button layoutX="81.0" layoutY="21.0" mnemonicParsing="false" onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File" />
+                              <Button fx:id="continueButton" layoutX="81.0" layoutY="205.0" mnemonicParsing="false" onAction="#continueToBreakpoint" prefHeight="45.0" prefWidth="120.0" text="Continue" />
                            </children></AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
