@@ -58,6 +58,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
     private final TreeSet<Integer> breakpoints;
+    private Integer lastPc;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -92,6 +93,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
         controlUnit.startMachine(startPc);
+        lastPc = -1;
         runUntilNextBreakpoint();
     }
 
@@ -99,12 +101,27 @@ public class NoBeardMachine implements SourceCodeInfo {
         Integer nextBreakpoint = breakpoints.stream().filter(e -> e > this.getPc()).findFirst().orElse(null);
         if (nextBreakpoint != null) {
             while (controlUnit.getPc() < nextBreakpoint) {
-                step();
+                if (controlUnit.getPc() < lastPc) {
+                    lastPc = controlUnit.getPc()-1;
+                    runUntilNextBreakpoint();
+                    break;
+                } else {
+                    lastPc = controlUnit.getPc();
+                    step();
+                }
             }
         }
-        else{
-            while (getState() == ControlUnit.MachineState.RUNNING)
-                step();
+        else {
+            while (getState() == ControlUnit.MachineState.RUNNING) {
+                if (controlUnit.getPc() < lastPc) {
+                    lastPc = controlUnit.getPc()-1;
+                    runUntilNextBreakpoint();
+                    break;
+                } else {
+                    lastPc = controlUnit.getPc();
+                    step();
+                }
+            }
         }
     }
 
