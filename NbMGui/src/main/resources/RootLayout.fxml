@@ -49,7 +49,7 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.3207126948775056, 0.700445434298441" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.33, 0.66" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
         <AnchorPane>
           <children>
@@ -95,7 +95,9 @@
                   <ScrollPane fx:id="programDataView" layoutX="100.0" layoutY="121.0" prefHeight="544.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0" />
                </children></AnchorPane>
       <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="544.0" prefWidth="300.0">
-            </AnchorPane>
+               <children>
+                  <ListView fx:id="dataMemoryView" prefHeight="544.0" prefWidth="301.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
       </items>
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

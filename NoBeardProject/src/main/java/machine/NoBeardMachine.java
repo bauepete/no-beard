@@ -133,6 +133,10 @@ public class NoBeardMachine implements SourceCodeInfo {
         breakpoints.remove(atAddress);
     }
 
+    public void removeAllBreakpoints() {
+        breakpoints.clear();
+    }
+
     public void stopProgram() {
         controlUnit.stopMachine();
     }
@@ -149,8 +153,11 @@ public class NoBeardMachine implements SourceCodeInfo {
         return callStack.peek();
     }
 
-    DataMemory getDataMemory() {
+    public DataMemory getDataMemory() {
         return dataMemory;
     }
 
+    public CallStack getCallStack() {
+        return callStack;
+    }
 }
