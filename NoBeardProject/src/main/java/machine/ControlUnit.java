@@ -25,15 +25,17 @@ package machine;
 
 import error.ErrorHandler;
 
+import java.util.Observable;
+
 /**
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class ControlUnit {
+public class ControlUnit extends Observable {
 
     public enum MachineState {
 
-        STOPPED, RUNNING, ERROR
+        STOPPED, RUNNING, ERROR, BLOCKED
     }
 
     private final ProgramMemory programMemory;
@@ -111,8 +113,13 @@ public class ControlUnit {
 
     void executeCycle() {
         fetchInstruction();
-        setPc(getPc() + instructionRegister.getSize());
+        if (instructionRegister.getId() != 32)
+            setPc(getPc() + instructionRegister.getSize());
         executeInstruction();
+        if (instructionRegister.getId() >= 22 && instructionRegister.getId() <= 24) {
+            setChanged();
+            notifyObservers(getPc());
+        }
     }
 
     public void startMachine(int startPc) {
@@ -135,6 +142,12 @@ public class ControlUnit {
 
     void stopMachine() {
         machineState = MachineState.STOPPED;
+    }
+
+    void blockMachine() {
+        machineState = MachineState.BLOCKED;
+        setChanged();
+        notifyObservers();
     }
 
     void stopDueToDivisionByZero() {

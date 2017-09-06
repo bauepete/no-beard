@@ -69,4 +69,9 @@ public class ProgramMemory {
             return -1;
         }
     }
+
+    public void replaceInstruction(int atAddress, byte instructionId) {
+        programMemory[atAddress] = instructionId;
+    }
+
 }

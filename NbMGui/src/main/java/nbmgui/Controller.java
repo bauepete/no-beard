@@ -91,6 +91,8 @@ public class Controller {
         if (selectedFile != null) {
             this.path = Paths.get(selectedFile.getAbsolutePath());
             prepareObjectFile();
+            machine.loadStringConstants(objectFile.getStringStorage());
+            machine.loadProgram(0, objectFile.getProgram());
         } else
             outputView.appendText("Select a NoBeard object file\n");
     }
@@ -103,8 +105,6 @@ public class Controller {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                machine.loadStringConstants(objectFile.getStringStorage());
-                machine.loadProgram(0, objectFile.getProgram());
                 machine.runProgram(0);
                 highlightNextInstructionToBeExecuted();
                 updateDataMemory();
@@ -174,15 +174,12 @@ public class Controller {
     private ObservableList<String> getDataMemory() {
         ObservableList<String> result = FXCollections.observableArrayList();
         result.add("\t\tAddress\t  0\t+1\t+2\t+3");
-        StringBuilder line = null;
-        for (int i = 0; i < machine.getPc(); i++) {
-            if (i % 4 == 0) {
-                if (line != null) {
-                    result.add(line.toString());
-                }
-                line = new StringBuilder(String.format("\t\t%0" + 4 + "d\t", i));
+        for (int i = 0; i < machine.getCurrentLine(); i+=4) {
+            StringBuilder line = new StringBuilder(String.format("\t\t%0" + 4 + "d\t", i));
+            for (int j = i; j < i+4; j++) {
+                line.append(String.format("\t%0" + 3 + "d", machine.getDataMemory().loadByte(j)));
             }
-            line.append(String.format("\t%0" + 3 + "d", machine.getDataMemory().loadByte(i)));
+            result.add(line.toString());
         }
         return result;
     }
@@ -212,27 +209,20 @@ public class Controller {
         });
     }
 
-    private List<Label> setPointer(int atAddress, String line) {
+    private List<Label> setPointer(int startAddress, String line) {
         List<Label> result = new ArrayList<>();
         String[] split = line.split("\t");
-        int framePointerIndex = -1;
-        int stackPointerIndex = -1;
-        if (machine.getCallStack().getFramePointer() >= atAddress && machine.getCallStack().getFramePointer() < atAddress + 4) {
-            split[1] = "->";
-            framePointerIndex = machine.getCallStack().getFramePointer() - atAddress + 4;
-        }
-        if (machine.getCallStack().getStackPointer() >= atAddress && machine.getCallStack().getStackPointer() < atAddress + 4) {
-            split[1] = "->";
-            stackPointerIndex = machine.getCallStack().getStackPointer() - atAddress + 4;
-        }
+        int framePointer = machine.getCallStack().getFramePointer();
+        int stackPointer = machine.getCallStack().getStackPointer();
+        System.out.println("stack:" + stackPointer);
         for (int i = 0; i < split.length; i++) {
+            int currentAddress = i - 4 + startAddress;
             Label label = new Label(split[i] + "\t");
-            if (i == framePointerIndex) {
-                result.get(1).setStyle("-fx-text-fill: #0038AC;");
+            if (currentAddress >= startAddress && currentAddress == framePointer) {
                 label.setStyle("-fx-background-color: #0038AC;" +
                         "-fx-text-fill: white;");
             }
-            if (i == stackPointerIndex) {
+            if (currentAddress >= startAddress && currentAddress == stackPointer) {
                 result.get(1).setStyle("-fx-text-fill: #ac080e;");
                 label.setStyle("-fx-background-color: #ac080e;" +
                         "-fx-text-fill: white;");
@@ -243,13 +233,13 @@ public class Controller {
     }
 
     private void highlightNextInstructionToBeExecuted() {
-        if (programDataMap.containsKey(machine.getPc()))
-            programDataMap.get(machine.getPc()).setStyle("-fx-background-color: #999999");
+        if (programDataMap.containsKey(machine.getCurrentLine()))
+            programDataMap.get(machine.getCurrentLine()).setStyle("-fx-background-color: #999999");
         else
             setDebuggerButtonsDisable(true);
         if (lastProgramLine > -1)
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
-        lastProgramLine = machine.getPc();
+        lastProgramLine = machine.getCurrentLine();
     }
 
     private void setDebuggerButtonsDisable(boolean state) {

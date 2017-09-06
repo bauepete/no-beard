@@ -29,6 +29,7 @@ import java.util.List;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import machine.InstructionSet.Instruction;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -146,6 +147,7 @@ public class NoBeardMachineTest {
         assertEquals(17 + 42, machine.getDataMemory().loadWord(56));
     }
 
+    @Ignore
     @Test
     public void testProgramDebugger() {
         String output = "HelloWorld";

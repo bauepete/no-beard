@@ -58,7 +58,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
     private final TreeSet<Integer> breakpoints;
-    private Integer lastPc;
+    private final Debugger debugger;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -67,6 +67,8 @@ public class NoBeardMachine implements SourceCodeInfo {
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
         breakpoints = new TreeSet<>();
+        debugger = new Debugger(programMemory);
+        controlUnit.addObserver(debugger);
     }
 
     public static String getVersion() {
@@ -93,56 +95,32 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runProgram(int startPc) {
         System.out.println("Starting programm at pc " + startPc);
         controlUnit.startMachine(startPc);
-        lastPc = -1;
         runUntilNextBreakpoint();
     }
 
     public void runUntilNextBreakpoint() {
-        Integer nextBreakpoint = breakpoints.stream().filter(e -> e > this.getPc()).findFirst().orElse(null);
-        if (nextBreakpoint != null) {
-            while (controlUnit.getPc() < nextBreakpoint) {
-                if (controlUnit.getPc() < lastPc) {
-                    lastPc = controlUnit.getPc()-1;
-                    runUntilNextBreakpoint();
-                    break;
-                } else {
-                    lastPc = controlUnit.getPc();
-                    step();
-                }
-            }
-        }
-        else {
-            while (getState() == ControlUnit.MachineState.RUNNING) {
-                if (controlUnit.getPc() < lastPc) {
-                    lastPc = controlUnit.getPc()-1;
-                    runUntilNextBreakpoint();
-                    break;
-                } else {
-                    lastPc = controlUnit.getPc();
-                    step();
-                }
-            }
+        if (getState() == ControlUnit.MachineState.BLOCKED)
+            controlUnit.startMachine(getCurrentLine());
+        debugger.prepareNextBreakpoint(getCurrentLine());
+        while (getState() == ControlUnit.MachineState.RUNNING) {
+            step();
         }
     }
 
     public void addBreakpoint(int atAddress) {
-        breakpoints.add(atAddress);
+        debugger.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)));
     }
 
     public void removeBreakpoint(int atAddress) {
-        breakpoints.remove(atAddress);
+        debugger.removeBreakpoint(atAddress);
     }
 
     public void removeAllBreakpoints() {
-        breakpoints.clear();
+        debugger.clearBreakpoints();
     }
 
     public void stopProgram() {
         controlUnit.stopMachine();
-    }
-
-    public int getPc() {
-        return controlUnit.getPc();
     }
 
     public void step() {
