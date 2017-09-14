@@ -27,6 +27,7 @@ import config.Configuration;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -101,14 +102,13 @@ public class NoBeardMachine implements SourceCodeInfo {
     public void runUntilNextBreakpoint() {
         if (getState() == ControlUnit.MachineState.BLOCKED)
             controlUnit.startMachine(getCurrentLine());
-        debugger.prepareNextBreakpoint(getCurrentLine());
         while (getState() == ControlUnit.MachineState.RUNNING) {
             step();
         }
     }
 
     public void addBreakpoint(int atAddress) {
-        debugger.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)));
+        debugger.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)).getId());
     }
 
     public void removeBreakpoint(int atAddress) {
@@ -119,8 +119,22 @@ public class NoBeardMachine implements SourceCodeInfo {
         debugger.clearBreakpoints();
     }
 
+    public Set<Integer> getBreakpoints() {
+          return debugger.getAllBreakpoints();
+    }
+
     public void stopProgram() {
         controlUnit.stopMachine();
+    }
+
+    public void setBreakInstructionIfNeeded() {
+        int address = getCurrentLine()-controlUnit.getInstructionRegister().getSize();
+        if (getBreakpoints().contains(address))
+            debugger.replaceInstructionAtAddress(address, InstructionSet.Instruction.BREAK);
+    }
+
+    public void replaceBreakInstruction() {
+        debugger.replaceInstructionAtAddress(getCurrentLine(), null);
     }
 
     public void step() {

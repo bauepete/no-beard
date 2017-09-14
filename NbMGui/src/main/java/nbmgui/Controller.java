@@ -12,7 +12,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import machine.NoBeardMachine;
 
 import java.io.File;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -115,13 +113,18 @@ public class Controller {
 
     @FXML
     void step(ActionEvent event) {
+        if (machine.getBreakpoints().contains(machine.getCurrentLine()))
+            machine.replaceBreakInstruction();
         machine.step();
+        machine.setBreakInstructionIfNeeded();
         highlightNextInstructionToBeExecuted();
         updateDataMemory();
     }
 
     @FXML
     void continueToBreakpoint(ActionEvent event) {
+        machine.step();
+        machine.setBreakInstructionIfNeeded();
         machine.runUntilNextBreakpoint();
         highlightNextInstructionToBeExecuted();
         updateDataMemory();
@@ -131,6 +134,7 @@ public class Controller {
     void stopProgram(ActionEvent event) {
         setDebuggerButtonsDisable(true);
         machine.stopProgram();
+        programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
     }
 
     private void prepareObjectFile() {
@@ -214,7 +218,6 @@ public class Controller {
         String[] split = line.split("\t");
         int framePointer = machine.getCallStack().getFramePointer();
         int stackPointer = machine.getCallStack().getStackPointer();
-        System.out.println("stack:" + stackPointer);
         for (int i = 0; i < split.length; i++) {
             int currentAddress = i - 4 + startAddress;
             Label label = new Label(split[i] + "\t");

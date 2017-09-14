@@ -79,6 +79,10 @@ public class ControlUnit extends Observable {
         this.pc = pc;
     }
 
+    public InstructionSet.Instruction getInstructionRegister() {
+        return instructionRegister;
+    }
+
     int getLiteral() {
         int n = programMemory.loadHalfWord(currentAddressInProgramMemory);
         currentAddressInProgramMemory += 2;
@@ -113,13 +117,12 @@ public class ControlUnit extends Observable {
 
     void executeCycle() {
         fetchInstruction();
-        if (instructionRegister.getId() != 32)
-            setPc(getPc() + instructionRegister.getSize());
+        increasePc();
         executeInstruction();
-        if (instructionRegister.getId() >= 22 && instructionRegister.getId() <= 24) {
-            setChanged();
-            notifyObservers(getPc());
-        }
+    }
+
+    private void increasePc() {
+        setPc(getPc() + instructionRegister.getSize());
     }
 
     public void startMachine(int startPc) {
@@ -146,8 +149,9 @@ public class ControlUnit extends Observable {
 
     void blockMachine() {
         machineState = MachineState.BLOCKED;
+        setPc(getPc() - instructionRegister.getSize());
         setChanged();
-        notifyObservers();
+        notifyObservers(getPc());
     }
 
     void stopDueToDivisionByZero() {
