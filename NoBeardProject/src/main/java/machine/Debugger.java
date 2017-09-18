@@ -9,12 +9,16 @@ import java.util.Set;
  * Created by Egon on 31.08.2017.
  */
 public class Debugger implements Observer {
-    private final HashMap<Integer, Byte> breakpoints;
-    private final ProgramMemory programMemory;
+    private HashMap<Integer, Byte> breakpoints;
+    private ProgramMemory programMemory;
 
     Debugger(ProgramMemory programMemory) {
         this.programMemory = programMemory;
         breakpoints = new HashMap<>();
+    }
+
+    public void setProgramMemory(ProgramMemory programMemory) {
+        this.programMemory = programMemory;
     }
 
     void setBreakpoint(Integer address, Byte instructionId) {
@@ -28,7 +32,7 @@ public class Debugger implements Observer {
     }
 
     void clearBreakpoints() {
-        breakpoints.forEach((address, instructionId) -> removeBreakpoint(address));
+        breakpoints = new HashMap<>();
     }
 
     @Override

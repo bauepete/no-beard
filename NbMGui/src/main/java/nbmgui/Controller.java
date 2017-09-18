@@ -100,33 +100,42 @@ public class Controller {
         setDebuggerButtonsDisable(false);
         dataMemoryView.getItems().clear();
         lastProgramLine = -1;
-        Thread thread = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 machine.runProgram(0);
                 highlightNextInstructionToBeExecuted();
-                updateDataMemory();
             }
-        });
-        thread.start();
+        }).start();
+        updateDataMemory();
     }
 
     @FXML
     void step(ActionEvent event) {
-        if (machine.getBreakpoints().contains(machine.getCurrentLine()))
-            machine.replaceBreakInstruction();
-        machine.step();
-        machine.setBreakInstructionIfNeeded();
-        highlightNextInstructionToBeExecuted();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (machine.getBreakpoints().contains(machine.getCurrentLine()))
+                    machine.replaceBreakInstruction();
+                machine.step();
+                machine.setBreakInstructionIfNeeded();
+                highlightNextInstructionToBeExecuted();
+            }
+        }).start();
         updateDataMemory();
     }
 
     @FXML
     void continueToBreakpoint(ActionEvent event) {
-        machine.step();
-        machine.setBreakInstructionIfNeeded();
-        machine.runUntilNextBreakpoint();
-        highlightNextInstructionToBeExecuted();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                machine.step();
+                machine.setBreakInstructionIfNeeded();
+                machine.runUntilNextBreakpoint();
+                highlightNextInstructionToBeExecuted();
+            }
+        }).start();
         updateDataMemory();
     }
 
@@ -240,22 +249,23 @@ public class Controller {
             programDataMap.get(machine.getCurrentLine()).setStyle("-fx-background-color: #999999");
         else
             setDebuggerButtonsDisable(true);
-        if (lastProgramLine > -1)
+        if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
         lastProgramLine = machine.getCurrentLine();
     }
 
-    private void setDebuggerButtonsDisable(boolean state) {
+    public void setDebuggerButtonsDisable(boolean state) {
         stepButton.setDisable(state);
         continueButton.setDisable(state);
         stopButton.setDisable(state);
     }
 
     private void inputIsAvailable(String providedInput) {
-        this.getOutputView().appendText(providedInput + "\n");
-        this.input = providedInput;
-        this.inputView.clear();
-        this.inputView.setDisable(true);
-        this.getSemaphore().release();
+        getOutputView().appendText(providedInput + "\n");
+        input = providedInput;
+        inputView.clear();
+        inputView.setDisable(true);
+        setDebuggerButtonsDisable(false);
+        getSemaphore().release();
     }
 }
