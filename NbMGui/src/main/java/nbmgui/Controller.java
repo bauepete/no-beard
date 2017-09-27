@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -201,6 +203,9 @@ public class Controller {
         dataMemoryView.setItems(getDataMemory());
         dataMemoryView.setCellFactory((list) -> {
             return new ListCell<String>() {
+                int framePointer = machine.getCallStack().getFramePointer();
+                int stackPointer = machine.getCallStack().getStackPointer();
+                static final int INDEX_OF_ADDRESS = 2;
                 @Override
                 protected void updateItem(String item, boolean empty) {
                     super.updateItem(item, empty);
@@ -218,31 +223,87 @@ public class Controller {
                         }
                     }
                 }
+                private List<Label> setPointer(int startAddress, String line) {
+                    List<Label> result = new ArrayList<>();
+                    String[] split = line.split("\t");
+                    int framePointer = machine.getCallStack().getFramePointer();
+                    int stackPointer = machine.getCallStack().getStackPointer();
+                    for (int i = 0; i < split.length; i++) {
+                        int currentAddress = i - 4 + startAddress;
+                        Label label = new Label(split[i] + "\t");
+                        if (currentAddress >= startAddress && currentAddress == framePointer) {
+                            label.setStyle("-fx-background-color: #0038AC;" +
+                                    "-fx-text-fill: white;");
+                        }
+                        if (currentAddress >= startAddress && currentAddress == stackPointer) {
+                            result.get(1).setStyle("-fx-text-fill: #ac080e;");
+                            label.setStyle("-fx-background-color: #ac080e;" +
+                                    "-fx-text-fill: white;");
+                        }
+                        result.add(label);
+                    }
+                    return result;
+                }
+
+                private void createLine(String line) {
+                    if (getIndex() == 0) {
+                        createHeadline(line);
+                    } else {
+                        createDataLine(line);
+                    }
+                }
+
+                private void createHeadline(String item) {
+                    setText(item);
+                    setStyle("-fx-background-color: #002c73;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-font-weight: bold;");
+                }
+
+                private void createDataLine(String item) {
+                    HBox line = new HBox();
+                    int firstAddressInLine = (getIndex() - 1) * 4;
+                    convertStringToLabels(firstAddressInLine, item).forEach(line.getChildren()::add);
+                    setGraphic(line);
+                }
+
+                private List<Label> convertStringToLabels(int firstAddressInLine, String line) {
+                    String[] lineContent = line.split("\t");
+                    List<Label> result = createLabelsForAddress(lineContent[INDEX_OF_ADDRESS]);
+                    int currentAddress = firstAddressInLine;
+                    for (int i = 4; i < lineContent.length; i++) {
+                        if (currentAddress == framePointer) {
+                            result.add(createHighlightedLabel(lineContent[i], "#0038AC"));
+                        } else if (currentAddress == stackPointer) {
+                            result.add(createHighlightedLabel(lineContent[i], "#AC080E"));
+                        } else {
+                            result.add(createNormalLabel(lineContent[i]));
+                        }
+                        currentAddress++;
+                    }
+                    return result;
+                }
+
+                List<Label> createLabelsForAddress(String address) {
+                    Label tabLabel = new Label("\t");
+                    return Arrays.asList(tabLabel, tabLabel, new Label(address), tabLabel);
+                }
+
+                Label createHighlightedLabel(String content, String bgColor) {
+                    Label l = new Label(content + "\t");
+                    l.setStyle("-fx-background-color: " + bgColor + ";" +
+                            "-fx-text-fill: white;");
+                    return l;
+                }
+
+                Label createNormalLabel(String content) {
+                    return new Label(content + "\t");
+                }
             };
         });
     }
 
-    private List<Label> setPointer(int startAddress, String line) {
-        List<Label> result = new ArrayList<>();
-        String[] split = line.split("\t");
-        int framePointer = machine.getCallStack().getFramePointer();
-        int stackPointer = machine.getCallStack().getStackPointer();
-        for (int i = 0; i < split.length; i++) {
-            int currentAddress = i - 4 + startAddress;
-            Label label = new Label(split[i] + "\t");
-            if (currentAddress >= startAddress && currentAddress == framePointer) {
-                label.setStyle("-fx-background-color: #0038AC;" +
-                        "-fx-text-fill: white;");
-            }
-            if (currentAddress >= startAddress && currentAddress == stackPointer) {
-                result.get(1).setStyle("-fx-text-fill: #ac080e;");
-                label.setStyle("-fx-background-color: #ac080e;" +
-                        "-fx-text-fill: white;");
-            }
-            result.add(label);
-        }
-        return result;
-    }
+
 
     private void highlightNextInstructionToBeExecuted() {
         if (programDataMap.containsKey(machine.getCurrentLine()))
