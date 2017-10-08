@@ -41,6 +41,10 @@ public class DataMemory {
         this.errorHandler = errorHandler;
     }
 
+    public int getMemoryLength() {
+        return memory.length;
+    }
+
     void storeByte(int atAddress, byte value) {
         if (0 <= atAddress && atAddress < memory.length) {
             memory[atAddress] = value;
