@@ -10,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
@@ -19,8 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -51,7 +48,9 @@ public class Controller {
     @FXML
     private Button stopButton;
     @FXML
-    private ListView<String> dataMemoryView;
+    private ListView<String> dataMemoryListView;
+    @FXML
+    private Label dataMemoryHeader;
 
     public void initialize() {
         machine = new NoBeardMachine(new FxInputDevice(this), new FxOutputDevice(this));
@@ -64,7 +63,9 @@ public class Controller {
             if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
                 inputIsAvailable(inputView.getText());
         });
-        dataMemoryView.setFocusTraversable(false);
+        dataMemoryListView.setFocusTraversable(false);
+        dataMemoryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        dataMemoryHeader.setText("\t\tAddress\t  0\t+1\t+2\t+3");
     }
 
     Semaphore getSemaphore() {
@@ -83,6 +84,18 @@ public class Controller {
         return inputView;
     }
 
+    ListView<String> getDataMemoryListView() {
+        return dataMemoryListView;
+    }
+
+    NoBeardMachine getMachine() {
+        return machine;
+    }
+
+    double getDataMemoryHeaderHeight() {
+        return dataMemoryHeader.getHeight();
+    }
+
     @FXML
     void openFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -95,7 +108,7 @@ public class Controller {
             prepareObjectFile();
             machine.loadStringConstants(objectFile.getStringStorage());
             machine.loadProgram(0, objectFile.getProgram());
-            dataMemoryView.getItems().clear();
+            dataMemoryListView.getItems().clear();
         } else
             outputView.appendText("Select a NoBeard object file\n");
     }
@@ -103,12 +116,12 @@ public class Controller {
     @FXML
     void startProgram(ActionEvent event) {
         setDebuggerButtonsDisable(false);
-        dataMemoryView.getItems().clear();
+        dataMemoryListView.getItems().clear();
         lastProgramLine = -1;
         new Thread(() -> {
             machine.runProgram(0);
             highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> updateDataMemory(getDataMemory()));
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
         }).start();
     }
 
@@ -120,7 +133,7 @@ public class Controller {
             machine.step();
             machine.setBreakInstructionIfNeeded();
             highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> updateDataMemory(getDataMemory()));
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
         }).start();
     }
 
@@ -131,7 +144,7 @@ public class Controller {
             machine.setBreakInstructionIfNeeded();
             machine.runUntilNextBreakpoint();
             highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> updateDataMemory(getDataMemory()));
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
         }).start();
     }
 
@@ -180,127 +193,16 @@ public class Controller {
         return Integer.valueOf(line.substring(2, 5));
     }
 
-    private ObservableList<String> getDataMemory() {
+    ObservableList<String> getRawDataMemoryList() {
         ObservableList<String> result = FXCollections.observableArrayList();
-        result.add("\t\tAddress\t  0\t+1\t+2\t+3");
         for (int i = 0; i <= machine.getCallStack().getStackPointer(); i += 4) {
-            StringBuilder line = new StringBuilder(String.format("\t\t%0" + 4 + "d\t", i));
+            StringBuilder line = new StringBuilder(String.format("%0" + 4 + "d", i));
             for (int j = i; j < i + 4; j++) {
-                line.append(String.format("\t%0" + 3 + "d", machine.getDataMemory().loadByte(j)));
+                line.append(String.format("%0" + 3 + "d", machine.getDataMemory().loadByte(j)));
             }
             result.add(line.toString());
         }
         return result;
-    }
-
-    private void updateDataMemory(ObservableList<String> content) {
-        dataMemoryView.setItems(content);
-        dataMemoryView.setCellFactory((list) -> new ListCell<String>() {
-            int framePointer = machine.getCallStack().getFramePointer();
-            int stackPointer = machine.getCallStack().getStackPointer();
-            static final int INDEX_OF_ADDRESS = 2;
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item != null) {
-                    createLine(item);
-                }
-            }
-
-            private void createLine(String line) {
-                if (getIndex() == 0 && line.contains("Address")) {
-                    createHeadline(line);
-                } else {
-                    createDataLine(line);
-                }
-            }
-
-            private void createHeadline(String item) {
-                setText(item);
-                setStyle("-fx-background-color: #002c73;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;");
-            }
-
-            private void createDataLine(String item) {
-                HBox line = new HBox();
-                int firstAddressInLine = (getIndex() - 1) * 4;
-                convertStringToLabels(firstAddressInLine, item).forEach(line.getChildren()::add);
-                setGraphic(line);
-            }
-
-            private List<Label> convertStringToLabels(int firstAddressInLine, String line) {
-                String[] lineContent = line.split("\t");
-                List<Label> result = createLabelsForAddress(lineContent[INDEX_OF_ADDRESS]);
-                int currentAddress = firstAddressInLine;
-                for (int i = 4; i < lineContent.length; i++) {
-                    if (currentAddress == framePointer) {
-                        result.add(createHighlightedLabel(lineContent[i], "#0038AC"));
-                    } else if (currentAddress == stackPointer) {
-                        result.add(createHighlightedLabel(lineContent[i], "#AC080E"));
-                    } else {
-                        result.add(createNormalLabel(lineContent[i]));
-                    }
-                    currentAddress++;
-                }
-                return result;
-            }
-
-            List<Label> createLabelsForAddress(String address) {
-                return new ArrayList<>(Arrays.asList(new Label("\t"), new Label("\t"), new Label(address), new Label("\t")));
-            }
-
-            Label createHighlightedLabel(String content, String bgColor) {
-                Label l = new Label(content + "\t");
-                l.setStyle("-fx-background-color: " + bgColor + ";" +
-                        "-fx-text-fill: white;");
-                return l;
-            }
-
-            Label createNormalLabel(String content) {
-                return new Label(content + "\t");
-            }
-        });
-        setContextMenuToListView();
-    }
-
-    private void setContextMenuToListView() {
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem viewInt = new MenuItem("View Integer");
-        MenuItem viewChar = new MenuItem("View characters");
-        viewChar.setOnAction((event) -> convertAsciiToChar(dataMemoryView.getSelectionModel().getSelectedIndex(), dataMemoryView.getSelectionModel().getSelectedItem()));
-        viewInt.setOnAction((event) -> convertAsciiToInt(dataMemoryView.getSelectionModel().getSelectedIndex(), dataMemoryView.getSelectionModel().getSelectedItem()));
-        contextMenu.getItems().addAll(viewInt, viewChar);
-        dataMemoryView.setContextMenu(contextMenu);
-        dataMemoryView.setOnContextMenuRequested((event) -> {
-            contextMenu.show(dataMemoryView, event.getScreenX(), event.getScreenY());
-            event.consume();
-        });
-    }
-
-    private void convertAsciiToInt(int selectedIndex, String selectedLine) {
-        ObservableList<String> dataMemoryList = dataMemoryView.getItems();
-        String[] lineContent = selectedLine.split("\t");
-        String line = "\t\t" + lineContent[2] + "\t\t" + machine.getDataMemory().loadWord(selectedIndex) + "\t\t\t";
-        dataMemoryList.set(selectedIndex, line);
-        updateDataMemory(dataMemoryList);
-    }
-
-    private void convertAsciiToChar(int selectedIndex, String selectedLine) {
-        ObservableList<String> dataMemoryList = dataMemoryView.getItems();
-        String[] lineContent = selectedLine.split("\t");
-        StringBuilder line = new StringBuilder("\t\t" + lineContent[2] + "\t");
-        for (int i = 4; i < lineContent.length; i++) {
-            int ascii = Integer.parseInt(lineContent[i]);
-            if ((ascii != 0)) {
-                line.append("\t" + (char) ascii);
-            } else {
-                line.append("\t" + lineContent[i]);
-            }
-        }
-        dataMemoryList.set(selectedIndex, line.toString());
-        updateDataMemory(dataMemoryList);
     }
 
     private void highlightNextInstructionToBeExecuted() {

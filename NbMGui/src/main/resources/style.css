@@ -12,3 +12,18 @@
 .check-box:selected .box {
     -fx-background-color: #ac0002;
 }
+
+#dataMemoryHeader {
+    -fx-background-color: #002c73;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#dataCell {
+    -fx-pref-width: 35.0;
+    -fx-alignment: center;
+}
+
+#addressCell {
+    -fx-pref-width: 122.0;
+}
