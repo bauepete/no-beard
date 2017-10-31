@@ -46,13 +46,12 @@ class DataMemoryView
                 List<Label> result = createLabelForAddress(lineContent[INDEX_OF_ADDRESS]);
                 int currentAddress = firstAddressInLine;
                 for (int i = 1; i < lineContent.length; i++) {
-                    if (currentAddress == framePointer) {
+                    if (currentAddress == framePointer)
                         result.add(createHighlightedLabel(lineContent[i], "#0038AC"));
-                    } else if (currentAddress == stackPointer) {
+                    else if (currentAddress == stackPointer)
                         result.add(createHighlightedLabel(lineContent[i], "#AC080E"));
-                    } else {
+                    else
                         result.add(createNormalLabel(lineContent[i]));
-                    }
                     currentAddress++;
                 }
                 return result;
@@ -70,46 +69,29 @@ class DataMemoryView
                 l.setStyle("-fx-background-color: " + bgColor + ";" +
                         "-fx-text-fill: white;");
                 l.setId("dataCell");
-                setContextMenuToDataCell(controller, l);
+                setContextMenuToDataCell(l);
                 return l;
             }
 
             Label createNormalLabel(String content) {
                 Label l = new Label(content);
                 l.setId("dataCell");
-                setContextMenuToDataCell(controller, l);
+                setContextMenuToDataCell(l);
                 return l;
+            }
+
+            void setContextMenuToDataCell(Label dataCell) {
+                dataCell.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.SECONDARY) {
+                        MenuItem menuItem = new MenuItem("View char");
+                        menuItem.setOnAction(menuEvent -> DataMemoryConverter.convertDataToChar(dataCell));
+                        controller.getDataMemoryListView().getContextMenu().getItems().add(menuItem);
+                    }
+                });
             }
         });
         setContextMenuToListView(controller);
         AnchorPane.setTopAnchor(controller.getDataMemoryListView(), controller.getDataMemoryHeaderHeight());
-    }
-
-    static String[] splitDataLine(String line) {
-        switch (line.length()) {
-            case 16:
-                return new String[] {line.substring(0, 4), line.substring(4, 7), line.substring(7, 10), line.substring(10, 13), line.substring(13, 16)};
-            case 14:
-                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 8), line.substring(8, 11), line.substring(11, 14)};
-            case 12:
-                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 9), line.substring(9, 12)};
-            case 10:
-                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 7), line.substring(7, 10)};
-            case 8:
-                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 7), line.substring(7, 8)};
-            default:
-                return new String[] {line.substring(0, 4), line.substring(4), " ", " ", " "};
-        }
-    }
-
-    private static void setContextMenuToDataCell(Controller controller, Label dataCell) {
-        dataCell.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                MenuItem menuItem = new MenuItem("View char");
-                menuItem.setOnAction(menuEvent -> DataMemoryConverter.convertDataToChar(dataCell));
-                controller.getDataMemoryListView().getContextMenu().getItems().add(menuItem);
-            }
-        });
     }
 
     private static void setContextMenuToListView(Controller controller) {
@@ -130,5 +112,22 @@ class DataMemoryView
             contextMenu.show(controller.getDataMemoryListView(), event.getScreenX(), event.getScreenY());
             event.consume();
         });
+    }
+
+    static String[] splitDataLine(String line) {
+        switch (line.length()) {
+            case 16:
+                return new String[] {line.substring(0, 4), line.substring(4, 7), line.substring(7, 10), line.substring(10, 13), line.substring(13, 16)};
+            case 14:
+                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 8), line.substring(8, 11), line.substring(11, 14)};
+            case 12:
+                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 9), line.substring(9, 12)};
+            case 10:
+                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 7), line.substring(7, 10)};
+            case 8:
+                return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 7), line.substring(7, 8)};
+            default:
+                return new String[] {line.substring(0, 4), line.substring(4), " ", " ", " "};
+        }
     }
 }

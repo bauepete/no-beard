@@ -52,22 +52,6 @@ public class Controller {
     @FXML
     private Label dataMemoryHeader;
 
-    public void initialize() {
-        machine = new NoBeardMachine(new FxInputDevice(this), new FxOutputDevice(this));
-        semaphore = new Semaphore(0);
-        programDataMap = new HashMap<>();
-        setDebuggerButtonsDisable(true);
-        inputView.setDisable(true);
-        startButton.setDisable(true);
-        inputView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
-                inputIsAvailable(inputView.getText());
-        });
-        dataMemoryListView.setFocusTraversable(false);
-        dataMemoryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        dataMemoryHeader.setText("\t\tAddress\t  0\t+1\t+2\t+3");
-    }
-
     Semaphore getSemaphore() {
         return semaphore;
     }
@@ -96,10 +80,40 @@ public class Controller {
         return dataMemoryHeader.getHeight();
     }
 
+    public void initialize() {
+        machine = new NoBeardMachine(new FxInputDevice(this), new FxOutputDevice(this));
+        semaphore = new Semaphore(0);
+        programDataMap = new HashMap<>();
+        setDebuggerButtonsDisable(true);
+        inputView.setDisable(true);
+        startButton.setDisable(true);
+        inputView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
+                inputIsAvailable(inputView.getText());
+        });
+        dataMemoryListView.setFocusTraversable(false);
+        dataMemoryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        dataMemoryHeader.setText("\t\tAddress\t  0\t+1\t+2\t+3");
+    }
+
+    void setDebuggerButtonsDisable(boolean state) {
+        stepButton.setDisable(state);
+        continueButton.setDisable(state);
+        stopButton.setDisable(state);
+    }
+
+    private void inputIsAvailable(String providedInput) {
+        getOutputView().appendText(providedInput + "\n");
+        input = providedInput;
+        inputView.clear();
+        inputView.setDisable(true);
+        setDebuggerButtonsDisable(false);
+        getSemaphore().release();
+    }
+
     @FXML
     void openFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("C:\\Users\\egonm\\Documents\\DiplomaThesis\\SamplePrograms\\NbAssemblerPrograms"));
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("NoBeard-object Files", "*.no"));
         File selectedFile = fileChooser.showOpenDialog(null);
@@ -111,48 +125,6 @@ public class Controller {
             dataMemoryListView.getItems().clear();
         } else
             outputView.appendText("Select a NoBeard object file\n");
-    }
-
-    @FXML
-    void startProgram(ActionEvent event) {
-        setDebuggerButtonsDisable(false);
-        dataMemoryListView.getItems().clear();
-        lastProgramLine = -1;
-        new Thread(() -> {
-            machine.runProgram(0);
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
-        }).start();
-    }
-
-    @FXML
-    void step(ActionEvent event) {
-        new Thread(() -> {
-            if (machine.getBreakpoints().contains(machine.getCurrentLine()))
-                machine.replaceBreakInstruction();
-            machine.step();
-            machine.setBreakInstructionIfNeeded();
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
-        }).start();
-    }
-
-    @FXML
-    void continueToBreakpoint(ActionEvent event) {
-        new Thread(() -> {
-            machine.step();
-            machine.setBreakInstructionIfNeeded();
-            machine.runUntilNextBreakpoint();
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
-        }).start();
-    }
-
-    @FXML
-    void stopProgram(ActionEvent event) {
-        setDebuggerButtonsDisable(true);
-        machine.stopProgram();
-        programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
     }
 
     private void prepareObjectFile() {
@@ -193,6 +165,31 @@ public class Controller {
         return Integer.valueOf(line.substring(2, 5));
     }
 
+    @FXML
+    void startProgram(ActionEvent event) {
+        setDebuggerButtonsDisable(false);
+        startButton.setDisable(true);
+        dataMemoryListView.getItems().clear();
+        lastProgramLine = -1;
+        new Thread(() -> {
+            machine.runProgram(0);
+            highlightNextInstructionToBeExecuted();
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+        }).start();
+    }
+
+    private void highlightNextInstructionToBeExecuted() {
+        if (programDataMap.containsKey(machine.getCurrentLine()))
+            programDataMap.get(machine.getCurrentLine()).setStyle("-fx-background-color: #999999");
+        else  {
+            setDebuggerButtonsDisable(true);
+            startButton.setDisable(false);
+        }
+        if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
+            programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
+        lastProgramLine = machine.getCurrentLine();
+    }
+
     ObservableList<String> getRawDataMemoryList() {
         ObservableList<String> result = FXCollections.observableArrayList();
         for (int i = 0; i <= machine.getCallStack().getStackPointer(); i += 4) {
@@ -205,29 +202,35 @@ public class Controller {
         return result;
     }
 
-    private void highlightNextInstructionToBeExecuted() {
-        if (programDataMap.containsKey(machine.getCurrentLine()))
-            programDataMap.get(machine.getCurrentLine()).setStyle("-fx-background-color: #999999");
-        else
-            setDebuggerButtonsDisable(true);
-        if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
-            programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
-        lastProgramLine = machine.getCurrentLine();
+    @FXML
+    void step(ActionEvent event) {
+        new Thread(() -> {
+            if (machine.getBreakpoints().contains(machine.getCurrentLine()))
+                machine.replaceBreakInstruction();
+            machine.step();
+            machine.setBreakInstructionIfNeeded();
+            highlightNextInstructionToBeExecuted();
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+        }).start();
     }
 
-    void setDebuggerButtonsDisable(boolean state) {
-        stepButton.setDisable(state);
-        continueButton.setDisable(state);
-        stopButton.setDisable(state);
-        startButton.setDisable(!state);
+    @FXML
+    void continueToBreakpoint(ActionEvent event) {
+        new Thread(() -> {
+            machine.step();
+            machine.setBreakInstructionIfNeeded();
+            machine.runUntilNextBreakpoint();
+            highlightNextInstructionToBeExecuted();
+            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+        }).start();
     }
 
-    private void inputIsAvailable(String providedInput) {
-        getOutputView().appendText(providedInput + "\n");
-        input = providedInput;
-        inputView.clear();
-        inputView.setDisable(true);
-        setDebuggerButtonsDisable(false);
-        getSemaphore().release();
+    @FXML
+    void stopProgram(ActionEvent event) {
+        setDebuggerButtonsDisable(true);
+        startButton.setDisable(false);
+        machine.stopProgram();
+        dataMemoryListView.getItems().clear();
+        programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
     }
 }

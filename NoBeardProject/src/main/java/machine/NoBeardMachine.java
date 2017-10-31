@@ -125,6 +125,9 @@ public class NoBeardMachine implements SourceCodeInfo {
 
     public void stopProgram() {
         controlUnit.stopMachine();
+        if(this.getBreakpoints().contains(getCurrentLine())) {
+            this.debugger.replaceInstructionAtAddress(getCurrentLine(), InstructionSet.Instruction.BREAK);
+        }
     }
 
     public void setBreakInstructionIfNeeded() {
