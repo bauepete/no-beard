@@ -128,6 +128,11 @@ public class NoBeardMachine implements SourceCodeInfo {
         if(this.getBreakpoints().contains(getCurrentLine())) {
             this.debugger.replaceInstructionAtAddress(getCurrentLine(), InstructionSet.Instruction.BREAK);
         }
+        resetStackPointer();
+    }
+
+    private void resetStackPointer() {
+        callStack.setCurrentFramePointer(callStack.getFramePointer());
     }
 
     public void setBreakInstructionIfNeeded() {
