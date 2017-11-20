@@ -49,7 +49,7 @@ public class DataMemory {
         }
     }
 
-    byte loadByte(int atAddress) {
+    public byte loadByte(int atAddress) {
         if (0 <= atAddress && atAddress < memory.length) {
             return memory[atAddress];
         } else {
@@ -70,7 +70,7 @@ public class DataMemory {
      * @param atAddress – the address from where the word to be read
      * @return The word located at address.
      */
-    int loadWord(int atAddress) {
+    public int loadWord(int atAddress) {
         byte[] byteArray = load(atAddress, 4);
         if (errorHandler.getCount() == 0) {
             return ByteBuffer.wrap(byteArray).order(ByteOrder.LITTLE_ENDIAN).getInt();

@@ -18,12 +18,7 @@ public class FxInputDevice implements InputDevice {
 
     @Override
     public boolean hasNext() {
-        try {
-            controller.getInputView().setDisable(false);
-            controller.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitForInput();
         return !controller.getInput().isEmpty();
     }
 
@@ -34,17 +29,22 @@ public class FxInputDevice implements InputDevice {
 
     @Override
     public boolean hasNextInt() {
-        try {
-            controller.getInputView().setDisable(false);
-            controller.getSemaphore().acquire();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitForInput();
         return controller.getInput().chars().allMatch( Character::isDigit );
     }
 
     @Override
     public int nextInt() throws InputMismatchException, NoSuchElementException {
         return Integer.parseInt(controller.getInput());
+    }
+
+    private void waitForInput() {
+        try {
+            controller.getInputView().setDisable(false);
+            controller.setDebuggerButtonsDisable(true);
+            controller.getSemaphore().acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

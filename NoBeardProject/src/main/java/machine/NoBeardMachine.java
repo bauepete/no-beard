@@ -27,6 +27,7 @@ import config.Configuration;
 import error.ErrorHandler;
 import error.SourceCodeInfo;
 
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -58,6 +59,7 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
     private final TreeSet<Integer> breakpoints;
+    private final Debugger debugger;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -66,6 +68,8 @@ public class NoBeardMachine implements SourceCodeInfo {
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
         breakpoints = new TreeSet<>();
+        debugger = new Debugger(programMemory);
+        controlUnit.addObserver(debugger);
     }
 
     public static String getVersion() {
@@ -96,32 +100,49 @@ public class NoBeardMachine implements SourceCodeInfo {
     }
 
     public void runUntilNextBreakpoint() {
-        Integer nextBreakpoint = breakpoints.stream().filter(e -> e > this.getPc()).findFirst().orElse(null);
-        if (nextBreakpoint != null) {
-            while (controlUnit.getPc() < nextBreakpoint) {
-                step();
-            }
-        }
-        else{
-            while (getState() == ControlUnit.MachineState.RUNNING)
-                step();
+        if (getState() == ControlUnit.MachineState.BLOCKED)
+            controlUnit.startMachine(getCurrentLine());
+        while (getState() == ControlUnit.MachineState.RUNNING) {
+            step();
         }
     }
 
     public void addBreakpoint(int atAddress) {
-        breakpoints.add(atAddress);
+        debugger.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)).getId());
     }
 
     public void removeBreakpoint(int atAddress) {
-        breakpoints.remove(atAddress);
+        debugger.removeBreakpoint(atAddress);
+    }
+
+    public void removeAllBreakpoints() {
+        debugger.clearBreakpoints();
+    }
+
+    public Set<Integer> getBreakpoints() {
+          return debugger.getAllBreakpoints();
     }
 
     public void stopProgram() {
         controlUnit.stopMachine();
+        if(this.getBreakpoints().contains(getCurrentLine())) {
+            this.debugger.replaceInstructionAtAddress(getCurrentLine(), InstructionSet.Instruction.BREAK);
+        }
+        resetStackPointer();
     }
 
-    public int getPc() {
-        return controlUnit.getPc();
+    private void resetStackPointer() {
+        callStack.setCurrentFramePointer(callStack.getFramePointer());
+    }
+
+    public void setBreakInstructionIfNeeded() {
+        int address = getCurrentLine()-controlUnit.getInstructionRegister().getSize();
+        if (getBreakpoints().contains(address))
+            debugger.replaceInstructionAtAddress(address, InstructionSet.Instruction.BREAK);
+    }
+
+    public void replaceBreakInstruction() {
+        debugger.replaceInstructionAtAddress(getCurrentLine(), null);
     }
 
     public void step() {
@@ -132,8 +153,11 @@ public class NoBeardMachine implements SourceCodeInfo {
         return callStack.peek();
     }
 
-    DataMemory getDataMemory() {
+    public DataMemory getDataMemory() {
         return dataMemory;
     }
 
+    public CallStack getCallStack() {
+        return callStack;
+    }
 }

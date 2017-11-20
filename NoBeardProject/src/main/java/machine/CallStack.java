@@ -56,11 +56,11 @@ public class CallStack {
         setFrameAndStackPointer(currentFramePointer, sizeOfAuxiliaryCells);
     }
 
-    int getFramePointer() {
+    public int getFramePointer() {
         return currentFramePointer;
     }
 
-    int getStackPointer() {
+    public int getStackPointer() {
         return currentStackPointer;
     }
 
