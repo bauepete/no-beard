@@ -51,6 +51,8 @@ public class Controller {
     private ListView<String> dataMemoryListView;
     @FXML
     private Label dataMemoryHeader;
+    @FXML
+    private Label versionLabel;
 
     Semaphore getSemaphore() {
         return semaphore;
@@ -94,6 +96,7 @@ public class Controller {
         dataMemoryListView.setFocusTraversable(false);
         dataMemoryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         dataMemoryHeader.setText("\t\tAddress\t  0\t+1\t+2\t+3");
+        versionLabel.setText(NoBeardMachine.getVersion());
     }
 
     void setDebuggerButtonsDisable(boolean state) {

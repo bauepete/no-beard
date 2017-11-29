@@ -11,6 +11,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
+\usepackage{float}
 
 \include{00_FrontPageDefinitions} % This file should really be touched
 \include{Globals} % Set basic data (author, title, etc.) of your thesis
@@ -19,24 +20,20 @@
 \include{00_Start} % Declaration of Academic Honesty, Abstracts, Acknowledgments, 
 \tableofcontents
 \include{01_Introduction}
-\include{02_TheoreticalBackground}
-\include{03_UsedTechnologies}
-\include{04_SystemProgramming}
-\include{05_WhatIsNoBeard}
-\include{06_VirtualMachine}
-\include{07_NoBeardAssembler}
-\include{08_NoBeardCompiler}
+\include{02_FormalLangAndCompilerConstruct}
+\include{03_DescriptionOfTheGui}
+\include{04_Implementation}
 % create further tex files for all other chapters of your document
-\include{10_Summary}
+\include{05_Summary}
 
 \bibliography{da_bibliography}{}
 \bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
 
 \listoffigures
 \listoftables
-\include{11_ProjectLogBook}
+\include{06_ProjectLogBook}
 
 \appendix
-\include{12_FirstAppendix}
-\include{13_IndividualGoals}
+\include{07_FirstAppendix}
+\include{08_IndividualGoals}
 \end{document}  
