@@ -265,6 +265,9 @@ public class InstructionSet {
         HALT((byte) 0x1F, (cu) -> {
             cu.stopMachine();
         }),
+        BREAK((byte) 0x20, (cu) -> {
+            cu.blockMachine();
+        }),
         ;
 
         private final byte id;
