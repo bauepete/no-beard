@@ -88,14 +88,37 @@ Considering a concrete scenario as given in figure~\ref{fig:threeframes} we have
 At address~36 frame~1 starts with the address to its statically surrounding frame, i.e, the function (or unit or block) represented by frame~0 is defining the function (or block) represented by frame~1. Frame~1 defines two local values at addresses 68 and 72. Now it can be easily verified that an assembler instruction \lstinline$la 0 32$ (see section~\ref{sec:instructions}) loads the value of the local (i.e., relative to the closest frame pointer) address 32. In the concrete example this is address $36 + 32 = 68$.
 
 \section{Binary File Format}
-\leongage{} binaries have the extension \lstinline$.no$ (from \leongage{} object file) and have a format as shown in figure~\ref{fig:binaryfileformat}. From byte 0 onwards the machine instructions are stored in a continuous stream. After the final \lstinline$halt$ instruction the stream of string constants follows immediately.
+\leongage{} binaries have the extension \lstinline$.no$ (from \leongage{} object file)  and consist of three segments, a header segment, a string storage segment and a program segment.
+
+The header segment takes the first six bytes and contains a file identifier (the digits 1 and 7, each stored in one byte) followed by the file format version. This version information starts with the character \lstinline$'v'$ followed by three bytes. Figure~\ref{fig:binaryfileformat} shows an example of such a file. From bytes 3 to 5 it can be seen that this is a file in version 1.0.0.
+
+The string storage segment starts with a four byte number $s$ holding the length of the string storage segment and then follows a bunch of $s$ bytes holding the characters of the strings stored.
+
+The final program segment is organized analogously to the string storage segment. Again a four byte number $p$ is followed by $p$ bytes of program code.
+
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 
 \begin{figure}
 \begin{center}
-\begin{tabular}{p{8em}|p{8em}|}
-\cline{2-2}
-\parbox[t][3em][t]{8em}{\hfill 0} & Instructions \\[3em] \cline{2-2}
-\parbox[b][2em][b]{8em}{\hfill N} & String Constants \\ \cline{2-2}
+\begin{tabular}{R{3em}|C{1em}|C{1em}|C{1em}|C{1em}|C{1em}|C{1em}|}
+& \multicolumn{1}{c}{0} & \multicolumn{1}{c}{1} & \multicolumn{1}{c}{2} & \multicolumn{1}{c}{3} & \multicolumn{1}{c}{4} & \multicolumn{1}{c|}{5} \\
+\cline{2-7} 
+0 & 1 & 7 & 'v' & 1 & 0 & 0 \\ \cline{2-7}
+6 & \multicolumn{4}{|c|}{$s$} & \multicolumn{2}{c|}{ } \\ \cline{2-5}
+12 & \multicolumn{6}{|c|}{ } \\
+ & \multicolumn{6}{|c|}{$s$ bytes of } \\
+ & \multicolumn{6}{|c|}{ strings in the } \\
+ & \multicolumn{6}{|c|}{ string storage segment} \\
+ & \multicolumn{6}{|c|}{ } \\ \cline{2-7}
+$10+s$ & \multicolumn{4}{|c|}{$p$} & \multicolumn{2}{c|}{ } \\ \cline{2-5}
+ & \multicolumn{6}{|c|}{ } \\
+ & \multicolumn{6}{|c|}{$p$ bytes of } \\
+ & \multicolumn{6}{|c|}{ program code in the} \\
+ & \multicolumn{6}{|c|}{ program segment } \\
+ & \multicolumn{6}{|c|}{ } \\ \cline{2-7}
 \end{tabular}
 \end{center}
 \caption{\leongage{} Binary File Format}\label{fig:binaryfileformat}

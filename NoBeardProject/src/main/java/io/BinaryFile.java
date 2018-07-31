@@ -34,6 +34,8 @@ public class BinaryFile {
     private static final byte[] FILE_ID = new byte[]{'1', '7'};
     private static final byte[] CURRENT_VERSION = new byte[]{'v', 1, 0, 0};
 
+    private static final int START_OF_STRING_SEGMENT = 6;
+
     private final String filePath;
 
     private final byte[] versionInfo;
@@ -59,7 +61,7 @@ public class BinaryFile {
         return program;
     }
 
-    public void setStringStorage(byte[] stringStorage) {
+    void setStringStorage(byte[] stringStorage) {
         if (stringStorage != null) {
             this.stringStorage = stringStorage;
         } else {
@@ -83,8 +85,7 @@ public class BinaryFile {
         byte[] headerSegment = createHeaderSegment();
         byte[] stringStorageSegment = createStringStorageSegment();
         byte[] programSegment = createProgramSegment();
-        byte[] byteStream = copySegementsIntoByteStream(headerSegment, stringStorageSegment, programSegment);
-        return byteStream;
+        return copySegmentsIntoByteStream(headerSegment, stringStorageSegment, programSegment);
     }
 
     private byte[] createHeaderSegment() {
@@ -110,7 +111,7 @@ public class BinaryFile {
         return getSegment(program);
     }
 
-    private byte[] copySegementsIntoByteStream(byte[] headerSegment, byte[] stringStorageSegment, byte[] programSegment) {
+    private byte[] copySegmentsIntoByteStream(byte[] headerSegment, byte[] stringStorageSegment, byte[] programSegment) {
         byte[] byteStream = new byte[headerSegment.length + stringStorageSegment.length + programSegment.length];
         System.arraycopy(headerSegment, 0, byteStream, 0, headerSegment.length);
         System.arraycopy(stringStorageSegment, 0, byteStream, headerSegment.length, stringStorageSegment.length);
@@ -147,8 +148,8 @@ public class BinaryFile {
         program = new byte[programLength];
         System.arraycopy(byteStream, START_OF_STRING_SEGMENT + SIZE_OF_LENGTH + stringLength + SIZE_OF_LENGTH, program, 0, programLength);
     }
+
     private static final int SIZE_OF_LENGTH = 4;
-    private static final int START_OF_STRING_SEGMENT = 6;
 
     private int extractLength(byte[] byteStream, final int fromPosition) {
         byte[] stringLength = new byte[SIZE_OF_LENGTH];
@@ -157,7 +158,7 @@ public class BinaryFile {
         return strLen;
     }
 
-    public byte[] getVersion() {
+    byte[] getVersion() {
         return versionInfo;
     }
 }
