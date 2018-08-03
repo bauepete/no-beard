@@ -111,6 +111,413 @@ The machine has a firmly defined execution cycle:
 \end{enumerate}
 The very first instruction is fetched from a specified starting program counter which is provided as an argument when starting the program. From this point of time forwards the program is running until the machine state changes from run. There are two options to interrupt the machine from running state. It get interrupted mostly by the debugger with a breakpoint. Or otherwise when the \lstinline$halt$ instruction get executed.
 \section{Instructions}\label{sec:instructions}
-NoBeard instructions have a variable length and each one has an opcode and operands with an amount of between 0 and 2. For all instructions the first byte is dedicated to the op code, which is the id by which the instruction is identified on machine language level. The remaining bytes, if any, are dedicated to the operands of the instruction. 
+NoBeard instructions are of a different length and each has an opcode and operands of an amount between 0 and 2. The first byte of all instructions is reserved for the op code, which is the identifier used to identify the instruction on machine language level. The remaining bytes, if any, are assigned to the operand of the instruction.
+Each of the following subsections explains these instructions in four categories. The underlined title is the shorthand that identifies the instruction on assembler level. Then follows a table showing the size of the instruction and which bytes carry which information. Finally, each one has also a short explanation in human language and in some cases also an example. All the examples here are taken from \cite{bauer_p._2017}.
+
+\subsection{Load and Store Instructions}
+% ----------------------------- NOP ----------------------------
+\subsubsection{nop}
+\onebyteinstruction{0x00}
+
+\paragraph{Operation:}
+Empty instruction. Does nothing
+
+\begin{lstlisting}
+nop
+\end{lstlisting}
+
+% ----------------------------- LIT ----------------------------
+\subsubsection{lit}
+\threebyteinstruction{0x01}{Literal}
+
+\paragraph{Operation:}
+Pushes a value on the expression stack.
+
+\begin{lstlisting}
+lit Literal
+push(Literal);
+\end{lstlisting}
+
+
+% ----------------------------- LA ----------------------------
+\subsubsection{la}
+\fourbyteinstructiona{0x02}{Displacement}{DataAddress}
+
+\paragraph{Operation:}
+Loads an address on the stack.
+
+	\begin{lstlisting}
+	la Displacement DataAddress
+	base = fp;
+	for (i= 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	push(base + DataAddress);
+	\end{lstlisting}
+
+% ----------------------------- LV ----------------------------
+\subsubsection{lv}
+\fourbyteinstructiona{0x03}{Displacement}{DataAddress}
+
+\paragraph{Operation:}
+Loads a value on the stack.
+
+	\begin{lstlisting}
+	lv Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	adr = base + DataAddress;
+	push(dat[addr ... addr + 3]);
+	\end{lstlisting}
+
+% ----------------------------- LC ----------------------------
+\subsubsection{lc}
+\fourbyteinstructiona{0x04}{Displacement}{DataAddress}
+
+\paragraph{Operation:}
+Loads a character on the stack.
+
+	\begin{lstlisting}
+	lc Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	// fill 3 bytes of zeros to get a full word
+	lw = 000dat[base + Address];
+	push(lw);
+	\end{lstlisting}
+
+% ----------------------------- LVI ----------------------------
+\subsubsection{lvi}
+\fourbyteinstructiona{0x03}{Displacement}{DataAddress}
+
+\paragraph{Operation:}
+Loads a value indirectly on the stack.
+
+	\begin{lstlisting}
+	lvi Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	adr = base + DataAddress;
+	ra = dat[addr ... addr + 3];
+	push(ra);
+	\end{lstlisting}
+
+% ----------------------------- LCI ----------------------------
+\subsubsection{lci}
+\fourbyteinstructiona{0x05}{Displacement}{DataAddress}
+
+\paragraph{Operation:}
+Loads a character indirectly on the stack.
+
+	\begin{lstlisting}
+	lci Displacement DataAddress
+	base = fp;
+	for (i = 0; i < Displacement; i++) {
+		base = dat[base ... base + 3];
+	}
+	ra = dat[base + Address];
+	// fill 3 bytes of zeros to get a full word
+	lw = 000dat[ra];
+	push(lw);
+	\end{lstlisting}
+
+% ----------------------------- INC ----------------------------
+\subsubsection{inc}
+\threebyteinstruction{0x1D}{Size}
+
+\paragraph{Operation:}
+Increases the size of the stack frame by \lstinline$Size$.
+
+	\begin{lstlisting}
+	inc Size
+	top += Size;
+	\end{lstlisting}
+
+% ----------------------------- STO ----------------------------
+\subsubsection{sto}
+\onebyteinstruction{0x07}
+
+\paragraph{Operation:}
+Stores a value on an address.
+
+	\begin{lstlisting}
+	sto
+	x = pop();
+	a = pop();
+	dat[a ... a + 3] = x;
+	\end{lstlisting}
+
+% ----------------------------- STC ----------------------------
+\subsubsection{stc}
+\onebyteinstruction{0x08}
+
+\paragraph{Operation:}
+Stores a character on an address.
+
+	\begin{lstlisting}
+	stc
+	x = pop();
+	a = pop();
+	// Only take the rightmost byte
+	dat[a] = 000x;
+	\end{lstlisting}
+
+\subsection{Integer Instructions}
+
+
+% ----------------------------- NEG ----------------------------
+\subsubsection{neg}
+\onebyteinstruction{0x0B}
+
+\paragraph{Operation:}
+Negates the top of the stack.
+
+	\begin{lstlisting}
+	neg
+	x = pop();
+	push(-x);
+	\end{lstlisting}
+
+% ----------------------------- ADD ----------------------------
+\subsubsection{add}
+\onebyteinstruction{0x0C}
+
+\paragraph{Operation:}
+Adds the top two values of the stack.
+
+	\begin{lstlisting}
+	add
+	push(pop() + pop());
+	\end{lstlisting}
+
+% ----------------------------- SUB ----------------------------
+\subsubsection{sub}
+\onebyteinstruction{0x0D}
+
+\paragraph{Operation:}
+Subtracts the top two values of the stack.
+
+	\begin{lstlisting}
+	sub
+	y = pop();
+	x = pop();
+	push(x - y);
+	\end{lstlisting}
+
+% ----------------------------- MUL ----------------------------
+\subsubsection{mul}
+\onebyteinstruction{0x0E}
+
+\paragraph{Operation:}
+Multiplies the top two values of the stack.
+
+	\begin{lstlisting}
+	mul
+	push(pop() * pop());
+	\end{lstlisting}
+
+% ----------------------------- DIV ----------------------------
+\subsubsection{div}
+\onebyteinstruction{0x0F}
+
+\paragraph{Operation:}
+Divides the top two values of the stack.
+
+	\begin{lstlisting}
+	div
+	y = pop();
+	x = pop();
+	if (y != 0)
+		push(x / y);
+	else
+		throwDivByZero();
+	\end{lstlisting}
+
+
+% ----------------------------- MOD ----------------------------
+\subsubsection{mod}
+\onebyteinstruction{0x10}
+
+\paragraph{Operation:}
+Calculates the remainder of the division of the top values of the stack.
+
+	\begin{lstlisting}
+	mod
+	y = pop();
+	x = pop();
+	push(x % y);
+	\end{lstlisting}
+
+% ----------------------------- NOT ----------------------------
+\subsubsection{not}
+\onebyteinstruction{0x11}
+
+\paragraph{Operation:}
+Calculates the remainder of the division of the top values of the stack.
+
+	\begin{lstlisting}
+	not
+	x = pop();
+	if (x == 0)
+	   push(1);
+	else
+	   push(0);
+	\end{lstlisting}
+
+\subsection{Control Flow Instructions}
+
+% ----------------------------- FJMP ----------------------------
+\subsubsection{fjmp}
+\threebyteinstruction{0x16}{NewPc}
+
+\paragraph{Operation:}
+Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is false.
+
+	\begin{lstlisting}
+	fjmp newPc
+	x = pop();
+	if (x == 0)
+	   pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- TJMP ----------------------------
+\subsubsection{tjmp}
+\threebyteinstruction{0x17}{NewPc}
+
+\paragraph{Operation:}
+Sets \lstinline$pc$ to \lstinline$newPc$ if stack top value is true.
+
+	\begin{lstlisting}
+	tjmp newPc
+	x = pop();
+	if (x == 1)
+	   pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- JMP ----------------------------
+\subsubsection{jmp}
+\threebyteinstruction{0x18}{NewPc}
+
+\paragraph{Operation:}
+Unconditional jump: Sets \lstinline$pc$ to \lstinline$newPc$.
+
+	\begin{lstlisting}
+	jmp newPc
+	pc = NewPc;
+	\end{lstlisting}
+
+% ----------------------------- BREAK----------------------------
+\subsubsection{break}
+\onebyteinstruction{0x1F}
+
+\paragraph{Operation:}
+Breaks the machine. Especially used for the debugging function.
+
+	\begin{lstlisting}
+	break
+	ms = blocked;
+	\end{lstlisting}
+
+% ----------------------------- HALT ----------------------------
+\subsubsection{halt}
+\onebyteinstruction{0x1F}
+
+\paragraph{Operation:}
+Halts the machine.
+
+	\begin{lstlisting}
+	halt
+	ms = stopped;
+	\end{lstlisting}
+	
+
+\subsection{IO-Instructions}
+
+% ----------------------------- IN ----------------------------
+\subsubsection{in}\label{sec:in}
+\twobyteinstruction{0x19}{Type}
+
+\paragraph{Operation:}
+Reads data from the terminal. Depending on \lstinline$Type$ different data types are read:
+
+\begin{itemize}
+	\item 0: An \lstinline$int$ is read and stored at the address on top of the stack. After execution the value 1 is pushed if an integer was read successfully, otherwise 0 is pushed.
+	\item 1: A \lstinline$char$ is read and stored at the address on top of the stack. After execution the value 1 is pushed 
+	\item 2: a \lstinline$string$ with a specific length is read
+\end{itemize}
+
+	\begin{lstlisting}
+	in Type
+	switch(Type) {
+		case 0:
+			a = pop();
+			n = readInt();
+			dat[a ... a + 3] = n;
+			break;
+		case 1:
+			a= pop();
+			ch = readChar();
+			dat[a] = ch;
+			break;
+		case 2:
+			a = pop();
+			strLen = pop();
+			
+			break;
+	}
+	\end{lstlisting}
+
+% ----------------------------- OUT ----------------------------
+\subsubsection{out}\label{sec:out}
+\twobyteinstruction{0x1A}{Type}
+
+\paragraph{Operation:}
+Writes data to the terminal. Depending on \lstinline$Type$ different data types are printed:
+
+\begin{itemize}
+	\item 0: An \lstinline$int$ with a specific column width is printed
+	\item 1: A \lstinline$char$ with a specific column width is printed
+	\item 2: a \lstinline$string$ with a specific column width is printed
+	\item 3: a new line is printed
+\end{itemize}
+
+	\begin{lstlisting}
+	out Type
+	switch(Type) {
+		case 0:
+			width = pop();
+			x = pop();
+			// + means string concatenation in the next line
+			formatString = "%" + width + "d";
+			printf(formatString, x);
+			break;
+		case 1:
+			width= pop();
+			x = pop();
+			printf("%c", x);
+			for (i = 0; i < width - 1; i++)
+				printf(" ");
+			break;
+		case 2:
+			width = pop();
+			strLen = pop();
+			strAddr = pop();
+			printf("%s", dat[strAddr ... strAddr + strLen - 1]);
+			for (i = n; i < width - 1; i++)
+				printf(" ");
+			break;
+		case 3:
+			printf("\n");
+			break;
+	}
+	\end{lstlisting}
+	
 \section{NoBeard Assembler}
-To write programs for the NoBeard machine an Assembler is provided. NoBeard Assembler files are separated in two blocks, which is called the string constants and the assembler program. The files have the extensions .na for NoBeard Assembler. The string constants are stored between two double quotes and has to be located at the beginning of the file. There is no possibility to address one single constant, so when using a string constant in the assembler program one has to provide the start address of the string constant and the length needed in the program.  Assembler programs contains a sequence of assembler instructions. The programmer has to follow the instruction format as shown in the figure
+To write programs for the NoBeard machine an Assembler is provided. NoBeard Assembler files are separated in two blocks, which is called the string constants and the assembler program. The files have the extensions \lstinline$.na$ for NoBeard Assembler. The string constants are stored between two double quotes and has to be located at the beginning of the file. There is no way to address a single constant. So, if we use a string constant in the assembler program, we have to specify the starting address of the string constant and the length needed in the program. Assembler programs  contain a sequence of assembler instructions like \lstinline$lit$ for load or \lstinline$out$ for print. After the opcode of the instruction follows the operands, if they are needed as already described in section \ref{sec:instructions}.
+\subsection{Example}

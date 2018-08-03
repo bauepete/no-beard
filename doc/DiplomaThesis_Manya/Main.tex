@@ -14,6 +14,8 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage[usenames, dvipsnames, table]{xcolor}
+\usepackage{sectsty}
+\subsubsectionfont{\normalfont\large\bfseries\underline}
 
 
 % --------------------------------------------------- Definition of colors used in source code listings ----------------------------------------------
@@ -37,6 +39,39 @@
 	escapechar=|,
 	captionpos=b,
 	numberstyle=\small
+}
+
+% ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
+\newcommand{\onebyteinstruction}[1]{
+\begin{tabular}{|p{3.9em}|}
+\hline
+\tiny{Byte 0} \\ \hline
+#1  \\ \hline
+\end{tabular}
+}
+
+\newcommand{\twobyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} \\ \hline
+#1 & #2 \\ \hline
+\end{tabular}
+}
+
+\newcommand{\threebyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} \\ \hline
+#1 & \multicolumn{2}{c |}{#2} \\ \hline
+\end{tabular}
+}
+
+\newcommand{\fourbyteinstructiona}[3]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} & \tiny{Byte 3} \\ \hline
+#1 & #2 & \multicolumn{2}{c |}{#3} \\ \hline
+\end{tabular}
 }
 
 
