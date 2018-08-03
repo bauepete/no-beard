@@ -1,0 +1,69 @@
+\documentclass[11pt]{report}
+\usepackage[german, english]{babel}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper}                   % ... or a4paper or a5paper or ... 
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{xifthen}
+\usepackage{xstring}			% to check content of strings in xifthen
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[usenames, dvipsnames, table]{xcolor}
+
+
+% --------------------------------------------------- Definition of colors used in source code listings ----------------------------------------------
+\definecolor{srcred}{rgb}{0.6,0,0}
+\definecolor{srcpurple}{rgb}{0.5,0,0.35}
+\definecolor{srcgreen}{rgb}{0.25,0.5,0.35}
+\definecolor{srcblue}{rgb}{0.25,0.35,0.75}
+
+% ----------------------------------------------- Definition of lstlisting for NoBeardAsm programs --------------------------------------------------
+\lstdefinelanguage{NoBeardAsm}{
+	basicstyle=\ttfamily,
+	frame=single,
+	sensitive=true,
+	tabsize=3,
+	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt},
+	morecomment=[l][\color{srcgreen}]{\#},
+	morestring=[b][\color{srcred}]{"},
+	keywordstyle=\color{srcpurple},
+	showspaces=false,
+	showstringspaces=false,
+	escapechar=|,
+	captionpos=b,
+	numberstyle=\small
+}
+
+\newcommand{\bau}[1]{\textcolor{red}{{\small{\bf  BAU:} #1}}}
+
+\include{00_FrontPageDefinitions} % This file should really be touched
+\include{Globals} % Set basic data (author, title, etc.) of your thesis
+\begin{document}
+\include{00_FrontPage} % Should not be necessary to touch this file
+\include{00_Start} % Declaration of Academic Honesty, Abstracts, Acknowledgments, 
+\tableofcontents
+\include{01_Introduction}
+\include{02_FormalLanguage}
+\include{CompilerConstruct}
+\include{03_TheNoBeardMachineArchitecture}
+\include{04_UserManual}
+\include{05_Implementation}
+% create further tex files for all other chapters of your document
+\include{06_Summary}
+
+\bibliography{da_bibliography}{}
+\bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
+
+\listoffigures
+\listoftables
+\include{07_ProjectLogBook}
+
+\appendix
+\include{08_FirstAppendix}
+\include{09_IndividualGoals}
+\end{document}  
