@@ -1,4 +1,6 @@
 \chapter{User Manual}
+\lstset{language=NoBeardAsm}
+\section{Overview}
 This chapter describes how to use the graphical user interface of the NoBeard virtual machine and serves at the same time as a user manual.
 With the NoBeardMachine users are able to load and run NoBeard object files with just a view clicks. The integrated debugger of the virtual machine gives them also the possibility to debug these programs by setting breakpoints. Another big feature is the data visualization which gives users a whole view of the data memory.
 \section{The UI Components}
@@ -12,11 +14,11 @@ As shown in figure~\ref{fig:components} the NoBeardMachine contains the followin
 \end{figure}
 
 \begin{itemize}
-\item \textbf{Control Window: }
-\item \textbf{Output Window: }
-\item \textbf{Program Window: }
-\item \textbf{Data Memory Window: }
-\item \textbf{Input Window: }
+\item \textbf{Control Window: }A window with a set of buttons for user interactions.
+\item \textbf{Output Window: }A terminal showing outputs of programs and user inputs.
+\item \textbf{Program Window: }Shows the actually opened program and its running flow.
+\item \textbf{Data Memory Window: }A visualized call stack of a debugged program.
+\item \textbf{Input Window: }A single-line field for user inputs.
 \end{itemize}
 
 \subsection{Control Window}
@@ -24,18 +26,18 @@ This window consists of five buttons that gives the possibility to open, run, st
 \begin{itemize}
 \item \textbf{Open file: }Opens up a file chooser dialog where the target object file can be selected.
 \item \textbf{Run: }Executes the program from the first byte.
-\item \textbf{Step: }Gives the opportunity to step one single line further in the program flow. This button is only in a "blocked" state available.
+\item \textbf{Step: }Gives the opportunity to step one single line further in the program flow. This button is only in a \lstinline$blocked$ state available.
 \item \textbf{Continue: }When the program execution gets interrupted by a breakpoint this button enables users to jump to the next breakpoint. If there is no breakpoints left it continues the process until the end.
-\item \textbf{Stop: }Stops the execution and sets the machine into the "stopped" state.
+\item \textbf{Stop: }Stops the execution and sets the machine into the \lstinline$stopped$ state.
 \end{itemize}
 \subsection{Output Window}
-It is a non-editable TextArea which simulates a terminal. Program outputs that are coming from an "OUT" instruction are shown here. Submitted inputs are also visible here after a successfully submit.
+It is a non-editable TextArea which simulates a terminal. Program outputs that are coming from an \lstinline$out$ instruction are shown here. Submitted inputs are also visible here after a successfully submit.
 \subsection{Program Window}
 This window shows assembler instructions with the belonging addresses in a VBox. Every line also gets a checkbox that is responsible for setting and removing breakpoints.
 \subsection{Data Memory Window}
 A ListView filled with raw data from the data memory. Every line of the ListView contains four byte data with the belonging addresses. Each byte can be converted to a character. Even a whole line can be translated to four characters or to a single four byte integer. Data with blue background color highlights the frame pointer. Red background color stands for the stack pointer.
 \subsection{Input Window}
-The Input window is a TextField where inputs from users can be handled. It is only enabled when the machine is executing an "IN" instruction. To submit an input, the "ENTER" key has to be pressed and then the entered text will be attached to the Output window.
+The Input window is a TextField where inputs from users can be handled. It is only enabled when the machine is executing an \lstinline$in$ instruction. To submit an input, the "ENTER" key has to be pressed and then the entered text will be attached to the Output window.
 \section{Loading and Running a Program}
 After starting the NoBeardMachine, a NoBeard object file has to be loaded by a click on the “Open File” button. Than a file chooser dialog should appear where the user can choose the desired file. Afterward, the window shows the assembler code and the title of the opened program which is now executable.
 

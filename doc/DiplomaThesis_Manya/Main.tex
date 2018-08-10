@@ -30,7 +30,7 @@
 	frame=single,
 	sensitive=true,
 	tabsize=3,
-	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt},
+	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt, break, push, pop, printf, dat, prog, top, fp, pc, ms, ProgramAddressError, running, stopped, blocked, error},
 	morecomment=[l][\color{srcgreen}]{\#},
 	morestring=[b][\color{srcred}]{"},
 	keywordstyle=\color{srcpurple},
@@ -41,9 +41,8 @@
 	numberstyle=\small
 }
 
-<<<<<<< HEAD
 \newcommand{\bau}[1]{\textcolor{red}{{\small{\bf  BAU:} #1}}}
-=======
+
 % ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
 \newcommand{\onebyteinstruction}[1]{
 \begin{tabular}{|p{3.9em}|}
@@ -77,7 +76,6 @@
 \end{tabular}
 }
 
->>>>>>> DiplomaThesis
 
 \include{00_FrontPageDefinitions} % This file should really be touched
 \include{Globals} % Set basic data (author, title, etc.) of your thesis
