@@ -27,7 +27,7 @@ package machine;
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-public class CallStack {
+class CallStack {
 
     private final DataMemory memory;
     private int currentFramePointer;
@@ -39,9 +39,8 @@ public class CallStack {
      * @param memory The underlying memory on which the call stack is built.
      * @param addressOfFirstFrame The address where the first frame starts.
      * @param sizeOfAuxiliaryCells The number of bytes reserved for auxiliary data,
-     * like return address, static link, etc., for each frame.
      */
-    public CallStack(DataMemory memory, int addressOfFirstFrame, int sizeOfAuxiliaryCells) {
+    CallStack(DataMemory memory, int addressOfFirstFrame, int sizeOfAuxiliaryCells) {
         this.memory = memory;
         this.sizeOfAuxiliaryCells = sizeOfAuxiliaryCells;
         setFrameAndStackPointer(addressOfFirstFrame, sizeOfAuxiliaryCells);
@@ -52,31 +51,61 @@ public class CallStack {
         this.currentStackPointer = addressOfFirstFrame + sizeOfAuxiliaryCells;
     }
 
-    public void setCurrentFramePointer(int currentFramePointer) {
+    /**
+     * setCurrentFramePointer sets the start address of the current frame.
+     * @param currentFramePointer The new start address of the frame
+     * @implSpec The default implementation also sets the start address of the stack pointer
+     * relatively to the start of the current frame
+     */
+    void setCurrentFramePointer(int currentFramePointer) {
         setFrameAndStackPointer(currentFramePointer, sizeOfAuxiliaryCells);
     }
 
-    public int getFramePointer() {
+    /**
+     *
+     * @return The start address of the current frame.
+     */
+    int getFramePointer() {
         return currentFramePointer;
     }
 
-    public int getStackPointer() {
+    /**
+     *
+     * @return The address of the top of stack of the current frame.
+     */
+    int getStackPointer() {
         return currentStackPointer;
     }
 
-    public void setStackPointer(int currentStackPointer) {
+    /**
+     * Sets the address of the last used word of the stack.
+     * @param currentStackPointer The address of the last used word.
+     */
+    void setStackPointer(int currentStackPointer) {
         this.currentStackPointer = currentStackPointer;
     }
 
+    /**
+     * Pushes a value on the stack if possible.
+     * @param value The value to be pushed.
+     */
     void push(int value) {
         currentStackPointer += 4;
         memory.storeWord(currentStackPointer, value);
     }
-    
+
+    /**
+     *
+     * @return The top value of the stack
+     */
     int peek() {
         return memory.loadWord(currentStackPointer);
     }
 
+    /**
+     * Removes the top value of the stack.
+     * @return The top value of the stack.
+     */
     int pop() {
         int value = peek();
         currentStackPointer -= 4;
