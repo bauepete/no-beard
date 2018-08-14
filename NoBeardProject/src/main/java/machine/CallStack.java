@@ -27,7 +27,7 @@ package machine;
  *
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
-class CallStack {
+public class CallStack {
 
     private final DataMemory memory;
     private int currentFramePointer;
@@ -65,7 +65,7 @@ class CallStack {
      *
      * @return The start address of the current frame.
      */
-    int getFramePointer() {
+    public int getFramePointer() {
         return currentFramePointer;
     }
 
@@ -73,7 +73,7 @@ class CallStack {
      *
      * @return The address of the top of stack of the current frame.
      */
-    int getStackPointer() {
+    public int getStackPointer() {
         return currentStackPointer;
     }
 
