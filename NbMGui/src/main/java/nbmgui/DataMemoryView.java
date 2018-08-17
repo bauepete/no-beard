@@ -83,7 +83,7 @@ class DataMemoryView
             void setContextMenuToDataCell(Label dataCell) {
                 dataCell.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.SECONDARY) {
-                        MenuItem menuItem = new MenuItem("View char");
+                        MenuItem menuItem = new MenuItem("View as Char");
                         menuItem.setOnAction(menuEvent -> DataMemoryConverter.convertDataToChar(dataCell));
                         controller.getDataMemoryListView().getContextMenu().getItems().add(menuItem);
                     }
