@@ -38,6 +38,7 @@ class DataMemoryView
                 HBox line = new HBox();
                 int firstAddressInLine = getIndex() * 4;
                 convertStringToLabels(firstAddressInLine, item).forEach(line.getChildren()::add);
+                setContextMenuToDataCells(line);
                 setGraphic(line);
             }
 
@@ -69,25 +70,30 @@ class DataMemoryView
                 l.setStyle("-fx-background-color: " + bgColor + ";" +
                         "-fx-text-fill: white;");
                 l.setId("dataCell");
-                setContextMenuToDataCell(l);
                 return l;
             }
 
             Label createNormalLabel(String content) {
                 Label l = new Label(content);
                 l.setId("dataCell");
-                setContextMenuToDataCell(l);
                 return l;
             }
 
-            void setContextMenuToDataCell(Label dataCell) {
-                dataCell.setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.SECONDARY) {
-                        MenuItem menuItem = new MenuItem("View as Char");
-                        menuItem.setOnAction(menuEvent -> DataMemoryConverter.convertDataToChar(dataCell));
-                        controller.getDataMemoryListView().getContextMenu().getItems().add(menuItem);
-                    }
-                });
+            void setContextMenuToDataCells(HBox dataCells) {
+                for (int i = 1; i < dataCells.getChildren().size(); i++) {
+                    final int idx = i;
+                    dataCells.getChildren().get(i).setOnMouseClicked(event -> {
+                        if (event.getButton() == MouseButton.SECONDARY) {
+                            MenuItem viewAsChar = new MenuItem("View as Char");
+                            MenuItem viewInt = new MenuItem("View Integer");
+                            viewAsChar.setOnAction(menuEvent -> DataMemoryConverter.convertDataToChar((Label) dataCells.getChildren().get(idx)));
+                            viewInt.setOnAction(menuEvent -> DataMemoryConverter.convertToInt(controller, controller.getDataMemoryListView().getSelectionModel().getSelectedIndex(), idx));
+                            controller.getDataMemoryListView().getContextMenu().getItems().addAll(viewAsChar, viewInt);
+                            controller.getDataMemoryListView().getContextMenu().setOnHidden(onHiddenEvent ->
+                                    controller.getDataMemoryListView().getContextMenu().getItems().removeAll(viewAsChar, viewInt));
+                        }
+                    });
+                }
             }
         });
         setContextMenuToListView(controller);
@@ -96,17 +102,11 @@ class DataMemoryView
 
     private static void setContextMenuToListView(Controller controller) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem viewInt = new MenuItem("View Integer");
         MenuItem viewChar = new MenuItem("View characters");
         MenuItem viewRawData = new MenuItem("View raw data");
         viewChar.setOnAction(event -> DataMemoryConverter.convertLineToChar(controller, controller.getDataMemoryListView().getSelectionModel().getSelectedIndices()));
-        viewInt.setOnAction(event -> DataMemoryConverter.convertToInt(controller, controller.getDataMemoryListView().getSelectionModel().getSelectedIndices()));
         viewRawData.setOnAction(event -> DataMemoryConverter.convertLineToRawData(controller, controller.getDataMemoryListView().getSelectionModel().getSelectedIndices()));
-        contextMenu.getItems().addAll(viewInt, viewChar, viewRawData);
-        contextMenu.setOnHidden(event -> {
-            if (controller.getDataMemoryListView().getContextMenu().getItems().size() > 3)
-                controller.getDataMemoryListView().getContextMenu().getItems().remove(3);
-        });
+        contextMenu.getItems().addAll(viewChar, viewRawData);
         controller.getDataMemoryListView().setContextMenu(contextMenu);
         controller.getDataMemoryListView().setOnContextMenuRequested(event -> {
             contextMenu.show(controller.getDataMemoryListView(), event.getScreenX(), event.getScreenY());
@@ -115,6 +115,19 @@ class DataMemoryView
     }
 
     static String[] splitDataLine(String line) {
+        if (line.contains("#int#")) {
+            String[] str = line.split("#int#");
+            switch (str[0].length()) {
+                case 13:
+                    return new String[] {str[0].substring(0, 4), str[0].substring(4, 7), str[0].substring(7, 10), str[0].substring(10, 13), str[1]};
+                case 10:
+                    return new String[] {str[0].substring(0, 4), str[0].substring(4, 7), str[0].substring(7, 10),str[1]};
+                case 7:
+                    return new String[] {str[0].substring(0, 4), str[0].substring(4, 7),str[1]};
+                default:
+                    return new String[] {str[0], str[1]};
+            }
+        }
         switch (line.length()) {
             case 16:
                 return new String[] {line.substring(0, 4), line.substring(4, 7), line.substring(7, 10), line.substring(10, 13), line.substring(13, 16)};
@@ -127,7 +140,7 @@ class DataMemoryView
             case 8:
                 return new String[] {line.substring(0, 4), line.substring(4, 5), line.substring(5, 6), line.substring(6, 7), line.substring(7, 8)};
             default:
-                return new String[] {line.substring(0, 4), line.substring(4), " ", " ", " "};
+                return new String[] {""};
         }
     }
 }
