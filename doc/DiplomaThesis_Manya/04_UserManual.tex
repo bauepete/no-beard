@@ -83,23 +83,22 @@ To view a character of a one-byte data as shown in figure~\ref{fig:convertToChar
 Now the value at the given address is translated to an alphanumeric character. 
 The conversion of an entire row of data to characters is done in the same way except that the user has to click "View characters" instead of "View as Char"
 \subsection{Converting Data to Integer}
-The translation of an integer takes four bytes that means, it takes all values of a whole row and translates them to a single integer.  
+The translation of an integer takes four bytes that means, it takes four data cells from the desired start address and translates them to a single integer.  
 \begin{figure}[h] 
 	\centering
 	\includegraphics[scale=.90]{images/screenshot-4.png}
-	\caption{Converting data to a single integer}
+	\caption{Converting four-byte data to a single integer}
 	\label{fig:convertToInt}
 \end{figure}
 \begin{enumerate}
-\item Select the row with the four-byte value 
-\item Right click on the line
+\item Select the data cell with the start address of the integer
+\item Right click on the cell
 \item Click on "View Integer"
 \end{enumerate}
-Figure~\ref{fig:convertToInt} shows an example of a translated integer which is on the same place as the stack pointer, precisely at the address 64. 
+After a successful conversion, the four data cells are being replaced by a single integer. Figure~\ref{fig:convertToInt} shows an example of the translated integers. The first one is at address 54 which is not aligned in one row and the second one is on the same place as the stack pointer, precisely at the address 64. 
 
-\bau{Something I am missing is the problem to get a number of four bytes converted to an integer which are not aligned in one row. Say, you want to convert the four bytes from address 58 to 63 into an int. How to do that?}
 \subsection{Multiple Conversion}
-To facilitate the conversion from raw data to alphanumeric characters or integers a multi selection function is available for the list of the data memory.
+To facilitate the conversion from raw data to alphanumeric characters a multi selection function is available for the list of the data memory.
 To convert multiple data rows, the user has to hold the "Ctrl" key and select the specified rows with a left mouse click. Chosen lines will get highlighted with a light grey background color. As figure~\ref{fig:multipleConversion} shows, the selected rows with grey background are successfully concerted to some characters.
 \begin{figure}[h] 
 	\centering
