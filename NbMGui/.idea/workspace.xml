@@ -28,39 +28,45 @@
     <session id="-1084886173">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.closed" value="2" />
+          <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.6" value="2" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="class" value="3" />
+          <entry key="class" value="6" />
           <entry key="css" value="1" />
-          <entry key="java" value="18" />
+          <entry key="fxml" value="1" />
+          <entry key="java" value="20" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CLASS" value="3" />
+          <entry key="CLASS" value="6" />
           <entry key="CSS" value="1" />
-          <entry key="JAVA" value="18" />
+          <entry key="JAVA" value="20" />
+          <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="29" />
-          <entry key="java" value="1861" />
+          <entry key="fxml" value="6" />
+          <entry key="java" value="1924" />
           <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="CSS" value="29" />
-          <entry key="JAVA" value="1861" />
+          <entry key="JAVA" value="1924" />
           <entry key="PLAIN_TEXT" value="1" />
+          <entry key="XML" value="6" />
         </counts>
       </usages-collector>
     </session>
@@ -73,8 +79,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="711">
-              <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+            <state relative-caret-position="-412">
+              <caret line="23" column="82" selection-start-line="23" selection-start-column="82" selection-end-line="23" selection-end-column="82" />
               <folding>
                 <element signature="method#splitDataLine#0;class#DataMemoryView#0" />
               </folding>
@@ -85,8 +91,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryConverter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1166">
-              <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
+            <state relative-caret-position="357">
+              <caret line="23" column="19" lean-forward="true" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/DataMemory.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -94,17 +109,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2431">
-              <caret line="179" column="36" selection-start-line="179" selection-start-column="36" selection-end-line="179" selection-end-column="36" />
+            <state relative-caret-position="2992">
+              <caret line="212" column="86" selection-start-line="212" selection-start-column="82" selection-end-line="212" selection-end-column="90" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1479#1480#0" expanded="true" />
-                <element signature="e#1507#1508#0" expanded="true" />
-                <element signature="e#1684#1685#0" expanded="true" />
+                <element signature="e#1520#1521#0" expanded="true" />
+                <element signature="e#1548#1549#0" expanded="true" />
                 <element signature="e#1725#1726#0" expanded="true" />
-                <element signature="e#1760#1761#0" expanded="true" />
-                <element signature="e#1790#1791#0" expanded="true" />
+                <element signature="e#1766#1767#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/NoBeardMachine.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="816">
+              <caret line="68" column="16" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/Debugger.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -114,6 +145,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
               <caret line="21" column="9" selection-start-line="21" selection-end-line="21" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/FxInputDevice.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -160,15 +200,15 @@
         <option value="$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/ControlUnit.class" />
         <option value="$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/Debugger.class" />
         <option value="$PROJECT_DIR$/src/main/java/nbmgui/MachineThread.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nbmgui/FxInputDevice.java" />
         <option value="$PROJECT_DIR$/src/main/java/nbmgui/xg.css" />
-        <option value="$PROJECT_DIR$/src/main/resources/RootLayout.fxml" />
         <option value="$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/NoBeardMachine.class" />
         <option value="$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/CallStack.class" />
-        <option value="$PROJECT_DIR$/src/main/java/nbmgui/Controller.java" />
         <option value="$PROJECT_DIR$/src/main/resources/style.css" />
-        <option value="$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryView.java" />
         <option value="$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryConverter.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/RootLayout.fxml" />
+        <option value="$PROJECT_DIR$/src/main/java/nbmgui/FxInputDevice.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nbmgui/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryView.java" />
       </list>
     </option>
   </component>
@@ -219,10 +259,11 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-10" />
-    <option name="width" value="979" />
-    <option name="height" value="1040" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1257" />
+    <option name="y" value="15" />
+    <option name="width" value="784" />
+    <option name="height" value="833" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -285,22 +326,22 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
       <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/egonm/Documents/DiplomaThesis/NbMGui/src/main/java/nbmgui/DataMemoryView.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1534770666818" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536777725465" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propDebugger" />
+    <property name="settings.editor.selected.configurable" value="preferences.JavaFX" />
     <property name="settings.editor.splitter.proportion" value="0.24367088" />
   </component>
   <component name="RecentsManager">
@@ -500,7 +541,7 @@
     <option name="totallyTimeSpent" value="400803000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <layout>
       <window_info id="Structure" order="0" side_tool="true" weight="0.24973147" />
       <window_info id="Nl-Palette" order="1" />
@@ -509,9 +550,9 @@
       <window_info id="Designer" order="4" />
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="7" sideWeight="0.6703755" visible="true" weight="0.18926175" />
+      <window_info content_ui="combo" id="Project" order="7" sideWeight="0.6703755" visible="true" weight="0.16845638" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32844576" />
       <window_info anchor="bottom" id="Cvs" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="3" weight="0.4" />
       <window_info active="true" anchor="bottom" id="Run" order="4" visible="true" weight="0.29912025" />
@@ -535,7 +576,7 @@
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Maven Projects" order="9" visible="true" weight="0.07181208" />
+      <window_info active="true" anchor="right" id="Maven Projects" order="9" visible="true" weight="0.053691275" />
       <window_info anchor="right" id="Coverage" order="10" side_tool="true" weight="0.32975295" />
       <window_info anchor="right" id="Database" order="11" weight="0.32921588" />
     </layout>
@@ -567,7 +608,6 @@
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/nio/ByteBuffer.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/Thread.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/ProgramMemory.class" />
-    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/DataMemory.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/io/BinaryFile.class" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/beans/property/ObjectPropertyBase.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/collections/ListChangeBuilder.java" />
@@ -575,7 +615,6 @@
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/event/EventType.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/scene/control/MenuItem.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/event/EventHandler.java" />
-    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/Debugger.class" />
     <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/InstructionSet.class" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/scene/control/ListView.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/collections/ObservableListBase.java" />
@@ -585,13 +624,6 @@
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/event/Event.java" />
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/javafx-src.zip!/javafx/scene/Scene.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/ControlUnit.class" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/FxInputDevice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="43" column="44" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -613,28 +645,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/RootLayout.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="148" selection-start-line="12" selection-start-column="148" selection-end-line="12" selection-end-column="148" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/javafx-src.zip!/javafx/scene/control/ListView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
           <caret line="566" selection-start-line="566" selection-end-line="566" />
-          <folding>
-            <element signature="e#23346#23347#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/NoBeardMachine.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="143" selection-start-line="143" selection-end-line="143" />
         </state>
       </provider>
     </entry>
@@ -656,9 +670,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
           <caret line="494" selection-start-line="494" selection-end-line="494" />
-          <folding>
-            <element signature="e#21489#21490#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -680,9 +691,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="567" selection-start-line="567" selection-end-line="567" />
-          <folding>
-            <element signature="e#23772#23773#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -690,9 +698,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="326">
           <caret line="141" selection-start-line="141" selection-end-line="141" />
-          <folding>
-            <element signature="e#4340#4341#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -700,11 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="462" selection-start-line="462" selection-end-line="462" />
-          <folding>
-            <element signature="e#10057#10058#0" expanded="true" />
-            <element signature="e#10103#10104#0" expanded="true" />
-            <element signature="e#15741#15742#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -719,10 +719,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="2494" selection-start-line="2494" selection-end-line="2494" />
-          <folding>
-            <element signature="e#66572#66573#0" expanded="true" />
-            <element signature="e#66618#66619#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -751,27 +747,49 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="1138" selection-start-line="1138" selection-end-line="1138" />
-          <folding>
-            <element signature="e#34834#34835#0" expanded="true" />
-            <element signature="e#34867#34868#0" expanded="true" />
-            <element signature="e#41804#41805#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/RootLayout.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="54" column="103" selection-start-line="54" selection-start-column="103" selection-end-line="54" selection-end-column="103" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/DataMemory.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="35" column="9" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2431">
-          <caret line="179" column="36" selection-start-line="179" selection-start-column="36" selection-end-line="179" selection-end-column="36" />
+        <state relative-caret-position="2992">
+          <caret line="212" column="86" selection-start-line="212" selection-start-column="82" selection-end-line="212" selection-end-column="90" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1479#1480#0" expanded="true" />
-            <element signature="e#1507#1508#0" expanded="true" />
-            <element signature="e#1684#1685#0" expanded="true" />
+            <element signature="e#1520#1521#0" expanded="true" />
+            <element signature="e#1548#1549#0" expanded="true" />
             <element signature="e#1725#1726#0" expanded="true" />
-            <element signature="e#1760#1761#0" expanded="true" />
-            <element signature="e#1790#1791#0" expanded="true" />
+            <element signature="e#1766#1767#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/NoBeardMachine.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="68" column="16" selection-start-line="68" selection-start-column="16" selection-end-line="68" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/at/ac/htlleonding/NoBeardProject/1.2/NoBeardProject-1.2.jar!/machine/Debugger.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="17" column="43" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="43" />
         </state>
       </provider>
     </entry>
@@ -782,17 +800,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/FxInputDevice.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryConverter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1166">
-          <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
+        <state relative-caret-position="357">
+          <caret line="23" column="19" lean-forward="true" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nbmgui/DataMemoryView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="711">
-          <caret line="146" lean-forward="true" selection-start-line="146" selection-end-line="146" />
+        <state relative-caret-position="-412">
+          <caret line="23" column="82" selection-start-line="23" selection-start-column="82" selection-end-line="23" selection-end-column="82" />
           <folding>
             <element signature="method#splitDataLine#0;class#DataMemoryView#0" />
           </folding>

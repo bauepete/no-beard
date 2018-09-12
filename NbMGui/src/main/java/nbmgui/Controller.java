@@ -42,6 +42,8 @@ public class Controller {
     @FXML
     private Button startButton;
     @FXML
+    private Button openButton;
+    @FXML
     private Button stepButton;
     @FXML
     private Button continueButton;
@@ -99,7 +101,7 @@ public class Controller {
         versionLabel.setText(NoBeardMachine.getVersion());
     }
 
-    void setDebuggerButtonsDisable(boolean state) {
+    private void setDebuggerButtonsDisable(boolean state) {
         stepButton.setDisable(state);
         continueButton.setDisable(state);
         stopButton.setDisable(state);
@@ -109,9 +111,13 @@ public class Controller {
         getOutputView().appendText(providedInput + "\n");
         input = providedInput;
         inputView.clear();
-        inputView.setDisable(true);
-        setDebuggerButtonsDisable(false);
+        enableInputView(false);
         getSemaphore().release();
+    }
+
+    void enableInputView(boolean state) {
+        inputView.setDisable(!state);
+        setDebuggerButtonsDisable(state);
     }
 
     @FXML
@@ -170,15 +176,20 @@ public class Controller {
 
     @FXML
     void startProgram(ActionEvent event) {
-        setDebuggerButtonsDisable(false);
-        startButton.setDisable(true);
-        dataMemoryListView.getItems().clear();
-        lastProgramLine = -1;
+        prepareGuiForProgramStart();
         new Thread(() -> {
             machine.runProgram(0);
             highlightNextInstructionToBeExecuted();
             Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
         }).start();
+    }
+
+    private void prepareGuiForProgramStart() {
+        setDebuggerButtonsDisable(false);
+        startButton.setDisable(true);
+        openButton.setDisable(true);
+        dataMemoryListView.getItems().clear();
+        lastProgramLine = -1;
     }
 
     private void highlightNextInstructionToBeExecuted() {
@@ -187,6 +198,7 @@ public class Controller {
         else  {
             setDebuggerButtonsDisable(true);
             startButton.setDisable(false);
+            openButton.setDisable(false);
         }
         if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
@@ -232,6 +244,7 @@ public class Controller {
     void stopProgram(ActionEvent event) {
         setDebuggerButtonsDisable(true);
         startButton.setDisable(false);
+        openButton.setDisable(false);
         machine.stopProgram();
         dataMemoryListView.getItems().clear();
         programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");

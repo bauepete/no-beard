@@ -16,6 +16,7 @@
 \usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{sectsty}
 \usepackage[normalem]{ulem}
+\usepackage{minted}
 \subsubsectionfont{\normalfont\large\bfseries\underline}
 
 
@@ -98,7 +99,8 @@
 \bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
 
 \listoffigures
-\listoftables
+\renewcommand\listoflistingscaption{List of source codes}
+\listoflistings
 \include{07_ProjectLogBook}
 
 \appendix
