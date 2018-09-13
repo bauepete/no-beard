@@ -40,8 +40,7 @@ public class FxInputDevice implements InputDevice {
 
     private void waitForInput() {
         try {
-            controller.getInputView().setDisable(false);
-            controller.setDebuggerButtonsDisable(true);
+            controller.enableInputView(true);
             controller.getSemaphore().acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();

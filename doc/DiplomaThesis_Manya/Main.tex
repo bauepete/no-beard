@@ -15,6 +15,8 @@
 \usepackage{listings}
 \usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{sectsty}
+\usepackage[normalem]{ulem}
+\usepackage{minted}
 \subsubsectionfont{\normalfont\large\bfseries\underline}
 
 
@@ -30,7 +32,7 @@
 	frame=single,
 	sensitive=true,
 	tabsize=3,
-	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt, break, push, pop, printf, dat, prog, top, fp, pc, ms, ProgramAddressError, running, stopped, blocked, error},
+	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt, break, push, peek, pop, printf, dat, prog, top, fp, pc, ms, ProgramAddressError, running, stopped, blocked, error},
 	morecomment=[l][\color{srcgreen}]{\#},
 	morestring=[b][\color{srcred}]{"},
 	keywordstyle=\color{srcpurple},
@@ -42,6 +44,7 @@
 }
 
 \newcommand{\bau}[1]{\textcolor{red}{{\small{\bf  BAU:} #1}}}
+\newcommand{\baust}[2]{\textcolor{red}{{\small{\bf BAU:} \sout{#1}}} \textcolor{green}{{\small #2}}}
 
 % ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
 \newcommand{\onebyteinstruction}[1]{
@@ -96,7 +99,8 @@
 \bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
 
 \listoffigures
-\listoftables
+\renewcommand\listoflistingscaption{List of source codes}
+\listoflistings
 \include{07_ProjectLogBook}
 
 \appendix
