@@ -16,7 +16,7 @@
 \usepackage[usenames, dvipsnames, table]{xcolor}
 \usepackage{sectsty}
 \usepackage[normalem]{ulem}
-\subsubsectionfont{\normalfont\large\bfseries\underline}
+%\subsubsectionfont{\normalfont\large\bfseries\underline}
 
 
 % --------------------------------------------------- Definition of colors used in source code listings ----------------------------------------------
@@ -43,7 +43,7 @@
 }
 
 \newcommand{\bau}[1]{\textcolor{red}{{\small{\bf  BAU:} #1}}}
-\newcommand{\baust}[2]{\textcolor{red}{{\small{\bf BAU:} \sout{#1}}} \textcolor{green}{{\small #2}}}
+\newcommand{\baust}[2]{\textcolor{red}{{\small \sout{#1}}} \textcolor{green}{{\small #2}}}
 
 % ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
 \newcommand{\onebyteinstruction}[1]{
