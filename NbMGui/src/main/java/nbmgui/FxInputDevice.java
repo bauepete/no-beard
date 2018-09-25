@@ -3,7 +3,6 @@ package nbmgui;
 import javafx.application.Platform;
 import machine.InputDevice;
 
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 
 /**

@@ -117,6 +117,7 @@ public class Controller {
 
     void enableInputView(boolean state) {
         inputView.setDisable(!state);
+        inputView.requestFocus();
         setDebuggerButtonsDisable(state);
     }
 
