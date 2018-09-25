@@ -152,22 +152,24 @@ public class Controller {
 
     private void fillProgramDataView(List<String> programDataList) {
         VBox programData = new VBox();
-        for (String lineStr : programDataList) {
-            CheckBox line = new CheckBox(lineStr);
-            line.setPadding(new Insets(1));
-            line.setOnAction((event) -> {
-                if (event.getSource() instanceof CheckBox) {
-                    CheckBox breakpoint = (CheckBox) event.getSource();
-                    if (breakpoint.isSelected())
-                        machine.addBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
-                    else
-                        machine.removeBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
-                }
-            });
-            programData.getChildren().add(line);
-            programDataMap.put(getAddressOfProgramLine(line.getText()), line);
-        }
+        for (String lineStr : programDataList)
+            addLineToProgramDataView(programData, lineStr);
         programDataView.setContent(programData);
+    }
+
+    private void addLineToProgramDataView(VBox programData, String lineContent) {
+        CheckBox line = new CheckBox(lineContent);
+        line.setPadding(new Insets(1));
+        line.setOnAction((event) -> setClickEventToLine((CheckBox) event.getSource()));
+        programData.getChildren().add(line);
+        programDataMap.put(getAddressOfProgramLine(line.getText()), line);
+    }
+
+    private void setClickEventToLine(CheckBox breakpoint) {
+        if (breakpoint.isSelected())
+            machine.addBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
+        else
+            machine.removeBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
     }
 
     private int getAddressOfProgramLine(String line) {
@@ -195,7 +197,7 @@ public class Controller {
     private void highlightNextInstructionToBeExecuted() {
         if (programDataMap.containsKey(machine.getCurrentLine()))
             programDataMap.get(machine.getCurrentLine()).setStyle("-fx-background-color: #999999");
-        else  {
+        else {
             setDebuggerButtonsDisable(true);
             startButton.setDisable(false);
             openButton.setDisable(false);
