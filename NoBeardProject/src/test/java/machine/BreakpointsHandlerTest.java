@@ -5,8 +5,6 @@ import error.ErrorHandler;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Observable;
 
 import static machine.InstructionSet.Instruction.*;
@@ -60,6 +58,28 @@ public class BreakpointsHandlerTest {
     }
 
     @Test
+    public void testOnStopAtBreakpointWithInvalidAddress() {
+        bph.setBreakpoint(4);
+        bph.onStopAtBreakpoint(3);
+        assertEquals(BREAK.getId(), program[4]);
+    }
+
+    @Test
+    public void testOnStopAtBreakpoint() {
+        bph.setBreakpoint(4);
+        bph.onStopAtBreakpoint(4);
+        assertEquals(LIT.getId(), program[4]);
+    }
+
+    @Test
+    public void testOnContinueFromBreakpoint() {
+        bph.setBreakpoint(7);
+        bph.onStopAtBreakpoint(7);
+        bph.onContinueFromBreakpoint();
+        assertEquals(BREAK.getId(), program[7]);
+    }
+
+    @Test
     public void clearBreakpoints() {
         bph.setBreakpoint(0);
         bph.setBreakpoint(4);
@@ -71,7 +91,7 @@ public class BreakpointsHandlerTest {
 
     @Test
     public void testUpateFromInvalidObservable() {
-        Observable o = new Observable(){
+        Observable o = new Observable() {
 
         };
         bph.setBreakpoint(0);
@@ -81,7 +101,7 @@ public class BreakpointsHandlerTest {
 
     @Test
     public void testUpdate() {
-        DataMemory dataMemory =  new DataMemory(32, errorHandler);
+        DataMemory dataMemory = new DataMemory(32, errorHandler);
         ControlUnit cu = new ControlUnit(programMemory, dataMemory, new CallStack(dataMemory, 0, 32),
                 errorHandler, new FakeInputDevice(), new FakeOutputDevice());
         bph.setBreakpoint(0);
