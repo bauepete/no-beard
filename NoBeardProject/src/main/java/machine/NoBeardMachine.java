@@ -104,8 +104,8 @@ public class NoBeardMachine implements SourceCodeInfo {
         }
     }
 
-    public void addBreakpoint(int atAddress) {
-        breakpointsHandler.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)).getId());
+    public void setBreakpoint(int atAddress) {
+        breakpointsHandler.setBreakpoint(atAddress);
     }
 
     public void removeBreakpoint(int atAddress) {
