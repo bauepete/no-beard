@@ -14,6 +14,9 @@
 \usepackage{float}
 \usepackage{listings}
 \usepackage[usenames, dvipsnames, table]{xcolor}
+\usepackage{sectsty}
+\usepackage[normalem]{ulem}
+\subsubsectionfont{\normalfont\large\bfseries\underline}
 
 
 % --------------------------------------------------- Definition of colors used in source code listings ----------------------------------------------
@@ -28,7 +31,7 @@
 	frame=single,
 	sensitive=true,
 	tabsize=3,
-	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt},
+	morekeywords = {nop, lit, la, lv, lc, sto, stc, assn, neg, add, sub, mul, div, mod, not, rel, fjmp, tjmp, jmp, in, out, inc, halt, break, push, peek, pop, printf, dat, prog, top, fp, pc, ms, ProgramAddressError, running, stopped, blocked, error},
 	morecomment=[l][\color{srcgreen}]{\#},
 	morestring=[b][\color{srcred}]{"},
 	keywordstyle=\color{srcpurple},
@@ -40,6 +43,82 @@
 }
 
 \newcommand{\bau}[1]{\textcolor{red}{{\small{\bf  BAU:} #1}}}
+\newcommand{\baust}[2]{\textcolor{red}{{\small{\bf BAU:} \sout{#1}}} \textcolor{green}{{\small #2}}}
+
+% ------------------------------------------------------ Definition of assembler instruction commands --------------------------------------------
+\newcommand{\onebyteinstruction}[1]{
+\begin{tabular}{|p{3.9em}|}
+\hline
+\tiny{Byte 0} \\ \hline
+#1  \\ \hline
+\end{tabular}
+}
+
+\newcommand{\twobyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} \\ \hline
+#1 & #2 \\ \hline
+\end{tabular}
+}
+
+\newcommand{\threebyteinstruction}[2]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} \\ \hline
+#1 & \multicolumn{2}{c |}{#2} \\ \hline
+\end{tabular}
+}
+
+\newcommand{\fourbyteinstructiona}[3]{
+\begin{tabular}{|p{3.9em}|p{9em}|p{9em}|p{9em}|}
+\hline
+\tiny{Byte 0} & \tiny{Byte 1} & \tiny{Byte 2} & \tiny{Byte 3} \\ \hline
+#1 & #2 & \multicolumn{2}{c |}{#3} \\ \hline
+\end{tabular}
+}
+
+\definecolor{forestgreen}{rgb}{0.0, 0.5, 0.0}
+\definecolor{olive}{rgb}{0.5, 0.5, 0.0}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{lightblue}{rgb}{0.0,0.0,0.9}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{darkred}{rgb}{0.6,0.0,0.0}
+
+
+\lstdefinestyle{MyStyle}{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  showstringspaces=false,
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{black},  % the style that is used for the line-numbers
+  stepnumber=1,
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=top,frame=bottom,      % adds a frame to the code
+  rulecolor=\color{black},  
+  tabsize=4,                     
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=false,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  commentstyle=\color{gray}\upshape
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[s][\color{darkred}]{"}{"},
+  morestring=[s][\color{black}]{>}{<},
+  morecomment=[s]{<?}{?>},
+  morecomment=[s][\color{dkgreen}]{<!--}{-->},
+  stringstyle=\color{black},
+  identifierstyle=\color{forestgreen},
+  keywordstyle=\color{olive},
+  morekeywords={xmlns,xsi,fx,id,onAction,text}% list your attributes here
+}
 
 \include{00_FrontPageDefinitions} % This file should really be touched
 \include{Globals} % Set basic data (author, title, etc.) of your thesis
@@ -49,21 +128,21 @@
 \tableofcontents
 \include{01_Introduction}
 \include{02_FormalLanguage}
-\include{CompilerConstruct}
-\include{03_TheNoBeardMachineArchitecture}
-\include{04_UserManual}
-\include{05_Implementation}
+\include{03_CompilerConstruct}
+\include{04_TheNoBeardMachineArchitecture}
+\include{05_UserManual}
+\include{06_Implementation}
 % create further tex files for all other chapters of your document
-\include{06_Summary}
+\include{07_Summary}
 
 \bibliography{da_bibliography}{}
 \bibliographystyle{alphaurl} % save alternatives are abbrvurl	alphaurl	plainurl	unsrturl
 
 \listoffigures
-\listoftables
-\include{07_ProjectLogBook}
+\lstlistoflistings
+\include{08_ProjectLogBook}
 
 \appendix
-\include{08_FirstAppendix}
-\include{09_IndividualGoals}
+\include{09_FirstAppendix}
+\include{10_IndividualGoals}
 \end{document}  

@@ -26,8 +26,6 @@ package machine;
 import java.util.Arrays;
 import java.util.List;
 
-import io.BinaryFile;
-import io.BinaryFileHandler;
 import machine.InstructionSet.Instruction;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -165,8 +163,8 @@ public class NoBeardMachineTest {
                 Instruction.HALT.getId()
         };
 
-        machine.addBreakpoint(11);
-        machine.addBreakpoint(22);
+        machine.setBreakpoint(11);
+        machine.setBreakpoint(22);
         machine.loadStringConstants(stringMemory);
         machine.loadProgram(0, program);
         machine.runProgram(0);

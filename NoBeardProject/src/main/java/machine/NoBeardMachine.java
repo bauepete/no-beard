@@ -28,7 +28,6 @@ import error.ErrorHandler;
 import error.SourceCodeInfo;
 
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * @author peter
@@ -50,16 +49,15 @@ public class NoBeardMachine implements SourceCodeInfo {
     }
 
     public static final int MAX_PROG = 1024;   // Size of program memory
-    public static final int MAX_DATA = 1024;    // Size of data memory
-    public static final int SIZE_OF_AUXILIARY_CELLS = 28;    // Space to store house keeping data for stack frames
+    static final int MAX_DATA = 1024;    // Size of data memory
+    private static final int SIZE_OF_AUXILIARY_CELLS = 28;    // Space to store house keeping data for stack frames
 
     private final error.ErrorHandler errorHandler;
     private final DataMemory dataMemory;
     private final CallStack callStack;
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
-    private final TreeSet<Integer> breakpoints;
-    private final Debugger debugger;
+    private final BreakpointsHandler breakpointsHandler;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
         errorHandler = new ErrorHandler(this);
@@ -67,9 +65,8 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack = new CallStack(dataMemory, 0, SIZE_OF_AUXILIARY_CELLS);
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
-        breakpoints = new TreeSet<>();
-        debugger = new Debugger(programMemory);
-        controlUnit.addObserver(debugger);
+        breakpointsHandler = new BreakpointsHandler(programMemory);
+        controlUnit.addObserver(breakpointsHandler);
     }
 
     public static String getVersion() {
@@ -107,26 +104,27 @@ public class NoBeardMachine implements SourceCodeInfo {
         }
     }
 
-    public void addBreakpoint(int atAddress) {
-        debugger.setBreakpoint(atAddress, InstructionSet.getInstructionById(programMemory.loadByte(atAddress)).getId());
+    public void setBreakpoint(int atAddress) {
+        breakpointsHandler.setBreakpoint(atAddress);
     }
 
     public void removeBreakpoint(int atAddress) {
-        debugger.removeBreakpoint(atAddress);
+        breakpointsHandler.removeBreakpoint(atAddress);
     }
 
     public void removeAllBreakpoints() {
-        debugger.clearBreakpoints();
+        breakpointsHandler.clearAllBreakpoints();
     }
 
     public Set<Integer> getBreakpoints() {
-          return debugger.getAllBreakpoints();
+          return breakpointsHandler.getAllBreakpoints();
     }
 
     public void stopProgram() {
         controlUnit.stopMachine();
-        if(this.getBreakpoints().contains(getCurrentLine())) {
-            this.debugger.replaceInstructionAtAddress(getCurrentLine(), InstructionSet.Instruction.BREAK);
+        int currentAddress = controlUnit.getPc();
+        if(getBreakpoints().contains(currentAddress)) {
+            breakpointsHandler.onStopAtBreakpoint(currentAddress);
         }
         resetStackPointer();
     }
@@ -135,14 +133,14 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack.setCurrentFramePointer(callStack.getFramePointer());
     }
 
-    public void setBreakInstructionIfNeeded() {
-        int address = getCurrentLine()-controlUnit.getInstructionRegister().getSize();
-        if (getBreakpoints().contains(address))
-            debugger.replaceInstructionAtAddress(address, InstructionSet.Instruction.BREAK);
+    public void continueFromBreakpoint() {
+        int addressOfInstruction = controlUnit.getPc() - controlUnit.getInstructionRegister().getSize();
+        if (getBreakpoints().contains(addressOfInstruction))
+            breakpointsHandler.onContinueFromBreakpoint();
     }
 
-    public void replaceBreakInstruction() {
-        debugger.replaceInstructionAtAddress(getCurrentLine(), null);
+    public void stopOnBreakpoint() {
+        breakpointsHandler.onStopAtBreakpoint(controlUnit.getPc() - controlUnit.getInstructionRegister().getSize());
     }
 
     public void step() {
