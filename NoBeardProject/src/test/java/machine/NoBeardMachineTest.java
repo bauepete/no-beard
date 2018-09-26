@@ -145,7 +145,6 @@ public class NoBeardMachineTest {
         assertEquals(17 + 42, machine.getDataMemory().loadWord(56));
     }
 
-    @Ignore
     @Test
     public void testProgramDebugger() {
         String output = "HelloWorld";
@@ -163,10 +162,10 @@ public class NoBeardMachineTest {
                 Instruction.HALT.getId()
         };
 
-        machine.setBreakpoint(11);
-        machine.setBreakpoint(22);
         machine.loadStringConstants(stringMemory);
         machine.loadProgram(0, program);
+        machine.setBreakpoint(11);
+        machine.setBreakpoint(22);
         machine.runProgram(0);
 
         List<String> expectedOutput = Arrays.asList("Hello");
