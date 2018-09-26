@@ -26,8 +26,6 @@ package machine;
 import java.util.Arrays;
 import java.util.List;
 
-import io.BinaryFile;
-import io.BinaryFileHandler;
 import machine.InstructionSet.Instruction;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -166,8 +164,8 @@ public class NoBeardMachineTest {
 
         machine.loadStringConstants(stringMemory);
         machine.loadProgram(0, program);
-        machine.addBreakpoint(11);
-        machine.addBreakpoint(22);
+        machine.setBreakpoint(11);
+        machine.setBreakpoint(22);
         machine.runProgram(0);
 
         List<String> expectedOutput = Arrays.asList("Hello");
