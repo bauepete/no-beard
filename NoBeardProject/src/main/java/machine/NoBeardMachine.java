@@ -58,7 +58,6 @@ public class NoBeardMachine implements SourceCodeInfo {
     private final CallStack callStack;
     private final ProgramMemory programMemory;
     private final ControlUnit controlUnit;
-    private final TreeSet<Integer> breakpoints;
     private final Debugger debugger;
 
     public NoBeardMachine(InputDevice in, OutputDevice out) {
@@ -67,7 +66,6 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack = new CallStack(dataMemory, 0, SIZE_OF_AUXILIARY_CELLS);
         programMemory = new ProgramMemory(MAX_PROG, errorHandler);
         controlUnit = new ControlUnit(programMemory, dataMemory, callStack, errorHandler, in, out);
-        breakpoints = new TreeSet<>();
         debugger = new Debugger(programMemory);
         controlUnit.addObserver(debugger);
     }
