@@ -119,4 +119,13 @@ public class ProgramMemoryTest {
         assertThat(successfullyReplaced, is(false));
         assertThat(errorHandler.getLastError().getNumber(), is(Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber()));
     }
+
+    @Test
+    public void testReplaceInstruction() {
+        ProgramMemory programMemory = new ProgramMemory(new byte[32], errorHandler);
+        byte instruction = Instruction.STO.getId();
+
+        boolean successfullyReplaced = programMemory.replaceInstruction(0, instruction);
+        assertThat(successfullyReplaced, is(true));
+    }
 }

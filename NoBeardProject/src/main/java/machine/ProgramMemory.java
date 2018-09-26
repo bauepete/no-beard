@@ -71,12 +71,14 @@ public class ProgramMemory {
     }
 
     public boolean replaceInstruction(int atAddress, byte instructionId) {
+        boolean successfullyReplaced = false;
         if (atAddress < 0 || atAddress >= programMemory.length) {
             errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
-            return false;
+        } else {
+            programMemory[atAddress] = instructionId;
+            successfullyReplaced = true;
         }
-        programMemory[atAddress] = instructionId;
-        return false;
+        return successfullyReplaced;
     }
 
 }
