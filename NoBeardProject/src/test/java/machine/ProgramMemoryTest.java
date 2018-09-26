@@ -23,9 +23,10 @@
  */
 package machine;
 
-import machine.ProgramMemory;
+import error.Error;
 import error.ErrorHandler;
 import machine.InstructionSet.Instruction;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -103,5 +104,19 @@ public class ProgramMemoryTest {
         programMemory.store(0, program);
         programMemory.loadHalfWord(1023);
         assertEquals(error.Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+
+    @Test
+    public void testReplaceInstructionAtIllegalAddress() {
+        ProgramMemory programMemory = new ProgramMemory(1024, errorHandler);
+        byte instruction = Instruction.INC.getId();
+
+        boolean successfullyReplaced = programMemory.replaceInstruction(-1, instruction);
+        assertThat(successfullyReplaced, is(false));
+        assertThat(errorHandler.getLastError().getNumber(), is(Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber()));
+
+        successfullyReplaced = programMemory.replaceInstruction(1024, instruction);
+        assertThat(successfullyReplaced, is(false));
+        assertThat(errorHandler.getLastError().getNumber(), is(Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber()));
     }
 }
