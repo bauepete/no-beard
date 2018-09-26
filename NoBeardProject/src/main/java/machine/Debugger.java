@@ -17,10 +17,6 @@ public class Debugger implements Observer {
         breakpoints = new HashMap<>();
     }
 
-    public void setProgramMemory(ProgramMemory programMemory) {
-        this.programMemory = programMemory;
-    }
-
     void setBreakpoint(Integer address, Byte instructionId) {
         this.breakpoints.put(address, instructionId);
         programMemory.replaceInstruction(address, InstructionSet.Instruction.BREAK.getId());
