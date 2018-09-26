@@ -17,18 +17,7 @@ public class BreakpointsHandler implements Observer {
         this.programMemory = programMemory;
         breakpoints = new HashMap<>();
     }
-
-    /**
-     * @param atAddress
-     * @param instructionId
-     * @deprecated
-     */
-    void setBreakpoint(Integer atAddress, Byte instructionId) {
-        boolean instructionReplacedSuccessfully = programMemory.replaceInstruction(atAddress, InstructionSet.Instruction.BREAK.getId());
-        if (instructionReplacedSuccessfully)
-            breakpoints.put(atAddress, instructionId);
-    }
-
+    
     /**
      * Stores a breakpoint for a given address. If the given address is invalid (out of range of program memory)
      * a PROGRAM_ADDRESS_ERROR is thrown and nothing is stored.
