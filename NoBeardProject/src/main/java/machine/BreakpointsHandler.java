@@ -95,8 +95,8 @@ public class BreakpointsHandler implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ControlUnit && arg != null) {
-            int address = (int) arg;
-            replaceInstructionAtAddress(address, null);
+            int atAddress = (int) arg;
+            onStopAtBreakpoint(atAddress);
         }
     }
 

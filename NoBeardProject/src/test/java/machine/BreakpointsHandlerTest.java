@@ -90,7 +90,7 @@ public class BreakpointsHandlerTest {
     }
 
     @Test
-    public void testUpateFromInvalidObservable() {
+    public void testUpdateFromInvalidObservable() {
         Observable o = new Observable() {
 
         };
