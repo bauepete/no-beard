@@ -68,10 +68,6 @@ public class Controller {
         return outputView;
     }
 
-    TextField getInputView() {
-        return inputView;
-    }
-
     ListView<String> getDataMemoryListView() {
         return dataMemoryListView;
     }
