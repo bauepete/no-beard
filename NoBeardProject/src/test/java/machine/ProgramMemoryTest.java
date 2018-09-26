@@ -27,7 +27,6 @@ import error.Error;
 import error.ErrorHandler;
 import machine.InstructionSet.Instruction;
 import static org.hamcrest.CoreMatchers.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -46,10 +45,6 @@ public class ProgramMemoryTest {
     @Before
     public void setUp() {
         errorHandler = new ErrorHandler(new FakeSourceCodeInfo());
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -75,7 +70,7 @@ public class ProgramMemoryTest {
     }
     
     @Test
-    public void testLoadByteAddressError() {
+    public void testLoadByteTooHighAddress() {
         ProgramMemory programMemory = new ProgramMemory(1024, errorHandler);
         byte[] program = {
             Instruction.LIT.getId(), (byte) 0, (byte) 42
@@ -83,6 +78,13 @@ public class ProgramMemoryTest {
         programMemory.store(0, program);
         programMemory.loadByte(1024);
         assertEquals(error.Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+
+    @Test
+    public void testLoadByteTooLowAddress() {
+        ProgramMemory programMemory = new ProgramMemory(1024, errorHandler);
+        programMemory.loadByte(-1);
+        assertEquals(Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
     
     @Test
@@ -96,13 +98,20 @@ public class ProgramMemoryTest {
     }
     
     @Test
-    public void testLoadHalfWordAddressError() {
+    public void testLoadHalfWordTooHighAddress() {
         ProgramMemory programMemory = new ProgramMemory(1024, errorHandler);
         byte[] program = {
             Instruction.LIT.getId(), (byte) 1, (byte) 0
         };
         programMemory.store(0, program);
         programMemory.loadHalfWord(1023);
+        assertEquals(error.Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
+    }
+
+    @Test
+    public void testLoadHalfWordTooLowAddress() {
+        ProgramMemory programMemory = new ProgramMemory(32, errorHandler);
+        programMemory.loadHalfWord(-1);
         assertEquals(error.Error.ErrorType.PROGRAM_ADDRESS_ERROR.getNumber(), errorHandler.getLastError().getNumber());
     }
 

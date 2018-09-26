@@ -53,7 +53,7 @@ public class ProgramMemory {
     }
 
     public byte loadByte(int atAddress) {
-        if (atAddress < programMemory.length) {
+        if (0 <= atAddress && atAddress < programMemory.length) {
             return programMemory[atAddress];
         } else {
             errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
@@ -62,7 +62,7 @@ public class ProgramMemory {
     }
 
     public int loadHalfWord(int atAddress) {
-        if (atAddress < programMemory.length - 1)
+        if (0 <= atAddress && atAddress < programMemory.length - 1)
             return ((programMemory[atAddress] & 0xff) * 256 + (programMemory[atAddress + 1] & 0xff));
         else {
             errorHandler.throwProgramAddressError("0x" + Integer.toHexString(atAddress));
