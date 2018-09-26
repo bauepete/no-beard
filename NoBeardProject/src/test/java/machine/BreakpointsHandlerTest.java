@@ -5,6 +5,10 @@ import error.ErrorHandler;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Observable;
+
 import static machine.InstructionSet.Instruction.*;
 import static org.junit.Assert.*;
 
@@ -63,6 +67,26 @@ public class BreakpointsHandlerTest {
         assertEquals(3, bph.getAllBreakpoints().size());
         bph.clearAllBreakpoints();
         assertTrue(bph.getAllBreakpoints().isEmpty());
+    }
+
+    @Test
+    public void testUpateFromInvalidObservable() {
+        Observable o = new Observable(){
+
+        };
+        bph.setBreakpoint(0);
+        bph.update(o, 0);
+        assertEquals(BREAK.getId(), program[0]);
+    }
+
+    @Test
+    public void testUpdate() {
+        DataMemory dataMemory =  new DataMemory(32, errorHandler);
+        ControlUnit cu = new ControlUnit(programMemory, dataMemory, new CallStack(dataMemory, 0, 32),
+                errorHandler, new FakeInputDevice(), new FakeOutputDevice());
+        bph.setBreakpoint(0);
+        bph.update(cu, 0);
+        assertEquals(LA.getId(), program[0]);
     }
 
     @Test

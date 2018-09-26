@@ -18,9 +18,9 @@ public class BreakpointsHandler implements Observer {
     }
 
     /**
-     * @deprecated
      * @param atAddress
      * @param instructionId
+     * @deprecated
      */
     void setBreakpoint(Integer atAddress, Byte instructionId) {
         boolean instructionReplacedSuccessfully = programMemory.replaceInstruction(atAddress, InstructionSet.Instruction.BREAK.getId());
@@ -57,7 +57,7 @@ public class BreakpointsHandler implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg != null) {
+        if (o instanceof ControlUnit && arg != null) {
             int address = (int) arg;
             replaceInstructionAtAddress(address, null);
         }
