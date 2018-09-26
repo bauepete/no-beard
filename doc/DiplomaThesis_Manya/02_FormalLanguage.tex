@@ -1,7 +1,16 @@
 \chapter{Formal languages}
 \section{Overview}
-A formal language is an abstract language that, unlike concrete languages, often does not focus on communication but on mathematical use. A formal language consists of a certain set of symbol strings (generally strings) that can be assembled from a set of characters or symbols). Formal languages are used in linguistics, logic and theoretical computer science.
+A formal language is an abstract language that, unlike concrete languages, often does not focus on communication but on mathematical use. A formal language consists of a certain set of symbol strings (generally strings) that can be assembled from a set of characters or symbols. Formal languages are used in linguistics, logic and theoretical computer science.
 
 Formal languages are suitable for the (mathematically) precise description of the handling of character strings. For example, data formats or entire programming languages can be specified. Together with a formal semantics, the defined character strings have a meaning. With a programming language, a programming instruction (as part of the formal language) can be assigned a unique machine behaviour (as part of the semantics).
 
 Based on formal languages, however, it is also possible to define logic calculi with which one can draw mathematical conclusions. In conjunction with formally defined programming languages, calculi can help to check programs for their correctness.
+\section{Symbols and Strings}
+Syntactically, programs consist of sequences or strings of symbols that originate from an alphabet. An Alphabet (sometimes called a Vocabulary) is a non-empty and finite set of elements. Alphabets are often denoted by upper-case letters $A$ or $V$ and sometimes as upper-case Greek letters like $\Sigma$.
+If $a$, $b$, $c$ are the symbols of an alphabet $V$, we write:
+$$V=(a,b,c)$$
+A String is a finite sequence of symbols of an alphabet. By writing one symbol after the other symbols strings can be generated, whereby special abbreviations are common for some strings and set of strings:
+
+$a^n$ \qquad\qquad String from $n$ same symbol $a$, this means $a^3=aaa$
+
+
