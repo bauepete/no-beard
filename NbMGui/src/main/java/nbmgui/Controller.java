@@ -91,14 +91,18 @@ public class Controller {
         setDebuggerButtonsDisable(true);
         inputView.setDisable(true);
         startButton.setDisable(true);
-        inputView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
-                inputIsAvailable(inputView.getText());
-        });
+        makeInputViewReactOnReturn();
         dataMemoryListView.setFocusTraversable(false);
         dataMemoryListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         dataMemoryHeader.setText("\t\tAddress\t  0\t+1\t+2\t+3");
         versionLabel.setText(NoBeardMachine.getVersion());
+    }
+
+    private void makeInputViewReactOnReturn() {
+        inputView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
+                inputIsAvailable(inputView.getText());
+        });
     }
 
     private void setDebuggerButtonsDisable(boolean state) {
@@ -151,16 +155,16 @@ public class Controller {
         machine.removeAllBreakpoints();
     }
 
-    private void fillProgramDataView(List<String> programDataList) {
+    private void fillProgramDataView(List<String> assemblerProgramLines) {
         VBox programData = new VBox();
-        for (String lineStr : programDataList) {
-            CheckBox line = new CheckBox(lineStr);
+        for (String oneLine : assemblerProgramLines) {
+            CheckBox line = new CheckBox(oneLine);
             line.setPadding(new Insets(1));
             line.setOnAction((event) -> {
                 if (event.getSource() instanceof CheckBox) {
                     CheckBox breakpoint = (CheckBox) event.getSource();
                     if (breakpoint.isSelected())
-                        machine.addBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
+                        machine.setBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
                     else
                         machine.removeBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
                 }
@@ -177,15 +181,18 @@ public class Controller {
 
     @FXML
     void startProgram(ActionEvent event) {
-        prepareGuiForProgramStart();
+        prepareGuiForRunningProgram();
         new Thread(() -> {
             machine.runProgram(0);
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+
+            Platform.runLater(() -> {
+                highlightNextInstructionToBeExecuted();
+                DataMemoryView.update(this, getRawDataMemoryList());
+            });
         }).start();
     }
 
-    private void prepareGuiForProgramStart() {
+    private void prepareGuiForRunningProgram() {
         setDebuggerButtonsDisable(false);
         startButton.setDisable(true);
         openButton.setDisable(true);
@@ -222,11 +229,14 @@ public class Controller {
     void step(ActionEvent event) {
         new Thread(() -> {
             if (machine.getBreakpoints().contains(machine.getCurrentLine()))
-                machine.replaceBreakInstruction();
+                machine.stopOnBreakpoint();
             machine.step();
-            machine.setBreakInstructionIfNeeded();
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+            machine.continueFromBreakpoint();
+
+            Platform.runLater(() -> {
+                highlightNextInstructionToBeExecuted();
+                DataMemoryView.update(this, getRawDataMemoryList());
+            });
         }).start();
     }
 
@@ -234,10 +244,13 @@ public class Controller {
     void continueToBreakpoint(ActionEvent event) {
         new Thread(() -> {
             machine.step();
-            machine.setBreakInstructionIfNeeded();
+            machine.continueFromBreakpoint();
             machine.runUntilNextBreakpoint();
-            highlightNextInstructionToBeExecuted();
-            Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+
+            Platform.runLater(() -> {
+                highlightNextInstructionToBeExecuted();
+                DataMemoryView.update(this, getRawDataMemoryList());
+            });
         }).start();
     }
 
