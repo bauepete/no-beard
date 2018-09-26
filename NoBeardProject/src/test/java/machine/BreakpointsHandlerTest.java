@@ -87,6 +87,7 @@ public class BreakpointsHandlerTest {
         assertEquals(3, bph.getAllBreakpoints().size());
         bph.clearAllBreakpoints();
         assertTrue(bph.getAllBreakpoints().isEmpty());
+        assertEquals(LA.getId(), program[0]);
     }
 
     @Test
@@ -107,10 +108,5 @@ public class BreakpointsHandlerTest {
         bph.setBreakpoint(0);
         bph.update(cu, 0);
         assertEquals(LA.getId(), program[0]);
-    }
-
-    @Test
-    @Ignore
-    public void replaceInstructionAtAddress() {
     }
 }

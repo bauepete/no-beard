@@ -1,9 +1,6 @@
 package machine;
 
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Egon on 31.08.2017.
@@ -17,7 +14,7 @@ public class BreakpointsHandler implements Observer {
         this.programMemory = programMemory;
         breakpoints = new HashMap<>();
     }
-    
+
     /**
      * Stores a breakpoint for a given address. If the given address is invalid (out of range of program memory)
      * a PROGRAM_ADDRESS_ERROR is thrown and nothing is stored.
@@ -70,6 +67,9 @@ public class BreakpointsHandler implements Observer {
      * Deletes all breakpoints
      */
     void clearAllBreakpoints() {
+        for (Map.Entry<Integer, Byte> breakpoint : breakpoints.entrySet()) {
+            programMemory.replaceInstruction(breakpoint.getKey(), breakpoint.getValue());
+        }
         breakpoints.clear();
     }
 
@@ -86,15 +86,6 @@ public class BreakpointsHandler implements Observer {
         if (o instanceof ControlUnit && arg != null) {
             int atAddress = (int) arg;
             onStopAtBreakpoint(atAddress);
-        }
-    }
-
-    void replaceInstructionAtAddress(int address, InstructionSet.Instruction instruction) {
-        if (!breakpoints.isEmpty() && breakpoints.keySet().contains(address)) {
-            if (instruction != null)
-                programMemory.replaceInstruction(address, instruction.getId());
-            else
-                programMemory.replaceInstruction(address, breakpoints.get(address));
         }
     }
 }

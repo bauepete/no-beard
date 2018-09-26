@@ -122,8 +122,9 @@ public class NoBeardMachine implements SourceCodeInfo {
 
     public void stopProgram() {
         controlUnit.stopMachine();
-        if(this.getBreakpoints().contains(getCurrentLine())) {
-            this.breakpointsHandler.replaceInstructionAtAddress(getCurrentLine(), InstructionSet.Instruction.BREAK);
+        int currentAddress = controlUnit.getPc();
+        if(getBreakpoints().contains(currentAddress)) {
+            breakpointsHandler.onStopAtBreakpoint(currentAddress);
         }
         resetStackPointer();
     }
@@ -132,14 +133,14 @@ public class NoBeardMachine implements SourceCodeInfo {
         callStack.setCurrentFramePointer(callStack.getFramePointer());
     }
 
-    public void setBreakInstructionIfNeeded() {
-        int address = getCurrentLine()-controlUnit.getInstructionRegister().getSize();
-        if (getBreakpoints().contains(address))
-            breakpointsHandler.replaceInstructionAtAddress(address, InstructionSet.Instruction.BREAK);
+    public void continueFromBreakpoint() {
+        int addressOfInstruction = controlUnit.getPc() - controlUnit.getInstructionRegister().getSize();
+        if (getBreakpoints().contains(addressOfInstruction))
+            breakpointsHandler.onContinueFromBreakpoint();
     }
 
-    public void replaceBreakInstruction() {
-        breakpointsHandler.replaceInstructionAtAddress(getCurrentLine(), null);
+    public void stopOnBreakpoint() {
+        breakpointsHandler.onStopAtBreakpoint(controlUnit.getPc() - controlUnit.getInstructionRegister().getSize());
     }
 
     public void step() {
