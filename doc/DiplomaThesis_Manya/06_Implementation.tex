@@ -165,17 +165,20 @@ When a program is started, a new external thread must be started in which the ma
 void startProgram(ActionEvent event) {
     prepareGuiForProgramStart();
     new Thread(() -> {
-        machine.runProgram(0);
-        highlightNextInstructionToBeExecuted();
-        Platform.runLater(() -> DataMemoryView.update(this, getRawDataMemoryList()));
+        machine.runProgram(0);        
+    	Platform.runLater(() -> {
+            highlightNextInstructionToBeExecuted();
+            DataMemoryView.update(this, getRawDataMemoryList());
     }).start();
 }
 \end{lstlisting}
 The reason why and how they run on different threads will be explained in section~\ref{sec:synchronization}. The machine executes step by step every instruction of the program until any interruption. It can be interrupted by a breakpoint, input request or by a \lstinline$halt$ instruction. 
 
-The method \lstinline$highlightNextInstructionToBeExecuted()$ at line~6 signs the instruction which hast to be executed as next, e.g., if the user press the ``Step'' button then the highlighted assembler statement will be executed. In other words, it shows where the current program counter is.
+\lstinline$Platform.runLater(java.lang.Runnable runnable)$ is usually used for updating the GUI from a background thread. Java supports \lstinline$Task$ which is a similar concept and can be utilized for the same purpose. 
 
-The final statement in this code snippet is at line~7 which updates the data memory on the view after an interruption. \lstinline$Platform.runLater(java.lang.Runnable runnable)$ is usually used for updating the GUI from a background thread. Java supports \lstinline$Task$ which is a similar concept and can be utilized for the same purpose. The method \lstinline$DataMemoryView.update$ sets the data memory to the current state, but this will be described in section~\ref{sec:implementationOfDataVisualisation}.
+The method \lstinline$highlightNextInstructionToBeExecuted()$ at line~7 signs the instruction which hast to be executed as next, e.g., if the user press the ``Step'' button then the highlighted assembler statement will be executed. In other words, it shows where the current program counter is.
+
+The final statement in this code snippet is at line~8 which updates the data memory on the view after an interruption, but this will be described in section~\ref{sec:implementationOfDataVisualisation}.
 
 \section{Synchronization of NoBeard Machine and GUI}
 \label{sec:synchronization} 
@@ -193,7 +196,7 @@ public boolean hasNextInt() {
 
 private void waitForInput() {
     try {
-        controller.enableInputView(true);
+        Platform.runLater(() -> controller.enableInputView(true));
         controller.getSemaphore().acquire();
     } catch (InterruptedException e) {
         e.printStackTrace();
@@ -202,11 +205,13 @@ private void waitForInput() {
 \end{lstlisting}
 Now the user can make an input on the UI thread and submit it. To get back to the machine thread, the semaphore hast to be released after the user fires the submit event by pressing the ENTER key. This is demonstrated with the code fragment~\ref{listing:Synchronisation2} more precisely at line~12. Then the machine continues at the same position where the semaphore was acquired, at one of the has Next function and can analyse the provided input string.
 \begin{lstlisting}[caption={Synchronisation with semaphore (Part 2)},label=listing:Synchronisation2]
-inputView.setOnKeyPressed(event -> {
-    if (event.getCode() == KeyCode.ENTER && inputView != null && 
-    !inputView.getText().isEmpty())
-        inputIsAvailable(inputView.getText());
-});
+private void makeInputViewReactOnReturn() {
+    inputView.setOnKeyPressed(event -> {
+        if (event.getCode() == KeyCode.ENTER && inputView != null && 
+        		!inputView.getText().isEmpty())
+            inputIsAvailable(inputView.getText());
+    });
+}
 
 private void inputIsAvailable(String providedInput) {
     getOutputView().appendText(providedInput + "\n");
@@ -221,34 +226,45 @@ Machine internal handling of breakpoints is done as described in \cite{bendersky
 
 The idea of this solution is pretty easy to understand. The machine runs only as long as it is in a \lstinline$running$ state. So, a new instruction is introduced, called \lstinline$break$ which sets the machine into a \lstinline$blocked$ state. This means at the same time that as soon as a user sets a breakpoint on a specified instruction, a change from the original to a \lstinline$break$ instruction is necessary.
 
-The \lstinline$ControlUnit$ which is responsible for execution cycles in the virtual machine is going to be an observable class. Then a new Observer class is implemented which is called \lstinline$Debugger$ that is holding all breakpoints in a \lstinline$HashMap$.
+The \lstinline$ControlUnit$ which is responsible for execution cycles in the virtual machine is going to be an observable class. Then a new Observer class is implemented which is called \lstinline$BreakpointsHandler$ that is holding all breakpoints in a \lstinline$HashMap$.
 
 \lstinline$private HashMap<Integer, Byte> breakpoints;$
  
-This \lstinline$HashMap$ stores the address and the instruction of a selected breakpoint. The \lstinline$Debugger$ class contains in all three major functions as shown in the code snippet~\ref{listing:debugger}. Adding and removing breakpoints to or from the \lstinline$HashMap$ and replacing an instruction at a specified address from the program memory to a new one. The selection of a breakpoint on the UI calls the set or remove function from the debugger, as the case may be. As soon as a breakpoint is selected, it will be stored to the \lstinline$HashMap$ with its original instruction and at same time replaces the original instruction by the newly added \lstinline$break$ instruction.
+This \lstinline$HashMap$ stores the address and the instruction of a selected breakpoint. The \lstinline$BreakpointsHandler$ class contains in all four major functions as shown in the code snippet~\ref{listing:debugger}. Adding and removing breakpoints to or from the \lstinline$HashMap$ and replacing an instruction at a specified address from the program memory to a new one. The selection of a breakpoint on the UI calls the set or remove function from the debugger, as the case may be. As soon as a breakpoint is selected, it will be stored to the \lstinline$HashMap$ with its original instruction and at same time replaces the original instruction by the newly added \lstinline$break$ instruction.
 \begin{lstlisting}[caption={Implementation of the debugger},label=listing:debugger]
-void setBreakpoint(Integer address, Byte instructionId) {
-    this.breakpoints.put(address, instructionId);
-    programMemory.replaceInstruction(address, InstructionSet.Instruction.BREAK.getId());
-}
-
-void removeBreakpoint(Integer address) {
-    programMemory.replaceInstruction(address, breakpoints.get(address));
-    this.breakpoints.remove(address);
-}
-
-public void replaceInstructionAtAddress(int address, InstructionSet.Instruction instruction) {
-    if (!breakpoints.isEmpty() && breakpoints.keySet().contains(address)) {
-        if (instruction != null)
-            programMemory.replaceInstruction(address, instruction.getId());
-        else
-            programMemory.replaceInstruction(address, breakpoints.get(address));
+void setBreakpoint(int atAddress) {
+    byte originalInstruction = programMemory.loadByte(atAddress);
+    if (originalInstruction != -1) {
+        breakpoints.put(atAddress, programMemory.loadByte(atAddress));
+        programMemory.replaceInstruction(atAddress, InstructionSet.Instruction.BREAK.getId());
     }
 }
-\end{lstlisting}
-This break instruction sets the machine to a \lstinline$blocked$ state and notify the observer to change the \lstinline$break$ instruction back to the original one which is stored in the \lstinline$HashMap$. 
 
-Now the machine is blocked at a specified breakpoint and the user can take a look to the current stack frames and go one step further in the program or continue the execution cycle to a next breakpoint. However, when the user wants to step further to execute the current instruction where the breakpoint is, of course again a switch back to the break instruction is needed after the original instruction completed.  
+void removeBreakpoint(int atAddress) {
+    if (breakpoints.containsKey(atAddress)) {
+        programMemory.replaceInstruction(atAddress, breakpoints.get(atAddress));
+        breakpoints.remove(atAddress);
+    } else {
+        // force program address error
+        programMemory.loadByte(-1);
+    }
+}
+
+void onStopAtBreakpoint(int atAddress) {
+    if (breakpoints.containsKey(atAddress)) {
+        programMemory.replaceInstruction(atAddress, breakpoints.get(atAddress));
+        programCurrentlyStoppedAtAddress = atAddress;
+    }
+}
+
+void onContinueFromBreakpoint() {
+    programMemory.replaceInstruction(programCurrentlyStoppedAtAddress,
+    		InstructionSet.Instruction.BREAK.getId());
+}
+\end{lstlisting}
+This \lstinline$break$ instruction sets the machine to a \lstinline$blocked$ state and notify the observer to change the \lstinline$break$ instruction back to the original one by calling the \lstinline$onStopAtBreakpoint(int atAddress)$ method. 
+
+Now the machine is blocked at a specified breakpoint and the user can take a look to the current memory state and go one step further in the program flow or continue the execution cycle to a next breakpoint. However, when the user wants to step further to execute the current instruction where the breakpoint is, of course again a switch back to the break instruction is needed after the original instruction completed. This is will be done by calling the \lstinline$onContinueFromBreakpoint()$ method.
 \section{Visualisation of DataMemory}
 \label{sec:implementationOfDataVisualisation}
 The visualisation of the data memory gives an overview about string constants and stack frames. As figure~\ref{fig:dataMemoryView} shows the view lists four byte of data on each row starting with the belonging address. 

@@ -151,24 +151,26 @@ public class Controller {
         machine.removeAllBreakpoints();
     }
 
-    private void fillProgramDataView(List<String> assemblerProgramLines) {
+    private void fillProgramDataView(List<String> programDataList) {
         VBox programData = new VBox();
-        for (String oneLine : assemblerProgramLines) {
-            CheckBox line = new CheckBox(oneLine);
-            line.setPadding(new Insets(1));
-            line.setOnAction((event) -> {
-                if (event.getSource() instanceof CheckBox) {
-                    CheckBox breakpoint = (CheckBox) event.getSource();
-                    if (breakpoint.isSelected())
-                        machine.setBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
-                    else
-                        machine.removeBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
-                }
-            });
-            programData.getChildren().add(line);
-            programDataMap.put(getAddressOfProgramLine(line.getText()), line);
-        }
+        for (String lineStr : programDataList)
+            addLineToProgramDataView(programData, lineStr);
         programDataView.setContent(programData);
+    }
+
+    private void addLineToProgramDataView(VBox programData, String lineContent) {
+        CheckBox line = new CheckBox(lineContent);
+        line.setPadding(new Insets(1));
+        line.setOnAction((event) -> setClickEventToLine((CheckBox) event.getSource()));
+        programData.getChildren().add(line);
+        programDataMap.put(getAddressOfProgramLine(line.getText()), line);
+    }
+
+    private void setClickEventToLine(CheckBox breakpoint) {
+        if (breakpoint.isSelected())
+            machine.setBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
+        else
+            machine.removeBreakpoint(getAddressOfProgramLine(breakpoint.getText()));
     }
 
     private int getAddressOfProgramLine(String line) {
