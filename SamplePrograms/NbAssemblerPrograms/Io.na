@@ -1,4 +1,4 @@
-# Reads in an integer value from the
+# Reads an integer value from the
 # stdin and prints it to the stdout.
 "Enter an int:You entered:Read operation successful?"
 inc 8     # reserve space for two variables
