@@ -2,7 +2,6 @@ package nbmgui;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 
 /**
  * Created by Egon on 17.10.2017.
@@ -13,21 +12,31 @@ class DataMemoryConverter {
         String[] lineContent = DataMemoryView.splitDataLine(controller.getDataMemoryListView().getItems().get(selectedLineIndex));
         StringBuilder line = new StringBuilder();
         int address = Integer.parseInt(lineContent[0]);
-        if (dataCellIndex == 1) {
-            line = new StringBuilder(lineContent[0] + "#int#" + controller.getMachine().getDataMemory().loadWord(address)); // #int# is needed to separate raw data and integer
-        } else {
-            for (int i = 0; i < lineContent.length; i++) {
-                if (i == dataCellIndex) {
-                    address = Integer.parseInt(lineContent[0]) + i - 1;
-                    line.append("#int#").append(controller.getMachine().getDataMemory().loadWord(address));
-                    if (selectedLineIndex < controller.getDataMemoryListView().getItems().size()-1)
-                        fillNextLineWithSpaces(controller, dataCellIndex, selectedLineIndex+1);
-                    break;
-                }
-                line.append(lineContent[i]);
-            }
-        }
+
+        if (dataCellIndex == 1)
+            line = createAlignedInt(controller, lineContent, address);
+        else
+            createNotAlignedInt(controller, selectedLineIndex, dataCellIndex, lineContent, line);
+
         controller.getDataMemoryListView().getItems().set(selectedLineIndex, line.toString());
+    }
+
+    private static StringBuilder createAlignedInt(Controller controller, String[] lineContent, int address) {
+        return new StringBuilder(lineContent[0] + "#int#" + controller.getMachine().getDataMemory().loadWord(address)); // #int# is needed to separate raw data and integer
+    }
+
+    private static void createNotAlignedInt(Controller controller, int selectedLineIndex, int dataCellIndex, String[] lineContent, StringBuilder line) {
+        int address;
+        for (int i = 0; i < lineContent.length; i++) {
+            if (i == dataCellIndex) {
+                address = Integer.parseInt(lineContent[0]) + i - 1;
+                line.append("#int#").append(controller.getMachine().getDataMemory().loadWord(address));
+                if (selectedLineIndex < controller.getDataMemoryListView().getItems().size()-1)
+                    fillNextLineWithSpaces(controller, dataCellIndex, selectedLineIndex+1);
+                break;
+            }
+            line.append(lineContent[i]);
+        }
     }
 
     private static void fillNextLineWithSpaces(Controller controller, int dataCellIndex, int selectedLineIndex) {

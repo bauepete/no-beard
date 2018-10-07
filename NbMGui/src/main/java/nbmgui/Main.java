@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -20,9 +21,9 @@ public class Main extends Application {
         initRootLayout();
     }
 
-    public void initRootLayout() {
+    private void initRootLayout() {
         try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("RootLayout.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("RootLayout.fxml")));
             Scene scene = new Scene(root);
             scene.getStylesheets().add("style.css");
             primaryStage.setScene(scene);
