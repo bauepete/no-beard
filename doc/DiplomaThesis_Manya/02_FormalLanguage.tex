@@ -5,33 +5,42 @@ A formal language is an abstract language that, unlike concrete languages, often
 Formal languages are suitable for the (mathematically) precise description of the handling of character strings. For example, data formats or entire programming languages can be specified. Together with a formal semantics, the defined character strings have a meaning. With a programming language, a programming instruction (as part of the formal language) can be assigned a unique machine behaviour (as part of the semantics).
 
 Based on formal languages, however, it is also possible to define logic calculi with which one can draw mathematical conclusions. In conjunction with formally defined programming languages, calculi can help to check programs for their correctness.
+\bau{cite; generally I would suggest that you add a sentence here, where you give a citation to the book/site from which you took most of the information. Then you do not have to cite this over and over again. Only at the points where you use a different source you add the citation at the point where you use it.}
+
 \section{Strings and Alphabets}
 \subsection{Alphabet}
 An alphabet (sometimes called a Vocabulary) is a non-empty and finite set of elements. Alphabets are often denoted by upper-case letters $A$ or $V$ and sometimes as upper-case Greek letters like $\Sigma$. Examples of common alphabets are e.g. the machine text alphabet ASCII or the binary bit $0$ or $1$.
 \subsection{String}
 A string (or word) is a finite sequence of elements, called symbols or letters selected from a particular finite set which is the alphabet.
-The length of a string $\omega$ is denoted as $|\omega|$ which gives the number of symbols in the string. The empty string is a special word which has no symbols and is denoted by $\epsilon$ or $\lambda$. This means a string $\omega$ is called empty $\epsilon$ if $|\omega|=0$.
+The length of a string $\omega$ is denoted as $|\omega|$ which gives the number of symbols in the string. The empty string is a special word which has no symbols and is denoted by $\varepsilon$ or $\lambda$. This means a string $\omega$ is called an empty string if $|\omega|=0$.
 \subsection{Concatenation}
 The basic operation of strings is concatenation, i.e., writing strings as a junction. Let $\omega_1$ and $\omega_2$ be two strings. Then the concatenation of $\omega_1$ and $\omega_2$ makes a new string $\alpha$ containing all the symbols of $\omega_1$ in order followed by all symbols of $\omega_2$ in order. This is usually written as $\alpha=\omega_1\omega_2$.
 Concatenations in the alphabet $\{x, y, z\}$ can be:
 \begin{align*}
 \omega_1&=xxzyyx	& \omega_2&=zxxz	& \omega_1\omega_2&=xxzyyxzxxz\\
-\omega_1&=xxzyyx	& \omega_2&=\epsilon	& \omega_1\omega_2&=xxzyyx\\
-\omega_1&=\epsilon	& \omega_2&=zxxz	& \omega_1\omega_2&=zxxz
+\omega_1&=xxzyyx	& \omega_2&=\varepsilon	& \omega_1\omega_2&=xxzyyx\\
+\omega_1&=\varepsilon	& \omega_2&=zxxz	& \omega_1\omega_2&=zxxz
 \end{align*}
-Concatenation is associative, that means:
-$$\omega_1(\omega_2\omega_3)=(\omega_1\omega_2)\omega_3$$
-In some cases strings can be simplified by the following rules: 
+
+\baust{C}{The c}oncatenation \baust{is associative, that means}{on an alphabet has two important properties}:
+
+\begin{itemize}
+	\item Assiciativity: $\omega_1(\omega_2\omega_3)=(\omega_1\omega_2)\omega_3$
+	\item An identity element $\varepsilon$: i., e., $\omega\varepsilon = \varepsilon\omega = \omega$
+\end{itemize}
+
+In some cases \baust{strings}{string notation} can be simplified by the following rules: 
 
 $a^n$ \qquad For strings containing $n$ same symbols, e.g., $a^3=aaa$
 
-$\epsilon$\qquad\quad The empty string containing null symbols
+$\varepsilon$\qquad\quad The empty string containing null symbols
 
 $a^+$ \qquad For strings with set of $(a^n:n\geq1)$, e.g., $a^+=\{a, aa, aaa, aaaa, \ldots\}$
 
-$a^*$ \qquad For strings with set of $(a^n:n\geq0)$, e.g., $a^*=\{\epsilon, a, aa, aaa, aaaa, \ldots\}$
+$a^*$ \qquad For strings with set of $(a^n:n\geq0)$, e.g., $a^*=\{\varepsilon, a, aa, aaa, aaaa, \ldots\}$
  
 \section{Languages and Grammars}
+\bau{Here I would start with the Kleeny Star. This helps you to define the term Language pretty formally (see my slides)}
 Formally, a language $L$ is defined as a set of strings over some finite alphabet. Specific examples of languages are finite languages with a finite number of words.
 
 For languages we use the usual set-theoretic notations like:
@@ -41,8 +50,11 @@ For languages we use the usual set-theoretic notations like:
 \item $\cup$ (union), 
 \item $\cap$ (intersection), 
 \end{itemize}
-Belonging of a string $\omega$ in the language $L$ is denoted by $\omega \in L$, as usual. There are also ``negated'' relations such as $\not\subseteq$, $\not\subset$ and $\not\in$.
+\bau{Examples are missing here}
 
+\baust{Belonging of a}{If a} string $\omega$ \baust{in the}{belongs to a} language $L$ \baust{}{it} is denoted by $\omega \in L$, as usual. There are also ``negated'' relations such as $\not\subseteq$, $\not\subset$ and $\not\in$.
+
+\bau{I would move this part after the explanation of production rules and grammars}
 The grammatical structure of a statement, a program or generally of a string is a tree, the so-called syntax tree. There are two types of symbols:
 \begin{itemize}
 \item \textbf{Terminal symbols: }these are the symbols of the sentence itself, i.e. the symbols that can not be further decomposed. In other words they are the ``leaves'' of the tree and are donated with lower-case letter. 
@@ -82,10 +94,10 @@ In case, that $\alpha \Rightarrow^+ \beta$ or $\alpha = \beta$ we write $\alpha 
 
 \subsection{Kleene Star}
 The Kleene star set $\Sigma^*$ of an alphabet $\Sigma$ is a language that contains all the words of the alphabet. It can be defined by means of structural induction. 
-Firstly, in the beginning of the induction the empty word $\epsilon$ is defined. Then in the induction step it is defined that each string is being one element in the Kleene star set.
+Firstly, in the beginning of the induction the empty word $\varepsilon$ is defined. Then in the induction step it is defined that each string is being one element in the Kleene star set.
 To define the sets $\Sigma_i$ recursively, we use the following components:
 \begin{itemize}
-\item \textbf{Basis Clause: }$\Sigma_0 = \{\epsilon\}$ 
+\item \textbf{Basis Clause: }$\Sigma_0 = \{\varepsilon\}$ 
 \item \textbf{Inductive Clause: }$\Sigma_{i+1} = \{\omega v \mid \omega\in\Sigma_{i-1}\wedge v\in\Sigma\}$
 \end{itemize}
 The Kleene star is defined then by $\Sigma^* = \bigcup\limits_{i\in\mathbb{N_0}} \Sigma_{i}$
@@ -93,7 +105,7 @@ In other words, the Kleene Star of an alphabet is the set of all strings that ca
 
 The Kleene star set $L^*$ of a language $L$ is the union of all its potential languages (repeated concatenation of languages):
 $$L^* = \bigcup\limits_{i\in\mathbb{N_0}} \L^{i}$$
-Where $L^0 = \{\epsilon\}$ and $\L^{n+1} = L^nL$. 
+Where $L^0 = \{\varepsilon\}$ and $\L^{n+1} = L^nL$. 
 \subsection{Syntax of formal grammars}
 A formal grammar is represented by the 4-tuple $G=(N,\Sigma,P,S)$ wherein:
 \begin{itemize}
@@ -127,3 +139,5 @@ Therefore it is $L(G) = \{``abc", ``aabc", ``bbbc", ``babbc", ``abbbc", ``ababbc
 
 If $G(S)$ is a formal grammar with a start symbol $S$ then the set $$L(G(S)) = \{\alpha : S \Rightarrow^* \alpha \wedge \alpha \in V^{*}_{T}\}$$
 is called the language of $G(S)$.
+
+\bau{If you finish this chapter with different forms of syntax notations (Classical, syntax diagrams, EBNF) then this chapter is pretty ok.}
