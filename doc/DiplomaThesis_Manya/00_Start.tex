@@ -19,25 +19,22 @@ Leonding, am \duedatede \\[5em]
 \end{otherlanguage}
 
 \begin{abstract}
-Here it is described what the thesis is all about. The abstract shall be brief and concise and its size  shall not go beyond one page. Furthermore it has no chapters, sections etc. Paragraphs can be used to structure the abstract. If necessary one can also use bullet point lists but care must be taken that also in this part of the text full sentences and a clearly readable structure are required.
+The target of this diploma thesis is to extend an available system programming environment which is called the NoBeard project. The project is developed to enable students to gain some experiences in the field of system programming by coding on assembler level with basic instructions. In addition, the reader of this thesis gets a basic knowledge about formal languages and their uses.
 
-Concerning the content the following points shall be covered. 
-
+Initially, it contained three big components:
 \begin{itemize}
-	\item {\em Definition of the project:} What do we currently know about the topic or on which results can the work be based? What is the goal of the project? Who can use the results of the project?
-	
-	\item {\em Implementation:} What are the tools and methods used to implement the project?
-	
-	\item {\em Results:} What is the final result of the project?
+\item {\em The NoBeard Machine:} A stack based virtual machine with a small set of instructions. The main task of the machine is to execute NoBeard object files.
+\item {\em The NoBeard Assembler:} Provided to write programs for the NoBeard Machine.
+\item {\em The NoBeard Compiler:} Includes a dedicated programming language and the corresponding compiler to simplify the writing of codes for the NoBeard Machine.
 \end{itemize}
-This list does not mean that the abstract must strictly follow this structure. Rather it should be understood in that way that these points shall be described such that the reader is animated  to dig further into the thesis.
 
-Finally it is required to add a representative image which describes your project best. The image here shows Leslie Lamport the inventor of \LaTeX.
+The purpose of this thesis was to develop a proper concept of a graphical user interface for the virtual machine.
+The concept has to focus the didactic aims to enable users to explore the execution cycle of an assembler instruction, the execution of programs on assembler level, the monitoring of stack frames, the expression stack etc\ldots 
 
-\begin{flushright}
-	\includegraphics[scale=.25]{images/leslie_lamport.jpg}
-\end{flushright}
+Furthermore, the system is extended with some debugger functions such as setting break points, stepping on assembler instruction level etc\ldots
 
+The initial version of the NoBeard project was developed in Java, therefore the graphical user interface had to be implemented with the Java FX framework.
+Primary, it was conceived with the NetBeans IDE on the ant build system, however the entire project was migrated to Maven and further developed using the IntelliJ IDEA environment.
 \end{abstract}
 
 \begin{otherlanguage}{german}
@@ -47,11 +44,9 @@ An dieser Stelle wird beschrieben, worum es in der Diplomarbeit geht. Die Zusamm
 Bezüglich des Inhalts sollen folgende Punkte in der Zusammenfassung vorkommen: 
 
 \begin{itemize}
-	\item {\em Aufgabenstellung:} Von welchem Wissenstand kann man im Umfeld der Aufgabenstellung ausgehen? Was ist das Ziel des Projekts? Wer kann die Ergebnisse der Arbeit benutzen?
-	
-	\item {\em Umsetzung:} Welche fachtheoretischen oder -praktischen Methoden wurden bei der Umsetzung verwendet?
-	
-	\item {\em Ergebnisse:} Was ist das endgültige Ergebnis der Arbeit?
+\item {\em Aufgabenstellung:} Von welchem Wissenstand kann man im Umfeld der Aufgabenstellung ausgehen? Was ist das Ziel des Projekts? Wer kann die Ergebnisse der Arbeit benutzen?
+\item {\em Umsetzung:} Welche fachtheoretischen oder -praktischen Methoden wurden bei der Umsetzung verwendet?
+\item {\em Ergebnisse:} Was ist das endgültige Ergebnis der Arbeit?
 \end{itemize}
 Diese Liste soll als Sammlung von inhaltlichen Punkten für die Zusammenfassung verstanden werden. Die konkrete Gliederung und Reihung der Punkte ist den Autoren überlassen. Zu beachten ist, dass der/die LeserIn beim Lesen dieses Teils Lust bekommt, diese Arbeit weiter zu lesen.
 
