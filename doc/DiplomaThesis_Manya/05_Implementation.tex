@@ -48,9 +48,10 @@ The NoBeard Machine is part of the existing NoBeard project. This project alread
 \item \textbf{error: }To handle errors that are occurring during compilation or assembly   
 \item \textbf{io: }Responsible for reading source files and handling binary files 
 \item \textbf{machine: }Implements a virtual machine with components like DataMemory, ProgramMemory, Instructions, etc...  
-\item \textbf{parser: }Converts source code files to binary files \bau{This has to be done better after you have done the introductory chapters}
-\item \textbf{scanner: }To analyze NoBeard source code files for keywords, operands or arguments  \bau{see above}
-\item \textbf{symbolTable: }Looks up for matching words based on the symbol table entry  \bau{see above}
+\item \textbf{scanner: }A scanner converts an input string (generally a whole file) into a list of tokens. These tokens represent things like identifiers, parentheses, operators, etc\ldots
+\item \textbf{parser: }It is a program unit that analyses whether a token sequence to a program source text adheres to predetermined grammar rules. If this is not the case, an error message is generated. Otherwise, a structured representation of the program source text is generated that reflects the syntactic structure required by the grammar rules.
+\item \textbf{symbolTable: }It is an abstract data type that contains variable names, constants, etc\ldots  
+Identifiers are added to the symbol table when they are initially declared. Later, when referring to an identifier, the symbol table is consulted to ensure that the identifier is known and used correctly.
 \end{itemize}
 However, the most important package for our work is \lstinline$machine$. It defines the interface which the project described here is built upon.
 \section{Architecture of the User Interface}
