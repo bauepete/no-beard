@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -22,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import static javafx.scene.control.Alert.AlertType.INFORMATION;
 
 public class Controller {
     public MenuItem openFileButton;
@@ -271,7 +271,7 @@ public class Controller {
     }
 
     public void showAboutNbmGui(ActionEvent actionEvent) {
-        Alert alert = new Alert(INFORMATION);
+        Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("NoBeard Machine Version");
         alert.setHeaderText("V 2.0");
         alert.setContentText("Peter Bauer / Egon Manya");
