@@ -46,11 +46,15 @@ public class NbM {
             System.out.println(NoBeardMachine.getVersion());
             return;
         }
+        runFile(args[0]);
+    }
+
+    private static void runFile(String filePath) {
         BinaryFile objectFile;
         try {
-            objectFile = BinaryFileHandler.open(args[0]);
+            objectFile = BinaryFileHandler.open(filePath);
         } catch (IOException ex) {
-            System.err.println("Unable to open " + args[0]);
+            System.err.println("Unable to open " + filePath);
             return;
         }
         NoBeardMachine machine = new NoBeardMachine(new ConsoleInputDevice(), new ConsoleOutputDevice());
@@ -58,5 +62,5 @@ public class NbM {
         machine.loadProgram(0, objectFile.getProgram());
         machine.runProgram(0);
     }
-    
+
 }

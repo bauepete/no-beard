@@ -6,19 +6,15 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d086d814-7fd3-459f-a620-8f4b3ec66024" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__at_ac_htlleonding_NoBeardProject_1_2.xml" beforeDir="false" />
+    <list default="true" id="d086d814-7fd3-459f-a620-8f4b3ec66024" name="Default" comment="- Upgraded nbc to 2.0&#10;- Added -v option to nbc">
+      <change afterPath="$PROJECT_DIR$/../NbM/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../NbM/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NbM/.idea/libraries/Maven__at_ac_htlleonding_NoBeardProject_1_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NbM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../NbM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NbM/NbM.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../NbM/NbM.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NbM/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../NbM/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NbM/src/main/java/nbm/NbM.java" beforeDir="false" afterPath="$PROJECT_DIR$/../NbM/src/main/java/nbm/NbM.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Nbc.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Nbc.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/nbc/Nbc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nbc/Nbc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../NoBeardProject/src/main/java/compiler/NoBeardCompiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../NoBeardProject/src/main/java/compiler/NoBeardCompiler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SamplePrograms/nba" beforeDir="false" afterPath="$PROJECT_DIR$/../SamplePrograms/nba" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SamplePrograms/nbc" beforeDir="false" afterPath="$PROJECT_DIR$/../SamplePrograms/nbc" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -40,14 +36,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/nbc/Nbc.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
+            <state relative-caret-position="360">
               <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -56,7 +47,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="690">
@@ -145,7 +136,7 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="nbc" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551872979519" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551874083645" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -474,6 +465,14 @@
       <workItem from="1500413251104" duration="642000" />
       <workItem from="1500984854722" duration="1827000" />
     </task>
+    <task id="LOCAL-00001" summary="- Upgraded nbc to 2.0&#10;- Added -v option to nbc">
+      <created>1551873108503</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1551873108503</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -523,6 +522,10 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Upgraded nbc to 2.0&#10;- Added -v option to nbc" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Upgraded nbc to 2.0&#10;- Added -v option to nbc" />
+  </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
@@ -533,20 +536,20 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nbc/Nbc.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
+        <state relative-caret-position="360">
           <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="46" column="54" selection-start-line="46" selection-start-column="54" selection-end-line="46" selection-end-column="54" />
         </state>
       </provider>
     </entry>
