@@ -6,7 +6,7 @@
 
     <groupId>at.ac.htlleonding</groupId>
     <artifactId>Nbc</artifactId>
-    <version>1.2</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -32,21 +32,28 @@
 
             <!-- Make this jar executable -->
             <plugin>
-                <groupId>com.jolira</groupId>
-                <artifactId>onejar-maven-plugin</artifactId>
-                <version>1.4.4</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <configuration>
-                            <mainClass>nbc.Nbc</mainClass>
-                        </configuration>
                         <goals>
-                            <goal>one-jar</goal>
+                            <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>nbc.Nbc</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>nbc</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-       </plugins>
+
+        </plugins>
     </build>
 
 
