@@ -22,7 +22,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import static javafx.scene.control.Alert.AlertType.INFORMATION;
+
 public class Controller {
+    public MenuItem openFileButton;
     private NoBeardMachine machine;
     private Semaphore semaphore;
     private BinaryFile objectFile;
@@ -192,6 +195,7 @@ public class Controller {
         setDebuggerButtonsDisable(false);
         startButton.setDisable(true);
         openButton.setDisable(true);
+        openFileButton.setDisable(true);
         dataMemoryListView.getItems().clear();
         lastProgramLine = -1;
     }
@@ -203,6 +207,7 @@ public class Controller {
             setDebuggerButtonsDisable(true);
             startButton.setDisable(false);
             openButton.setDisable(false);
+            openFileButton.setDisable(false);
         }
         if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
@@ -255,6 +260,7 @@ public class Controller {
         setDebuggerButtonsDisable(true);
         startButton.setDisable(false);
         openButton.setDisable(false);
+        openFileButton.setDisable(false);
         machine.stopProgram();
         dataMemoryListView.getItems().clear();
         programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
@@ -262,5 +268,14 @@ public class Controller {
 
     public void quitNbmGui(ActionEvent actionEvent) {
         Platform.exit();
+    }
+
+    public void showAboutNbmGui(ActionEvent actionEvent) {
+        Alert alert = new Alert(INFORMATION);
+        alert.setTitle("NoBeard Machine Version");
+        alert.setHeaderText("V 2.0");
+        alert.setContentText("Peter Bauer / Egon Manya");
+
+        alert.showAndWait();
     }
 }

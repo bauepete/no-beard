@@ -1,110 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nbmgui.Controller">
-  <children>
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="nbmgui.Controller">
     <MenuBar VBox.vgrow="NEVER">
-      <menus>
         <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem fx:id="openFileButton" mnemonicParsing="false" onAction="#openFile" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#quitNbmGui" text="Quit" />
-          </items>
+            <MenuItem fx:id="openFileButton" mnemonicParsing="false" onAction="#openFile" text="Open…"/>
+            <Menu mnemonicParsing="false" text="Open Recent"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Preferences…"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" onAction="#quitNbmGui" text="Quit"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
+            <MenuItem mnemonicParsing="false" text="Cut"/>
+            <MenuItem mnemonicParsing="false" text="Copy"/>
+            <MenuItem mnemonicParsing="false" text="Paste"/>
+            <MenuItem mnemonicParsing="false" text="Delete"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Select All"/>
+            <MenuItem mnemonicParsing="false" text="Unselect All"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About NbmGui" />
-          </items>
+            <MenuItem mnemonicParsing="false" onAction="#showAboutNbmGui" text="About NbmGui"/>
         </Menu>
-      </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.33, 0.66" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <items>
+    <SplitPane dividerPositions="0.33, 0.66" focusTraversable="true"
+               VBox.vgrow="ALWAYS">
         <AnchorPane>
-          <children>
-              <SplitPane dividerPositions="0.6033210332103321" layoutX="-32.0" layoutY="59.0" orientation="VERTICAL" prefHeight="544.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                 <items>
-                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="219.0">
-                        <children>
-                            <Button fx:id="startButton" layoutX="81.0" layoutY="83.0" mnemonicParsing="false" onAction="#startProgram" prefHeight="45.0" prefWidth="120.0" text="Run" textAlignment="CENTER" />
-                            <Button fx:id="stepButton" layoutX="81.0" layoutY="144.0" mnemonicParsing="false" onAction="#step" prefHeight="45.0" prefWidth="120.0" text="Step" />
-                            <Button fx:id="stopButton" layoutX="81.0" layoutY="264.0" mnemonicParsing="false" onAction="#stopProgram" prefHeight="45.0" prefWidth="120.0" text="Stop" AnchorPane.topAnchor="264.0" />
-                            <Button fx:id="openButton" layoutX="81.0" layoutY="21.0" mnemonicParsing="false" onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File" />
-                            <Button fx:id="continueButton" layoutX="81.0" layoutY="205.0" mnemonicParsing="false" onAction="#continueToBreakpoint" prefHeight="45.0" prefWidth="120.0" text="Continue" />
-                        </children>
-                     </AnchorPane>
-                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                         <children>
-                             <TextArea fx:id="outputView" editable="false" prefHeight="161.0" prefWidth="246.0" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                             <Separator prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                             <TextField fx:id="inputView" prefHeight="40.0" prefWidth="246.0" promptText="Input" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                         </children>
-                     </AnchorPane>
-                 </items>
-              </SplitPane>
-          </children>
+            <SplitPane dividerPositions="0.6033210332103321" layoutX="-32.0" layoutY="59.0"
+                       orientation="VERTICAL" prefHeight="544.0" prefWidth="221.0" AnchorPane.bottomAnchor="0.0"
+                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="145.0" prefWidth="219.0">
+                    <Button fx:id="startButton" layoutX="81.0" layoutY="83.0" mnemonicParsing="false"
+                            onAction="#startProgram" prefHeight="45.0" prefWidth="120.0" text="Run"
+                            textAlignment="CENTER"/>
+                    <Button fx:id="stepButton" layoutX="81.0" layoutY="144.0" mnemonicParsing="false"
+                            onAction="#step" prefHeight="45.0" prefWidth="120.0" text="Step"/>
+                    <Button fx:id="stopButton" layoutX="81.0" layoutY="264.0" mnemonicParsing="false"
+                            onAction="#stopProgram" prefHeight="45.0" prefWidth="120.0" text="Stop"
+                            AnchorPane.topAnchor="264.0"/>
+                    <Button fx:id="openButton" layoutX="81.0" layoutY="21.0" mnemonicParsing="false"
+                            onAction="#openFile" prefHeight="45.0" prefWidth="120.0" text="Open File"/>
+                    <Button fx:id="continueButton" layoutX="81.0" layoutY="205.0"
+                            mnemonicParsing="false" onAction="#continueToBreakpoint" prefHeight="45.0"
+                            prefWidth="120.0" text="Continue"/>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <TextArea fx:id="outputView" editable="false" prefHeight="161.0" prefWidth="246.0"
+                              AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="0.0"
+                              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                    <Separator prefWidth="200.0" AnchorPane.bottomAnchor="40.0"
+                               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                    <TextField fx:id="inputView" prefHeight="40.0" prefWidth="246.0" promptText="Input"
+                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                               AnchorPane.rightAnchor="0.0"/>
+                </AnchorPane>
+            </SplitPane>
         </AnchorPane>
         <AnchorPane>
-               <children>
-                  <Label fx:id="fileTitle" alignment="CENTER" maxHeight="40.0" minHeight="40.0" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-                  <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                  <ScrollPane fx:id="programDataView" layoutX="100.0" layoutY="121.0" prefHeight="544.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0" />
-               </children></AnchorPane>
-      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="544.0" prefWidth="300.0">
-               <children>
-                  <Label id="dataMemoryHeader" fx:id="dataMemoryHeader" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <font>
-                        <Font size="15.5" />
-                     </font>
-                  </Label>
-                  <ListView fx:id="dataMemoryListView" prefHeight="544.0" prefWidth="301.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children></AnchorPane>
-      </items>
+            <Label fx:id="fileTitle" alignment="CENTER" maxHeight="40.0" minHeight="40.0" textAlignment="CENTER"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                <font>
+                    <Font size="20.0"/>
+                </font>
+            </Label>
+            <Separator prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                       AnchorPane.topAnchor="40.0"/>
+            <ScrollPane fx:id="programDataView" layoutX="100.0" layoutY="121.0" prefHeight="544.0"
+                        prefWidth="333.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="41.0"/>
+        </AnchorPane>
+        <AnchorPane id="Content" prefHeight="544.0" prefWidth="300.0">
+            <Label id="dataMemoryHeader" fx:id="dataMemoryHeader" textAlignment="CENTER"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <font>
+                    <Font size="15.5"/>
+                </font>
+            </Label>
+            <ListView fx:id="dataMemoryListView" prefHeight="544.0" prefWidth="301.0"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                      AnchorPane.topAnchor="0.0"/>
+        </AnchorPane>
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
-      <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" HBox.hgrow="ALWAYS">
-          <font>
-            <Font size="11.0" fx:id="x3" />
-          </font>
-          <textFill>
-            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
-          </textFill>
+        <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+        </padding>
+        <Label maxHeight="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+            <font>
+                <Font size="11.0" fx:id="x3"/>
+            </font>
+            <textFill>
+                <Color blue="0.625" green="0.625" red="0.625" fx:id="x4"/>
+            </textFill>
         </Label>
-        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label fx:id="versionLabel" font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
-      </children>
-      <padding>
-        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-      </padding>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Label fx:id="versionLabel" font="$x3" text="Right status" textFill="$x4"
+               HBox.hgrow="NEVER"/>
     </HBox>
-  </children>
 </VBox>
