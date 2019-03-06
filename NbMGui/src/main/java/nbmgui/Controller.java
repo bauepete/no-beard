@@ -259,4 +259,8 @@ public class Controller {
         dataMemoryListView.getItems().clear();
         programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
     }
+
+    public void quitNbmGui(ActionEvent actionEvent) {
+        Platform.exit();
+    }
 }
