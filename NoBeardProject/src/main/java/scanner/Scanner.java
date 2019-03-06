@@ -102,7 +102,7 @@ public class Scanner {
  - if getCurrentToken().getSymbol() is different from IDENTIFIER and NUMBER
  getCurrentToken.getValue() is undefined
      *
-     *** @note Before the first call of nextToken SrcReader.getCurrentChar()
+     *** @implNote  Before the first call of nextToken SrcReader.getCurrentChar()
      * must return the first character of the source file.
      */
     public void nextToken() {
@@ -116,7 +116,7 @@ public class Scanner {
                 return;
             }
 
-            if (nameManager.isAPossibleStartOfName((char)srcReader.getCurrentChar())) {
+            if (nameManager.isAValidStartOfName((char)srcReader.getCurrentChar())) {
                 handleName();
                 return;
             }
@@ -283,7 +283,6 @@ public class Scanner {
      * assumptions ** in next_symbol also hold for current_token.
      *
      *** @return The current token.
-     *** @see nextToken()
      */
     public Token getCurrentToken() {
         return currentToken;

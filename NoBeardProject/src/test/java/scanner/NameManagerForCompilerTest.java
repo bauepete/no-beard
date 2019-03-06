@@ -41,12 +41,12 @@ public class NameManagerForCompilerTest {
 
     @Test
     public void testIsAPossibleStartOfName() {
-        assertTrue(nameManager.isAPossibleStartOfName('a'));
-        assertTrue(nameManager.isAPossibleStartOfName('z'));
-        assertTrue(nameManager.isAPossibleStartOfName('_'));
-        assertTrue(nameManager.isAPossibleStartOfName('$'));
-        assertFalse(nameManager.isAPossibleStartOfName('0'));
-        assertFalse(nameManager.isAPossibleStartOfName('.'));
+        assertTrue(nameManager.isAValidStartOfName('a'));
+        assertTrue(nameManager.isAValidStartOfName('z'));
+        assertTrue(nameManager.isAValidStartOfName('_'));
+        assertTrue(nameManager.isAValidStartOfName('$'));
+        assertFalse(nameManager.isAValidStartOfName('0'));
+        assertFalse(nameManager.isAValidStartOfName('.'));
     }
 
     /**

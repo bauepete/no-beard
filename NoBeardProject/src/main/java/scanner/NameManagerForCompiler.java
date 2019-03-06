@@ -73,8 +73,7 @@ public class NameManagerForCompiler extends NameManager {
 
 
     @Override
-    protected boolean isValidNameCharacter() {
-        char currentChar = (char)sr.getCurrentChar();
+    protected boolean isAValidNameCharacter(char currentChar) {
         return Character.isLetter(currentChar) || Character.isDigit(currentChar)
                 || currentChar == '_' || currentChar == '$';
     }
@@ -121,7 +120,7 @@ public class NameManagerForCompiler extends NameManager {
     }
 
     @Override
-    boolean isAPossibleStartOfName(char c) {
+    boolean isAValidStartOfName(char c) {
         return Character.isLetter(c) || c == '_' || c == '$';
     }
 }
