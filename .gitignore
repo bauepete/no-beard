@@ -277,6 +277,7 @@ buildNumber.properties
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
 **/.idea/dictionaries
+**/.idea/modules.xml
 
 # Sensitive or high-churn files:
 **/.idea/**/dataSources/
