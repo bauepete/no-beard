@@ -39,7 +39,7 @@ public class NameManagerForAssemblerTest {
      * Test of isAValidStartOfName method, of class NameManagerForAssembler.
      */
     @Test
-    public void testIsAPossibleStartOfName() {
+    public void testIsAValidStartOfName() {
         NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
         for (char c = 'a'; c <= 'z'; c++) {
             assertTrue(instance.isAValidStartOfName(c));
@@ -58,7 +58,7 @@ public class NameManagerForAssemblerTest {
         }
 
         char[] invalidStarts = {
-                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', '_'
+                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', '_', ';', ',', ':', '-', '#', '+', '*', '´', '`'
         };
         for (char c : invalidStarts) {
             assertFalse(instance.isAValidStartOfName(c));
@@ -68,16 +68,22 @@ public class NameManagerForAssemblerTest {
     @Test
     public void testValidNameCharacter() {
         NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        // additionally to all valid starts of name
         for (char c = '0'; c <= '9'; c++) {
             assertTrue(instance.isAValidNameCharacter(c));
         }
+        assertTrue(instance.isAValidNameCharacter('_'));
     }
 
     @Test
     public void testInvalidNameCharacter() {
         NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
-        boolean result = instance.isAValidNameCharacter('§');
-        assertFalse(result);
+        char[] invalidNameChars = {
+                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', ';', ',', ':', '-', '#', '+', '*', '´', '`'
+        };
+        for (char c : invalidNameChars) {
+            assertFalse(instance.isAValidNameCharacter(c));
+        }
     }
 
     /**

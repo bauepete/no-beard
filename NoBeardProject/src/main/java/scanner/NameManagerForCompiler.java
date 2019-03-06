@@ -71,11 +71,14 @@ public class NameManagerForCompiler extends NameManager {
         }
     }
 
+    @Override
+    boolean isAValidStartOfName(char c) {
+        return Character.isLetter(c) || c == '_' || c == '$';
+    }
 
     @Override
     protected boolean isAValidNameCharacter(char currentChar) {
-        return Character.isLetter(currentChar) || Character.isDigit(currentChar)
-                || currentChar == '_' || currentChar == '$';
+        return isAValidStartOfName(currentChar) || Character.isDigit(currentChar);
     }
 
     // if s is found in keywords it returns the keyword symbol otherwise
@@ -117,10 +120,5 @@ public class NameManagerForCompiler extends NameManager {
             }
         }
         return name;
-    }
-
-    @Override
-    boolean isAValidStartOfName(char c) {
-        return Character.isLetter(c) || c == '_' || c == '$';
     }
 }
