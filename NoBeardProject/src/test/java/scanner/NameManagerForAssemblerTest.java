@@ -47,9 +47,22 @@ public class NameManagerForAssemblerTest {
         for (char c = 'A'; c <= 'Z'; c++) {
             assertTrue(instance.isAValidStartOfName(c));
         }
-
-        assertFalse(instance.isAValidStartOfName('_'));
         assertTrue(instance.isAValidStartOfName('.'));
+    }
+
+    @Test
+    public void testInvalidStartsOfName() {
+        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        for (char c = '0'; c <= '9'; c++) {
+            assertFalse(instance.isAValidStartOfName(c));
+        }
+
+        char[] invalidStarts = {
+                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', '_'
+        };
+        for (char c : invalidStarts) {
+            assertFalse(instance.isAValidStartOfName(c));
+        }
     }
 
     @Test
