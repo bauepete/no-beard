@@ -1,0 +1,53 @@
+# Reads a number and calculates the absolute value of the number
+"Enter a number:Ok No Number Absolute value is"
+inc 8
+
+# print "Enter a number: "
+lit 0
+lit 15
+lit 16
+out 2
+
+# read input from user
+la 0 32
+la 0 36
+in 0
+
+lv 0 36
+lit 1
+rel 2   # read success == 1?
+fjmp .input_no_number
+
+lv 0 32
+lit 0
+rel 0 # check value < 0
+fjmp .output_result
+
+# negative value to be converted
+la 0 32
+lv 0 32
+neg
+sto
+
+.output_result
+# out Absolute value is
+lit 28
+lit 17
+lit 18
+out 2
+
+# out value
+lv 0 32 # load value to be printed
+lit 1 # load width
+out 0
+jmp .end
+
+.input_no_number
+lit 18
+lit 9
+lit 9
+out 2
+
+.end
+out 3
+halt
