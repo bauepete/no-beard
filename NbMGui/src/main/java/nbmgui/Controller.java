@@ -226,13 +226,18 @@ public class Controller {
     ObservableList<String> getRawDataMemoryList() {
         ObservableList<String> result = FXCollections.observableArrayList();
         for (int i = 0; i <= machine.getCallStack().getStackPointer(); i += 4) {
-            StringBuilder line = new StringBuilder(String.format("%0" + 4 + "d", i));
-            for (int j = i; j < i + 4; j++) {
-                line.append(String.format("%0" + 3 + "d", machine.getDataMemory().loadByte(j)));
-            }
-            result.add(line.toString());
+            String line = getStringRepresentationOfWordAtAddress(i);
+            result.add(line);
         }
         return result;
+    }
+
+    private String getStringRepresentationOfWordAtAddress(int address) {
+        StringBuilder line = new StringBuilder(String.format("%0" + 4 + "d", address));
+        for (int j = address; j < address + 4; j++) {
+            line.append(String.format("%0" + 3 + "d", machine.getDataMemory().loadByte(j)));
+        }
+        return line.toString();
     }
 
     @FXML
