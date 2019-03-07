@@ -30,7 +30,7 @@ import io.SourceReader;
  * @author P. Bauer (p.bauer@htl-leonding.ac.at)
  */
 public abstract class NameManager {
-    protected final SourceReader sr;
+    private final SourceReader sr;
 
     public NameManager(SourceReader sr) {
         this.sr = sr;
@@ -50,20 +50,20 @@ public abstract class NameManager {
      *
      * @param t Token which corresponds to the name read.
      * @see Token
-     * @see Symbol
+     * @see Scanner.Symbol
      */
     public abstract void readName(Token t);
 
     protected String readString() {
         StringBuilder s = new StringBuilder();
-        while (isValidNameCharacter()) {
+        while (isAValidNameCharacter((char) sr.getCurrentChar())) {
             s.append((char) (sr.getCurrentChar()));
             sr.nextChar();
         }
         return s.toString();
     }
 
-    protected abstract boolean isValidNameCharacter();
+    protected abstract boolean isAValidNameCharacter(char c);
 
     /**
      * Returns the string which corresponds to the given spix.
@@ -73,6 +73,6 @@ public abstract class NameManager {
      */
     public abstract String getStringName(int spix);
 
-    abstract boolean isAPossibleStartOfName(char c);
+    abstract boolean isAValidStartOfName(char c);
     
 }

@@ -46,8 +46,8 @@ public class NameManagerForAssembler extends NameManager {
     }
 
     @Override
-    protected boolean isValidNameCharacter() {
-        return isAPossibleStartOfName((char)sr.getCurrentChar()) || sr.getCurrentChar() == '_';
+    protected boolean isAValidNameCharacter(char c) {
+        return isAValidStartOfName(c) || c == '_' || Character.isDigit(c);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class NameManagerForAssembler extends NameManager {
     }
 
     @Override
-    boolean isAPossibleStartOfName(char c) {
+    boolean isAValidStartOfName(char c) {
         return Character.isLetter(c) || c == '.';
     }
     

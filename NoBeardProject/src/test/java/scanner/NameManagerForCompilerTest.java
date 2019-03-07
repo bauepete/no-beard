@@ -9,10 +9,10 @@ import io.SourceReader;
 import scanner.Scanner.Symbol;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author peter
  */
 public class NameManagerForCompilerTest {
@@ -40,13 +40,51 @@ public class NameManagerForCompilerTest {
     }
 
     @Test
-    public void testIsAPossibleStartOfName() {
-        assertTrue(nameManager.isAPossibleStartOfName('a'));
-        assertTrue(nameManager.isAPossibleStartOfName('z'));
-        assertTrue(nameManager.isAPossibleStartOfName('_'));
-        assertTrue(nameManager.isAPossibleStartOfName('$'));
-        assertFalse(nameManager.isAPossibleStartOfName('0'));
-        assertFalse(nameManager.isAPossibleStartOfName('.'));
+    public void testIsAValidStartOfName() {
+        for (char c = 'a'; c <= 'z'; c++) {
+            assertTrue(nameManager.isAValidStartOfName(c));
+        }
+
+        for (char c = 'A'; c <= 'Z'; c++) {
+            assertTrue(nameManager.isAValidStartOfName(c));
+        }
+
+        assertTrue(nameManager.isAValidStartOfName('_'));
+        assertTrue(nameManager.isAValidStartOfName('$'));
+    }
+
+    @Test
+    public void testInvalidStartsOfName() {
+        for (char c = '0'; c <= '9'; c++) {
+            assertFalse(nameManager.isAValidStartOfName(c));
+        }
+
+        char[] invalidStarts = {
+                '!', '"', '§', '%', '&', '/', '(', ')', '<', '>', ',', ':', '-', '.', ';', ',', ':', '-', '#', '+', '*', '´', '`'
+        };
+
+        for (char c : invalidStarts) {
+            assertFalse(nameManager.isAValidStartOfName(c));
+        }
+    }
+
+    @Test
+    public void testValidNameChars() {
+        // additionally to all valid starts of name
+        for (char c = '0'; c <= '9'; c++) {
+            assertTrue(nameManager.isAValidNameCharacter(c));
+        }
+    }
+
+    @Test
+    public void testInvalidNameChars() {
+        char[] invalidChars = {
+                '!', '"', '§', '%', '&', '/', '(', ')', '<', '>', ',', ':', '-', '.', ';', ',', ':', '-', '#', '+', '*', '´', '`'
+        };
+        for (char c : invalidChars) {
+            assertFalse(nameManager.isAValidStartOfName(c));
+        }
+
     }
 
     /**
@@ -102,7 +140,7 @@ public class NameManagerForCompilerTest {
         assertEquals(Symbol.IDENTIFIER, token.getSymbol());
         assertEquals("$$", token.getClearName());
     }
-    
+
     @Test
     public void testReadNameDouble() {
         srMany.nextChar();
@@ -163,8 +201,8 @@ public class NameManagerForCompilerTest {
         nmKeywords.readName(token);
 
         Symbol[] expTokens = {Symbol.PUT, Symbol.PUTLN, Symbol.UNIT, Symbol.DO,
-            Symbol.DONE, Symbol.IF, Symbol.ELSE, Symbol.INT, Symbol.BOOL,
-            Symbol.CHAR, Symbol.TRUE, Symbol.FALSE};
+                Symbol.DONE, Symbol.IF, Symbol.ELSE, Symbol.INT, Symbol.BOOL,
+                Symbol.CHAR, Symbol.TRUE, Symbol.FALSE};
 
         for (Symbol s : expTokens) {
             assertEquals(s, token.getSymbol());

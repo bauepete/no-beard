@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import machine.InputDevice;
 
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * Created by Egon on 22.07.2017.
@@ -30,7 +31,8 @@ public class FxInputDevice implements InputDevice {
     @Override
     public boolean hasNextInt() {
         waitForInput();
-        return controller.getInput().chars().allMatch(Character::isDigit);
+        Scanner s = new Scanner(controller.getInput());
+        return s.hasNextInt();
     }
 
     @Override

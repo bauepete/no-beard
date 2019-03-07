@@ -1,5 +1,6 @@
 package nbmgui;
 
+import config.Configuration;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import javafx.application.Platform;
@@ -9,7 +10,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
@@ -22,7 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+
 public class Controller {
+    public MenuItem openFileButton;
     private NoBeardMachine machine;
     private Semaphore semaphore;
     private BinaryFile objectFile;
@@ -96,23 +101,28 @@ public class Controller {
 
     private void makeInputViewReactOnReturn() {
         inputView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
-                inputIsAvailable(inputView.getText());
+            if (inputIsAvailable(event))
+                reactOnAvailableInput();
         });
+    }
+
+    private boolean inputIsAvailable(KeyEvent event) {
+        return event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty();
+    }
+
+    private void reactOnAvailableInput() {
+        String providedInput = inputView.getText();
+        getOutputView().appendText(providedInput + "\n");
+        input = providedInput;
+        inputView.clear();
+        enableInputView(false);
+        getSemaphore().release();
     }
 
     private void setDebuggerButtonsDisable(boolean state) {
         stepButton.setDisable(state);
         continueButton.setDisable(state);
         stopButton.setDisable(state);
-    }
-
-    private void inputIsAvailable(String providedInput) {
-        getOutputView().appendText(providedInput + "\n");
-        input = providedInput;
-        inputView.clear();
-        enableInputView(false);
-        getSemaphore().release();
     }
 
     void enableInputView(boolean state) {
@@ -194,6 +204,7 @@ public class Controller {
         setDebuggerButtonsDisable(false);
         startButton.setDisable(true);
         openButton.setDisable(true);
+        openFileButton.setDisable(true);
         dataMemoryListView.getItems().clear();
         lastProgramLine = -1;
     }
@@ -205,6 +216,7 @@ public class Controller {
             setDebuggerButtonsDisable(true);
             startButton.setDisable(false);
             openButton.setDisable(false);
+            openFileButton.setDisable(false);
         }
         if (lastProgramLine > -1 && lastProgramLine != machine.getCurrentLine())
             programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
@@ -257,8 +269,22 @@ public class Controller {
         setDebuggerButtonsDisable(true);
         startButton.setDisable(false);
         openButton.setDisable(false);
+        openFileButton.setDisable(false);
         machine.stopProgram();
         dataMemoryListView.getItems().clear();
         programDataMap.get(lastProgramLine).setStyle("-fx-background-color: transparent");
+    }
+
+    public void quitNbmGui(ActionEvent actionEvent) {
+        Platform.exit();
+    }
+
+    public void showAboutNbmGui(ActionEvent actionEvent) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("NoBeard Machine Version");
+        alert.setHeaderText(Configuration.getVersion());
+        alert.setContentText("Peter Bauer / Egon Manya");
+
+        alert.showAndWait();
     }
 }

@@ -138,7 +138,7 @@
 \begin{center}
 \includegraphics[scale=0.3]{no_beard_1.jpg} \\[2em]
 {\Huge A Formal Description of \leongage} \\[1em]
-{\large v 1.2} \\[2em]
+{\large v 2.0} \\[2em]
 {\Large P. Bauer} \\[1em]
 HTBLA Leonding \\
 Limesstr. 14 - 18 \\
@@ -151,6 +151,8 @@ Austria
 \begin{tabular}{|l|l|p{.5\textwidth}|}
 \hline
 \cellcolor{Gray}\textcolor{White}{Date} & \cellcolor{Gray}\textcolor{White}{Author} & \cellcolor{Gray}\textcolor{White}{Change} \\ \hline
+March 7, 2019 & P. Bauer &  {\bf Released v. 2.0} \\ \hline
+March 6, 2019 & P. Bauer & Updated naming schemes for NoBeard identifiers and Assembler labels. Documentation of assembler instruction \verb$in$ is corrected. \\ \hline
 September 21, 2016 & P. Bauer & Added instructins in.  \\ \hline
 September 2, 2016 & P. Bauer & Added instructins lci, lvi.  \\ \hline
 August 15, 2016 & P. Bauer & Added introduction to assembler.  \\ \hline
@@ -193,8 +195,9 @@ When developing this project we had an extremely helpful guideline in the {\em M
 
 The string constants are stored within one block of double quotes and can be organized by the programmer as (s)he wants. There is no possibility to address one single constant, i.e., when using a string constant in the assembler program one has to provide the start address of the string constant and the length needed in the program.
 
-Assembler programs are texts holding a sequence of assembler instructions as described in section~\ref{sec:instructions}. The opcode has to be written in lower case letters.The programmer has to follow the instruction format, i.e., (s)he has to take care that the given operands fit into the required data format of the instruction.
+Assembler programs are texts holding a sequence of assembler instructions as described in section~\ref{sec:instructions} and labels. The opcode has to be written in lower case letters.The programmer has to follow the instruction format, i.e., (s)he has to take care that the given operands fit into the required data format of the instruction.
 
+Labels are identifiers to name jump addresses and follow the following naming scheme: \verb$(letter | '.'){letter | digit | '.' | '_'}$
 \section{Examples}
 \subsection{First Example}
 The first example shows a non-empty assembler program which definitely does nothing. It is worth to be mentioned that \lstinline$#$ marks a comment which then lasts until the end of the line. 
@@ -267,9 +270,9 @@ given in its original definition.
 
 \subsection{Token Classes}
 \begin{description}
-	\item [identifier]: \verb$letter{letter|digit|_}$
-	\item [number]: \verb$digit{digit}$
-	\item [string]: \verb$'"' {nodoublequote} '"'$
+	\item [identifier] \verb1(letter | '_' | '$'){letter | digit | '_' | '$'}1
+	\item [number] \verb$digit{digit}$
+	\item [string] \verb$'"' {nodoublequote} '"'$
 \end{description}
 
 \subsection{Keywords}

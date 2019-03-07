@@ -530,7 +530,7 @@ Unconditional jump: Sets \lstinline$pc$ to \lstinline$newPc$.
 Reads data from the terminal. Depending on \lstinline$Type$ different data types are read:
 
 \begin{itemize}
-	\item 0: An \lstinline$int$ is read and stored at the address on top of the stack. After execution the value 1 is pushed if an integer was read successfully, otherwise 0 is pushed.
+	\item 0: Attempt to read an \lstinline$int$. After execution the value 1 is stored to the address located on top of stack if reading was successful, otherwise 0 is stored. In case of success the value read is stored on the address located right under the top of stack.
 	\item 1: A \lstinline$char$ is read and stored at the address on top of the stack. After execution the value 1 is pushed 
 	\item 2: a \lstinline$string$ with a specific length is read
 \end{itemize}
@@ -539,9 +539,15 @@ Reads data from the terminal. Depending on \lstinline$Type$ different data types
 	in Type
 	switch(Type) {
 		case 0:
+			s = pop();
 			a = pop();
-			n = readInt();
-			dat[a ... a + 3] = n;
+			n = readInt(&readOk);
+			if (readOk) {
+				dat[a ... a + 3] = n;
+				dat[s ... s + 3] = 1;
+			} else {
+				dat[s ... s + 3] = 0;
+			}
 			break;
 		case 1:
 			a= pop();

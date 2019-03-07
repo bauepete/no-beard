@@ -25,8 +25,6 @@ package scanner;
 
 import io.SourceReader;
 import io.SourceStringReader;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import scanner.Scanner.Symbol;
@@ -37,32 +35,55 @@ import scanner.Scanner.Symbol;
  */
 public class NameManagerForAssemblerTest {
 
-    @Before
-    public void setUp() {
+    /**
+     * Test of isAValidStartOfName method, of class NameManagerForAssembler.
+     */
+    @Test
+    public void testIsAValidStartOfName() {
+        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        for (char c = 'a'; c <= 'z'; c++) {
+            assertTrue(instance.isAValidStartOfName(c));
+        }
+        for (char c = 'A'; c <= 'Z'; c++) {
+            assertTrue(instance.isAValidStartOfName(c));
+        }
+        assertTrue(instance.isAValidStartOfName('.'));
     }
 
-    @After
-    public void tearDown() {
+    @Test
+    public void testInvalidStartsOfName() {
+        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        for (char c = '0'; c <= '9'; c++) {
+            assertFalse(instance.isAValidStartOfName(c));
+        }
+
+        char[] invalidStarts = {
+                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', '_', ';', ',', ':', '-', '#', '+', '*', '´', '`'
+        };
+        for (char c : invalidStarts) {
+            assertFalse(instance.isAValidStartOfName(c));
+        }
     }
 
     @Test
     public void testValidNameCharacter() {
-        SourceReader sourceReader = new SourceStringReader("l_");
-        sourceReader.nextChar();
-        NameManagerForAssembler instance = new NameManagerForAssembler(sourceReader);
-        assertEquals(true, instance.isValidNameCharacter());
-
-        sourceReader.nextChar();
-        assertEquals(true, instance.isValidNameCharacter());
+        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        // additionally to all valid starts of name
+        for (char c = '0'; c <= '9'; c++) {
+            assertTrue(instance.isAValidNameCharacter(c));
+        }
+        assertTrue(instance.isAValidNameCharacter('_'));
     }
 
     @Test
     public void testInvalidNameCharacter() {
-        SourceReader sourceReader = new SourceStringReader("§");
-        sourceReader.nextChar();
-        NameManagerForAssembler instance = new NameManagerForAssembler(sourceReader);
-        boolean result = instance.isValidNameCharacter();
-        assertEquals(false, result);
+        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
+        char[] invalidNameChars = {
+                '!', '"', '§', '$', '%', '&', '/', '(', ')', '<', '>', ';', ',', ':', '-', '#', '+', '*', '´', '`'
+        };
+        for (char c : invalidNameChars) {
+            assertFalse(instance.isAValidNameCharacter(c));
+        }
     }
 
     /**
@@ -75,18 +96,6 @@ public class NameManagerForAssemblerTest {
         String expResult = "";
         String result = instance.getStringName(spix);
         assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of isAPossibleStartOfName method, of class NameManagerForAssembler.
-     */
-    @Test
-    public void testIsAPossibleStartOfName() {
-        NameManagerForAssembler instance = new NameManagerForAssembler(new SourceStringReader(""));
-        assertEquals(true, instance.isAPossibleStartOfName('a'));
-        assertEquals(true, instance.isAPossibleStartOfName('z'));
-        assertEquals(false, instance.isAPossibleStartOfName('_'));
-        assertEquals(true, instance.isAPossibleStartOfName('.'));
     }
 
     /**
@@ -123,5 +132,21 @@ public class NameManagerForAssemblerTest {
         instance.readName(t);
         assertEquals(Symbol.LABEL, t.getSymbol());
         assertEquals(".file_not_found", t.getClearName());
+    }
+
+    @Test
+    public void testLabelWithNumberInside() {
+        SourceReader sourceReader = new SourceStringReader(".label1 .first2Labels");
+        NameManagerForAssembler instance = new NameManagerForAssembler(sourceReader);
+
+        sourceReader.nextChar();
+        Token t = new Token();
+        instance.readName(t);
+        assertEquals(Symbol.LABEL, t.getSymbol());
+        assertEquals(".label1", t.getClearName());
+
+        sourceReader.nextChar();
+        instance.readName(t);
+        assertEquals(Symbol.LABEL, t.getSymbol());
     }
 }

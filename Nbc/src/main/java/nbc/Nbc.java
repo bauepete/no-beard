@@ -42,10 +42,18 @@ public class Nbc {
             System.err.println("Usage nbc <source file>");
             return;
         }
-        NoBeardCompiler.setSourceFile(args[0]);
+        if (args[0].compareTo("-v") == 0) {
+            System.out.println(NoBeardCompiler.getVersion());
+            return;
+        }
+        compileFile(args[0]);
+    }
+
+    private static void compileFile(String filePath) {
+        NoBeardCompiler.setSourceFile(filePath);
         NoBeardCompiler.compile();
         if (NoBeardCompiler.lastCompilationWasSuccessful()) {
-            String binaryFilePath = args[0].replaceAll(".nb", ".no");
+            String binaryFilePath = filePath.replaceAll(".nb", ".no");
             writeBinaryFile(binaryFilePath, NoBeardCompiler.getByteCode(), NoBeardCompiler.getStringStorage());
         } else {
             NoBeardCompiler.getErrorList().forEach(System.out::println);

@@ -33,18 +33,7 @@ public class ConstantOperandTest {
     private final ConstantOperand intOp = new ConstantOperand(Type.SIMPLEINT, 4, 42, 0);
     private final ConstantOperand charOp = new ConstantOperand(Type.SIMPLECHAR, 1, 0, 0);
     private final ConstantOperand strOp = new ConstantOperand(Type.ARRAYCHAR, 10, 0, 0);
-    
-    public ConstantOperandTest() {
-    }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
     @Before
     public void setUp() {
         SourceReader sourceReader = new SourceStringReader("unit A; do done A;");
@@ -55,10 +44,6 @@ public class ConstantOperandTest {
         Operand.setErrorHandler(errorHandler);
     }
     
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of emitLoadVal method, of class ConstantOperand.
      */

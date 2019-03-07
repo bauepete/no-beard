@@ -24,6 +24,8 @@
 package compiler;
 
 import java.io.FileNotFoundException;
+
+import config.Configuration;
 import error.Error;
 import parser.NoBeardParser;
 import parser.Parser;
@@ -45,6 +47,10 @@ public class NoBeardCompiler {
     private static SourceReader sourceReader;
     private static Parser parserl;
     private static boolean sourceIsAvailable;
+
+    public static String getVersion() {
+        return Configuration.getVersion();
+    }
 
     public static void setSourceString(String source) {
         NoBeardCompiler.sourceReader = new SourceStringReader(source);

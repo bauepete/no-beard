@@ -61,7 +61,7 @@ public class BinaryFile {
         return program;
     }
 
-    void setStringStorage(byte[] stringStorage) {
+    public void setStringStorage(byte[] stringStorage) {
         if (stringStorage != null) {
             this.stringStorage = stringStorage;
         } else {
