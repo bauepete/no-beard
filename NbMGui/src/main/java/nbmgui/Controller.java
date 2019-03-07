@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import machine.NoBeardMachine;
@@ -99,23 +100,28 @@ public class Controller {
 
     private void makeInputViewReactOnReturn() {
         inputView.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty())
-                inputIsAvailable(inputView.getText());
+            if (inputIsAvailable(event))
+                reactOnAvailableInput();
         });
+    }
+
+    private boolean inputIsAvailable(KeyEvent event) {
+        return event.getCode() == KeyCode.ENTER && inputView != null && !inputView.getText().isEmpty();
+    }
+
+    private void reactOnAvailableInput() {
+        String providedInput = inputView.getText();
+        getOutputView().appendText(providedInput + "\n");
+        input = providedInput;
+        inputView.clear();
+        enableInputView(false);
+        getSemaphore().release();
     }
 
     private void setDebuggerButtonsDisable(boolean state) {
         stepButton.setDisable(state);
         continueButton.setDisable(state);
         stopButton.setDisable(state);
-    }
-
-    private void inputIsAvailable(String providedInput) {
-        getOutputView().appendText(providedInput + "\n");
-        input = providedInput;
-        inputView.clear();
-        enableInputView(false);
-        getSemaphore().release();
     }
 
     void enableInputView(boolean state) {
