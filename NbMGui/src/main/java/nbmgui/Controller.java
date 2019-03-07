@@ -1,5 +1,6 @@
 package nbmgui;
 
+import config.Configuration;
 import io.BinaryFile;
 import io.BinaryFileHandler;
 import javafx.application.Platform;
@@ -279,7 +280,7 @@ public class Controller {
     public void showAboutNbmGui(ActionEvent actionEvent) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("NoBeard Machine Version");
-        alert.setHeaderText("V 2.0");
+        alert.setHeaderText(Configuration.getVersion());
         alert.setContentText("Peter Bauer / Egon Manya");
 
         alert.showAndWait();
