@@ -108,11 +108,17 @@ public class DataMemory {
     int storeStringConstants(byte[] stringConstants) {
         store(0, stringConstants);
         if (errorHandler.getCount() == 0) {
-            final int startAddressOfNextWord = (((stringConstants.length - 1) / 4 + 1) * 4);
-            return startAddressOfNextWord;
+            return getStartOfNextWord(stringConstants);
         } else {
             return -1;
         }
+    }
+
+    private int getStartOfNextWord(byte[] stringConstants) {
+        if (stringConstants.length == 0)
+            return 0;
+        final int startAddressOfNextWord = (((stringConstants.length - 1) / 4 + 1) * 4);
+        return startAddressOfNextWord;
     }
 
     void copyBlock(int fromAddress, int toAddress, int length) {

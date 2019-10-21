@@ -192,6 +192,12 @@ public class DataMemoryTest {
         assertNull(mem.load(1023, 2));
         assertDataAddressError();
     }
+
+    @Test
+    public void testEmptyStringBufferInStringConstantsMemory() {
+        byte[] stringConstants = {};
+        assertEquals(0, mem.storeStringConstants(stringConstants));
+    }
     
     @Test
     public void testStoreStringConstants() {
