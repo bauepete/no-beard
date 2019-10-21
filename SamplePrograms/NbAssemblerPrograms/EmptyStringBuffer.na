@@ -1,0 +1,17 @@
+inc 12
+la 0 32
+lit 3
+sto
+la 0 36
+lit 5
+sto
+la 0 40
+lv 0 32
+lv 0 36
+add
+sto
+lv 0 40
+lit 1
+out 0
+out 3
+halt
