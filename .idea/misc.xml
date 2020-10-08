@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Nbc/pom.xml" />
+        <option value="$PROJECT_DIR$/NbM/pom.xml" />
+        <option value="$PROJECT_DIR$/NbAsm/pom.xml" />
+        <option value="$PROJECT_DIR$/NbMGui/pom.xml" />
+        <option value="$PROJECT_DIR$/NoBeardProject/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="15 (1)" project-jdk-type="JavaSDK" />
+</project>
