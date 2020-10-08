@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="NbMGui" target="15" />
+      <module name="NbMGui" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>

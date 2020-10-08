@@ -28,7 +28,7 @@
       <module name="Nbc" target="8" />
       <module name="NbM" target="8" />
       <module name="NbMGui" target="15" />
-      <module name="NoBeardProject" target="1.8" />
+      <module name="NoBeardProject" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>
